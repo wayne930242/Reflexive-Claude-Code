@@ -25,7 +25,7 @@ For each skill, evaluate:
 - [ ] YAML frontmatter has `name` and `description`
 - [ ] Description includes "Use when..." trigger
 - [ ] Name matches directory name
-- [ ] Body is < 500 lines
+- [ ] Body is < 200 lines
 
 **Content Check**:
 - [ ] Uses imperative form
@@ -102,14 +102,27 @@ Output summary:
 ### Core Principles
 
 1. **Concise is key** - Context window is shared; only add what Claude doesn't know
-2. **< 500 lines** - Split to `references/` if approaching limit
+2. **< 200 lines** - Split to `references/` if approaching limit
 3. **Description triggers** - Include "Use when..." in YAML description, not body
+4. **Scripts for precision** - Create `.py` scripts for tasks requiring exact format or validation
+
+### Skill Structure
+
+```
+.claude/
+└── skills/
+    └── skill-name/
+        ├── SKILL.md           # Required: instructions (<200 lines)
+        ├── scripts/           # Optional: executable code
+        ├── references/        # Optional: docs loaded on-demand
+        └── assets/            # Optional: templates, images
+```
 
 ### What Makes a Good Skill
 
 - **Focused**: One clear purpose
 - **Unique**: Doesn't duplicate other skills
-- **Lean**: < 500 lines, uses references for details
+- **Lean**: < 200 lines, uses references for details
 - **Discoverable**: Clear "Use when" trigger
 
 ### Description Formula
