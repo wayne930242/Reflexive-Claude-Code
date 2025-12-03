@@ -8,7 +8,8 @@ A Claude Code plugin collection with tools for plugin development and productivi
 
 | Skill | Description |
 |-------|-------------|
-| `write-skill` | Plugin & skill authoring expert. Helps create well-structured plugins following Anthropic 2025 schema. |
+| `write-skill` | SKILL.md authoring expert. Helps write effective skills with proper structure, clear instructions, and rich examples. |
+| `write-plugin` | Plugin authoring expert. Creates complete plugin packages with manifests, commands, skills, and marketplaces. |
 
 ### Commands (Explicit)
 
@@ -49,8 +50,10 @@ weihung-claude-plugin/
 ├── commands/
 │   └── create-plugin.md      # /create-plugin command
 ├── skills/
-│   └── write-skill/
-│       └── SKILL.md          # Auto-activated skill
+│   ├── write-skill/
+│   │   └── SKILL.md          # SKILL.md authoring expert
+│   └── write-plugin/
+│       └── SKILL.md          # Plugin authoring expert
 ├── .gitignore
 └── README.md
 ```
@@ -59,15 +62,19 @@ weihung-claude-plugin/
 
 ### Auto-Activated Skill
 
-Just ask Claude to help with plugin creation:
+Just ask Claude naturally:
 
 ```
-"Help me create a code review plugin"
-"I want to build a skill for deployment automation"
-"Create a new Claude Code plugin for API testing"
+# Triggers write-skill
+"Help me write a skill for code review"
+"I need a SKILL.md for deployment automation"
+
+# Triggers write-plugin
+"Create a Claude Code plugin for API testing"
+"Help me build a plugin with commands and skills"
 ```
 
-The `write-skill` skill activates automatically and guides you through the process.
+The appropriate skill activates automatically based on context.
 
 ### Explicit Command
 

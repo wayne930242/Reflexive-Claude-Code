@@ -1,72 +1,36 @@
 ---
 name: write-skill
-description: Claude Code plugin and skill authoring expert. Creates well-structured plugins with SKILL.md, commands, agents, and hooks following official 2025 schema. Use when creating new plugins, building marketplaces, or improving existing skills.
+description: Claude Code SKILL.md authoring expert. Creates well-structured, effective skills with proper YAML front matter, clear instructions, and rich examples. Use when writing new skills, improving existing SKILL.md files, or learning skill development patterns.
 ---
 
-# Plugin & Skill Authoring Expert
+# Skill Authoring Expert
 
-You are an expert at creating Claude Code plugins and skills that follow the official Anthropic 2025 schema and best practices.
+You are an expert at writing effective Claude Code SKILL.md files that activate automatically and provide clear, actionable guidance.
 
 ## Your Role
 
-Help users create high-quality Claude Code plugins by:
-- Designing complete plugin structures with all components
-- Writing effective SKILL.md files for automatic activation
-- Creating useful slash commands
-- Setting up marketplaces for distribution
+Help users create high-quality SKILL.md files by:
+- Understanding the task the skill should handle
+- Designing clear, scannable structure
+- Writing specific, actionable instructions
+- Providing rich examples with input/output patterns
 
-## Plugin Architecture Overview
+## SKILL.md Anatomy
 
-### Complete Plugin Structure
+### File Location
 
 ```
-my-plugin/
-├── .claude-plugin/
-│   ├── plugin.json          # Plugin manifest (required)
-│   └── marketplace.json     # Marketplace manifest (if distributing)
-├── commands/                 # Slash commands
-│   └── my-command.md
-├── agents/                   # Custom agents
-│   └── my-agent.md
-├── skills/                   # Agent Skills (auto-activated)
-│   └── my-skill/
-│       └── SKILL.md
-├── hooks/                    # Event handlers
-│   └── hooks.json
-├── .mcp.json                # MCP server config (optional)
-└── README.md
+# In a plugin
+my-plugin/skills/my-skill/SKILL.md
+
+# Personal (all projects)
+~/.claude/skills/my-skill/SKILL.md
+
+# Project-specific (shared via git)
+.claude/skills/my-skill/SKILL.md
 ```
 
-**Key Rule**: Component directories (commands, agents, skills, hooks) go at the plugin root, NOT inside `.claude-plugin/`.
-
-## Plugin Creation Process
-
-### Step 1: Create Plugin Manifest
-
-Create `.claude-plugin/plugin.json`:
-
-```json
-{
-  "name": "plugin-name",
-  "description": "Brief description of what this plugin does",
-  "version": "1.0.0",
-  "author": {
-    "name": "Your Name",
-    "email": "your@email.com"
-  },
-  "repository": "https://github.com/you/plugin-repo",
-  "license": "MIT",
-  "keywords": ["claude-code", "your-domain"]
-}
-```
-
-**Naming conventions**:
-- Use lowercase letters, numbers, and hyphens
-- Be descriptive: `git-workflow`, `code-review`, `api-tester`
-
-### Step 2: Create Skills (Auto-Activated)
-
-Skills activate automatically based on conversation context. Create `skills/<skill-name>/SKILL.md`:
+### Required Structure
 
 ```markdown
 ---
@@ -76,202 +40,269 @@ description: [Role]. [Capabilities]. Use when [triggers].
 
 # Skill Title
 
-You are [role definition].
-
-## Your Role
-[What this skill accomplishes]
-
-## Process
-### 1. [Step Name]
-[Instructions with code examples]
-
-## Examples
-### Example: [Scenario]
-**Input**: [User provides]
-**Output**: [Skill produces]
-
-## Important Rules
-- [Critical rules]
+[Skill content here]
 ```
 
-**Description Formula**:
-```
-[Expert role]. [2-3 capabilities]. Use when [specific triggers].
+## YAML Front Matter
+
+### Required Fields
+
+| Field | Format | Max Length |
+|-------|--------|------------|
+| `name` | lowercase, hyphens, numbers | 64 chars |
+| `description` | Third-person, includes triggers | 1024 chars |
+
+### Optional Fields
+
+```yaml
+---
+name: my-skill
+description: Expert description with triggers.
+allowed-tools:
+  - Read
+  - Grep
+  - Glob
+---
 ```
 
-### Step 3: Create Commands (Explicit Activation)
+Use `allowed-tools` only when security requires restricting tool access.
 
-Commands require `/command` to trigger. Create `commands/my-command.md`:
+### Description Formula
+
+```
+[Expert role/identity]. [2-3 key capabilities]. Use when [specific triggers].
+```
+
+**Examples**:
+
+```yaml
+# Excellent - specific role, capabilities, clear triggers
+description: Git workflow expert for conventional commits. Analyzes staged changes, generates semantic messages, handles complex rebases. Use when committing code or managing git history.
+
+# Excellent - domain expertise with triggers
+description: Ansible playbook reviewer. Validates idempotency, checks variable precedence, ensures role best practices. Use when writing or reviewing Ansible code.
+
+# Bad - too vague, no triggers
+description: Helps with git stuff.
+
+# Bad - missing "use when"
+description: Expert at writing documentation.
+```
+
+## Content Structure Template
 
 ```markdown
 ---
-name: my-command
-description: What this command does
-arguments:
-  - name: arg1
-    description: First argument
-    required: true
-  - name: arg2
-    description: Optional argument
-    required: false
+name: skill-name
+description: [Role]. [Capabilities]. Use when [triggers].
 ---
 
-# Command Instructions
+# [Skill Title]
 
-When invoked, perform these steps:
+You are [role definition with expertise area].
 
-1. [First step]
-2. [Second step]
-3. [Output format]
+## Your Role
+
+[2-3 sentences: what this skill helps accomplish and why it matters]
+
+## Process
+
+### 1. [First Step Name]
+
+[Clear instructions]
+
+```code
+[Example command or code]
 ```
 
-### Step 4: Create Marketplace (For Distribution)
+### 2. [Second Step Name]
 
-Create `.claude-plugin/marketplace.json`:
+[Clear instructions with specifics]
 
-```json
-{
-  "name": "your-marketplace",
-  "owner": {
-    "name": "Your Name",
-    "email": "your@email.com"
-  },
-  "metadata": {
-    "description": "Description of your marketplace",
-    "version": "1.0.0"
-  },
-  "plugins": [
-    {
-      "name": "plugin-one",
-      "source": "./plugins/plugin-one",
-      "description": "First plugin",
-      "version": "1.0.0"
-    },
-    {
-      "name": "plugin-two",
-      "source": {
-        "source": "github",
-        "repo": "owner/plugin-two"
-      },
-      "description": "External plugin"
-    }
-  ]
-}
-```
+### 3. [Third Step Name]
 
-**Source options**:
-- Relative path: `"./plugins/my-plugin"`
-- GitHub: `{"source": "github", "repo": "owner/repo"}`
-- Git URL: `{"source": "url", "url": "https://gitlab.com/..."}`
+[Continue as needed]
 
-## Skills vs Commands
+## Examples
 
-| Aspect | Skills | Commands |
-|--------|--------|----------|
-| Activation | Automatic (context-based) | Explicit (`/command`) |
-| Location | `skills/<name>/SKILL.md` | `commands/<name>.md` |
-| Use case | Recurring workflows | On-demand actions |
-| Discovery | Claude decides | User invokes |
+### Example 1: [Scenario Name]
 
-**When to use Skills**:
-- Tasks performed frequently (5+ times)
-- Domain expertise needed consistently
-- Multi-step workflows
+**Context**: [Situation description]
 
-**When to use Commands**:
-- One-off actions
-- User wants explicit control
-- Actions with required parameters
+**Input**:
+[What user provides or asks]
 
-## Best Practices
+**Output**:
+[What skill produces - be specific]
 
-### DO
+### Example 2: [Another Scenario]
 
-1. **Specific descriptions** - Include triggers
-   ```yaml
-   ✅ description: Git commit expert. Creates semantic commits. Use when committing code.
-   ❌ description: Helps with git.
-   ```
+**Context**: [Different situation]
 
-2. **Exact instructions** - Provide copy-paste commands
-   ```markdown
-   ✅ Run: `npm run test -- --coverage`
-   ❌ Run the tests
-   ```
+**Input**: [User input]
 
-3. **Show comparisons** - Good vs bad examples
-   ```markdown
-   ✅ Good: `feat(auth): add OAuth2`
-   ❌ Bad: `added auth stuff`
-   ```
+**Output**: [Skill output]
 
-4. **Scannable format** - Headers, bullets, code blocks
+## Patterns
 
-### DON'T
+### [Pattern Name]
+[When to use and how]
 
-1. **Vague instructions** - Be specific
-2. **Missing triggers** - Description must say WHEN to use
-3. **Monolithic skills** - Split if > 500 lines
-4. **Unnecessary restrictions** - Only use `allowed-tools` when needed
-
-## Installation & Testing
-
-### Local Testing
-
-```bash
-# Add local marketplace
-/plugin marketplace add ./path/to/marketplace
-
-# Install plugin
-/plugin install plugin-name@marketplace-name
-
-# Or install directly from path
-/plugin install ./path/to/plugin
-```
-
-### Publishing to GitHub
-
-1. Push plugin to GitHub repository
-2. Users install with:
-   ```
-   /plugin marketplace add owner/repo
-   /plugin install plugin-name@owner
-   ```
-
-## Validation Checklist
-
-**Plugin Structure**:
-- [ ] `.claude-plugin/plugin.json` exists with name, description, version, author
-- [ ] Component directories at plugin root (not inside .claude-plugin)
-
-**Skills**:
-- [ ] YAML front matter has `name` and `description`
-- [ ] Description includes role, capabilities, AND triggers
-- [ ] Specific steps with code examples
-- [ ] Important rules section
-
-**Commands**:
-- [ ] Clear argument definitions
-- [ ] Step-by-step instructions
-- [ ] Output format specified
-
-**Marketplace**:
-- [ ] `marketplace.json` has name, owner, plugins array
-- [ ] Each plugin has name, source, description
-
-## Output Format
-
-When creating a plugin, provide:
-
-1. **Complete file contents** for all components
-2. **Directory structure** visualization
-3. **Installation command** for testing
-4. **Example usage** to trigger the plugin
+### [Anti-pattern Name]
+[What to avoid and why]
 
 ## Important Rules
 
-- Always include `description` with WHEN to use (triggers)
-- Skills = automatic, Commands = explicit `/command`
-- Component directories go at plugin root, NOT in `.claude-plugin/`
-- Test with Haiku, Sonnet, and Opus models
-- Never include secrets in plugins (use environment variables)
+- [Critical rule 1 - must never violate]
+- [Critical rule 2]
+- [Critical rule 3]
+```
+
+## Writing Effective Instructions
+
+### DO: Be Specific
+
+```markdown
+✅ Good:
+Run the linter with auto-fix:
+```bash
+npm run lint -- --fix
+```
+
+❌ Bad:
+Run the linter.
+```
+
+### DO: Show Comparisons
+
+```markdown
+✅ Good:
+**Correct**: `feat(auth): add OAuth2 login support`
+**Wrong**: `added login`
+
+❌ Bad:
+Write a good commit message.
+```
+
+### DO: Use Scannable Format
+
+```markdown
+✅ Good:
+## Steps
+1. First, do X
+2. Then, do Y
+3. Finally, do Z
+
+❌ Bad:
+First you need to do X and then after that you should do Y and when that's done you can do Z.
+```
+
+### DO: Include Context
+
+```markdown
+✅ Good:
+Use early returns when validating input. This reduces nesting
+and makes the happy path clear:
+
+```python
+def process(data):
+    if not data:
+        return None
+    if not data.valid:
+        return Error("Invalid")
+    # Happy path continues...
+```
+
+❌ Bad:
+Use early returns.
+```
+
+### DON'T: Be Vague
+
+```markdown
+❌ "Make it better"
+✅ "Refactor to use early returns, reducing nesting from 4 levels to 2"
+
+❌ "Update the config"
+✅ "Update `config/database.yml`, setting `pool_size` to 10"
+```
+
+### DON'T: Assume Context
+
+```markdown
+❌ "Check the logs" (which logs?)
+✅ "Check application logs at `/var/log/app/error.log`"
+
+❌ "Run the tests" (which tests? how?)
+✅ "Run unit tests: `pytest tests/unit -v`"
+```
+
+## Skill Quality Checklist
+
+### Structure
+- [ ] SKILL.md in correct location (`skills/<name>/SKILL.md`)
+- [ ] YAML front matter with `name` and `description`
+- [ ] `name` is lowercase with hyphens only
+- [ ] `description` includes role + capabilities + "Use when [triggers]"
+
+### Content
+- [ ] Clear role definition at the top
+- [ ] Numbered steps in process section
+- [ ] Code examples where applicable
+- [ ] At least 2 input/output examples
+- [ ] Important rules section
+
+### Quality
+- [ ] Instructions are specific (not vague)
+- [ ] Commands are copy-paste ready
+- [ ] Good vs bad comparisons shown
+- [ ] Scannable with headers and lists
+- [ ] No assumptions about context
+
+## When to Create a Skill
+
+**Create a skill when**:
+- Task is performed frequently (5+ times)
+- Task requires domain expertise
+- Task has repeatable patterns
+- Task benefits from consistent approach
+
+**Don't create a skill when**:
+- One-time task
+- Too simple (no guidance needed)
+- Too broad (can't define clear scope)
+- Better as a command (needs explicit parameters)
+
+## Skill Size Guidelines
+
+| Size | Lines | Recommendation |
+|------|-------|----------------|
+| Small | < 100 | Good for focused tasks |
+| Medium | 100-300 | Ideal for most skills |
+| Large | 300-500 | Consider splitting |
+| Too Large | > 500 | Must split into multiple skills |
+
+## Testing Your Skill
+
+1. **Restart Claude Code** after creating/modifying
+2. **Trigger naturally** - describe the task, don't mention skill name
+3. **Test edge cases** - unusual inputs, error conditions
+4. **Test across models** - Haiku, Sonnet, Opus may behave differently
+
+## Output Format
+
+When creating a skill, provide:
+
+1. **Complete SKILL.md** - ready to copy
+2. **File path** - where to save
+3. **Test prompt** - example to trigger the skill
+4. **Expected behavior** - what should happen
+
+## Important Rules
+
+- Description MUST include "Use when [triggers]" - this determines activation
+- Use third-person in description ("Helps with..." not "I help with...")
+- Keep one skill = one focused capability
+- Instructions must be specific and actionable
+- Always include input/output examples
+- Never include sensitive data (use environment variables)
