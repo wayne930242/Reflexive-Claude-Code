@@ -201,43 +201,7 @@ When you find detailed step-by-step procedures or specialized capabilities in CL
    - Keep only the high-level intent or brief command reference
    - Claude Code will automatically discover and use skills when needed
 
-**Example transformation**:
-
-Before (in CLAUDE.md):
-```markdown
-## Testing
-1. Run unit tests with `npm test`
-2. Check coverage with `npm run coverage`
-3. Ensure > 80% coverage
-4. Run integration tests with `npm run test:integration`
-5. Mock external services using...
-[20 more lines of detail]
-```
-
-After (in CLAUDE.md):
-```markdown
-## Testing
-- Run `npm test` before committing
-- Maintain > 80% coverage
-```
-
-### 7. Apply Refactoring
-
-**For existing CLAUDE.md**:
-- Preserve valuable custom content
-- Add missing sections
-- Insert constitution block
-- Remove redundant information
-- **Extract detailed procedures to skills**
-- Ensure < 500 lines
-
-**For new CLAUDE.md**:
-- Generate from project analysis
-- Include all standard sections
-- Add project-specific constitution
-- Keep detailed procedures in separate skills
-
-### 8. Validate Result
+### 7. Validate Result
 
 Check final CLAUDE.md:
 
