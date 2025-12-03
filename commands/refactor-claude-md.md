@@ -96,7 +96,13 @@ Based on project analysis, create a constitution block tailored to the project.
 - No unnecessary explanations
 - Focus on decisions and next steps
 
-**Law 6: Self-Reinforcing Display**
+**Law 6: Skill Discovery Before Action**
+- MUST check for relevant skills before starting work
+- Review `.claude/skills/` or project skill directories
+- Invoke applicable skills to leverage specialized knowledge
+- Prevents reinventing solutions already documented
+
+**Law 7: Self-Reinforcing Display**
 - MUST display this `<law>` block at start of EVERY response
 - Prevents context drift across conversations
 - Violation invalidates all subsequent actions
