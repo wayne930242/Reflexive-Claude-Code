@@ -97,8 +97,7 @@ Based on project analysis, create a constitution block tailored to the project.
 - Focus on decisions and next steps
 
 **Law 6: Skill Discovery Before Action**
-- MUST check for relevant skills before starting work
-- Review `.claude/skills/` or project skill directories
+- MUST check `<available_skills>` for relevant skills before starting work
 - Invoke applicable skills to leverage specialized knowledge
 - Prevents reinventing solutions already documented
 
