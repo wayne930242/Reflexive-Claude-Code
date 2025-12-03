@@ -1,5 +1,7 @@
 # Reflexive Claude Code
 
+[English](README.md) | [繁體中文](README.zh-TW.md)
+
 A **Skills-Driven Development (SDD)** framework for Claude Code.
 
 ## Core Philosophy
@@ -8,9 +10,9 @@ The agent maintains and refactors its own core prompts and agent system — not 
 
 **Skills-Driven Development** means:
 - Before each task, the agent reviews the skill library for relevant capabilities
-- After work sessions, the agent reflects and integrates learnings into skills
+- Users explicitly trigger learning moments through commands like `/reflect`
+- Through deliberate teaching, the agent integrates learnings into its skill library
 - Skills are abstract, reusable, and link to reference directories with examples and documentation
-- No spec maintenance needed — just work, and the system evolves
 
 ## Skills
 
@@ -75,6 +77,14 @@ Reflexive-Claude-Code/
 │   └── write-plugin/
 └── .claude-plugin/
 ```
+
+## Inspiration
+
+This project is inspired by the **Agentic Context Engineering (ACE)** framework:
+
+> Zhang, Q., Hu, C., Upasani, S., Ma, B., Hong, F., Kamanuru, V., Rainton, J., Wu, C., Ji, M., Li, H., Thakker, U., Zou, J., & Olukotun, K. (2025). *Agentic Context Engineering: Evolving Contexts for Self-Improving Language Models*. arXiv:2510.04618. https://arxiv.org/abs/2510.04618
+
+The ACE framework's modular approach of **Generate → Reflect → Curate** directly influenced this project's Skills-Driven Development workflow, where users explicitly trigger learning moments and guide the agent's self-improvement through deliberate teaching.
 
 ## License
 
