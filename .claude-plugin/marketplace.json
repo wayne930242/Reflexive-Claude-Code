@@ -1,0 +1,19 @@
+{
+  "name": "weihung-marketplace",
+  "owner": {
+    "name": "Wei Hung",
+    "email": "weihung@example.com"
+  },
+  "metadata": {
+    "description": "Personal Claude Code plugin marketplace with productivity tools",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "weihung-claude-plugin",
+      "source": ".",
+      "description": "Productivity plugins including skill authoring tools",
+      "version": "1.0.0"
+    }
+  ]
+}
