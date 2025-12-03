@@ -99,12 +99,75 @@ Output summary:
 
 ## Guidelines
 
+### Core Principles
+
+1. **Concise is key** - Context window is shared; only add what Claude doesn't know
+2. **< 500 lines** - Split to `references/` if approaching limit
+3. **Description triggers** - Include "Use when..." in YAML description, not body
+
 ### What Makes a Good Skill
 
 - **Focused**: One clear purpose
 - **Unique**: Doesn't duplicate other skills
 - **Lean**: < 500 lines, uses references for details
 - **Discoverable**: Clear "Use when" trigger
+
+### Description Formula
+
+```
+[What it does]. [Key capabilities]. Use when [specific triggers].
+```
+
+**Good**:
+```yaml
+description: Create semantic git commits. Analyzes staged changes and generates conventional commit messages. Use when committing code or managing git history.
+```
+
+**Bad**:
+```yaml
+description: Helps with git stuff.
+```
+
+### Degrees of Freedom
+
+Choose format based on how critical/fragile the operation is:
+
+| Level | When | Format |
+|-------|------|--------|
+| High | Multiple valid approaches | Text guidance |
+| Medium | Preferred pattern exists | Pseudocode |
+| Low | Fragile/critical operations | Specific scripts |
+
+### Progressive Disclosure
+
+Split content when SKILL.md grows:
+
+```markdown
+## Quick start
+[Essential usage]
+
+## Advanced
+- **Forms**: See [forms.md](references/forms.md)
+- **API**: See [api.md](references/api.md)
+```
+
+Claude loads references only when needed.
+
+### Common Skill Patterns
+
+| Pattern | Use Case | Structure |
+|---------|----------|-----------|
+| High-Level Guide | Lean SKILL.md with linked docs | SKILL.md → references/*.md |
+| Domain-Specific | Multi-domain skills | SKILL.md → references/{domain}.md |
+| Framework Variants | Multiple frameworks supported | SKILL.md → references/{framework}.md |
+| Script-Heavy | Deterministic reliability needed | SKILL.md → scripts/*.py |
+
+### Anti-Patterns to Fix
+
+- **❌ Deeply nested references** - Keep references one level deep from SKILL.md
+- **❌ Duplicate information** - Don't repeat content in SKILL.md and references
+- **❌ Verbose explanations** - Claude already knows basics; add only non-obvious knowledge
+- **❌ Auxiliary files** - No README.md, CHANGELOG.md in skills
 
 ### When to Merge Skills
 
