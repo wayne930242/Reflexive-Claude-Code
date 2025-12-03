@@ -76,6 +76,14 @@ Reflexive-Claude-Code/
 └── .claude-plugin/
 ```
 
+## Inspiration
+
+This project is inspired by the **Agentic Context Engineering (ACE)** framework:
+
+> Zhang, Q., Hu, C., Upasani, S., Ma, B., Hong, F., Kamanuru, V., Rainton, J., Wu, C., Ji, M., Li, H., Thakker, U., Zou, J., & Olukotun, K. (2025). *Agentic Context Engineering: Evolving Contexts for Self-Improving Language Models*. arXiv:2510.04618. https://arxiv.org/abs/2510.04618
+
+The ACE framework's modular approach of **Generate → Reflect → Curate** directly influenced this project's Skills-Driven Development workflow, where agents continuously reflect on their work and evolve their skill library without labeled supervision.
+
 ## License
 
 MIT
