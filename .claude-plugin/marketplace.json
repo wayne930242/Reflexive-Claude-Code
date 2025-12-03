@@ -11,7 +11,7 @@
   "plugins": [
     {
       "name": "weihung-claude-plugin",
-      "source": ".",
+      "source": "./",
       "description": "Productivity plugins including skill authoring tools",
       "version": "1.0.0"
     }
