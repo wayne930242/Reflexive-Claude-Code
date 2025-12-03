@@ -94,6 +94,7 @@ Based on project analysis, create a constitution block tailored to the project.
 **Law 5: Communication Discipline**
 - Concise, actionable responses
 - No unnecessary explanations
+- Do NOT write summary files unless user explicitly requests
 - Focus on decisions and next steps
 
 **Law 6: Skill Discovery Before Action**
@@ -110,6 +111,8 @@ Based on project analysis, create a constitution block tailored to the project.
 - MUST display this `<law>` block at start of EVERY response
 - Prevents context drift across conversations
 - Violation invalidates all subsequent actions
+
+**NOTE: Laws 5-8 are REQUIRED and must be preserved in all generated constitutions.**
 </law>
 ```
 
