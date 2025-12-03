@@ -72,7 +72,7 @@ Reflexive-Claude-Code/
 │   ├── refactor-claude-md.md
 │   └── create-plugin.md
 ├── skills/
-│   ├── write-skill/         # 元技能：建立技能
+│   ├── write-skill/         # 後設技能：建立技能
 │   ├── write-command/
 │   └── write-plugin/
 └── .claude-plugin/
