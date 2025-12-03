@@ -1,17 +1,16 @@
 # Reflexive Claude Code
 
-A **reflexive meta-framework** for Claude Code that enables Claude to introspect, optimize, and evolve its own agent system configurations.
+A **Skills-Driven Development (SDD)** framework for Claude Code.
 
 ## Core Philosophy
 
-This plugin provides Claude with **reflexive capabilities** - the ability to:
+The agent maintains and refactors its own core prompts and agent system — not external documents or memory banks.
 
-- **Self-examine**: Analyze existing CLAUDE.md configurations, skills, and commands
-- **Self-improve**: Refactor and optimize agent system components
-- **Self-extend**: Create new skills and commands following best practices
-- **Self-govern**: Establish constitution mechanisms for consistent AI behavior
-
-By giving Claude tools to understand and improve its own configuration, users can build more effective, well-structured Claude Code agent systems through collaborative refinement.
+**Skills-Driven Development** means:
+- Before each task, the agent reviews the skill library for relevant capabilities
+- After work sessions, the agent reflects and integrates learnings into skills
+- Skills are abstract, reusable, and link to reference directories with examples and documentation
+- No spec maintenance needed — just work, and the system evolves
 
 ## Skills
 
@@ -25,57 +24,30 @@ Auto-activated capabilities based on context.
 
 ## Commands
 
-Manually invoked actions for agent system optimization.
-
 | Command | Description | Usage |
 |---------|-------------|-------|
-| `/create-plugin` | Scaffold a new Claude Code plugin with proper structure | `/create-plugin <name> [type]` |
-| `/refactor-skills` | Analyze and refactor all skills - consolidate, optimize, remove redundancy | `/refactor-skills` |
-| `/refactor-claude-md` | Refactor CLAUDE.md with constitution mechanism for consistent AI behavior | `/refactor-claude-md [path] [mode]` |
+| `/reflect` | Reflect on conversation, extract learnings, integrate into skill library | `/reflect [focus]` |
+| `/refactor-skills` | Analyze and consolidate all skills - merge, optimize, remove redundancy | `/refactor-skills` |
+| `/refactor-claude-md` | Refactor CLAUDE.md with constitution mechanism | `/refactor-claude-md [path] [mode]` |
+| `/create-plugin` | Scaffold a new Claude Code plugin | `/create-plugin <name> [type]` |
 
-### Command Details
+## Workflow
 
-**`/create-plugin <name> [type]`**
-- `name`: Plugin name in kebab-case (required)
-- `type`: `skill`, `command`, or `full` (default: `full`)
-
-**`/refactor-claude-md [path] [mode]`**
-- `path`: Path to CLAUDE.md or project directory (default: current directory)
-- `mode`: `analyze`, `refactor`, or `generate` (default: `analyze`)
-
-The refactor-claude-md command includes a **constitution mechanism** with self-reinforcing laws:
-1. Collaborative Decision Making
-2. Project-Specific Architecture Law
-3. Quality Gates
-4. Code Style Compliance
-5. Communication Discipline
-6. Self-Reinforcing Display
-
-## Use Cases
-
-### Building a New Agent System
 ```
-User: Help me create a CLAUDE.md for my TypeScript project
-Claude: [Uses write-skill patterns + /refactor-claude-md generate]
+┌─────────────────────────────────────────────────────────┐
+│                   Work Session                          │
+├─────────────────────────────────────────────────────────┤
+│  1. Before Task     │  Review skill library             │
+│  2. Do Work         │  Just work normally               │
+│  3. /reflect        │  Extract learnings → skills       │
+│  4. /refactor-skills│  Consolidate & optimize           │
+└─────────────────────────────────────────────────────────┘
 ```
 
-### Optimizing Existing Configuration
-```
-User: My CLAUDE.md is getting too long and messy
-Claude: [Uses /refactor-claude-md refactor to optimize and add constitution]
-```
-
-### Creating Reusable Components
-```
-User: I want to package my workflow as a shareable plugin
-Claude: [Uses write-plugin skill + /create-plugin command]
-```
-
-### Skill Consolidation
-```
-User: I have too many overlapping skills, help me clean up
-Claude: [Uses /refactor-skills to analyze, merge, and optimize]
-```
+Each skill links to a directory with:
+- `SKILL.md` — Abstract instructions
+- `references/` — Detailed docs, code examples
+- `scripts/` — Executable utilities
 
 ## Installation
 
@@ -92,18 +64,16 @@ Claude: [Uses /refactor-skills to analyze, merge, and optimize]
 
 ```
 Reflexive-Claude-Code/
-├── .claude-plugin/
-│   ├── plugin.json          # Plugin manifest
-│   └── marketplace.json     # Marketplace definition
 ├── commands/
-│   ├── create-plugin.md     # Plugin scaffolding
-│   ├── refactor-skills.md   # Skill optimization
-│   └── refactor-claude-md.md # CLAUDE.md refactoring
+│   ├── reflect.md           # Core: session reflection
+│   ├── refactor-skills.md   # Core: skill consolidation
+│   ├── refactor-claude-md.md
+│   └── create-plugin.md
 ├── skills/
-│   ├── write-skill/         # Skill authoring guide
-│   ├── write-command/       # Command authoring guide
-│   └── write-plugin/        # Plugin authoring guide
-└── README.md
+│   ├── write-skill/         # Meta: creates skills
+│   ├── write-command/
+│   └── write-plugin/
+└── .claude-plugin/
 ```
 
 ## License
