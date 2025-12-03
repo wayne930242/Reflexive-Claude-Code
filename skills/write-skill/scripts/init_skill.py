@@ -72,7 +72,7 @@ def main() -> None:
     """Entry point for skill initialization CLI."""
     parser = argparse.ArgumentParser(description="Initialize a new skill")
     parser.add_argument("name", help="Skill name (kebab-case)")
-    parser.add_argument("--path", "-p", default=".", help="Output directory")
+    parser.add_argument("--path", "-p", default=".claude/skills", help="Output directory (default: .claude/skills)")
 
     args = parser.parse_args()
 

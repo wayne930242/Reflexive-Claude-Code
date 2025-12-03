@@ -16,11 +16,13 @@ Create skills that extend Claude's capabilities with specialized knowledge and w
 ## Skill Structure
 
 ```
-skill-name/
-├── SKILL.md           # Required: instructions (<500 lines)
-├── scripts/           # Optional: executable code
-├── references/        # Optional: docs loaded on-demand
-└── assets/            # Optional: templates, images
+.claude/
+└── skills/
+    └── skill-name/
+        ├── SKILL.md           # Required: instructions (<500 lines)
+        ├── scripts/           # Optional: executable code
+        ├── references/        # Optional: docs loaded on-demand
+        └── assets/            # Optional: templates, images
 ```
 
 ## Creation Process
@@ -30,8 +32,11 @@ skill-name/
 Run the init script to create proper structure:
 
 ```bash
-python scripts/init_skill.py <skill-name> --path <output-dir>
+python3 scripts/init_skill.py <skill-name>
 ```
+
+Options:
+- `--path`, `-p`: Output directory (default: `.claude/skills`)
 
 ### 2. Write SKILL.md
 
@@ -48,7 +53,7 @@ description: [What it does]. Use when [specific triggers].
 ### 3. Validate
 
 ```bash
-python scripts/validate_skill.py <path/to/skill>
+python3 scripts/validate_skill.py <path/to/skill>
 ```
 
 ### 4. Test

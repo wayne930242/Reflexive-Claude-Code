@@ -20,24 +20,32 @@ Help users create high-quality Claude Code plugins by:
 ### Complete Plugin Structure
 
 ```
+project-root/
+└── .claude/
+    ├── commands/                 # Slash commands
+    │   └── my-command.md
+    ├── agents/                   # Custom agents
+    │   └── my-agent.md
+    ├── skills/                   # Agent Skills (auto-activated)
+    │   └── my-skill/
+    │       └── SKILL.md
+    ├── hooks/                    # Event handlers
+    │   └── hooks.json
+    └── settings.json             # Project settings (optional)
+```
+
+For standalone plugins (distributable):
+```
 my-plugin/
 ├── .claude-plugin/
 │   ├── plugin.json          # Plugin manifest (required)
 │   └── marketplace.json     # Marketplace manifest (if distributing)
-├── commands/                 # Slash commands
-│   └── my-command.md
-├── agents/                   # Custom agents
-│   └── my-agent.md
-├── skills/                   # Agent Skills (auto-activated)
-│   └── my-skill/
-│       └── SKILL.md
-├── hooks/                    # Event handlers
-│   └── hooks.json
-├── .mcp.json                # MCP server config (optional)
+├── commands/
+├── skills/
 └── README.md
 ```
 
-**Key Rule**: Component directories (commands, agents, skills, hooks) go at the plugin root, NOT inside `.claude-plugin/`.
+**Key Rule**: For project-level customization, use `.claude/` directory. For distributable plugins, use `.claude-plugin/` with component directories at plugin root.
 
 ## Plugin Creation Process
 
@@ -169,7 +177,7 @@ Create `.claude-plugin/marketplace.json`:
 | Aspect | Skills | Commands |
 |--------|--------|----------|
 | Activation | Automatic (context-based) | Explicit (`/command`) |
-| Location | `skills/<name>/SKILL.md` | `commands/<name>.md` |
+| Location | `.claude/skills/<name>/SKILL.md` | `.claude/commands/<name>.md` |
 | Use case | Recurring workflows | On-demand actions |
 | Discovery | Claude decides | User invokes |
 
