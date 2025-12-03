@@ -1,7 +1,7 @@
 [project]
-name = "weihung-claude-plugin"
-version = "0.1.0"
-description = "Add your description here"
+name = "Reflexive-Claude-Code"
+version = "0.2.0"
+description = "A skills-driven Agentic Context Engineering workflow for Claude Code."
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = []
