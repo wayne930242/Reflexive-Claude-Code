@@ -1,308 +1,91 @@
 ---
 name: write-skill
-description: Claude Code SKILL.md authoring expert. Creates well-structured, effective skills with proper YAML front matter, clear instructions, and rich examples. Use when writing new skills, improving existing SKILL.md files, or learning skill development patterns.
+description: Create effective Claude Code SKILL.md files following Anthropic's official patterns. Use when writing new skills, improving existing skills, or learning skill best practices.
 ---
 
-# Skill Authoring Expert
+# Skill Creator
 
-You are an expert at writing effective Claude Code SKILL.md files that activate automatically and provide clear, actionable guidance.
+Create skills that extend Claude's capabilities with specialized knowledge and workflows.
 
-## Your Role
+## Core Principles
 
-Help users create high-quality SKILL.md files by:
-- Understanding the task the skill should handle
-- Designing clear, scannable structure
-- Writing specific, actionable instructions
-- Providing rich examples with input/output patterns
+1. **Concise is key** - Context window is shared; only add what Claude doesn't know
+2. **< 500 lines** - Split to `references/` if approaching limit
+3. **Description triggers** - Include "Use when..." in YAML description, not body
 
-## SKILL.md Anatomy
-
-### File Location
+## Skill Structure
 
 ```
-# In a plugin
-my-plugin/skills/my-skill/SKILL.md
-
-# Personal (all projects)
-~/.claude/skills/my-skill/SKILL.md
-
-# Project-specific (shared via git)
-.claude/skills/my-skill/SKILL.md
+skill-name/
+├── SKILL.md           # Required: instructions (<500 lines)
+├── scripts/           # Optional: executable code
+├── references/        # Optional: docs loaded on-demand
+└── assets/            # Optional: templates, images
 ```
 
-### Required Structure
+## Creation Process
 
-```markdown
----
-name: skill-name
-description: [Role]. [Capabilities]. Use when [triggers].
----
+### 1. Initialize
 
-# Skill Title
+Run the init script to create proper structure:
 
-[Skill content here]
+```bash
+python scripts/init_skill.py <skill-name> --path <output-dir>
 ```
 
-## YAML Front Matter
+### 2. Write SKILL.md
 
-### Required Fields
-
-| Field | Format | Max Length |
-|-------|--------|------------|
-| `name` | lowercase, hyphens, numbers | 64 chars |
-| `description` | Third-person, includes triggers | 1024 chars |
-
-### Optional Fields
-
+**Frontmatter** (required):
 ```yaml
 ---
 name: my-skill
-description: Expert description with triggers.
-allowed-tools:
-  - Read
-  - Grep
-  - Glob
+description: [What it does]. Use when [specific triggers].
 ---
 ```
 
-Use `allowed-tools` only when security requires restricting tool access.
+**Body**: Instructions only. Keep lean—move details to `references/`.
 
-### Description Formula
+### 3. Validate
 
-```
-[Expert role/identity]. [2-3 key capabilities]. Use when [specific triggers].
-```
-
-**Examples**:
-
-```yaml
-# Excellent - specific role, capabilities, clear triggers
-description: Git workflow expert for conventional commits. Analyzes staged changes, generates semantic messages, handles complex rebases. Use when committing code or managing git history.
-
-# Excellent - domain expertise with triggers
-description: Ansible playbook reviewer. Validates idempotency, checks variable precedence, ensures role best practices. Use when writing or reviewing Ansible code.
-
-# Bad - too vague, no triggers
-description: Helps with git stuff.
-
-# Bad - missing "use when"
-description: Expert at writing documentation.
-```
-
-## Content Structure Template
-
-```markdown
----
-name: skill-name
-description: [Role]. [Capabilities]. Use when [triggers].
----
-
-# [Skill Title]
-
-You are [role definition with expertise area].
-
-## Your Role
-
-[2-3 sentences: what this skill helps accomplish and why it matters]
-
-## Process
-
-### 1. [First Step Name]
-
-[Clear instructions]
-
-```code
-[Example command or code]
-```
-
-### 2. [Second Step Name]
-
-[Clear instructions with specifics]
-
-### 3. [Third Step Name]
-
-[Continue as needed]
-
-## Examples
-
-### Example 1: [Scenario Name]
-
-**Context**: [Situation description]
-
-**Input**:
-[What user provides or asks]
-
-**Output**:
-[What skill produces - be specific]
-
-### Example 2: [Another Scenario]
-
-**Context**: [Different situation]
-
-**Input**: [User input]
-
-**Output**: [Skill output]
-
-## Patterns
-
-### [Pattern Name]
-[When to use and how]
-
-### [Anti-pattern Name]
-[What to avoid and why]
-
-## Important Rules
-
-- [Critical rule 1 - must never violate]
-- [Critical rule 2]
-- [Critical rule 3]
-```
-
-## Writing Effective Instructions
-
-### DO: Be Specific
-
-```markdown
-✅ Good:
-Run the linter with auto-fix:
 ```bash
-npm run lint -- --fix
+python scripts/validate_skill.py <path/to/skill>
 ```
 
-❌ Bad:
-Run the linter.
-```
+### 4. Test
 
-### DO: Show Comparisons
+Restart Claude Code, trigger naturally (don't mention skill name).
+
+## Degrees of Freedom
+
+| Level | When | Format |
+|-------|------|--------|
+| High | Multiple valid approaches | Text guidance |
+| Medium | Preferred pattern exists | Pseudocode |
+| Low | Fragile/critical operations | Specific scripts |
+
+## Progressive Disclosure
+
+Split content when SKILL.md grows:
 
 ```markdown
-✅ Good:
-**Correct**: `feat(auth): add OAuth2 login support`
-**Wrong**: `added login`
+## Quick start
+[Essential usage]
 
-❌ Bad:
-Write a good commit message.
+## Advanced
+- **Forms**: See [forms.md](references/forms.md)
+- **API**: See [api.md](references/api.md)
 ```
 
-### DO: Use Scannable Format
+Claude loads references only when needed.
 
-```markdown
-✅ Good:
-## Steps
-1. First, do X
-2. Then, do Y
-3. Finally, do Z
+## What NOT to Include
 
-❌ Bad:
-First you need to do X and then after that you should do Y and when that's done you can do Z.
-```
+- README.md, CHANGELOG.md, INSTALLATION_GUIDE.md
+- Explanations Claude already knows
+- "When to use" sections in body (put in description)
 
-### DO: Include Context
+## References
 
-```markdown
-✅ Good:
-Use early returns when validating input. This reduces nesting
-and makes the happy path clear:
-
-```python
-def process(data):
-    if not data:
-        return None
-    if not data.valid:
-        return Error("Invalid")
-    # Happy path continues...
-```
-
-❌ Bad:
-Use early returns.
-```
-
-### DON'T: Be Vague
-
-```markdown
-❌ "Make it better"
-✅ "Refactor to use early returns, reducing nesting from 4 levels to 2"
-
-❌ "Update the config"
-✅ "Update `config/database.yml`, setting `pool_size` to 10"
-```
-
-### DON'T: Assume Context
-
-```markdown
-❌ "Check the logs" (which logs?)
-✅ "Check application logs at `/var/log/app/error.log`"
-
-❌ "Run the tests" (which tests? how?)
-✅ "Run unit tests: `pytest tests/unit -v`"
-```
-
-## Skill Quality Checklist
-
-### Structure
-- [ ] SKILL.md in correct location (`skills/<name>/SKILL.md`)
-- [ ] YAML front matter with `name` and `description`
-- [ ] `name` is lowercase with hyphens only
-- [ ] `description` includes role + capabilities + "Use when [triggers]"
-
-### Content
-- [ ] Clear role definition at the top
-- [ ] Numbered steps in process section
-- [ ] Code examples where applicable
-- [ ] At least 2 input/output examples
-- [ ] Important rules section
-
-### Quality
-- [ ] Instructions are specific (not vague)
-- [ ] Commands are copy-paste ready
-- [ ] Good vs bad comparisons shown
-- [ ] Scannable with headers and lists
-- [ ] No assumptions about context
-
-## When to Create a Skill
-
-**Create a skill when**:
-- Task is performed frequently (5+ times)
-- Task requires domain expertise
-- Task has repeatable patterns
-- Task benefits from consistent approach
-
-**Don't create a skill when**:
-- One-time task
-- Too simple (no guidance needed)
-- Too broad (can't define clear scope)
-- Better as a command (needs explicit parameters)
-
-## Skill Size Guidelines
-
-| Size | Lines | Recommendation |
-|------|-------|----------------|
-| Small | < 100 | Good for focused tasks |
-| Medium | 100-300 | Ideal for most skills |
-| Large | 300-500 | Consider splitting |
-| Too Large | > 500 | Must split into multiple skills |
-
-## Testing Your Skill
-
-1. **Restart Claude Code** after creating/modifying
-2. **Trigger naturally** - describe the task, don't mention skill name
-3. **Test edge cases** - unusual inputs, error conditions
-4. **Test across models** - Haiku, Sonnet, Opus may behave differently
-
-## Output Format
-
-When creating a skill, provide:
-
-1. **Complete SKILL.md** - ready to copy
-2. **File path** - where to save
-3. **Test prompt** - example to trigger the skill
-4. **Expected behavior** - what should happen
-
-## Important Rules
-
-- Description MUST include "Use when [triggers]" - this determines activation
-- Use third-person in description ("Helps with..." not "I help with...")
-- Keep one skill = one focused capability
-- Instructions must be specific and actionable
-- Always include input/output examples
-- Never include sensitive data (use environment variables)
+- [spec.md](references/spec.md) - YAML frontmatter specification
+- [patterns.md](references/patterns.md) - Common skill patterns
+- [examples.md](references/examples.md) - Before/after examples
