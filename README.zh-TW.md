@@ -2,13 +2,13 @@
 
 [English](README.md) | [繁體中文](README.zh-TW.md)
 
-一個用於 Claude Code 的**技能驅動開發 (Skills-Driven Development, SDD)** 框架。
+一個用於 Claude Code 的**技能驅動代理脈絡工程 (Agentic Context Engineering)** 工作流程。
 
 ## 核心理念
 
 Agent 維護並重構自己的核心提示詞與 Agent 系統——而非外部文件或記憶庫。
 
-**技能驅動開發**意味著：
+**技能驅動代理脈絡工程**意味著：
 - 每次任務開始前，Agent 會檢視技能庫中相關的能力
 - 使用者透過 `/reflect` 等指令明確觸發學習點
 - 透過刻意的教導，Agent 將學習成果整合到技能庫中
@@ -80,11 +80,11 @@ Reflexive-Claude-Code/
 
 ## 啟發來源
 
-本專案受到 **Agentic Context Engineering (ACE)** 框架的啟發：
+本專案受到**代理脈絡工程 (Agentic Context Engineering, ACE)** 框架的啟發：
 
 > Zhang, Q., Hu, C., Upasani, S., Ma, B., Hong, F., Kamanuru, V., Rainton, J., Wu, C., Ji, M., Li, H., Thakker, U., Zou, J., & Olukotun, K. (2025). *Agentic Context Engineering: Evolving Contexts for Self-Improving Language Models*. arXiv:2510.04618. https://arxiv.org/abs/2510.04618
 
-ACE 框架的模組化方法——**生成 → 反思 → 策展**——直接影響了本專案的技能驅動開發工作流程，由使用者明確觸發學習點，透過刻意的教導引導 Agent 的自我演化。
+ACE 框架的模組化方法——**生成 → 反思 → 策展**——直接影響了本專案的技能驅動代理脈絡工程工作流程，由使用者明確觸發學習點，透過刻意的教導引導 Agent 的自我演化。
 
 ## 授權條款
 
