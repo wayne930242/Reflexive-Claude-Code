@@ -2,13 +2,13 @@
 
 [English](README.md) | [繁體中文](README.zh-TW.md)
 
-A **Skills-Driven Development (SDD)** framework for Claude Code.
+A **skills-driven Agentic Context Engineering** workflow for Claude Code.
 
 ## Core Philosophy
 
 The agent maintains and refactors its own core prompts and agent system — not external documents or memory banks.
 
-**Skills-Driven Development** means:
+**Skills-driven Agentic Context Engineering** means:
 - Before each task, the agent reviews the skill library for relevant capabilities
 - Users explicitly trigger learning moments through commands like `/reflect`
 - Through deliberate teaching, the agent integrates learnings into its skill library
@@ -84,7 +84,7 @@ This project is inspired by the **Agentic Context Engineering (ACE)** framework:
 
 > Zhang, Q., Hu, C., Upasani, S., Ma, B., Hong, F., Kamanuru, V., Rainton, J., Wu, C., Ji, M., Li, H., Thakker, U., Zou, J., & Olukotun, K. (2025). *Agentic Context Engineering: Evolving Contexts for Self-Improving Language Models*. arXiv:2510.04618. https://arxiv.org/abs/2510.04618
 
-The ACE framework's modular approach of **Generate → Reflect → Curate** directly influenced this project's Skills-Driven Development workflow, where users explicitly trigger learning moments and guide the agent's self-improvement through deliberate teaching.
+The ACE framework's modular approach of **Generate → Reflect → Curate** directly influenced this project's skills-driven workflow, where users explicitly trigger learning moments and guide the agent's self-improvement through deliberate teaching.
 
 ## License
 
