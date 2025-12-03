@@ -44,6 +44,6 @@ description: Helps with git stuff.
 ## Body Guidelines
 
 - Use imperative form ("Run the script" not "You should run")
-- Keep under 500 lines
+- Keep under 200 lines
 - No "When to use" sections (put in description)
 - Link to references/ for detailed content

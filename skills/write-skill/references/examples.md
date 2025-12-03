@@ -20,7 +20,7 @@ description: Create and edit Word documents with tracked changes and comments. U
 
 ## Introduction
 This skill helps you work with documents...
-[500+ lines of explanation]
+[200+ lines of explanation]
 
 ## When to Use This Skill
 Use this skill when you need to...
@@ -57,7 +57,7 @@ python scripts/extract.py input.pdf --output text.txt
 ### ❌ Before (Flat)
 ```
 my-skill/
-├── SKILL.md (800 lines)
+├── SKILL.md (300 lines)
 ├── README.md
 └── CHANGELOG.md
 ```
