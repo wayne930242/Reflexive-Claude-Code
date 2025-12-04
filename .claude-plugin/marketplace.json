@@ -2,11 +2,11 @@
   "name": "Reflexive-Claude-Code",
   "owner": {
     "name": "Wei Hung",
-    "email": "weihung@example.com"
+    "email": "wayne930242@gmail.com"
   },
   "metadata": {
     "description": "A skills-driven Agentic Context Engineering workflow for Claude Code",
-    "version": "2.0.0"
+    "version": "2.0.1"
   },
   "plugins": [
     {
