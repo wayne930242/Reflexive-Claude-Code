@@ -14,23 +14,44 @@ The agent maintains and refactors its own core prompts and agent system — not 
 - Through deliberate teaching, the agent integrates learnings into its skill library
 - Skills are abstract, reusable, and link to reference directories with examples and documentation
 
-## Skills
+## Plugins
 
-Auto-activated capabilities based on context.
+This marketplace provides two plugins:
+
+### ACE-core (v1.2.0)
+
+Core ACE workflow with reflection, skill consolidation, CLAUDE.md refactoring, and skill/command authoring tools.
+
+**Skills:**
 
 | Skill | Description | Trigger |
 |-------|-------------|---------|
 | `write-skill` | Create effective SKILL.md files following Anthropic's official patterns | "Help me write a skill for...", "Create a new skill..." |
 | `write-command` | Create slash commands with proper YAML frontmatter and argument handling | "Help me write a command...", "Create a slash command..." |
-| `write-plugin` | Create complete plugin packages with manifests, commands, skills, and marketplaces | "Create a plugin for...", "Package this as a plugin..." |
 
-## Commands
+**Commands:**
 
 | Command | Description | Usage |
 |---------|-------------|-------|
 | `/reflect` | Reflect on conversation, extract learnings, integrate into skill library | `/reflect [focus]` |
 | `/refactor-skills` | Analyze and consolidate all skills - merge, optimize, remove redundancy | `/refactor-skills` |
 | `/refactor-claude-md` | Refactor CLAUDE.md with constitution mechanism | `/refactor-claude-md [path] [mode]` |
+| `/improve-skill` | Optimize a skill by analyzing conventions and researching best practices | `/improve-skill <skill-path>` |
+
+### RCC-dev-helper (v1.0.0)
+
+Development helper tools for creating Claude Code plugins with complete manifests, commands, skills, and marketplaces.
+
+**Skills:**
+
+| Skill | Description | Trigger |
+|-------|-------------|---------|
+| `write-plugin` | Create complete plugin packages with manifests, commands, skills, and marketplaces | "Create a plugin for...", "Package this as a plugin..." |
+
+**Commands:**
+
+| Command | Description | Usage |
+|---------|-------------|-------|
 | `/create-plugin` | Scaffold a new Claude Code plugin | `/create-plugin <name> [type]` |
 
 ## Workflow
@@ -56,7 +77,9 @@ Each skill links to a directory with:
 ```bash
 # From GitHub
 /plugin marketplace add wayne930242/Reflexive-Claude-Code
-/plugin install Reflexive-Claude-Code@wayne930242
+/plugin install ACE-core@weihung-marketplace
+# or
+/plugin install RCC-dev-helper@weihung-marketplace
 
 # From local path
 /plugin install /path/to/Reflexive-Claude-Code
@@ -66,16 +89,21 @@ Each skill links to a directory with:
 
 ```
 Reflexive-Claude-Code/
+├── .claude-plugin/
+│   ├── marketplace.json     # Marketplace definition
+│   ├── ACE-core.json        # ACE-core plugin manifest
+│   └── RCC-dev-helper.json  # RCC-dev-helper plugin manifest
 ├── commands/
-│   ├── reflect.md           # Core: session reflection
-│   ├── refactor-skills.md   # Core: skill consolidation
-│   ├── refactor-claude-md.md
-│   └── create-plugin.md
+│   ├── reflect.md           # ACE-core: session reflection
+│   ├── refactor-skills.md   # ACE-core: skill consolidation
+│   ├── refactor-claude-md.md # ACE-core: CLAUDE.md refactoring
+│   ├── improve-skill.md     # ACE-core: skill optimization
+│   └── create-plugin.md     # RCC-dev-helper: plugin scaffolding
 ├── skills/
-│   ├── write-skill/         # Meta: creates skills
-│   ├── write-command/
-│   └── write-plugin/
-└── .claude-plugin/
+│   ├── write-skill/         # ACE-core: creates skills
+│   ├── write-command/       # ACE-core: creates commands
+│   └── write-plugin/        # RCC-dev-helper: creates plugins
+└── README.md
 ```
 
 ## Inspiration
