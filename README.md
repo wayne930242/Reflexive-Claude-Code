@@ -18,7 +18,7 @@ The agent maintains and refactors its own core prompts and agent system — not 
 
 This marketplace provides two plugins:
 
-### ACE-core (v1.2.0)
+### ACE-core (v1.3.0)
 
 Core ACE workflow with reflection, skill consolidation, CLAUDE.md refactoring, and skill/command authoring tools.
 

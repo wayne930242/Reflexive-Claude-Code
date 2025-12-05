@@ -53,28 +53,37 @@ Learning:
 
 ### 4. Skill Integration
 
+For each learning that warrants skill integration:
+
 **If enhancing existing skill:**
-- Add pattern to existing SKILL.md
+Execute `/improve-skill [skill-path]` to:
+- Analyze and update the existing SKILL.md
+- Add new patterns discovered in this session
 - Move detailed examples to `references/` directory
+- Ensure compliance with write-skill standards
+
+Example:
+```
+/improve-skill skills/error-handling
+```
 
 **If creating new skill:**
-- Use `write-skill` patterns
+Use the `write-skill` skill to create a new skill:
+- Invoke the skill with the learning context
 - Ensure abstraction level is appropriate (not too project-specific)
-- Create `references/` directory for:
-  - Code examples from this session
-  - Detailed documentation
-  - Edge cases encountered
+- Include `references/` directory for code examples and edge cases
 
 **If documenting only:**
-- Add to appropriate `references/` file
-- Link from relevant skill
+- Add to appropriate `references/` file using Edit tool
+- Link from relevant skill's SKILL.md
 
-### 5. Skill Refactoring
+### 5. Execution Checklist
 
-After integration, run `/refactor-skills` to:
-- Consolidate overlapping skills
-- Ensure consistent abstraction levels
-- Remove redundancy
+Before completing reflection, ensure:
+- [ ] Each actionable learning has been integrated via `/improve-skill` or `write-skill`
+- [ ] New skills created follow write-skill standards (< 200 lines, proper frontmatter)
+- [ ] Enhanced skills have been validated
+- [ ] Documentation-only items added to references/
 
 ## Abstraction Guidelines
 
