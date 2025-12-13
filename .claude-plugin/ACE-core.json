@@ -1,7 +1,7 @@
 {
   "name": "ACE-core",
-  "description": "Core ACE workflow with reflection, skill consolidation, CLAUDE.md refactoring, and skill/command authoring tools",
-  "version": "1.3.0",
+  "description": "Core ACE workflow with reflection, architecture guidance, modular rules, and skill/command authoring tools",
+  "version": "2.0.0",
   "author": {
     "name": "Wei Hung",
     "email": "wayne930242@gmail.com"
@@ -24,6 +24,9 @@
   ],
   "skills": [
     "skills/write-skill",
-    "skills/write-command"
+    "skills/write-command",
+    "skills/write-rules",
+    "skills/write-subagent",
+    "skills/agent-architect"
   ]
 }

@@ -1,6 +1,6 @@
 ---
 name: reflect
-description: Reflect on conversation learnings and integrate into skill library. Consolidates successful/failed experiences into abstract, reusable skills.
+description: Reflect on conversation learnings and integrate into skill library or rules. Consolidates experiences into reusable knowledge.
 arguments:
   - name: focus
     description: Optional focus area to reflect on (e.g., "error-handling", "testing")
@@ -9,7 +9,7 @@ arguments:
 
 # Reflection Protocol
 
-Analyze the current conversation to extract learnings and integrate them into the skill library.
+Analyze the current conversation to extract learnings and integrate them appropriately.
 
 ## Process
 
@@ -22,22 +22,17 @@ Review the conversation history to identify:
 - **New Knowledge**: Project-specific insights, domain knowledge, or techniques discovered
 - **Repeated Patterns**: Actions performed multiple times that could be abstracted
 
-### 2. Skill Library Review
+### 2. Invoke Architecture Advisor
 
-Before creating new skills, scan existing skills:
+Use the `agent-architect` skill to classify each learning:
 
 ```
-skills/
-├── write-skill/
-├── write-command/
-├── write-plugin/
-└── [other skills...]
+Is it a CONSTRAINT (must follow)?
+├─ Yes → Rule
+└─ No → Is it a CAPABILITY (how to do)?
+    ├─ Yes → Skill
+    └─ No → Documentation only
 ```
-
-Determine:
-- Can learnings enhance an existing skill?
-- Is a new skill warranted, or would it overlap?
-- Are there skills that should be merged or deprecated?
 
 ### 3. Knowledge Extraction
 
@@ -47,74 +42,77 @@ For each significant learning, structure it as:
 Learning:
   context: [When this applies]
   insight: [What was learned]
-  abstraction_level: [high/medium/low - how generalizable?]
-  action: [enhance_existing | create_new | document_only]
+  classification: [rule | skill | documentation]
+  action: [create_new | enhance_existing | document_only]
 ```
 
-### 4. Skill Integration
+### 4. Integration
 
-For each learning that warrants skill integration:
+**For Rules** (constraints, must-follow):
+- Use the `write-rules` skill to create/update `.claude/rules/` files
+- Consider if `paths:` scoping is needed
+- Keep < 50 lines (auto-injected = token expensive)
 
-**If enhancing existing skill:**
-Execute `/improve-skill [skill-path]` to:
-- Analyze and update the existing SKILL.md
-- Add new patterns discovered in this session
-- Move detailed examples to `references/` directory
-- Ensure compliance with write-skill standards
+**For Skills** (capabilities, how-to):
+- If enhancing existing skill: `/improve-skill [skill-path]`
+- If creating new skill: Use the `write-skill` skill
+- Keep < 200 lines, use references/ for details
 
-Example:
-```
-/improve-skill skills/error-handling
-```
-
-**If creating new skill:**
-Use the `write-skill` skill to create a new skill:
-- Invoke the skill with the learning context
-- Ensure abstraction level is appropriate (not too project-specific)
-- Include `references/` directory for code examples and edge cases
-
-**If documenting only:**
-- Add to appropriate `references/` file using Edit tool
+**For Documentation only:**
+- Add to appropriate `references/` file
 - Link from relevant skill's SKILL.md
 
-### 5. Execution Checklist
+### 5. Review Existing Components
+
+Before creating new components, scan existing:
+
+```bash
+# Existing rules
+ls .claude/rules/ 2>/dev/null
+
+# Existing skills
+find . -name "SKILL.md" -type f
+```
+
+Determine:
+- Can learnings enhance an existing component?
+- Is a new component warranted, or would it overlap?
+
+### 6. Execution Checklist
 
 Before completing reflection, ensure:
-- [ ] Each actionable learning has been integrated via `/improve-skill` or `write-skill`
-- [ ] New skills created follow write-skill standards (< 200 lines, proper frontmatter)
-- [ ] Enhanced skills have been validated
-- [ ] Documentation-only items added to references/
 
-## Abstraction Guidelines
-
-Skills should be **abstract enough** to apply across projects:
-
-| Too Specific | Good Abstraction |
-|--------------|------------------|
-| "Fix TypeScript error TS2345 in UserService" | "Resolve type mismatches in service layers" |
-| "Add loading state to ProductList component" | "Implement loading states in data-fetching components" |
-| "Configure Jest for this monorepo" | "Set up testing in monorepo architectures" |
+- [ ] Each learning classified as rule, skill, or documentation
+- [ ] Rules created via `write-rules` skill (< 50 lines)
+- [ ] Skills created via `write-skill` skill (< 200 lines)
+- [ ] No redundancy with existing components
+- [ ] Proper use of `paths:` for domain-specific rules
 
 ## Output Format
 
-After reflection, provide:
+```markdown
+## Session Learnings
 
-1. **Summary**: Key learnings from session
-2. **Actions Taken**: Skills created/enhanced
-3. **Skill Map**: Updated skill relationships
+### Rules Created/Updated
+- [rule-file]: [constraint added]
 
-```
-Session Learnings:
-- [Learning 1]: Integrated into [skill-name]
-- [Learning 2]: New skill created: [skill-name]
-- [Learning 3]: Documented in [skill]/references/[file]
+### Skills Created/Updated
+- [skill-name]: [capability added]
 
-Skills Modified:
-- [skill-name]: [what changed]
+### Documentation Added
+- [skill]/references/[file]: [content added]
 
-Recommendations:
+### Recommendations
 - [Any suggested follow-up actions]
 ```
+
+## Abstraction Guidelines
+
+| Too Specific | Good Abstraction |
+|--------------|------------------|
+| "Fix TypeScript error TS2345 in UserService" | Rule: "Type parameters MUST match" |
+| "Add loading state to ProductList component" | Skill: "Implement loading states" |
+| "API must validate user input" | Rule with `paths: src/api/**` |
 
 ## When to Reflect
 

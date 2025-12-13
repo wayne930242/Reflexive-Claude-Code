@@ -18,14 +18,17 @@ Agent 維護並重構自己的核心提示詞與 Agent 系統——而非外部�
 
 此市集提供兩個插件：
 
-### ACE-core (v1.3.0)
+### ACE-core (v2.0.0)
 
-核心 ACE 工作流程，包含反思、技能整合、CLAUDE.md 重構，以及技能/指令撰寫工具。
+核心 ACE 工作流程，包含反思、架構指導、模組化規則，以及撰寫工具。
 
 **技能：**
 
 | 技能 | 說明 | 觸發條件 |
 |------|------|----------|
+| `agent-architect` | 架構顧問，提供元件設計的整全指導 | "檢視架構..."、"幫我重構..." |
+| `write-rules` | 為 `.claude/rules/` 建立模組化規則檔案 | "建立一條規則..."、"新增約束..." |
+| `write-subagent` | 為 `.claude/agents/` 建立子代理配置 | "建立子代理..."、"設定程式碼審查代理..." |
 | `write-skill` | 依照 Anthropic 官方模式建立有效的 SKILL.md 檔案 | "幫我寫一個技能..."、"建立一個新技能..." |
 | `write-command` | 建立具有正確 YAML frontmatter 和參數處理的斜線指令 | "幫我寫一個指令..."、"建立一個斜線指令..." |
 
@@ -33,9 +36,9 @@ Agent 維護並重構自己的核心提示詞與 Agent 系統——而非外部�
 
 | 指令 | 說明 | 用法 |
 |------|------|------|
-| `/reflect` | 反思對話內容，萃取學習成果，整合到技能庫 | `/reflect [focus]` |
+| `/reflect` | 反思對話內容，分類學習成果（規則 vs 技能），整合 | `/reflect [focus]` |
 | `/refactor-skills` | 分析並整合所有技能——合併、優化、移除冗餘 | `/refactor-skills` |
-| `/refactor-claude-md` | 以憲法機制重構 CLAUDE.md | `/refactor-claude-md [path] [mode]` |
+| `/refactor-claude-md` | 使用模組化憲法重構 CLAUDE.md 和 `.claude/rules/` | `/refactor-claude-md [path] [mode]` |
 | `/improve-skill` | 分析慣例與研究最佳實踐來優化技能 | `/improve-skill <skill-path>` |
 
 ### RCC-dev-helper (v1.0.0)
@@ -54,22 +57,55 @@ Agent 維護並重構自己的核心提示詞與 Agent 系統——而非外部�
 |------|------|------|
 | `/create-plugin` | 建立新的 Claude Code 插件骨架 | `/create-plugin <name> [type]` |
 
+## 元件架構
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    Claude Code Context                          │
+├─────────────────────────────────────────────────────────────────┤
+│  自動注入                          │  按需調用                   │
+│  ─────────                         │  ─────────                  │
+│  • CLAUDE.md（高層次）              │  • Skills（能力）           │
+│  • .claude/rules/*.md（約束）       │  • Commands（使用者觸發）   │
+│    └─ paths: 條件式觸發            │  • Subagents（隔離脈絡）    │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+| 元件 | 位置 | 觸發方式 | Token 影響 |
+|------|------|----------|------------|
+| **Rules** | `.claude/rules/*.md` | 自動注入 | 高（< 50 行） |
+| **Skills** | `.claude/skills/*/SKILL.md` | Claude 決定 | 中（< 200 行） |
+| **Commands** | `.claude/commands/*.md` | 使用者 `/command` | 低 |
+| **Subagents** | `.claude/agents/*.md` | Task 工具 | 隔離 |
+| **CLAUDE.md** | `.claude/CLAUDE.md` | 自動注入 | 高（< 300 行） |
+
+## 核心憲法
+
+模組化憲法（`.claude/rules/00-constitution.md`）包含：
+
+| 法則 | 目的 |
+|------|------|
+| **Communication** | 簡潔、可執行的回覆 |
+| **Skill Discovery** | 開始工作前檢查可用技能 |
+| **Parallel Processing** | 使用 Task 工具進行獨立操作 |
+| **Reflexive Learning** | 發現重要事項時提醒使用者 `/reflect` |
+
 ## 工作流程
 
 ```
-┌─────────────────────────────────────────────────────────┐
-│                      工作階段                            │
-├─────────────────────────────────────────────────────────┤
-│  1. 任務開始前   │  檢視技能庫                           │
-│  2. 執行工作     │  正常工作即可                         │
-│  3. /reflect     │  萃取學習成果 → 技能                  │
-│  4. /refactor-skills│  整合與優化                        │
-└─────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────┐
+│                      工作階段                                    │
+├─────────────────────────────────────────────────────────────────┤
+│  1. 任務開始前   │  檢視技能庫                                   │
+│  2. 執行工作     │  正常工作即可                                 │
+│  3. /reflect     │  分類 → 規則或技能 → 整合                     │
+│  4. /refactor-*  │  整合與優化                                   │
+└─────────────────────────────────────────────────────────────────┘
 ```
 
 每個技能連結到一個目錄，包含：
-- `SKILL.md` — 抽象指令
-- `references/` — 詳細文件、程式碼範例
+- `SKILL.md` — 抽象指令（< 200 行）
+- `references/` — 按需載入的詳細文件
 - `scripts/` — 可執行的工具程式
 
 ## 安裝
@@ -96,10 +132,13 @@ Reflexive-Claude-Code/
 ├── commands/
 │   ├── reflect.md           # ACE-core：階段反思
 │   ├── refactor-skills.md   # ACE-core：技能整合
-│   ├── refactor-claude-md.md # ACE-core：CLAUDE.md 重構
+│   ├── refactor-claude-md.md # ACE-core：CLAUDE.md/rules 重構
 │   ├── improve-skill.md     # ACE-core：技能優化
 │   └── create-plugin.md     # RCC-dev-helper：插件建立
 ├── skills/
+│   ├── agent-architect/     # ACE-core：架構顧問
+│   ├── write-rules/         # ACE-core：建立規則
+│   ├── write-subagent/      # ACE-core：建立子代理
 │   ├── write-skill/         # ACE-core：建立技能
 │   ├── write-command/       # ACE-core：建立指令
 │   └── write-plugin/        # RCC-dev-helper：建立插件

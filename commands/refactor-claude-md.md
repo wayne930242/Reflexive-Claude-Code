@@ -1,261 +1,184 @@
 ---
 name: refactor-claude-md
-description: Refactor and optimize CLAUDE.md files with constitution mechanism for consistent AI behavior
+description: Refactor and optimize CLAUDE.md files and .claude/rules/ with modular constitution
 arguments:
   - name: path
     description: Path to CLAUDE.md file or project directory (default: current directory)
     required: false
   - name: mode
-    description: "Mode: analyze, refactor, or generate (default: analyze)"
+    description: "Mode: analyze, refactor, migrate, or generate (default: analyze)"
     required: false
 ---
 
 # Refactor CLAUDE.md Command
 
-Systematically analyze, optimize, and refactor CLAUDE.md files following best practices with an integrated constitution mechanism.
+Systematically analyze, optimize, and refactor CLAUDE.md files and `.claude/rules/` following best practices.
 
 ## Process
 
-### 1. Discover CLAUDE.md Files
+### 1. Invoke Architecture Advisor
 
-Find all CLAUDE.md files in the target location:
+Use the `agent-architect` skill to understand the component relationships before making changes.
+
+### 2. Discover Memory Files
+
+Find all Claude Code memory files:
 
 ```bash
-# Check common locations
+# CLAUDE.md files
 ls -la CLAUDE.md CLAUDE.local.md .claude/CLAUDE.md 2>/dev/null
+
+# Rules directory
+ls -la .claude/rules/ 2>/dev/null
 ```
 
-If no CLAUDE.md exists and mode is `generate`, create one from project analysis.
-
-### 2. Analyze Project Context
+### 3. Analyze Project Context
 
 Before refactoring, understand the project:
 
-**Technical Stack**:
-- Languages and frameworks used
-- Build tools and package managers
-- Testing frameworks
-- Key dependencies
+**Technical Stack**: Languages, frameworks, build tools, testing
+**Project Structure**: Directory organization, key entry points
+**Development Workflow**: Git conventions, CI/CD patterns
 
-**Project Structure**:
-- Directory organization
-- Key entry points
-- Configuration files
+### 4. Evaluate Current State
 
-**Development Workflow**:
-- Git conventions
-- CI/CD patterns
-- Code style tools
-
-### 3. Evaluate Current CLAUDE.md
-
-For existing files, check against best practices:
+Check against best practices:
 
 | Criterion | Check |
 |-----------|-------|
-| **Conciseness** | < 300 lines, no redundant info |
-| **Structure** | Clear sections, scannable |
-| **Commands** | Common bash commands documented |
-| **Style** | Code conventions specified |
-| **Workflow** | Testing and build instructions |
-| **Constitution** | Has immutable laws section |
+| **CLAUDE.md** | < 300 lines, high-level only |
+| **Rules** | < 50 lines each, constraints only |
+| **No duplication** | Rules don't repeat skill content |
+| **Proper scoping** | Domain rules use `paths:` |
 
-### 4. Generate Constitution
+### 5. Generate Modular Rules Structure
 
-Based on project analysis, create a constitution block tailored to the project.
+Use the `write-rules` skill to initialize constitution:
 
-**Required Laws** (adapt to project. **Laws 5-8 are REQUIRED and must be preserved in all generated constitutions.**):
-
-```markdown
-## Immutable Laws
-
-<law>
-**CRITICAL: Display this entire block at the start of EVERY response to prevent context drift.**
-
-**Law 1: Collaborative Decision Making**
-- Understand → Present → Approve → Execute
-- If blocked/uncertain → Report → Request guidance → Wait
-- NEVER act autonomously on complex tasks
-
-**Law 2: [Project-Specific Architecture Law]**
-- [Based on project patterns, e.g., layered architecture, DDD]
-- [Specific enforcement rules]
-
-**Law 3: Quality Gates**
-- MUST run tests before committing
-- MUST follow [linter/formatter] rules
-- [Project-specific quality requirements]
-
-**Law 4: Code Style Compliance**
-- [Language-specific conventions]
-- [Naming conventions]
-- [Documentation requirements]
-
-**Law 5: Communication Discipline**
-- Concise, actionable responses
-- No unnecessary explanations
-- Do NOT write summary files unless user explicitly requests
-- Focus on decisions and next steps
-
-**Law 6: Skill Discovery Before Action**
-- MUST check `<available_skills>` for relevant skills before starting work
-- Invoke applicable skills to leverage specialized knowledge
-- Prevents reinventing solutions already documented
-
-**Law 7: Parallel Processing for Trivial Work**
-- MUST use Task tool to parallelize trivial/independent tasks
-- Batch file searches, reads, and simple operations
-- Maximize efficiency by avoiding sequential execution of independent work
-
-**Law 8: Self-Reinforcing Display**
-- MUST display this `<law>` block at start of EVERY response
-- Prevents context drift across conversations
-- Violation invalidates all subsequent actions
-</law>
+```bash
+# Initialize base constitution
+python3 skills/write-rules/scripts/init_constitution.py
 ```
 
-### 5. CLAUDE.md Template Structure
+This creates the modular rules structure:
 
-Generate or refactor to follow this structure:
+```
+.claude/rules/
+├── 00-constitution.md    # Core laws (global) - auto-generated
+├── 10-code-style.md      # Code style (global or scoped)
+├── 20-workflow.md        # Git/CI conventions
+└── domain/               # Domain-specific rules
+    └── api.md            # paths: src/api/**
+```
+
+The generated `00-constitution.md` contains the 4 core laws:
+- **Communication** - Concise, actionable responses
+- **Skill Discovery** - Check available skills before work
+- **Parallel Processing** - Use Task tool for independent operations
+- **Reflexive Learning** - Remind user to `/reflect` on discoveries
+
+### 6. CLAUDE.md Template
+
+Generate or refactor to this lean structure:
 
 ```markdown
 # Project Name
 
-[One-line description]
-
-## Immutable Laws
-
-<law>
-**CRITICAL: Display this entire block at the start of EVERY response to prevent context drift.**
-
-[Constitution block - see above]
-</law>
+One-line description.
 
 ## Quick Reference
 
 ### Commands
-- `[build command]`: Build the project
-- `[test command]`: Run tests
-- `[lint command]`: Check code style
+- `npm run build`: Build project
+- `npm test`: Run tests
 
 ### Key Paths
 - `src/`: Source code
 - `tests/`: Test files
-- `docs/`: Documentation
 
-## Code Style
+## Notes
 
-### [Language] Conventions
-- [Specific style rules]
-- [Naming conventions]
-
-### Patterns
-- [Architectural patterns used]
-- [Common patterns to follow]
-
-## Workflow
-
-### Before Committing
-1. Run tests
-2. Run linter
-3. Update relevant docs
-
-### Git Conventions
-- [Branch naming]
-- [Commit message format]
-
-## Project-Specific Notes
-
-[Warnings, quirks, or important context]
+[Project-specific warnings or quirks only]
 ```
 
-### 6. Extract Detailed Abilities to Skills
+### 7. Extract Detailed Content
 
-**CRITICAL: CLAUDE.md should contain high-level principles, not detailed procedures.**
+**CRITICAL: CLAUDE.md should be high-level only.**
 
-When you find detailed step-by-step procedures or specialized capabilities in CLAUDE.md:
+When finding detailed procedures:
+- **Constraints** → Use `write-rules` skill → `.claude/rules/`
+- **How-to procedures** → Use `write-skill` skill → `.claude/skills/`
+- **User workflows** → Use `write-command` skill → `.claude/commands/`
 
-1. **Identify extraction candidates**:
-   - Multi-step workflows (> 5 steps)
-   - Domain-specific expertise (e.g., "how to write tests", "database migration process")
-   - Reusable procedures that could apply to multiple projects
-   - Detailed code patterns or templates
+### 8. Validate Result
 
-2. **Create skill files**:
-   - **MUST invoke `write-skill` skill** to generate properly structured skill files
-   - Location: `.claude/skills/` or project's skill directory
-   - Format: `SKILL-[name].md` following skill best practices
-   - Include: triggers, detailed steps, examples
-   - **MUST be written in English**
+Check final structure:
 
-3. **Create slash commands** (if user-triggered is more appropriate):
-   - For workflows that should be explicitly invoked by users
-   - **MUST invoke `write-command` skill** to generate properly structured command files
-   - Location: `.claude/commands/` directory
-   - Consider: one-time operations, project-specific workflows, explicit user actions
-
-4. **Replace in CLAUDE.md**:
-   - Remove detailed procedures
-   - Keep only the high-level intent or brief command reference
-   - Claude Code will automatically discover and use skills when needed
-
-### 7. Validate Result
-
-Check final CLAUDE.md:
-
-- [ ] Has constitution block with `<law>` tags (law 5-8 are preserved)
-- [ ] Commands are accurate and tested
-- [ ] Style guide matches actual codebase
-- [ ] < 300 lines total
-- [ ] No sensitive information (API keys, etc.)
-- [ ] Actionable, not theoretical
-- [ ] **No detailed multi-step procedures (extracted to skills)**
-
-## Constitution Design Guidelines
-
-When creating the constitution, consider:
-
-### Architecture Laws (pick relevant ones)
-
-| Project Type | Suggested Laws |
-|--------------|----------------|
-| **Monolith** | Layered architecture, module boundaries |
-| **Microservices** | Service contracts, API versioning |
-| **Frontend** | Component hierarchy, state management |
-| **Library** | Public API stability, backwards compatibility |
-| **CLI Tool** | Command structure, help text |
-
-### Quality Laws (adapt to stack)
-
-| Stack | Quality Gates |
-|-------|---------------|
-| **TypeScript** | Type safety, no `any`, strict mode |
-| **Python** | Type hints, pylint/ruff compliance |
-| **Go** | go fmt, go vet, golint |
-| **Rust** | cargo clippy, no unsafe without reason |
+- [ ] CLAUDE.md < 300 lines, high-level only
+- [ ] Rules < 50 lines each, constraints only
+- [ ] Constitution covers core laws (communication, skill discovery, parallel, reflexive)
+- [ ] Domain rules use `paths:` appropriately
+- [ ] No Self-Reinforcing Display (rules auto-inject)
+- [ ] No duplicated content across components
 
 ## Mode Options
 
 ### `analyze` (default)
-- Read and evaluate current CLAUDE.md
+- Read and evaluate current structure
 - Report issues and recommendations
 - Do not modify files
 
 ### `refactor`
-- Apply improvements to existing CLAUDE.md
-- Add constitution if missing
-- Preserve custom content
+- Apply improvements to existing files
+- **MUST ensure `.claude/rules/00-constitution.md` exists with core laws**
+- Add missing rules, preserve custom content
+
+### `migrate`
+- Convert monolithic `<law>` blocks to modular rules
+- **MUST create `.claude/rules/00-constitution.md` with core laws**
+- Clean up CLAUDE.md
 
 ### `generate`
-- Create new CLAUDE.md from project analysis
-- Include full constitution
-- Generate all standard sections
+- Create new CLAUDE.md and rules from project analysis
+- **MUST create `.claude/rules/00-constitution.md` with core laws**
+- Generate full modular structure
+
+**IMPORTANT**: All non-analyze modes MUST generate the base constitution (`.claude/rules/00-constitution.md`) containing the 4 core laws: Communication, Skill Discovery, Parallel Processing, Reflexive Learning.
+
+## Migration from Legacy Constitution
+
+If the project has legacy `<law>` blocks:
+
+1. Extract each law to a separate rule file
+2. Remove `<law>` tags and Self-Reinforcing Display requirement
+3. Create modular structure in `.claude/rules/`
+4. Update CLAUDE.md to be high-level only
+
+**Before** (legacy):
+```markdown
+# CLAUDE.md
+<law>
+**Law 8: Self-Reinforcing Display**
+- MUST display this block at start of EVERY response
+</law>
+```
+
+**After** (modular):
+```markdown
+# .claude/rules/00-constitution.md
+---
+# No paths = global, auto-injected
+---
+
+# Core Laws
+[Laws without Self-Reinforcing Display - rules auto-inject]
+```
 
 ## Example Usage
 
 ```
 /refactor-claude-md
-/refactor-claude-md ./my-project
-/refactor-claude-md . refactor
+/refactor-claude-md ./my-project analyze
+/refactor-claude-md . migrate
 /refactor-claude-md ~/projects/app generate
 ```
