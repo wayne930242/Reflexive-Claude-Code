@@ -1,43 +1,13 @@
 # Rule Examples by Domain
 
-## Constitution Rules
+> **Note**: Rules are for conventions/guidelines only. For immutable laws, use `<law>` blocks in CLAUDE.md.
 
-### Core Laws (Global)
-
-```yaml
-# .claude/rules/00-constitution.md
----
-# No paths = global
----
-
-# Core Laws
-
-## Communication
-- Concise, actionable responses
-- No unnecessary explanations
-- No summary files unless explicitly requested
-
-## Skill Discovery
-- MUST check available skills before starting work
-- Invoke applicable skills for specialized knowledge
-
-## Parallel Processing
-- MUST use Task tool for independent operations
-- Batch file searches and reads
-
-## Reflexive Learning
-- Important discoveries → remind user: `/reflect`
-- Strong user requests for constraints → use `write-rules` skill
-```
-
----
-
-## Code Style Rules
+## Code Style Conventions
 
 ### TypeScript (Global)
 
 ```yaml
-# .claude/rules/10-typescript.md
+# .claude/rules/typescript.md
 ---
 paths: **/*.{ts,tsx}
 ---
@@ -53,7 +23,7 @@ paths: **/*.{ts,tsx}
 ### Python (Global)
 
 ```yaml
-# .claude/rules/10-python.md
+# .claude/rules/python.md
 ---
 paths: **/*.py
 ---
@@ -197,7 +167,7 @@ paths: src/auth/**/*.ts, src/middleware/auth*.ts
 ### Git Conventions
 
 ```yaml
-# .claude/rules/20-git.md
+# .claude/rules/git.md
 ---
 # Global
 ---

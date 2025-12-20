@@ -72,3 +72,30 @@ my-skill/
     ├── api.md
     └── examples.md
 ```
+
+## Example 5: Shared Conventions
+
+### ❌ Before (Duplicated in Multiple Skills)
+```markdown
+# api-client/SKILL.md
+- Use async/await for all HTTP calls
+- Handle errors with try/catch
+
+# data-fetcher/SKILL.md
+- Use async/await for all HTTP calls
+- Handle errors with try/catch
+```
+
+### ✅ After (Extracted to Rule)
+```yaml
+# .claude/rules/async-conventions.md
+---
+paths: src/**/*.ts
+---
+
+# Async Conventions
+- Use async/await for async operations
+- Handle errors with try/catch
+```
+
+**Action**: Use `write-rules` skill to create shared conventions across skills.

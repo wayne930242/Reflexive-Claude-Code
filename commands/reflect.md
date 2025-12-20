@@ -27,12 +27,17 @@ Review the conversation history to identify:
 Use the `agent-architect` skill to classify each learning:
 
 ```
-Is it a CONSTRAINT (must follow)?
-├─ Yes → Rule
+Is it an IMMUTABLE LAW (must enforce every response)?
+├─ Yes → <law> block in CLAUDE.md
 └─ No → Is it a CAPABILITY (how to do)?
     ├─ Yes → Skill
+    │   └─ Is it SHARED across multiple skills?
+    │       ├─ Yes → Extract to Rule (.claude/rules/)
+    │       └─ No → Keep in Skill
     └─ No → Documentation only
 ```
+
+**Key insight**: Rules = conventions/guidelines shared across skills.
 
 ### 3. Knowledge Extraction
 
@@ -48,15 +53,20 @@ Learning:
 
 ### 4. Integration
 
-**For Rules** (constraints, must-follow):
-- Use the `write-rules` skill to create/update `.claude/rules/` files
-- Consider if `paths:` scoping is needed
-- Keep < 50 lines (auto-injected = token expensive)
+**For Immutable Laws**:
+- Add to `<law>` block in CLAUDE.md
+- Must include Self-Reinforcing Display
 
 **For Skills** (capabilities, how-to):
 - If enhancing existing skill: `/improve-skill [skill-path]`
 - If creating new skill: Use the `write-skill` skill
 - Keep < 200 lines, use references/ for details
+
+**For Rules** (shared conventions across skills):
+- Use the `write-rules` skill to create/update `.claude/rules/` files
+- Extract when same convention appears in multiple skills
+- Consider if `paths:` scoping is needed
+- Keep < 50 lines (auto-injected = token expensive)
 
 **For Documentation only:**
 - Add to appropriate `references/` file
@@ -82,11 +92,11 @@ Determine:
 
 Before completing reflection, ensure:
 
-- [ ] Each learning classified as rule, skill, or documentation
-- [ ] Rules created via `write-rules` skill (< 50 lines)
+- [ ] Each learning classified as law, skill, rule, or documentation
+- [ ] Immutable laws added to `<law>` block in CLAUDE.md
 - [ ] Skills created via `write-skill` skill (< 200 lines)
+- [ ] Shared conventions extracted to rules (< 50 lines)
 - [ ] No redundancy with existing components
-- [ ] Proper use of `paths:` for domain-specific rules
 
 ## Output Format
 
@@ -108,11 +118,11 @@ Before completing reflection, ensure:
 
 ## Abstraction Guidelines
 
-| Too Specific | Good Abstraction |
-|--------------|------------------|
-| "Fix TypeScript error TS2345 in UserService" | Rule: "Type parameters MUST match" |
-| "Add loading state to ProductList component" | Skill: "Implement loading states" |
-| "API must validate user input" | Rule with `paths: src/api/**` |
+| Too Specific | Good Abstraction | Component |
+|--------------|------------------|-----------|
+| "Always display laws at response start" | `<law>` with Self-Reinforcing Display | CLAUDE.md |
+| "Add loading state to ProductList component" | "Implement loading states" | Skill |
+| "Use async/await in all API handlers" | Convention shared by API skills | Rule |
 
 ## When to Reflect
 

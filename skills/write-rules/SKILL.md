@@ -1,41 +1,29 @@
 ---
 name: write-rules
-description: Create Claude Code rule files for .claude/rules/. Writes constraints that auto-inject into context. Use when establishing project constraints, migrating constitution, or adding path-specific rules.
+description: Create Claude Code rule files for .claude/rules/. Writes conventions and shared guidelines that auto-inject into context. Use for path-specific coding conventions or shared project guidelines. NOT for constitution/laws (use <law> in CLAUDE.md instead).
 ---
 
 # Rule Creator
 
-Create modular rule files that auto-inject into Claude's context.
+Create modular rule files for conventions and shared guidelines.
 
 ## Core Principles
 
-1. **Rules = Constraints** - What MUST be done, not how to do it
+1. **Rules = Conventions** - Shared guidelines, lower priority than `<law>`
 2. **< 50 lines** - Auto-injected = token expensive
 3. **Use `paths:`** - Scope rules to relevant files only
 4. **No procedures** - How-to belongs in skills
-
-## Initialize Constitution
-
-Run the init script to create base constitution:
-
-```bash
-python3 scripts/init_constitution.py
-```
-
-Options:
-- `--path`, `-p`: Output directory (default: `.claude/rules`)
-- `--force`, `-f`: Overwrite existing constitution
+5. **NOT for laws** - Constitution uses `<law>` in CLAUDE.md
 
 ## Rule Structure
 
 ```
 .claude/rules/
-├── 00-constitution.md    # Core laws (global)
-├── 10-code-style.md      # Style constraints (global)
+├── code-style.md         # Style conventions (global)
 ├── api/
-│   └── validation.md     # paths: src/api/**
+│   └── conventions.md    # paths: src/api/**
 └── testing/
-    └── coverage.md       # paths: **/*.test.ts
+    └── guidelines.md     # paths: **/*.test.ts
 ```
 
 ## File Format
@@ -76,41 +64,41 @@ paths: src/api/**/*.ts
 | `{src,lib}/**/*.ts` | Multiple directories |
 | `**/*.{ts,tsx}` | Multiple extensions |
 
-## Constitution Template
-
-Core rules for reflexive workflows:
+## Example: Code Style Convention
 
 ```markdown
-# .claude/rules/00-constitution.md
+# .claude/rules/code-style.md
 ---
 # Global - no paths
 ---
 
-# Core Laws
+# Code Style
 
-## Communication
-- Concise, actionable responses
-- No unnecessary explanations
-- Focus on decisions and next steps
+- Prefer const over let
+- Use descriptive variable names
+- Keep functions under 50 lines
+```
 
-## Skill Discovery
-- MUST check available skills before starting work
-- Invoke applicable skills to leverage specialized knowledge
+## Example: Path-Scoped Convention
 
-## Parallel Processing
-- MUST use Task tool to parallelize independent tasks
-- Maximize efficiency with concurrent operations
+```markdown
+# .claude/rules/api/conventions.md
+---
+paths: src/api/**/*.ts
+---
 
-## Reflexive Learning
-- When discovering important patterns, remind user to run `/reflect`
-- If user strongly requests a new constraint, use `write-rules` skill
+# API Conventions
+
+- Use async/await, not callbacks
+- Return consistent response shapes
+- Log errors with context
 ```
 
 ## Validation Checklist
 
 Before creating a rule:
 
-- [ ] Is this a constraint, not a procedure?
+- [ ] Is this a convention/guideline, NOT a law? (laws use `<law>` in CLAUDE.md)
 - [ ] < 50 lines?
 - [ ] Does it need `paths:` scoping?
 - [ ] Not duplicating existing rules?

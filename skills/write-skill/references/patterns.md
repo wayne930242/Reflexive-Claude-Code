@@ -58,13 +58,36 @@ image-editor/
 
 Benefits: Token efficient, consistent results.
 
+## Pattern 5: Extract Shared Conventions to Rules
+
+When multiple skills share the same convention, extract to `.claude/rules/`:
+
+```
+# BEFORE: Convention duplicated in multiple skills
+skills/
+├── api-client/SKILL.md     # "Use async/await..."
+├── data-fetcher/SKILL.md   # "Use async/await..."
+└── webhook-handler/SKILL.md # "Use async/await..."
+
+# AFTER: Convention extracted to rule
+.claude/rules/
+└── async-conventions.md    # Shared convention
+
+skills/
+├── api-client/SKILL.md     # Skill-specific only
+├── data-fetcher/SKILL.md
+└── webhook-handler/SKILL.md
+```
+
+**Action**: Use `write-rules` skill to create shared conventions.
+
 ## Anti-Patterns
 
 ### ❌ Deeply Nested References
 Keep references one level deep from SKILL.md.
 
-### ❌ Duplicate Information
-Don't repeat content in SKILL.md and references.
+### ❌ Duplicate Conventions Across Skills
+If same guideline appears in multiple skills → extract to `.claude/rules/` using `write-rules` skill.
 
 ### ❌ Verbose Explanations
 Claude already knows basics—add only non-obvious knowledge.

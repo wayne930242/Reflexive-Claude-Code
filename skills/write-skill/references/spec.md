@@ -47,3 +47,13 @@ description: Helps with git stuff.
 - Keep under 200 lines
 - No "When to use" sections (put in description)
 - Link to references/ for detailed content
+
+## Shared Conventions
+
+If a convention appears in multiple skills, extract to `.claude/rules/`:
+
+- Use `write-rules` skill to create shared convention
+- Skills automatically inherit rules (auto-injected)
+- Keep only skill-specific details in SKILL.md
+
+**Rule of thumb**: Rules = conventions shared across skills.

@@ -18,7 +18,7 @@ The agent maintains and refactors its own core prompts and agent system — not 
 
 This marketplace provides two plugins:
 
-### ACE-core (v2.0.0)
+### ACE-core (v3.0.0)
 
 Core ACE workflow with reflection, architecture guidance, modular rules, and authoring tools.
 
@@ -27,7 +27,7 @@ Core ACE workflow with reflection, architecture guidance, modular rules, and aut
 | Skill | Description | Trigger |
 |-------|-------------|---------|
 | `agent-architect` | Architecture advisor for holistic guidance on component design | "Review architecture...", "Help me restructure..." |
-| `write-rules` | Create modular rule files for `.claude/rules/` | "Create a rule for...", "Add a constraint..." |
+| `write-claude-md` | Create CLAUDE.md with `<law>` constitution | "Help me write CLAUDE.md...", "Create project setup..." |
 | `write-subagent` | Create subagent configurations for `.claude/agents/` | "Create a subagent...", "Set up a code reviewer agent..." |
 | `write-skill` | Create effective SKILL.md files following Anthropic's official patterns | "Help me write a skill for...", "Create a new skill..." |
 | `write-command` | Create slash commands with proper YAML frontmatter and argument handling | "Help me write a command...", "Create a slash command..." |
@@ -36,9 +36,9 @@ Core ACE workflow with reflection, architecture guidance, modular rules, and aut
 
 | Command | Description | Usage |
 |---------|-------------|-------|
-| `/reflect` | Reflect on conversation, classify learnings (rules vs skills), integrate | `/reflect [focus]` |
+| `/reflect` | Reflect on conversation, classify learnings, integrate | `/reflect [focus]` |
 | `/refactor-skills` | Analyze and consolidate all skills - merge, optimize, remove redundancy | `/refactor-skills` |
-| `/refactor-claude-md` | Refactor CLAUDE.md and `.claude/rules/` with modular constitution | `/refactor-claude-md [path] [mode]` |
+| `/migration` | Migrate existing systems to best practices architecture | `/migration [path]` |
 | `/improve-skill` | Optimize a skill by analyzing conventions and researching best practices | `/improve-skill <skill-path>` |
 
 ### RCC-dev-helper (v1.0.0)
@@ -66,7 +66,7 @@ Development helper tools for creating Claude Code plugins with complete manifest
 │  Auto-Injected                     │  On-Demand                  │
 │  ─────────────                     │  ─────────                  │
 │  • CLAUDE.md (high-level)          │  • Skills (capabilities)    │
-│  • .claude/rules/*.md (constraints)│  • Commands (user-triggered)│
+│  • .claude/rules/*.md (conventions)│  • Commands (user-triggered)│
 │    └─ paths: conditional trigger   │  • Subagents (isolated ctx) │
 └─────────────────────────────────────────────────────────────────┘
 ```
@@ -81,14 +81,16 @@ Development helper tools for creating Claude Code plugins with complete manifest
 
 ## Core Constitution
 
-The modular constitution (`.claude/rules/00-constitution.md`) includes:
+CLAUDE.md uses `<law>` blocks for Self-Reinforcing Display:
 
 | Law | Purpose |
 |-----|---------|
 | **Communication** | Concise, actionable responses |
 | **Skill Discovery** | Check available skills before starting work |
+| **Rule Consultation** | Check `.claude/rules/` for domain conventions |
 | **Parallel Processing** | Use Task tool for independent operations |
 | **Reflexive Learning** | Remind user to `/reflect` on important discoveries |
+| **Self-Reinforcing Display** | Display `<law>` block at start of every response |
 
 ## Workflow
 
@@ -132,12 +134,12 @@ Reflexive-Claude-Code/
 ├── commands/
 │   ├── reflect.md           # ACE-core: session reflection
 │   ├── refactor-skills.md   # ACE-core: skill consolidation
-│   ├── refactor-claude-md.md # ACE-core: CLAUDE.md/rules refactoring
+│   ├── migration.md         # ACE-core: system migration
 │   ├── improve-skill.md     # ACE-core: skill optimization
 │   └── create-plugin.md     # RCC-dev-helper: plugin scaffolding
 ├── skills/
 │   ├── agent-architect/     # ACE-core: architecture advisor
-│   ├── write-rules/         # ACE-core: creates rules
+│   ├── write-claude-md/     # ACE-core: creates CLAUDE.md
 │   ├── write-subagent/      # ACE-core: creates subagents
 │   ├── write-skill/         # ACE-core: creates skills
 │   ├── write-command/       # ACE-core: creates commands

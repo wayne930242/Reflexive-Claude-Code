@@ -28,9 +28,12 @@ For each skill, classify:
 | **Keep** | Well-structured, unique purpose |
 | **Refactor** | Has issues but valuable |
 | **Merge** | Overlaps with another skill |
+| **Extract** | Has conventions shared by other skills → move to Rules |
 | **Delete** | Redundant or unused |
 
 Use the `write-skill` skill to understand quality standards.
+
+**Key insight**: Rules = conventions/guidelines shared across skills. If multiple skills repeat the same convention, extract it to `.claude/rules/`.
 
 ### 4. Apply Refactoring
 
@@ -41,6 +44,11 @@ Use the `write-skill` skill to guide improvements.
 - Identify the primary skill
 - Consolidate unique content
 - Delete the redundant skill
+
+**For shared conventions to extract:**
+- Use `write-rules` skill to create rule in `.claude/rules/`
+- Remove duplicated convention from each skill
+- Skills now reference the shared rule
 
 **For skills to delete:**
 - Confirm no dependencies
@@ -63,10 +71,14 @@ python3 skills/write-skill/scripts/validate_skill.py <skill-path>
 - Kept: X skills
 - Refactored: Y skills
 - Merged: Z skills
+- Extracted to Rules: A conventions
 - Deleted: W skills
 
 ### Changes Made:
 - [skill-name]: [action taken]
+
+### Rules Created:
+- [rule-file]: [convention extracted from skills]
 ```
 
 ## Example Usage

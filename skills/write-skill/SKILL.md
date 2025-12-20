@@ -89,6 +89,16 @@ Claude loads references only when needed.
 - README.md, CHANGELOG.md, INSTALLATION_GUIDE.md
 - Explanations Claude already knows
 - "When to use" sections in body (put in description)
+- **Shared conventions** - if multiple skills use the same convention, extract to `.claude/rules/`
+
+## Relationship with Rules
+
+**Rules = conventions shared across skills.**
+
+If you find yourself repeating the same guideline in multiple skills:
+1. Extract to `.claude/rules/` using `write-rules` skill
+2. Skills automatically inherit rules (auto-injected)
+3. Keep skill-specific details in the skill
 
 ## References
 

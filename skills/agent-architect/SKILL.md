@@ -1,69 +1,122 @@
 ---
 name: agent-architect
-description: Claude Code architecture advisor. Provides holistic guidance on component design and refactoring. Use when restructuring skills, rules, commands, subagents, or CLAUDE.md to ensure architectural consistency.
+description: Claude Code architecture advisor. Classifies knowledge and delegates to appropriate skills. Use when deciding where to put new knowledge or restructuring components.
 ---
 
 # Agent Architect
 
-Provide architectural guidance for Claude Code projects. Ensure refactoring decisions maintain consistency across all component types.
+Classify knowledge and delegate to the right skill. You are an **advisor**, not an executor.
 
-## Role
+## Task Delegation
 
-You are an **architecture advisor**, not an orchestrator. Your job is to:
-- Analyze the current state of a project's Claude Code components
-- Provide recommendations on structure, placement, and design
-- Identify redundancy, gaps, or misalignment across components
-- Guide the agent performing work with architectural context
+| Task | Delegate To | Reviewer |
+|------|-------------|----------|
+| Create/update CLAUDE.md with `<law>` | `write-claude-md` skill | - |
+| Create/update skill | `write-skill` skill | `agent-architect` |
+| Create/update command | `write-command` skill | `agent-architect` |
+| Create/update subagent | `write-subagent` skill | `agent-architect` |
+| Create/update rule (convention) | `write-rules` skill | `agent-architect` |
+| Create/update hook | `write-hook` skill | - |
+| Improve existing skill | `/improve-skill` command | - |
+| Reflect on learnings | `/reflect` command | `agent-architect` |
+| Refactor all skills | `/refactor-skills` command | `agent-architect` |
 
-## Component Overview
+## Classification Framework
 
-| Component | Location | Trigger | Token Impact | Purpose |
-|-----------|----------|---------|--------------|---------|
-| **Rules** | `.claude/rules/*.md` | Auto-inject | High (always loaded) | Constraints, must-follow |
-| **Skills** | `.claude/skills/*/SKILL.md` | Claude decides | Medium (on-demand) | Capabilities, how-to |
-| **Commands** | `.claude/commands/*.md` | User `/command` | Low (explicit) | User-triggered workflows |
-| **Subagents** | `.claude/agents/*.md` | Task tool | Isolated context | Specialized agents |
-| **CLAUDE.md** | `.claude/CLAUDE.md` | Auto-inject | High | Project overview, imports |
-
-## Decision Framework
-
-When classifying a piece of knowledge:
+### Step 1: Is it a LAW or KNOWLEDGE?
 
 ```
-Is it a CONSTRAINT (must follow)?
-├─ Yes → Rule (.claude/rules/)
-│   └─ Applies to specific paths? → Add paths: frontmatter
-└─ No → Is it a CAPABILITY (how to do)?
-    ├─ Yes → Skill (.claude/skills/)
-    │   └─ > 200 lines? → Split to references/
-    └─ No → Is it a USER-TRIGGERED workflow?
-        ├─ Yes → Command (.claude/commands/)
-        └─ No → Is it a SPECIALIZED AGENT task?
-            ├─ Yes → Subagent (.claude/agents/)
-            └─ No → CLAUDE.md or documentation
+┌─────────────────────────────────────────────────────────────────┐
+│ Must Claude display this at the START of EVERY response?       │
+│ (To prevent context drift over long conversations)             │
+├─────────────────────────────────────────────────────────────────┤
+│ YES → IMMUTABLE LAW                                             │
+│       Delegate: write-claude-md skill                           │
+│       Format: <law> block with Self-Reinforcing Display         │
+│       Examples: Communication discipline, Skill discovery,      │
+│                 Parallel processing, Self-reinforcing display   │
+├─────────────────────────────────────────────────────────────────┤
+│ NO → Continue to Step 2                                         │
+└─────────────────────────────────────────────────────────────────┘
 ```
 
-## Architecture Principles
+### Step 2: What type of KNOWLEDGE?
 
-1. **Single Source of Truth**: Each piece of knowledge lives in ONE place
-2. **Appropriate Granularity**: Rules < 50 lines, Skills < 200 lines
-3. **Clear Triggers**: Rules auto-load, Skills have description triggers
-4. **No Redundancy**: Commands should not duplicate skill content
-5. **Progressive Disclosure**: Link to references, don't inline everything
+```
+┌─────────────────────────────────────────────────────────────────┐
+│ A. CAPABILITY - "How to do something"                           │
+│    ─────────────────────────────────────────────────────────────│
+│    Delegate: write-skill skill                                  │
+│    Format: SKILL.md < 200 lines, references/ for details        │
+│    Trigger: Description contains "Use when..."                  │
+│    Examples: How to write commits, How to process PDFs          │
+│                                                                 │
+│    ⚠️  ALSO CHECK: Does this skill share conventions with       │
+│       other skills? If YES → Also delegate to write-rules       │
+├─────────────────────────────────────────────────────────────────┤
+│ B. USER WORKFLOW - "Explicit /command invocation"               │
+│    ─────────────────────────────────────────────────────────────│
+│    Delegate: write-command skill                                │
+│    Format: Orchestrate skills, don't duplicate content          │
+│    Trigger: User types /command-name                            │
+│    Examples: /reflect, /refactor-skills, /improve-skill         │
+│                                                                 │
+│    ⚠️  RULE: Commands MUST reference skills, not duplicate      │
+│       "Use the `write-skill` skill to..." NOT inline steps      │
+├─────────────────────────────────────────────────────────────────┤
+│ C. SPECIALIZED AGENT - "Isolated context for large tasks"       │
+│    ─────────────────────────────────────────────────────────────│
+│    Delegate: write-subagent skill                               │
+│    Format: Limited tools, auto-loads skills via skills: field   │
+│    Trigger: Task tool with subagent_type                        │
+│    Examples: code-reviewer, test-runner, explore agent          │
+├─────────────────────────────────────────────────────────────────┤
+│ D. STATIC CHECK - "Quality gate / automated enforcement"        │
+│    ─────────────────────────────────────────────────────────────│
+│    Delegate: write-hook skill                                   │
+│    Format: Script in .claude/hooks/, config in settings.json    │
+│    Trigger: Event-based (PreToolUse, PostToolUse, etc.)         │
+│    Examples: Linting, formatting, type checking                 │
+│                                                                 │
+│    ⚠️  Exit code 2 = block action, other = warning only         │
+├─────────────────────────────────────────────────────────────────┤
+│ E. SHARED CONVENTION - "Guideline used by multiple skills"      │
+│    ─────────────────────────────────────────────────────────────│
+│    Delegate: write-rules skill                                  │
+│    Format: < 50 lines, paths: for domain-specific               │
+│    Trigger: Auto-injected into context                          │
+│    Examples: Code style, API conventions, testing guidelines    │
+│                                                                 │
+│    ⚠️  Rules are CONVENTIONS, not LAWS                          │
+│       Lower priority, no Self-Reinforcing Display               │
+└─────────────────────────────────────────────────────────────────┘
+```
 
-## Analysis Checklist
+### Step 3: Review & Validate
 
-When reviewing a project's architecture:
+```
+After delegation, agent-architect reviews:
 
-- [ ] Rules are constraints, not procedures
-- [ ] Skills are capabilities, not constraints
-- [ ] Commands don't duplicate skill content
-- [ ] No overlapping responsibilities
-- [ ] Token budget respected (rules are expensive)
-- [ ] Proper use of `paths:` for conditional rules
+□ Single Source of Truth - Knowledge lives in ONE place only
+□ No Duplication - Commands reference skills, not duplicate
+□ Correct Priority - Laws > Skills > Rules
+□ Proper Triggers - Skills have "Use when...", Commands are explicit
+□ Size Limits - Rules < 50 lines, Skills < 200 lines
+```
 
-## References
+## Component Summary
 
-- [components.md](references/components.md) - Detailed component specifications
-- [patterns.md](references/patterns.md) - Common architectural patterns
-- [anti-patterns.md](references/anti-patterns.md) - What to avoid
+| Component | Location | Key Rule |
+|-----------|----------|----------|
+| **CLAUDE.md** | `.claude/CLAUDE.md` | `<law>` for constitution |
+| **Skills** | `.claude/skills/*/SKILL.md` | < 200 lines |
+| **Commands** | `.claude/commands/*.md` | Orchestrate, don't duplicate |
+| **Subagents** | `.claude/agents/*.md` | Isolated context |
+| **Hooks** | `.claude/hooks/` | Exit 2 blocks |
+| **Rules** | `.claude/rules/*.md` | < 50 lines, conventions only |
+
+## Key Principles
+
+1. **Single Source** - Each knowledge lives in ONE place
+2. **Delegate** - Commands reference skills, don't duplicate
+3. **Rules = Conventions** - Shared across skills, lower priority than `<law>`

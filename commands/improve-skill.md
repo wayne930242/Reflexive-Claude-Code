@@ -44,7 +44,17 @@ Search: "[skill domain] API reference"
 
 Use the `write-skill` skill to check compliance with standards.
 
-### 5. Apply Improvements
+### 5. Check for Shared Conventions
+
+Identify conventions that appear in multiple skills:
+
+- Search other skills for similar guidelines
+- If convention is duplicated → use `write-rules` skill to extract to `.claude/rules/`
+- Remove duplicated convention from this skill (rules auto-inject)
+
+**Rule of thumb**: Rules = conventions shared across skills.
+
+### 6. Apply Improvements
 
 Use the `write-skill` skill to guide targeted edits:
 
@@ -52,8 +62,9 @@ Use the `write-skill` skill to guide targeted edits:
 - Add missing triggers to description
 - Move large content to references/
 - Update APIs to current best practices
+- Remove conventions that now exist in rules
 
-### 6. Validate Final Result
+### 7. Validate Final Result
 
 ```bash
 python3 skills/write-skill/scripts/validate_skill.py $1

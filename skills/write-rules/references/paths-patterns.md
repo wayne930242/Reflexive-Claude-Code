@@ -101,6 +101,6 @@ paths: e2e/**/*.ts, cypress/**/*.ts
 
 ## Priority Notes
 
-- More specific rules take precedence
+- More specific paths take precedence
 - Rules without `paths:` are global (lowest specificity)
-- Use numbered prefixes for explicit ordering: `00-`, `10-`, `20-`
+- Use descriptive names: `api-conventions.md`, `testing-guidelines.md`
