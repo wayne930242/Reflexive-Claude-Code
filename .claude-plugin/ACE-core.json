@@ -26,6 +26,8 @@
     "skills/write-skill",
     "skills/write-command",
     "skills/write-claude-md",
+    "skills/write-rules",
+    "skills/write-hook",
     "skills/write-subagent",
     "skills/agent-architect"
   ]
