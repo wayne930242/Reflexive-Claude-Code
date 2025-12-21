@@ -33,6 +33,17 @@ Based on the architecture plan, execute each task by invoking the correct skill:
 | Hooks (static checks) | `write-hook` |
 | Rules (conventions) | `write-rules` |
 
+### Rules Discovery
+
+Analyze the project to infer conventions. Ask the user only when uncertain:
+
+1. **Code style** - Formatting, naming conventions, import order
+2. **Language conventions** - Framework-specific patterns
+3. **Architecture** - Project structure, layering, module boundaries
+4. **Methodology** - DDD, TDD, clean architecture, other patterns
+
+Use findings to create rules via `write-rules`.
+
 **CRITICAL**: Complete each task one by one. Do not skip or batch tasks.
 
 ### 3. Validation

@@ -13,6 +13,7 @@ Create hooks that enforce code quality through static analysis.
 2. **Fast checks only** - Hooks run synchronously; keep under 5 seconds
 3. **JSON stdin/stdout** - Hooks receive context, can output structured responses
 4. **Fail safe** - Non-zero (except 2) continues execution with warning
+5. **Use Python** - Wrap shell commands in Python for cross-platform compatibility
 
 ## Quick Start
 
@@ -141,6 +142,20 @@ if result.returncode != 0:
 | 0 | Success | Continue, stdout shown in verbose |
 | 2 | Block | Action blocked, stderr fed to Claude |
 | Other | Warning | Continue, stderr shown in verbose |
+
+## Verification
+
+After creating a hook, verify it works:
+
+```bash
+# Test with sample input
+echo '{"tool_input":{"file_path":"test.ts"}}' | .claude/hooks/your_hook.py
+echo $?  # Should be 0 (pass) or 2 (block)
+```
+
+Check:
+- Exit code 0 for valid files, 2 for violations
+- Errors go to stderr, info to stdout
 
 ## Best Practices
 
