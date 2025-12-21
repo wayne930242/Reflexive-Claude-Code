@@ -341,6 +341,8 @@ if __name__ == "__main__":
 
 ## Configuration Examples
 
+> **Note:** All hook configurations go in `.claude/settings.json` (not `settings.local.json`). This ensures hooks are version-controlled and shared with the team.
+
 ### Full Static Check Setup
 
 ```json

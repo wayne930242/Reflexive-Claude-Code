@@ -41,6 +41,8 @@ Options:
 
 ## Configuration Format
 
+**Important:** Hooks must be configured in `.claude/settings.json` (not `settings.local.json`). The `settings.json` file is shared with the team via version control, ensuring consistent hook behavior across all collaborators.
+
 ```json
 {
   "hooks": {
