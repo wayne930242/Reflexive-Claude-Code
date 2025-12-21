@@ -18,7 +18,7 @@ The agent maintains and refactors its own core prompts and agent system — not 
 
 This marketplace provides two plugins:
 
-### ACE-core (v4.1.0)
+### ACE-core (v4.5.0)
 
 Core ACE workflow with reflection, architecture guidance, modular rules, and authoring tools.
 
@@ -43,6 +43,7 @@ Core ACE workflow with reflection, architecture guidance, modular rules, and aut
 | `/refactor-skills` | Analyze and consolidate all skills - merge, optimize, remove redundancy | `/refactor-skills` |
 | `/migration` | Migrate existing systems to best practices architecture | `/migration [path]` |
 | `/improve-skill` | Optimize a skill by analyzing conventions and researching best practices | `/improve-skill <skill-path>` |
+| `/add-law` | Add a new law to the CLAUDE.md constitution | `/add-law [law_content]` |
 
 ### RCC-dev-helper (v1.0.0)
 
@@ -140,6 +141,7 @@ Reflexive-Claude-Code/
 │   ├── refactor-skills.md   # ACE-core: skill consolidation
 │   ├── migration.md         # ACE-core: system migration
 │   ├── improve-skill.md     # ACE-core: skill optimization
+│   ├── add-law.md           # ACE-core: add constitution law
 │   └── create-plugin.md     # RCC-dev-helper: plugin scaffolding
 ├── skills/
 │   ├── agent-architect/     # ACE-core: architecture advisor
