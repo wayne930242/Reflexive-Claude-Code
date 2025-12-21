@@ -104,12 +104,19 @@ After user confirmation:
 
 ### 5. Setup Agent System
 
-Invoke `/migration` command to:
+**CRITICAL: You MUST invoke the `/migration` command using the Skill tool. Do NOT perform migration steps manually.**
 
+```
+Invoke Skill tool with skill="sc:migration"
+```
+
+The `/migration` command will handle:
 - Create CLAUDE.md with project-specific constitution
 - Setup skills, commands, subagents as needed
 - Configure hooks for static checks (linting, formatting, type checking)
 - Create rules based on discovered conventions
+
+**Do NOT skip this step or attempt to create agent system components directly.**
 
 ### 6. Final Confirmation
 

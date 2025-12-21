@@ -11,6 +11,16 @@ arguments:
 
 Initialize new or migrate existing agent systems to recommended architecture.
 
+## Critical Rule: Skill Invocation is MANDATORY
+
+**You MUST invoke the Skill tool for each component. NEVER create files directly.**
+
+When creating any component:
+1. Identify the component type from the table below
+2. **Invoke the Skill tool** with the corresponding skill name
+3. Let the skill handle the actual file creation
+4. Proceed to the next component after completion
+
 ## Process
 
 ### 1. Architecture Planning
@@ -44,7 +54,9 @@ Analyze the project to infer conventions. Ask the user only when uncertain:
 
 Use findings to create rules via `write-rules`.
 
-**CRITICAL**: Complete each task one by one. Do not skip or batch tasks.
+**CRITICAL**:
+- Complete each task one by one. Do not skip or batch tasks.
+- You MUST invoke the Skill tool for each task. Do NOT write files directly.
 
 ### 3. Validation
 

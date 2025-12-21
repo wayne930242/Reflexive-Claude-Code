@@ -18,7 +18,7 @@ The agent maintains and refactors its own core prompts and agent system — not 
 
 This marketplace provides two plugins:
 
-### ACE-core (v4.0.0)
+### ACE-core (v4.1.0)
 
 Core ACE workflow with reflection, architecture guidance, modular rules, and authoring tools.
 
