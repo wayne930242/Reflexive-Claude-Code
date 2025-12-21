@@ -30,6 +30,8 @@ Based on the architecture plan, execute each task by invoking the correct skill:
 | Skills | `write-skill` |
 | Slash commands | `write-command` |
 | Subagents | `write-subagent` |
+| Hooks (static checks) | `write-hook` |
+| Rules (conventions) | `write-rules` |
 
 **CRITICAL**: Complete each task one by one. Do not skip or batch tasks.
 
