@@ -18,7 +18,7 @@ The agent maintains and refactors its own core prompts and agent system — not 
 
 This marketplace provides two plugins:
 
-### ACE-core (v3.0.0)
+### ACE-core (v4.0.0)
 
 Core ACE workflow with reflection, architecture guidance, modular rules, and authoring tools.
 
@@ -31,11 +31,14 @@ Core ACE workflow with reflection, architecture guidance, modular rules, and aut
 | `write-subagent` | Create subagent configurations for `.claude/agents/` | "Create a subagent...", "Set up a code reviewer agent..." |
 | `write-skill` | Create effective SKILL.md files following Anthropic's official patterns | "Help me write a skill for...", "Create a new skill..." |
 | `write-command` | Create slash commands with proper YAML frontmatter and argument handling | "Help me write a command...", "Create a slash command..." |
+| `write-rules` | Create rule files for `.claude/rules/` with conventions | "Add a coding convention...", "Create a rule for..." |
+| `write-hook` | Create hooks for static analysis and code quality | "Add a linting hook...", "Set up type checking..." |
 
 **Commands:**
 
 | Command | Description | Usage |
 |---------|-------------|-------|
+| `/init-project` | Initialize new project with framework, best practices, and agent system | `/init-project [path]` |
 | `/reflect` | Reflect on conversation, classify learnings, integrate | `/reflect [focus]` |
 | `/refactor-skills` | Analyze and consolidate all skills - merge, optimize, remove redundancy | `/refactor-skills` |
 | `/migration` | Migrate existing systems to best practices architecture | `/migration [path]` |
@@ -132,6 +135,7 @@ Reflexive-Claude-Code/
 │   ├── ACE-core.json        # ACE-core plugin manifest
 │   └── RCC-dev-helper.json  # RCC-dev-helper plugin manifest
 ├── commands/
+│   ├── init-project.md      # ACE-core: project initialization
 │   ├── reflect.md           # ACE-core: session reflection
 │   ├── refactor-skills.md   # ACE-core: skill consolidation
 │   ├── migration.md         # ACE-core: system migration
@@ -143,6 +147,8 @@ Reflexive-Claude-Code/
 │   ├── write-subagent/      # ACE-core: creates subagents
 │   ├── write-skill/         # ACE-core: creates skills
 │   ├── write-command/       # ACE-core: creates commands
+│   ├── write-rules/         # ACE-core: creates rules
+│   ├── write-hook/          # ACE-core: creates hooks
 │   └── write-plugin/        # RCC-dev-helper: creates plugins
 └── README.md
 ```
