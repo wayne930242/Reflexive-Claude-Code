@@ -28,7 +28,8 @@ CLAUDE_MD_TEMPLATE = '''# {project_name}
 
 **Law 3: Rule Consultation**
 - When task relates to specific domain, check `.claude/rules/` for relevant conventions
-- Apply domain-specific guidelines for best practices
+- If relevant rule exists, MUST apply it
+- If needed rule doesn't exist, confirm intent with user and create via `write-rules`
 
 **Law 4: Parallel Processing**
 - MUST use Task tool for independent operations
@@ -64,7 +65,7 @@ MINIMAL_TEMPLATE = '''# {project_name}
 
 **Law 1: Communication** - Concise responses, no unnecessary explanations
 **Law 2: Skill Discovery** - Check skills; MUST use if exists; ask to create via `write-skill` if not
-**Law 3: Rule Consultation** - Check `.claude/rules/` for domain-specific conventions
+**Law 3: Rule Consultation** - Check rules; MUST use if exists; ask to create via `write-rules` if not
 **Law 4: Parallel Processing** - Use Task tool for independent operations
 **Law 5: Reflexive Learning** - Important discoveries -> `/reflect`
 **Law 6: Self-Reinforcing Display** - Display this block every response
