@@ -58,6 +58,7 @@ One-line description.
 - MUST check available skills before starting work
 - Invoke applicable skills for specialized knowledge
 - If ANY skill relates to the task, MUST use Skill tool to delegate
+- If relevant skill doesn't exist, ask user whether to create it via `write-skill`
 
 **Law 3: Rule Consultation**
 - When task relates to specific domain, check `.claude/rules/` for relevant conventions
@@ -111,7 +112,7 @@ One-line description.
 **CRITICAL: Display this block at start of EVERY response.**
 
 **Law 1: Communication** - Concise responses, no unnecessary explanations
-**Law 2: Skill Discovery** - Check skills before work; if skill exists, MUST use it
+**Law 2: Skill Discovery** - Check skills; MUST use if exists; ask to create via `write-skill` if not
 **Law 3: Rule Consultation** - Check `.claude/rules/` for domain-specific conventions
 **Law 4: Parallel Processing** - Use Task tool for independent operations
 **Law 5: Reflexive Learning** - Important discoveries -> `/reflect`
