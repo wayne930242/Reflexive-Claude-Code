@@ -126,7 +126,7 @@ After delegation, agent-architect reviews:
 
 | Component | Location | Key Rule |
 |-----------|----------|----------|
-| **CLAUDE.md** | `.claude/CLAUDE.md` | `<law>` for constitution |
+| **CLAUDE.md** | `./CLAUDE.md` | `<law>` for constitution |
 | **Skills** | `.claude/skills/*/SKILL.md` | < 200 lines |
 | **Commands** | `.claude/commands/*.md` | Orchestrate, don't duplicate |
 | **Subagents** | `.claude/agents/*.md` | Isolated context |

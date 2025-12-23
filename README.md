@@ -81,7 +81,7 @@ Development helper tools for creating Claude Code plugins with complete manifest
 | **Skills** | `.claude/skills/*/SKILL.md` | Claude decides | Medium (< 200 lines) |
 | **Commands** | `.claude/commands/*.md` | User `/command` | Low |
 | **Subagents** | `.claude/agents/*.md` | Task tool | Isolated |
-| **CLAUDE.md** | `.claude/CLAUDE.md` | Auto-inject | High (< 300 lines) |
+| **CLAUDE.md** | `./CLAUDE.md` | Auto-inject | High (< 300 lines) |
 
 ## Core Constitution
 

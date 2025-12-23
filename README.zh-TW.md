@@ -81,7 +81,7 @@ Agent 維護並重構自己的核心提示詞與 Agent 系統——而非外部�
 | **Skills** | `.claude/skills/*/SKILL.md` | Claude 決定 | 中（< 200 行） |
 | **Commands** | `.claude/commands/*.md` | 使用者 `/command` | 低 |
 | **Subagents** | `.claude/agents/*.md` | Task 工具 | 隔離 |
-| **CLAUDE.md** | `.claude/CLAUDE.md` | 自動注入 | 高（< 300 行） |
+| **CLAUDE.md** | `./CLAUDE.md` | 自動注入 | 高（< 300 行） |
 
 ## 核心憲法
 
