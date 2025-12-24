@@ -10,7 +10,7 @@ The agent maintains and refactors its own core prompts and agent system — not 
 
 **Skills-driven Agentic Context Engineering** means:
 - Before each task, the agent reviews the skill library for relevant capabilities
-- Users explicitly trigger learning moments through commands like `/reflect`
+- Users explicitly trigger learning moments through commands like `/rcc:reflect`
 - Through deliberate teaching, the agent integrates learnings into its skill library
 - Skills are abstract, reusable, and link to reference directories with examples and documentation
 
@@ -18,7 +18,7 @@ The agent maintains and refactors its own core prompts and agent system — not 
 
 This marketplace provides two plugins:
 
-### ACE-core (v4.5.0)
+### ACE-core (v5.0.0)
 
 Core ACE workflow with reflection, architecture guidance, modular rules, and authoring tools.
 
@@ -38,12 +38,12 @@ Core ACE workflow with reflection, architecture guidance, modular rules, and aut
 
 | Command | Description | Usage |
 |---------|-------------|-------|
-| `/init-project` | Initialize new project with framework, best practices, and agent system | `/init-project [path]` |
-| `/reflect` | Reflect on conversation, classify learnings, integrate | `/reflect [focus]` |
-| `/refactor-skills` | Analyze and consolidate all skills - merge, optimize, remove redundancy | `/refactor-skills` |
-| `/migration` | Migrate existing systems to best practices architecture | `/migration [path]` |
-| `/improve-skill` | Optimize a skill by analyzing conventions and researching best practices | `/improve-skill <skill-path>` |
-| `/add-law` | Add a new law to the CLAUDE.md constitution | `/add-law [law_content]` |
+| `/rcc:init-project` | Initialize new project with framework, best practices, and agent system | `/rcc:init-project [path]` |
+| `/rcc:reflect` | Reflect on conversation, classify learnings, integrate | `/rcc:reflect [focus]` |
+| `/rcc:refactor-skills` | Analyze and consolidate all skills - merge, optimize, remove redundancy | `/rcc:refactor-skills` |
+| `/rcc:migration` | Migrate existing systems to best practices architecture | `/rcc:migration [path]` |
+| `/rcc:improve-skill` | Optimize a skill by analyzing conventions and researching best practices | `/rcc:improve-skill <skill-path>` |
+| `/rcc:add-law` | Add a new law to the CLAUDE.md constitution | `/rcc:add-law [law_content]` |
 
 ### RCC-dev-helper (v1.0.0)
 
@@ -59,7 +59,7 @@ Development helper tools for creating Claude Code plugins with complete manifest
 
 | Command | Description | Usage |
 |---------|-------------|-------|
-| `/create-plugin` | Scaffold a new Claude Code plugin | `/create-plugin <name> [type]` |
+| `/rcc:create-plugin` | Scaffold a new Claude Code plugin | `/rcc:create-plugin <name> [type]` |
 
 ## Component Architecture
 
@@ -93,7 +93,7 @@ CLAUDE.md uses `<law>` blocks for Self-Reinforcing Display:
 | **Skill Discovery** | Check available skills before starting work |
 | **Rule Consultation** | Check `.claude/rules/` for domain conventions |
 | **Parallel Processing** | Use Task tool for independent operations |
-| **Reflexive Learning** | Remind user to `/reflect` on important discoveries |
+| **Reflexive Learning** | Remind user to `/rcc:reflect` on important discoveries |
 | **Self-Reinforcing Display** | Display `<law>` block at start of every response |
 
 ## Workflow
@@ -104,7 +104,7 @@ CLAUDE.md uses `<law>` blocks for Self-Reinforcing Display:
 ├─────────────────────────────────────────────────────────────────┤
 │  1. Before Task     │  Review skill library                      │
 │  2. Do Work         │  Just work normally                        │
-│  3. /reflect        │  Classify → Rules or Skills → Integrate    │
+│  3. /rcc:reflect    │  Classify → Rules or Skills → Integrate    │
 │  4. /refactor-*     │  Consolidate & optimize                    │
 └─────────────────────────────────────────────────────────────────┘
 ```

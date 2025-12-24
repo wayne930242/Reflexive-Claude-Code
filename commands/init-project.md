@@ -1,5 +1,5 @@
 ---
-name: init-project
+name: rcc:init-project
 description: Initialize a new project with framework, best practices, and agent system from scratch
 arguments:
   - name: path
@@ -104,13 +104,13 @@ After user confirmation:
 
 ### 5. Setup Agent System
 
-**CRITICAL: You MUST invoke the `/migration` command using the Skill tool. Do NOT perform migration steps manually.**
+**CRITICAL: You MUST invoke the `/rcc:migration` command using the Skill tool. Do NOT perform migration steps manually.**
 
 ```
-Invoke Skill tool with skill="sc:migration"
+Invoke Skill tool with skill="rcc:migration"
 ```
 
-The `/migration` command will handle:
+The `/rcc:migration` command will handle:
 - Create CLAUDE.md with project-specific constitution
 - Setup skills, commands, subagents as needed
 - Configure hooks for static checks (linting, formatting, type checking)
@@ -125,6 +125,6 @@ Ask user if they want to proceed with bootstrapping according to the blueprint.
 ## Example Usage
 
 ```
-/init-project
-/init-project ./my-new-app
+/rcc:init-project
+/rcc:init-project ./my-new-app
 ```

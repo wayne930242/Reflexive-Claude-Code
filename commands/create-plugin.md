@@ -1,5 +1,5 @@
 ---
-name: create-plugin
+name: rcc:create-plugin
 description: Scaffold a new Claude Code plugin with proper structure
 arguments:
   - name: name
@@ -79,7 +79,7 @@ Display:
 ## Example Usage
 
 ```
-/create-plugin my-awesome-tool
-/create-plugin code-reviewer skill
-/create-plugin deploy-helper command
+/rcc:create-plugin my-awesome-tool
+/rcc:create-plugin code-reviewer skill
+/rcc:create-plugin deploy-helper command
 ```

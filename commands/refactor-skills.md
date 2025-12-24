@@ -1,5 +1,5 @@
 ---
-name: refactor-skills
+name: rcc:refactor-skills
 description: Analyze and refactor all skills in the project - consolidate, optimize, and remove unnecessary ones
 ---
 
@@ -84,5 +84,5 @@ python3 skills/write-skill/scripts/validate_skill.py <skill-path>
 ## Example Usage
 
 ```
-/refactor-skills
+/rcc:refactor-skills
 ```

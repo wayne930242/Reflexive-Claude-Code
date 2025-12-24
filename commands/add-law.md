@@ -1,5 +1,5 @@
 ---
-name: add-law
+name: rcc:add-law
 description: Add a new law to the CLAUDE.md constitution
 arguments:
   - name: law_content
@@ -19,7 +19,7 @@ Search for CLAUDE.md in:
 1. Project root (`./CLAUDE.md`)
 2. `.claude/` directory (`.claude/CLAUDE.md`)
 
-If not found, inform user and suggest `/migration` or `/init-project`.
+If not found, inform user and suggest `/rcc:migration` or `/rcc:init-project`.
 
 ### 2. Parse Existing Laws
 
@@ -61,7 +61,7 @@ Insert before `</law>`, after the last existing law.
 ## Example Usage
 
 ```
-/add-law
-/add-law "Testing: Run tests before commit"
-/add-law "Documentation: Update docs with code changes, Keep README current"
+/rcc:add-law
+/rcc:add-law "Testing: Run tests before commit"
+/rcc:add-law "Documentation: Update docs with code changes, Keep README current"
 ```

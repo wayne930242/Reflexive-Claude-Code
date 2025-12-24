@@ -1,5 +1,5 @@
 ---
-name: improve-skill
+name: rcc:improve-skill
 description: Optimize a skill by analyzing project conventions and researching best practices
 arguments:
   - name: skill-path
@@ -73,6 +73,6 @@ python3 skills/write-skill/scripts/validate_skill.py $1
 ## Example Usage
 
 ```
-/improve-skill skills/pdf-processor
-/improve-skill .claude/skills/api-client
+/rcc:improve-skill skills/pdf-processor
+/rcc:improve-skill .claude/skills/api-client
 ```

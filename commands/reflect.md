@@ -1,5 +1,5 @@
 ---
-name: reflect
+name: rcc:reflect
 description: Reflect on conversation learnings and integrate into skill library or rules. Consolidates experiences into reusable knowledge.
 arguments:
   - name: focus
@@ -58,7 +58,7 @@ Learning:
 - Must include Self-Reinforcing Display
 
 **For Skills** (capabilities, how-to):
-- If enhancing existing skill: `/improve-skill [skill-path]`
+- If enhancing existing skill: `/rcc:improve-skill [skill-path]`
 - If creating new skill: Use the `write-skill` skill
 - Keep < 200 lines, use references/ for details
 

@@ -10,7 +10,7 @@ Agent 維護並重構自己的核心提示詞與 Agent 系統——而非外部�
 
 **技能驅動代理脈絡工程**意味著：
 - 每次任務開始前，Agent 會檢視技能庫中相關的能力
-- 使用者透過 `/reflect` 等指令明確觸發學習點
+- 使用者透過 `/rcc:reflect` 等指令明確觸發學習點
 - 透過刻意的教導，Agent 將學習成果整合到技能庫中
 - 技能是抽象的、可重用的，並連結到包含範例和文件的參考目錄
 
@@ -18,7 +18,7 @@ Agent 維護並重構自己的核心提示詞與 Agent 系統——而非外部�
 
 此市集提供兩個插件：
 
-### ACE-core (v4.5.0)
+### ACE-core (v5.0.0)
 
 核心 ACE 工作流程，包含反思、架構指導、模組化規則，以及撰寫工具。
 
@@ -38,12 +38,12 @@ Agent 維護並重構自己的核心提示詞與 Agent 系統——而非外部�
 
 | 指令 | 說明 | 用法 |
 |------|------|------|
-| `/init-project` | 初始化新專案，包含框架、最佳實踐和代理人系統 | `/init-project [path]` |
-| `/reflect` | 反思對話內容，分類學習成果，整合 | `/reflect [focus]` |
-| `/refactor-skills` | 分析並整合所有技能——合併、優化、移除冗餘 | `/refactor-skills` |
-| `/migration` | 遷移現有系統到最佳實踐架構 | `/migration [path]` |
-| `/improve-skill` | 分析慣例與研究最佳實踐來優化技能 | `/improve-skill <skill-path>` |
-| `/add-law` | 新增法則到 CLAUDE.md 憲法 | `/add-law [law_content]` |
+| `/rcc:init-project` | 初始化新專案，包含框架、最佳實踐和代理人系統 | `/rcc:init-project [path]` |
+| `/rcc:reflect` | 反思對話內容，分類學習成果，整合 | `/rcc:reflect [focus]` |
+| `/rcc:refactor-skills` | 分析並整合所有技能——合併、優化、移除冗餘 | `/rcc:refactor-skills` |
+| `/rcc:migration` | 遷移現有系統到最佳實踐架構 | `/rcc:migration [path]` |
+| `/rcc:improve-skill` | 分析慣例與研究最佳實踐來優化技能 | `/rcc:improve-skill <skill-path>` |
+| `/rcc:add-law` | 新增法則到 CLAUDE.md 憲法 | `/rcc:add-law [law_content]` |
 
 ### RCC-dev-helper (v1.0.0)
 
@@ -59,7 +59,7 @@ Agent 維護並重構自己的核心提示詞與 Agent 系統——而非外部�
 
 | 指令 | 說明 | 用法 |
 |------|------|------|
-| `/create-plugin` | 建立新的 Claude Code 插件骨架 | `/create-plugin <name> [type]` |
+| `/rcc:create-plugin` | 建立新的 Claude Code 插件骨架 | `/rcc:create-plugin <name> [type]` |
 
 ## 元件架構
 
@@ -93,7 +93,7 @@ CLAUDE.md 使用 `<law>` 區塊進行自我強化顯示：
 | **Skill Discovery** | 開始工作前檢查可用技能 |
 | **Rule Consultation** | 檢查 `.claude/rules/` 的領域慣例 |
 | **Parallel Processing** | 使用 Task 工具進行獨立操作 |
-| **Reflexive Learning** | 發現重要事項時提醒使用者 `/reflect` |
+| **Reflexive Learning** | 發現重要事項時提醒使用者 `/rcc:reflect` |
 | **Self-Reinforcing Display** | 每次回覆開頭顯示 `<law>` 區塊 |
 
 ## 工作流程
@@ -104,7 +104,7 @@ CLAUDE.md 使用 `<law>` 區塊進行自我強化顯示：
 ├─────────────────────────────────────────────────────────────────┤
 │  1. 任務開始前   │  檢視技能庫                                   │
 │  2. 執行工作     │  正常工作即可                                 │
-│  3. /reflect     │  分類 → 規則或技能 → 整合                     │
+│  3. /rcc:reflect │  分類 → 規則或技能 → 整合                     │
 │  4. /refactor-*  │  整合與優化                                   │
 └─────────────────────────────────────────────────────────────────┘
 ```

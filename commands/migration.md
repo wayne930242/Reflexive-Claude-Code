@@ -1,5 +1,5 @@
 ---
-name: migration
+name: rcc:migration
 description: Initialize or migrate agent systems to Claude Code best practices architecture
 arguments:
   - name: path
