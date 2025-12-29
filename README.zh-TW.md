@@ -18,7 +18,7 @@ Agent 維護並重構自己的核心提示詞與 Agent 系統——而非外部�
 
 此市集提供兩個插件：
 
-### ACE-core (v5.0.0)
+### ACE-core (v5.1.0)
 
 核心 ACE 工作流程，包含反思、架構指導、模組化規則，以及撰寫工具。
 
@@ -33,6 +33,7 @@ Agent 維護並重構自己的核心提示詞與 Agent 系統——而非外部�
 | `write-command` | 建立具有正確 YAML frontmatter 和參數處理的斜線指令 | "幫我寫一個指令..."、"建立一個斜線指令..." |
 | `write-rules` | 為 `.claude/rules/` 建立慣例規則檔案 | "新增程式碼慣例..."、"建立規則..." |
 | `write-hook` | 建立靜態分析與程式碼品質的 hook | "新增 linting hook..."、"設定型別檢查..." |
+| `project-discovery` | 深度專案分析，用於架構規劃 | 開始遷移、設計代理元件 |
 
 **指令：**
 
@@ -151,6 +152,7 @@ Reflexive-Claude-Code/
 │   ├── write-command/       # ACE-core：建立指令
 │   ├── write-rules/         # ACE-core：建立規則
 │   ├── write-hook/          # ACE-core：建立 hook
+│   ├── project-discovery/   # ACE-core：專案分析
 │   └── write-plugin/        # RCC-dev-helper：建立插件
 └── README.md
 ```

@@ -1,7 +1,7 @@
 {
   "name": "ACE-core",
   "description": "Core ACE workflow with reflection, architecture guidance, modular rules, and skill/command authoring tools",
-  "version": "5.0.0",
+  "version": "5.1.0",
   "author": {
     "name": "Wei Hung",
     "email": "wayne930242@gmail.com"
@@ -31,6 +31,7 @@
     "skills/write-rules",
     "skills/write-hook",
     "skills/write-subagent",
-    "skills/agent-architect"
+    "skills/agent-architect",
+    "skills/project-discovery"
   ]
 }

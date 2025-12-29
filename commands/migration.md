@@ -23,14 +23,24 @@ When creating any component:
 
 ## Process
 
-### 1. Architecture Planning
+### 1. Project Discovery
+
+Invoke `project-discovery` skill to:
+- Scan project structure and tech stack
+- Identify existing workflows and automation
+- Discover patterns and conventions
+- **Produce a Discovery Report** with recommended components
+
+Present findings to user for validation before proceeding.
+
+### 2. Architecture Planning
 
 Invoke `agent-architect` skill to:
-- Analyze current agent system (or lack thereof)
+- Receive validated Discovery Report
 - Design complete architecture for the project
 - **Produce a detailed plan** listing all components to create/modify
 
-### 2. Execute Tasks
+### 3. Execute Tasks
 
 Based on the architecture plan, execute each task by invoking the correct skill:
 
@@ -58,6 +68,6 @@ Use findings to create rules via `write-rules`.
 - Complete each task one by one. Do not skip or batch tasks.
 - You MUST invoke the Skill tool for each task. Do NOT write files directly.
 
-### 3. Validation
+### 4. Validation
 
 After all tasks complete, verify the architecture plan is fully implemented.

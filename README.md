@@ -18,7 +18,7 @@ The agent maintains and refactors its own core prompts and agent system — not 
 
 This marketplace provides two plugins:
 
-### ACE-core (v5.0.0)
+### ACE-core (v5.1.0)
 
 Core ACE workflow with reflection, architecture guidance, modular rules, and authoring tools.
 
@@ -33,6 +33,7 @@ Core ACE workflow with reflection, architecture guidance, modular rules, and aut
 | `write-command` | Create slash commands with proper YAML frontmatter and argument handling | "Help me write a command...", "Create a slash command..." |
 | `write-rules` | Create rule files for `.claude/rules/` with conventions | "Add a coding convention...", "Create a rule for..." |
 | `write-hook` | Create hooks for static analysis and code quality | "Add a linting hook...", "Set up type checking..." |
+| `project-discovery` | Deep project analysis for architecture planning | Starting migration, designing agent components |
 
 **Commands:**
 
@@ -151,6 +152,7 @@ Reflexive-Claude-Code/
 │   ├── write-command/       # ACE-core: creates commands
 │   ├── write-rules/         # ACE-core: creates rules
 │   ├── write-hook/          # ACE-core: creates hooks
+│   ├── project-discovery/   # ACE-core: project analysis
 │   └── write-plugin/        # RCC-dev-helper: creates plugins
 └── README.md
 ```
