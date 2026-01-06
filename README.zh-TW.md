@@ -18,7 +18,7 @@ Agent 維護並重構自己的核心提示詞與 Agent 系統——而非外部�
 
 此市集提供兩個插件：
 
-### ACE-core (v5.1.0)
+### ACE-core (v5.2.0)
 
 核心 ACE 工作流程，包含反思、架構指導、模組化規則，以及撰寫工具。
 
@@ -45,6 +45,8 @@ Agent 維護並重構自己的核心提示詞與 Agent 系統——而非外部�
 | `/rcc:migration` | 遷移現有系統到最佳實踐架構 | `/rcc:migration [path]` |
 | `/rcc:improve-skill` | 分析慣例與研究最佳實踐來優化技能 | `/rcc:improve-skill <skill-path>` |
 | `/rcc:add-law` | 新增法則到 CLAUDE.md 憲法 | `/rcc:add-law [law_content]` |
+| `/rcc:chrollo` | 透過 claude-skills-mcp 搜尋外部技能，轉化為專案技能 | `/rcc:chrollo <query>` |
+| `/rcc:refactor-by-chrollo` | 使用外部技能模式重構現有技能 | `/rcc:refactor-by-chrollo [skill-path]` |
 
 ### RCC-dev-helper (v1.0.0)
 
@@ -143,6 +145,8 @@ Reflexive-Claude-Code/
 │   ├── migration.md         # ACE-core：系統遷移
 │   ├── improve-skill.md     # ACE-core：技能優化
 │   ├── add-law.md           # ACE-core：新增憲法法則
+│   ├── chrollo.md           # ACE-core：從外部來源獵取技能
+│   ├── refactor-by-chrollo.md # ACE-core：使用外部技能重構
 │   └── create-plugin.md     # RCC-dev-helper：插件建立
 ├── skills/
 │   ├── agent-architect/     # ACE-core：架構顧問

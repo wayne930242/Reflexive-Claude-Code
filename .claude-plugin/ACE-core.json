@@ -1,7 +1,7 @@
 {
   "name": "ACE-core",
   "description": "Core ACE workflow with reflection, architecture guidance, modular rules, and skill/command authoring tools",
-  "version": "5.1.0",
+  "version": "5.2.0",
   "author": {
     "name": "Wei Hung",
     "email": "wayne930242@gmail.com"
@@ -22,7 +22,9 @@
     "commands/migration.md",
     "commands/improve-skill.md",
     "commands/init-project.md",
-    "commands/add-law.md"
+    "commands/add-law.md",
+    "commands/chrollo.md",
+    "commands/refactor-by-chrollo.md"
   ],
   "skills": [
     "skills/write-skill",
