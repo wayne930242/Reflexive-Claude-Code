@@ -18,7 +18,7 @@ Agent 維護並重構自己的核心提示詞與 Agent 系統——而非外部�
 
 此市集提供兩個插件：
 
-### ACE-core (v5.2.0)
+### ACE-core (v5.3.0)
 
 核心 ACE 工作流程，包含反思、架構指導、模組化規則，以及撰寫工具。
 
@@ -135,29 +135,36 @@ CLAUDE.md 使用 `<law>` 區塊進行自我強化顯示：
 ```
 Reflexive-Claude-Code/
 ├── .claude-plugin/
-│   ├── marketplace.json     # 市集定義
-│   ├── ACE-core.json        # ACE-core 插件 manifest
-│   └── RCC-dev-helper.json  # RCC-dev-helper 插件 manifest
-├── commands/
-│   ├── init-project.md      # ACE-core：專案初始化
-│   ├── reflect.md           # ACE-core：階段反思
-│   ├── refactor-skills.md   # ACE-core：技能整合
-│   ├── migration.md         # ACE-core：系統遷移
-│   ├── improve-skill.md     # ACE-core：技能優化
-│   ├── add-law.md           # ACE-core：新增憲法法則
-│   ├── chrollo.md           # ACE-core：從外部來源獵取技能
-│   ├── refactor-by-chrollo.md # ACE-core：使用外部技能重構
-│   └── create-plugin.md     # RCC-dev-helper：插件建立
-├── skills/
-│   ├── agent-architect/     # ACE-core：架構顧問
-│   ├── write-claude-md/     # ACE-core：建立 CLAUDE.md
-│   ├── write-subagent/      # ACE-core：建立子代理
-│   ├── write-skill/         # ACE-core：建立技能
-│   ├── write-command/       # ACE-core：建立指令
-│   ├── write-rules/         # ACE-core：建立規則
-│   ├── write-hook/          # ACE-core：建立 hook
-│   ├── project-discovery/   # ACE-core：專案分析
-│   └── write-plugin/        # RCC-dev-helper：建立插件
+│   └── marketplace.json         # 市集定義
+├── plugins/
+│   ├── ACE-core/                # 主插件
+│   │   ├── .claude-plugin/
+│   │   │   └── plugin.json      # 插件 manifest
+│   │   ├── commands/
+│   │   │   ├── init-project.md
+│   │   │   ├── reflect.md
+│   │   │   ├── refactor-skills.md
+│   │   │   ├── migration.md
+│   │   │   ├── improve-skill.md
+│   │   │   ├── add-law.md
+│   │   │   ├── chrollo.md
+│   │   │   └── refactor-by-chrollo.md
+│   │   └── skills/
+│   │       ├── agent-architect/
+│   │       ├── write-claude-md/
+│   │       ├── write-subagent/
+│   │       ├── write-skill/
+│   │       ├── write-command/
+│   │       ├── write-rules/
+│   │       ├── write-hook/
+│   │       └── project-discovery/
+│   └── RCC-dev-helper/          # 開發輔助插件
+│       ├── .claude-plugin/
+│       │   └── plugin.json
+│       ├── commands/
+│       │   └── create-plugin.md
+│       └── skills/
+│           └── write-plugin/
 └── README.md
 ```
 

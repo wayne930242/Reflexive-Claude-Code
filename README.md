@@ -18,7 +18,7 @@ The agent maintains and refactors its own core prompts and agent system — not 
 
 This marketplace provides two plugins:
 
-### ACE-core (v5.2.0)
+### ACE-core (v5.3.0)
 
 Core ACE workflow with reflection, architecture guidance, modular rules, and authoring tools.
 
@@ -135,29 +135,36 @@ Each skill links to a directory with:
 ```
 Reflexive-Claude-Code/
 ├── .claude-plugin/
-│   ├── marketplace.json     # Marketplace definition
-│   ├── ACE-core.json        # ACE-core plugin manifest
-│   └── RCC-dev-helper.json  # RCC-dev-helper plugin manifest
-├── commands/
-│   ├── init-project.md      # ACE-core: project initialization
-│   ├── reflect.md           # ACE-core: session reflection
-│   ├── refactor-skills.md   # ACE-core: skill consolidation
-│   ├── migration.md         # ACE-core: system migration
-│   ├── improve-skill.md     # ACE-core: skill optimization
-│   ├── add-law.md           # ACE-core: add constitution law
-│   ├── chrollo.md           # ACE-core: skill hunting from external sources
-│   ├── refactor-by-chrollo.md # ACE-core: refactor using external skills
-│   └── create-plugin.md     # RCC-dev-helper: plugin scaffolding
-├── skills/
-│   ├── agent-architect/     # ACE-core: architecture advisor
-│   ├── write-claude-md/     # ACE-core: creates CLAUDE.md
-│   ├── write-subagent/      # ACE-core: creates subagents
-│   ├── write-skill/         # ACE-core: creates skills
-│   ├── write-command/       # ACE-core: creates commands
-│   ├── write-rules/         # ACE-core: creates rules
-│   ├── write-hook/          # ACE-core: creates hooks
-│   ├── project-discovery/   # ACE-core: project analysis
-│   └── write-plugin/        # RCC-dev-helper: creates plugins
+│   └── marketplace.json         # Marketplace definition
+├── plugins/
+│   ├── ACE-core/                # Main plugin
+│   │   ├── .claude-plugin/
+│   │   │   └── plugin.json      # Plugin manifest
+│   │   ├── commands/
+│   │   │   ├── init-project.md
+│   │   │   ├── reflect.md
+│   │   │   ├── refactor-skills.md
+│   │   │   ├── migration.md
+│   │   │   ├── improve-skill.md
+│   │   │   ├── add-law.md
+│   │   │   ├── chrollo.md
+│   │   │   └── refactor-by-chrollo.md
+│   │   └── skills/
+│   │       ├── agent-architect/
+│   │       ├── write-claude-md/
+│   │       ├── write-subagent/
+│   │       ├── write-skill/
+│   │       ├── write-command/
+│   │       ├── write-rules/
+│   │       ├── write-hook/
+│   │       └── project-discovery/
+│   └── RCC-dev-helper/          # Dev helper plugin
+│       ├── .claude-plugin/
+│       │   └── plugin.json
+│       ├── commands/
+│       │   └── create-plugin.md
+│       └── skills/
+│           └── write-plugin/
 └── README.md
 ```
 

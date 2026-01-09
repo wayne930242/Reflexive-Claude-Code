@@ -15,9 +15,9 @@
     "scaffolding"
   ],
   "commands": [
-    "commands/create-plugin.md"
+    "./commands/create-plugin.md"
   ],
   "skills": [
-    "skills/write-plugin"
+    "./skills/write-plugin"
   ]
 }
