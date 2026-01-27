@@ -1,6 +1,6 @@
 ---
-name: write-plugin
-description: Claude Code plugin authoring expert. Creates complete plugin packages with manifests, commands, agents, skills, hooks, and marketplaces following official 2025 schema. Use when creating new plugins, building marketplaces, or packaging skills for distribution.
+name: writing-plugins
+description: Creates complete Claude Code plugin packages with manifests, agents, skills, hooks, and marketplaces following official schema. Use when creating new plugins, building marketplaces, or packaging skills for distribution.
 ---
 
 # Plugin & Skill Authoring Expert

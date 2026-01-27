@@ -1,6 +1,6 @@
 # SKILL.md Specification
 
-Version 1.0 (2025-10-16)
+Version 1.1 (2026-01)
 
 ## YAML Frontmatter
 
@@ -8,8 +8,8 @@ Version 1.0 (2025-10-16)
 
 | Field | Format | Max Length |
 |-------|--------|------------|
-| `name` | lowercase, hyphens, numbers | 64 chars |
-| `description` | Includes "Use when..." | 1024 chars |
+| `name` | gerund form, lowercase, hyphens | 64 chars |
+| `description` | Third person, includes "Use when..." | 1024 chars |
 
 ### Optional Fields
 
@@ -21,9 +21,11 @@ Version 1.0 (2025-10-16)
 
 ## Name Requirements
 
+Use **gerund form** (verb + -ing):
+- `processing-pdfs`, `writing-documentation`, `analyzing-code`
+- Lowercase letters, numbers, hyphens only
 - Must match containing directory name
-- Lowercase Unicode alphanumerics and hyphens only
-- Examples: `my-skill`, `pdf-editor`, `brand-guidelines`
+- Avoid: `helper`, `utils`, reserved words (`anthropic`, `claude`)
 
 ## Description Formula
 
@@ -31,22 +33,25 @@ Version 1.0 (2025-10-16)
 [What it does]. [Key capabilities]. Use when [specific triggers].
 ```
 
+**Always write in third person** (description is injected into system prompt).
+
 **Good**:
 ```yaml
-description: Create semantic git commits. Analyzes staged changes and generates conventional commit messages. Use when committing code or managing git history.
+description: Creates semantic git commits. Analyzes staged changes and generates conventional commit messages. Use when committing code or managing git history.
 ```
 
 **Bad**:
 ```yaml
-description: Helps with git stuff.
+description: I can help you with git stuff.
+description: You can use this for git commits.
 ```
 
 ## Body Guidelines
 
 - Use imperative form ("Run the script" not "You should run")
-- Keep under 200 lines
+- SKILL.md is overview; move detailed content to `references/` (loaded on-demand)
 - No "When to use" sections (put in description)
-- Link to references/ for detailed content
+- Include workflow checklists for complex tasks
 
 ## Shared Conventions
 

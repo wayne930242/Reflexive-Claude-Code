@@ -1,6 +1,6 @@
 ---
-name: write-hook
-description: Create Claude Code hooks for static analysis and code quality. Provides pre-built linting, formatting, and type-checking hooks. Use when setting up project quality gates, enforcing code standards, or adding pre-commit style checks.
+name: writing-hooks
+description: Creates Claude Code hooks for static analysis and code quality. Provides pre-built linting, formatting, and type-checking hooks. Use when setting up project quality gates, enforcing code standards, or adding pre-commit style checks.
 ---
 
 # Hook Creator

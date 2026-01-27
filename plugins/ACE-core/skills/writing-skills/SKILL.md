@@ -1,63 +1,76 @@
 ---
-name: write-skill
-description: Create effective Claude Code SKILL.md files following Anthropic's official patterns. Use when writing new skills, improving existing skills, or learning skill best practices.
+name: writing-skills
+description: Creates effective Claude Code SKILL.md files following Anthropic's official patterns. Use when writing new skills, improving existing skills, or learning skill best practices.
 ---
 
-# Skill Creator
+# Writing Skills
 
 Create skills that extend Claude's capabilities with specialized knowledge and workflows.
 
 ## Core Principles
 
 1. **Concise is key** - Context window is shared; only add what Claude doesn't know
-2. **< 200 lines** - Split to `references/` if approaching limit
-3. **Description triggers** - Include "Use when..." in YAML description, not body
-4. **Scripts for precision** - Create `.py` scripts for tasks requiring exact format or validation; for templates, prefer Python scripts over raw markdown to ensure stable formatting
+2. **Progressive disclosure** - SKILL.md is overview; Claude loads `references/` only when needed
+3. **Description triggers** - Include "Use when..." in description (third person)
+4. **Scripts for precision** - Use scripts for deterministic operations
+
+## Naming Convention
+
+Use **gerund form** (verb + -ing) for skill names:
+- `processing-pdfs`, `analyzing-code`, `writing-documentation`
+- Must be lowercase, hyphens, numbers only (max 64 chars)
+- Avoid: `helper`, `utils`, reserved words (`anthropic`, `claude`)
 
 ## Skill Structure
 
 ```
-.claude/
-└── skills/
-    └── skill-name/
-        ├── SKILL.md           # Required: instructions (<200 lines)
-        ├── scripts/           # Optional: executable code
-        ├── references/        # Optional: docs loaded on-demand
-        └── assets/            # Optional: templates, images
+skill-name/
+├── SKILL.md           # Required (<200 lines)
+├── scripts/           # Optional: executable code
+└── references/        # Optional: docs loaded on-demand
 ```
 
-## Creation Process
+## Creation Workflow
 
-### 1. Initialize
+Copy this checklist and track progress:
 
-Run the init script to create proper structure:
+```
+Skill Creation Progress:
+- [ ] Step 1: Initialize structure
+- [ ] Step 2: Write SKILL.md
+- [ ] Step 3: Validate
+- [ ] Step 4: Test with real usage
+```
+
+### Step 1: Initialize
 
 ```bash
 python3 scripts/init_skill.py <skill-name>
 ```
 
-Options:
-- `--path`, `-p`: Output directory (default: `.claude/skills`)
-
-### 2. Write SKILL.md
+### Step 2: Write SKILL.md
 
 **Frontmatter** (required):
 ```yaml
 ---
-name: my-skill
-description: [What it does]. Use when [specific triggers].
+name: processing-pdfs
+description: Extracts text and tables from PDFs. Use when working with PDF files or document extraction.
 ---
 ```
 
+**Description formula**: `[What it does]. [Key capabilities]. Use when [triggers].`
+
+Always write in third person. The description is injected into system prompt.
+
 **Body**: Instructions only. Keep lean—move details to `references/`.
 
-### 3. Validate
+### Step 3: Validate
 
 ```bash
 python3 scripts/validate_skill.py <path/to/skill>
 ```
 
-### 4. Test
+### Step 4: Test
 
 Restart Claude Code, trigger naturally (don't mention skill name).
 
@@ -67,41 +80,34 @@ Restart Claude Code, trigger naturally (don't mention skill name).
 |-------|------|--------|
 | High | Multiple valid approaches | Text guidance |
 | Medium | Preferred pattern exists | Pseudocode |
-| Low | Fragile/critical operations | Specific scripts |
+| Low | Fragile operations | Specific scripts |
 
-## Progressive Disclosure
+## Feedback Loop Pattern
 
-Split content when SKILL.md grows:
+For quality-critical operations, use validate → fix → repeat:
 
 ```markdown
-## Quick start
-[Essential usage]
-
-## Advanced
-- **Forms**: See [forms.md](references/forms.md)
-- **API**: See [api.md](references/api.md)
+1. Create output
+2. Run: `python scripts/validate.py output`
+3. If errors, fix and repeat step 2
+4. Only proceed when validation passes
 ```
 
-Claude loads references only when needed.
+## MCP Tool References
+
+Always use fully qualified names: `ServerName:tool_name`
+- `BigQuery:bigquery_schema`
+- `GitHub:create_issue`
 
 ## What NOT to Include
 
-- README.md, CHANGELOG.md, INSTALLATION_GUIDE.md
+- README.md, CHANGELOG.md
 - Explanations Claude already knows
-- "When to use" sections in body (put in description)
-- **Shared conventions** - if multiple skills use the same convention, extract to `.claude/rules/`
-
-## Relationship with Rules
-
-**Rules = conventions shared across skills.**
-
-If you find yourself repeating the same guideline in multiple skills:
-1. Extract to `.claude/rules/` using `write-rules` skill
-2. Skills automatically inherit rules (auto-injected)
-3. Keep skill-specific details in the skill
+- "When to use" in body (put in description)
+- Shared conventions → extract to `.claude/rules/`
 
 ## References
 
-- [spec.md](references/spec.md) - YAML frontmatter specification
-- [patterns.md](references/patterns.md) - Common skill patterns
+- [spec.md](references/spec.md) - Frontmatter specification
+- [patterns.md](references/patterns.md) - Common patterns
 - [examples.md](references/examples.md) - Before/after examples

@@ -1,6 +1,6 @@
 ---
-name: write-rules
-description: Create Claude Code rule files for .claude/rules/. Writes conventions and shared guidelines that auto-inject into context. Use for path-specific coding conventions or shared project guidelines. NOT for constitution/laws (use <law> in CLAUDE.md instead).
+name: writing-rules
+description: Creates Claude Code rule files for .claude/rules/. Writes conventions and shared guidelines that auto-inject into context. Use for path-specific coding conventions or shared project guidelines. NOT for constitution/laws (use <law> in CLAUDE.md instead).
 ---
 
 # Rule Creator

@@ -1,7 +1,7 @@
 {
   "name": "RCC-dev-helper",
   "description": "Development helper tools for creating Claude Code plugins with complete manifests, commands, skills, and marketplaces",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "author": {
     "name": "Wei Hung",
     "email": "wayne930242@gmail.com"

@@ -1,6 +1,6 @@
 ---
-name: write-subagent
-description: Create Claude Code subagent configurations for .claude/agents/. Defines specialized agents with isolated contexts. Use when creating dedicated agents for code review, testing, or domain-specific tasks.
+name: writing-subagents
+description: Creates Claude Code subagent configurations for .claude/agents/. Defines specialized agents with isolated contexts. Use when creating dedicated agents for code review, testing, or domain-specific tasks.
 ---
 
 # Subagent Creator

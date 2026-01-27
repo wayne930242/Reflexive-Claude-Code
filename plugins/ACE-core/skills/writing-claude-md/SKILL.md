@@ -1,6 +1,6 @@
 ---
-name: write-claude-md
-description: Create effective CLAUDE.md files with proper constitution using <law> blocks. Use when creating project setup, writing new CLAUDE.md, or improving existing configuration.
+name: writing-claude-md
+description: Creates effective CLAUDE.md files with proper constitution using <law> blocks. Use when creating project setup, writing new CLAUDE.md, or improving existing configuration.
 ---
 
 # CLAUDE.md Creator
