@@ -10,7 +10,7 @@ The agent maintains and refactors its own core prompts and agent system — not 
 
 **Skills-driven Agentic Context Engineering** means:
 - Before each task, the agent reviews the skill library for relevant capabilities
-- Users explicitly trigger learning moments through commands like `/rcc:reflect`
+- Users explicitly trigger learning moments through skills like `reflecting`
 - Through deliberate teaching, the agent integrates learnings into its skill library
 - Skills are abstract, reusable, and link to reference directories with examples and documentation
 
@@ -18,51 +18,40 @@ The agent maintains and refactors its own core prompts and agent system — not 
 
 This marketplace provides two plugins:
 
-### ACE-core (v5.3.0)
+### ACE-core (v6.0.0)
 
-Core ACE workflow with reflection, architecture guidance, modular rules, and authoring tools.
-
-**Skills:**
-
-| Skill | Description | Trigger |
-|-------|-------------|---------|
-| `agent-architect` | Architecture advisor for holistic guidance on component design | "Review architecture...", "Help me restructure..." |
-| `write-claude-md` | Create CLAUDE.md with `<law>` constitution | "Help me write CLAUDE.md...", "Create project setup..." |
-| `write-subagent` | Create subagent configurations for `.claude/agents/` | "Create a subagent...", "Set up a code reviewer agent..." |
-| `write-skill` | Create effective SKILL.md files following Anthropic's official patterns | "Help me write a skill for...", "Create a new skill..." |
-| `write-command` | Create slash commands with proper YAML frontmatter and argument handling | "Help me write a command...", "Create a slash command..." |
-| `write-rules` | Create rule files for `.claude/rules/` with conventions | "Add a coding convention...", "Create a rule for..." |
-| `write-hook` | Create hooks for static analysis and code quality | "Add a linting hook...", "Set up type checking..." |
-| `project-discovery` | Deep project analysis for architecture planning | Starting migration, designing agent components |
-
-**Commands:**
-
-| Command | Description | Usage |
-|---------|-------------|-------|
-| `/rcc:init-project` | Initialize new project with framework, best practices, and agent system | `/rcc:init-project [path]` |
-| `/rcc:reflect` | Reflect on conversation, classify learnings, integrate | `/rcc:reflect [focus]` |
-| `/rcc:refactor-skills` | Analyze and consolidate all skills - merge, optimize, remove redundancy | `/rcc:refactor-skills` |
-| `/rcc:migration` | Migrate existing systems to best practices architecture | `/rcc:migration [path]` |
-| `/rcc:improve-skill` | Optimize a skill by analyzing conventions and researching best practices | `/rcc:improve-skill <skill-path>` |
-| `/rcc:add-law` | Add a new law to the CLAUDE.md constitution | `/rcc:add-law [law_content]` |
-| `/rcc:chrollo` | Search external skills via claude-skills-mcp, adapt as new project skills | `/rcc:chrollo <query>` |
-| `/rcc:refactor-by-chrollo` | Refactor existing skills using external skill patterns | `/rcc:refactor-by-chrollo [skill-path]` |
-
-### RCC-dev-helper (v1.0.0)
-
-Development helper tools for creating Claude Code plugins with complete manifests, commands, skills, and marketplaces.
+Core ACE workflow with reflection, architecture guidance, modular rules, and skill authoring tools.
 
 **Skills:**
 
-| Skill | Description | Trigger |
-|-------|-------------|---------|
-| `write-plugin` | Create complete plugin packages with manifests, commands, skills, and marketplaces | "Create a plugin for...", "Package this as a plugin..." |
+| Skill | Description |
+|-------|-------------|
+| `agent-architect` | Architecture advisor for holistic guidance on component design |
+| `project-discovery` | Deep project analysis for architecture planning |
+| `writing-skills` | Create effective SKILL.md files following Anthropic's official patterns |
+| `writing-claude-md` | Create CLAUDE.md with `<law>` constitution |
+| `writing-subagents` | Create subagent configurations for `.claude/agents/` |
+| `writing-rules` | Create rule files for `.claude/rules/` with conventions |
+| `writing-hooks` | Create hooks for static analysis and code quality |
+| `reflecting` | Reflect on conversation, classify learnings, integrate |
+| `improving-skills` | Optimize a skill by analyzing conventions and researching best practices |
+| `refactoring-skills` | Analyze and consolidate all skills - merge, optimize, remove redundancy |
+| `hunting-skills` | Search external skills via claude-skills-mcp, adapt as new project skills |
+| `refactoring-with-external-skills` | Refactor existing skills using external skill patterns |
+| `adding-laws` | Add a new law to the CLAUDE.md constitution |
+| `initializing-projects` | Initialize new project with framework, best practices, and agent system |
+| `migrating-agent-systems` | Migrate existing systems to best practices architecture |
 
-**Commands:**
+### RCC-dev-helper (v2.0.0)
 
-| Command | Description | Usage |
-|---------|-------------|-------|
-| `/rcc:create-plugin` | Scaffold a new Claude Code plugin | `/rcc:create-plugin <name> [type]` |
+Development helper tools for creating Claude Code plugins with complete manifests, skills, and marketplaces.
+
+**Skills:**
+
+| Skill | Description |
+|-------|-------------|
+| `writing-plugins` | Create complete plugin packages with manifests, skills, and marketplaces |
+| `creating-plugins` | Scaffold a new Claude Code plugin |
 
 ## Component Architecture
 
@@ -73,18 +62,17 @@ Development helper tools for creating Claude Code plugins with complete manifest
 │  Auto-Injected                     │  On-Demand                  │
 │  ─────────────                     │  ─────────                  │
 │  • CLAUDE.md (high-level)          │  • Skills (capabilities)    │
-│  • .claude/rules/*.md (conventions)│  • Commands (user-triggered)│
-│    └─ paths: conditional trigger   │  • Subagents (isolated ctx) │
+│  • .claude/rules/*.md (conventions)│  • Subagents (isolated ctx) │
+│    └─ paths: conditional trigger   │                             │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
 | Component | Location | Trigger | Token Impact |
 |-----------|----------|---------|--------------|
-| **Rules** | `.claude/rules/*.md` | Auto-inject | High (< 50 lines) |
-| **Skills** | `.claude/skills/*/SKILL.md` | Claude decides | Medium (< 200 lines) |
-| **Commands** | `.claude/commands/*.md` | User `/command` | Low |
+| **Rules** | `.claude/rules/*.md` | Auto-inject | High |
+| **Skills** | `.claude/skills/*/SKILL.md` | Claude decides | Progressive disclosure |
 | **Subagents** | `.claude/agents/*.md` | Task tool | Isolated |
-| **CLAUDE.md** | `./CLAUDE.md` | Auto-inject | High (< 300 lines) |
+| **CLAUDE.md** | `./CLAUDE.md` | Auto-inject | High |
 
 ## Core Constitution
 
@@ -96,7 +84,7 @@ CLAUDE.md uses `<law>` blocks for Self-Reinforcing Display:
 | **Skill Discovery** | Check available skills before starting work |
 | **Rule Consultation** | Check `.claude/rules/` for domain conventions |
 | **Parallel Processing** | Use Task tool for independent operations |
-| **Reflexive Learning** | Remind user to `/rcc:reflect` on important discoveries |
+| **Reflexive Learning** | Remind user to reflect on important discoveries |
 | **Self-Reinforcing Display** | Display `<law>` block at start of every response |
 
 ## Workflow
@@ -107,13 +95,13 @@ CLAUDE.md uses `<law>` blocks for Self-Reinforcing Display:
 ├─────────────────────────────────────────────────────────────────┤
 │  1. Before Task     │  Review skill library                      │
 │  2. Do Work         │  Just work normally                        │
-│  3. /rcc:reflect    │  Classify → Rules or Skills → Integrate    │
-│  4. /refactor-*     │  Consolidate & optimize                    │
+│  3. Reflect         │  Classify → Rules or Skills → Integrate    │
+│  4. Refactor        │  Consolidate & optimize                    │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
 Each skill links to a directory with:
-- `SKILL.md` — Abstract instructions (< 200 lines)
+- `SKILL.md` — Abstract instructions (progressive disclosure)
 - `references/` — Detailed docs loaded on-demand
 - `scripts/` — Executable utilities
 
@@ -135,36 +123,27 @@ Each skill links to a directory with:
 ```
 Reflexive-Claude-Code/
 ├── .claude-plugin/
-│   └── marketplace.json         # Marketplace definition
-├── plugins/
-│   ├── ACE-core/                # Main plugin
-│   │   ├── .claude-plugin/
-│   │   │   └── plugin.json      # Plugin manifest
-│   │   ├── commands/
-│   │   │   ├── init-project.md
-│   │   │   ├── reflect.md
-│   │   │   ├── refactor-skills.md
-│   │   │   ├── migration.md
-│   │   │   ├── improve-skill.md
-│   │   │   ├── add-law.md
-│   │   │   ├── chrollo.md
-│   │   │   └── refactor-by-chrollo.md
-│   │   └── skills/
-│   │       ├── agent-architect/
-│   │       ├── write-claude-md/
-│   │       ├── write-subagent/
-│   │       ├── write-skill/
-│   │       ├── write-command/
-│   │       ├── write-rules/
-│   │       ├── write-hook/
-│   │       └── project-discovery/
-│   └── RCC-dev-helper/          # Dev helper plugin
-│       ├── .claude-plugin/
-│       │   └── plugin.json
-│       ├── commands/
-│       │   └── create-plugin.md
-│       └── skills/
-│           └── write-plugin/
+│   ├── marketplace.json     # Marketplace definition
+│   ├── ACE-core.json        # ACE-core plugin manifest
+│   └── RCC-dev-helper.json  # RCC-dev-helper plugin manifest
+├── skills/
+│   ├── agent-architect/     # ACE-core: architecture advisor
+│   ├── project-discovery/   # ACE-core: project analysis
+│   ├── writing-skills/      # ACE-core: creates skills
+│   ├── writing-claude-md/   # ACE-core: creates CLAUDE.md
+│   ├── writing-subagents/   # ACE-core: creates subagents
+│   ├── writing-rules/       # ACE-core: creates rules
+│   ├── writing-hooks/       # ACE-core: creates hooks
+│   ├── reflecting/          # ACE-core: session reflection
+│   ├── improving-skills/    # ACE-core: skill optimization
+│   ├── refactoring-skills/  # ACE-core: skill consolidation
+│   ├── hunting-skills/      # ACE-core: external skill hunting
+│   ├── refactoring-with-external-skills/  # ACE-core: refactor with external
+│   ├── adding-laws/         # ACE-core: add constitution law
+│   ├── initializing-projects/  # ACE-core: project initialization
+│   ├── migrating-agent-systems/  # ACE-core: system migration
+│   ├── writing-plugins/     # RCC-dev-helper: creates plugins
+│   └── creating-plugins/    # RCC-dev-helper: plugin scaffolding
 └── README.md
 ```
 

@@ -16,16 +16,6 @@
     "reflection",
     "skill-authoring"
   ],
-  "commands": [
-    "./commands/reflect.md",
-    "./commands/refactor-skills.md",
-    "./commands/migration.md",
-    "./commands/improve-skill.md",
-    "./commands/init-project.md",
-    "./commands/add-law.md",
-    "./commands/chrollo.md",
-    "./commands/refactor-by-chrollo.md"
-  ],
   "skills": [
     "./skills/writing-skills",
     "./skills/writing-commands",
@@ -34,6 +24,15 @@
     "./skills/writing-hooks",
     "./skills/writing-subagents",
     "./skills/agent-architect",
-    "./skills/project-discovery"
+    "./skills/project-discovery",
+    "./skills/adding-laws",
+    "./skills/creating-plugins",
+    "./skills/hunting-skills",
+    "./skills/improving-skills",
+    "./skills/initializing-projects",
+    "./skills/migrating-agent-systems",
+    "./skills/refactoring-skills",
+    "./skills/refactoring-with-external-skills",
+    "./skills/reflecting"
   ]
 }

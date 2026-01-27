@@ -14,10 +14,8 @@
     "plugin-development",
     "scaffolding"
   ],
-  "commands": [
-    "./commands/create-plugin.md"
-  ],
   "skills": [
-    "./skills/writing-plugins"
+    "./skills/writing-plugins",
+    "./skills/creating-plugins"
   ]
 }

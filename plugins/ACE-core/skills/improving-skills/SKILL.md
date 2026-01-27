@@ -1,13 +1,9 @@
 ---
-name: rcc:improve-skill
-description: Optimize a skill by analyzing project conventions and researching best practices
-arguments:
-  - name: skill-path
-    description: Path to the skill directory to improve (e.g., skills/my-skill)
-    required: true
+name: improving-skills
+description: Optimizes a skill by analyzing project conventions and researching best practices. Use when a skill needs quality improvement or updates to current standards.
 ---
 
-# Improve Skill
+# Improving Skills
 
 Optimize the specified skill through systematic analysis and enhancement.
 
@@ -18,16 +14,15 @@ Optimize the specified skill through systematic analysis and enhancement.
 Read the skill's SKILL.md and all associated files:
 
 ```bash
-ls -la $1
-cat $1/SKILL.md
+ls -la <skill-path>
+cat <skill-path>/SKILL.md
 ```
 
-Document current state: purpose, triggers, references, line count.
+Document: purpose, triggers, references, structure.
 
 ### 2. Gather Project Conventions
 
 Search the project for implementation patterns:
-
 - Find related code using Grep for skill's domain keywords
 - Identify naming conventions, file structures, coding styles
 
@@ -42,37 +37,26 @@ Search: "[skill domain] API reference"
 
 ### 4. Validate Against Standards
 
-Use the `write-skill` skill to check compliance with standards.
+Use the `writing-skills` skill to check compliance with standards.
 
 ### 5. Check for Shared Conventions
 
 Identify conventions that appear in multiple skills:
-
 - Search other skills for similar guidelines
-- If convention is duplicated → use `write-rules` skill to extract to `.claude/rules/`
+- If convention is duplicated → use `writing-rules` skill to extract to `.claude/rules/`
 - Remove duplicated convention from this skill (rules auto-inject)
-
-**Rule of thumb**: Rules = conventions shared across skills.
 
 ### 6. Apply Improvements
 
-Use the `write-skill` skill to guide targeted edits:
-
+Targeted edits:
 - Trim verbose explanations
 - Add missing triggers to description
-- Move large content to references/
+- Move detailed content to references/
 - Update APIs to current best practices
 - Remove conventions that now exist in rules
 
 ### 7. Validate Final Result
 
 ```bash
-python3 skills/write-skill/scripts/validate_skill.py $1
-```
-
-## Example Usage
-
-```
-/rcc:improve-skill skills/pdf-processor
-/rcc:improve-skill .claude/skills/api-client
+python3 skills/write-skill/scripts/validate_skill.py <skill-path>
 ```

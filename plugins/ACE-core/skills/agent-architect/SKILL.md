@@ -29,15 +29,14 @@ User: "Create a skill for handling PDF files"
 
 | Task | Delegate To | Reviewer |
 |------|-------------|----------|
-| Create/update CLAUDE.md with `<law>` | `write-claude-md` skill | - |
-| Create/update skill | `write-skill` skill | `agent-architect` |
-| Create/update command | `write-command` skill | `agent-architect` |
-| Create/update subagent | `write-subagent` skill | `agent-architect` |
-| Create/update rule (convention) | `write-rules` skill | `agent-architect` |
-| Create/update hook | `write-hook` skill | - |
-| Improve existing skill | `/improve-skill` command | - |
-| Reflect on learnings | `/reflect` command | `agent-architect` |
-| Refactor all skills | `/refactor-skills` command | `agent-architect` |
+| Create/update CLAUDE.md with `<law>` | `writing-claude-md` skill | - |
+| Create/update skill | `writing-skills` skill | `agent-architect` |
+| Create/update subagent | `writing-subagents` skill | `agent-architect` |
+| Create/update rule (convention) | `writing-rules` skill | `agent-architect` |
+| Create/update hook | `writing-hooks` skill | - |
+| Improve existing skill | `improving-skills` skill | - |
+| Reflect on learnings | `reflecting` skill | `agent-architect` |
+| Refactor all skills | `refactoring-skills` skill | `agent-architect` |
 
 ## Classification Framework
 
@@ -49,7 +48,7 @@ User: "Create a skill for handling PDF files"
 │ (To prevent context drift over long conversations)             │
 ├─────────────────────────────────────────────────────────────────┤
 │ YES → IMMUTABLE LAW                                             │
-│       Delegate: write-claude-md skill                           │
+│       Delegate: writing-claude-md skill                         │
 │       Format: <law> block with Self-Reinforcing Display         │
 │       Examples: Communication discipline, Skill discovery,      │
 │                 Parallel processing, Self-reinforcing display   │
@@ -64,43 +63,33 @@ User: "Create a skill for handling PDF files"
 ┌─────────────────────────────────────────────────────────────────┐
 │ A. CAPABILITY - "How to do something"                           │
 │    ─────────────────────────────────────────────────────────────│
-│    Delegate: write-skill skill                                  │
-│    Format: SKILL.md < 200 lines, references/ for details        │
+│    Delegate: writing-skills skill                               │
+│    Format: SKILL.md with progressive disclosure to references/  │
 │    Trigger: Description contains "Use when..."                  │
 │    Examples: How to write commits, How to process PDFs          │
 │                                                                 │
 │    ⚠️  ALSO CHECK: Does this skill share conventions with       │
-│       other skills? If YES → Also delegate to write-rules       │
+│       other skills? If YES → Also delegate to writing-rules     │
 ├─────────────────────────────────────────────────────────────────┤
-│ B. USER WORKFLOW - "Explicit /command invocation"               │
+│ B. SPECIALIZED AGENT - "Isolated context for large tasks"       │
 │    ─────────────────────────────────────────────────────────────│
-│    Delegate: write-command skill                                │
-│    Format: Orchestrate skills, don't duplicate content          │
-│    Trigger: User types /command-name                            │
-│    Examples: /reflect, /refactor-skills, /improve-skill         │
-│                                                                 │
-│    ⚠️  RULE: Commands MUST reference skills, not duplicate      │
-│       "Use the `write-skill` skill to..." NOT inline steps      │
-├─────────────────────────────────────────────────────────────────┤
-│ C. SPECIALIZED AGENT - "Isolated context for large tasks"       │
-│    ─────────────────────────────────────────────────────────────│
-│    Delegate: write-subagent skill                               │
+│    Delegate: writing-subagents skill                            │
 │    Format: Limited tools, auto-loads skills via skills: field   │
 │    Trigger: Task tool with subagent_type                        │
 │    Examples: code-reviewer, test-runner, explore agent          │
 ├─────────────────────────────────────────────────────────────────┤
-│ D. STATIC CHECK - "Quality gate / automated enforcement"        │
+│ C. STATIC CHECK - "Quality gate / automated enforcement"        │
 │    ─────────────────────────────────────────────────────────────│
-│    Delegate: write-hook skill                                   │
+│    Delegate: writing-hooks skill                                │
 │    Format: Script in .claude/hooks/, config in settings.json    │
 │    Trigger: Event-based (PreToolUse, PostToolUse, etc.)         │
 │    Examples: Linting, formatting, type checking                 │
 │                                                                 │
 │    ⚠️  Exit code 2 = block action, other = warning only         │
 ├─────────────────────────────────────────────────────────────────┤
-│ E. SHARED CONVENTION - "Guideline used by multiple skills"      │
+│ D. SHARED CONVENTION - "Guideline used by multiple skills"      │
 │    ─────────────────────────────────────────────────────────────│
-│    Delegate: write-rules skill                                  │
+│    Delegate: writing-rules skill                                │
 │    Format: < 50 lines, paths: for domain-specific               │
 │    Trigger: Auto-injected into context                          │
 │    Examples: Code style, API conventions, testing guidelines    │
@@ -116,10 +105,9 @@ User: "Create a skill for handling PDF files"
 After delegation, agent-architect reviews:
 
 □ Single Source of Truth - Knowledge lives in ONE place only
-□ No Duplication - Commands reference skills, not duplicate
 □ Correct Priority - Laws > Skills > Rules
-□ Proper Triggers - Skills have "Use when...", Commands are explicit
-□ Size Limits - Rules < 50 lines, Skills < 200 lines
+□ Proper Triggers - Skills have "Use when..." in description
+□ Progressive Disclosure - SKILL.md is overview, details in references/
 ```
 
 ## Component Summary
@@ -127,11 +115,10 @@ After delegation, agent-architect reviews:
 | Component | Location | Key Rule |
 |-----------|----------|----------|
 | **CLAUDE.md** | `./CLAUDE.md` | `<law>` for constitution |
-| **Skills** | `.claude/skills/*/SKILL.md` | < 200 lines |
-| **Commands** | `.claude/commands/*.md` | Orchestrate, don't duplicate |
+| **Skills** | `.claude/skills/*/SKILL.md` | Progressive disclosure |
 | **Subagents** | `.claude/agents/*.md` | Isolated context |
 | **Hooks** | `.claude/hooks/` | Exit 2 blocks |
-| **Rules** | `.claude/rules/*.md` | < 50 lines, conventions only |
+| **Rules** | `.claude/rules/*.md` | Conventions only |
 
 ## Key Principles
 

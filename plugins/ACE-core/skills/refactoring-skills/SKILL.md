@@ -1,9 +1,9 @@
 ---
-name: rcc:refactor-skills
-description: Analyze and refactor all skills in the project - consolidate, optimize, and remove unnecessary ones
+name: refactoring-skills
+description: Analyzes and refactors all skills in the project - consolidate, optimize, and remove unnecessary ones. Use when skills need cleanup or reorganization.
 ---
 
-# Refactor Skills Command
+# Refactoring Skills
 
 Systematically analyze all skills and apply refactoring for quality and consistency.
 
@@ -31,14 +31,10 @@ For each skill, classify:
 | **Extract** | Has conventions shared by other skills → move to Rules |
 | **Delete** | Redundant or unused |
 
-Use the `write-skill` skill to understand quality standards.
-
-**Key insight**: Rules = conventions/guidelines shared across skills. If multiple skills repeat the same convention, extract it to `.claude/rules/`.
-
 ### 4. Apply Refactoring
 
 **For skills to refactor:**
-Use the `write-skill` skill to guide improvements.
+Use the `writing-skills` skill to guide improvements.
 
 **For skills to merge:**
 - Identify the primary skill
@@ -46,9 +42,8 @@ Use the `write-skill` skill to guide improvements.
 - Delete the redundant skill
 
 **For shared conventions to extract:**
-- Use `write-rules` skill to create rule in `.claude/rules/`
+- Use `writing-rules` skill to create rule in `.claude/rules/`
 - Remove duplicated convention from each skill
-- Skills now reference the shared rule
 
 **For skills to delete:**
 - Confirm no dependencies
@@ -76,13 +71,4 @@ python3 skills/write-skill/scripts/validate_skill.py <skill-path>
 
 ### Changes Made:
 - [skill-name]: [action taken]
-
-### Rules Created:
-- [rule-file]: [convention extracted from skills]
-```
-
-## Example Usage
-
-```
-/rcc:refactor-skills
 ```

@@ -11,48 +11,34 @@ Claude Code 插件市集，提供技能驅動的 Agentic Context Engineering 工
 
 **Law 2: Version Sync** - 版本號必須同步更新：
 - `.claude-plugin/marketplace.json` (metadata.version + plugins[0].version)
-- `plugins/ACE-core/.claude-plugin/plugin.json`
+- `.claude-plugin/ACE-core.json`
 - `README.md` + `README.zh-TW.md` (ACE-core version in header)
 
 **Law 3: Documentation Sync** - README.md 與 README.zh-TW.md 必須保持同步
 
-**Law 4: Command Namespace** - 所有 command 使用 `rcc:` 前綴（如 `/rcc:reflect`）
-
-**Law 5: Skill Conventions** - Skills 遵循：
-- SKILL.md < 200 行
-- 使用 `references/` 存放詳細文件
-- description 包含 "Use when..."
+**Law 4: Skill Conventions** - Skills 遵循：
+- 名稱使用 gerund form（verb+-ing，如 `writing-skills`）
+- Progressive disclosure：SKILL.md 為概覽，詳細內容放 `references/`（按需載入）
+- description 用第三人稱，包含 "Use when..."
 </law>
 
 ## Project Structure
 
 ```
 .claude-plugin/
-└── marketplace.json     # 市集定義（版本在此）
+├── marketplace.json     # 市集定義（版本在此）
+├── ACE-core.json        # 主插件 manifest
+└── RCC-dev-helper.json  # 開發輔助插件 manifest
 
-plugins/
-├── ACE-core/            # 主插件
-│   ├── .claude-plugin/plugin.json
-│   ├── commands/        # Slash commands（name 用 rcc: 前綴）
-│   └── skills/          # Skills（無前綴）
-└── RCC-dev-helper/      # 開發輔助插件
-    ├── .claude-plugin/plugin.json
-    ├── commands/
-    └── skills/
+skills/                  # Skills（gerund naming）
 ```
 
 ## Quick Reference
 
 ### Version Bump
-更新版本時需同步修改 3 個位置（見 Law 2）
-
-### Add New Command
-1. 在對應 plugin 的 `commands/` 建立 `.md` 檔
-2. frontmatter `name:` 加上 `rcc:` 前綴
-3. 更新對應 plugin 的 `plugin.json` 中 `commands` 陣列
-4. 同步更新兩份 README
+更新版本時需同步修改 4 個位置（見 Law 2）
 
 ### Add New Skill
-1. 在對應 plugin 的 `skills/` 建立目錄 + `SKILL.md`
-2. 更新對應 plugin 的 `plugin.json` 中 `skills` 陣列
+1. 在 `skills/` 建立目錄 + `SKILL.md`
+2. 更新對應的 plugin JSON `skills` 陣列
 3. 同步更新兩份 README
