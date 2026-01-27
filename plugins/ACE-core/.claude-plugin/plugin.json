@@ -27,12 +27,12 @@
     "./commands/refactor-by-chrollo.md"
   ],
   "skills": [
-    "./skills/write-skill",
-    "./skills/write-command",
-    "./skills/write-claude-md",
-    "./skills/write-rules",
-    "./skills/write-hook",
-    "./skills/write-subagent",
+    "./skills/writing-skills",
+    "./skills/writing-commands",
+    "./skills/writing-claude-md",
+    "./skills/writing-rules",
+    "./skills/writing-hooks",
+    "./skills/writing-subagents",
     "./skills/agent-architect",
     "./skills/project-discovery"
   ]

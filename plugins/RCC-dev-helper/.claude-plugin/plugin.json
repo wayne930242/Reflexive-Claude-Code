@@ -18,6 +18,6 @@
     "./commands/create-plugin.md"
   ],
   "skills": [
-    "./skills/write-plugin"
+    "./skills/writing-plugins"
   ]
 }
