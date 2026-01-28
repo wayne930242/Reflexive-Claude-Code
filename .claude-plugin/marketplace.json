@@ -10,8 +10,8 @@
   },
   "plugins": [
     {
-      "name": "ACE-core",
-      "source": "./plugins/ACE-core",
+      "name": "ace",
+      "source": "./plugins/ace",
       "description": "Core ACE workflow with reflection, architecture guidance, modular rules, and skill authoring tools",
       "version": "6.0.1"
     },
