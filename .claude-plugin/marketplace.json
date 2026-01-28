@@ -6,14 +6,14 @@
   },
   "metadata": {
     "description": "A skills-driven Agentic Context Engineering workflow for Claude Code",
-    "version": "6.0.0"
+    "version": "6.0.1"
   },
   "plugins": [
     {
       "name": "ACE-core",
       "source": "./plugins/ACE-core",
       "description": "Core ACE workflow with reflection, architecture guidance, modular rules, and skill authoring tools",
-      "version": "6.0.0"
+      "version": "6.0.1"
     },
     {
       "name": "RCC-dev-helper",

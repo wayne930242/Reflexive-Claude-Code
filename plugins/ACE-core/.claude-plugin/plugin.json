@@ -1,7 +1,7 @@
 {
   "name": "ACE-core",
   "description": "Core ACE workflow with reflection, architecture guidance, modular rules, and skill authoring tools",
-  "version": "6.0.0",
+  "version": "6.0.1",
   "author": {
     "name": "Wei Hung",
     "email": "wayne930242@gmail.com"
@@ -15,23 +15,5 @@
     "agentic-context-engineering",
     "reflection",
     "skill-authoring"
-  ],
-  "skills": [
-    "./skills/writing-skills",
-    "./skills/writing-claude-md",
-    "./skills/writing-rules",
-    "./skills/writing-hooks",
-    "./skills/writing-subagents",
-    "./skills/agent-architect",
-    "./skills/project-discovery",
-    "./skills/adding-laws",
-    "./skills/creating-plugins",
-    "./skills/hunting-skills",
-    "./skills/improving-skills",
-    "./skills/initializing-projects",
-    "./skills/migrating-agent-systems",
-    "./skills/refactoring-skills",
-    "./skills/refactoring-with-external-skills",
-    "./skills/reflecting"
   ]
 }

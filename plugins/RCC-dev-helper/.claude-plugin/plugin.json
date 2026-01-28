@@ -13,9 +13,5 @@
     "plugin",
     "plugin-development",
     "scaffolding"
-  ],
-  "skills": [
-    "./skills/writing-plugins",
-    "./skills/creating-plugins"
   ]
 }
