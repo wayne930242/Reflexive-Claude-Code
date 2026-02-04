@@ -18,7 +18,7 @@ The agent maintains and refactors its own core prompts and agent system — not 
 
 This marketplace provides two plugins:
 
-### core (v6.0.2)
+### rcc (v6.0.3)
 
 Core ACE workflow with reflection, architecture guidance, modular rules, and skill authoring tools.
 
@@ -42,7 +42,7 @@ Core ACE workflow with reflection, architecture guidance, modular rules, and ski
 | `initializing-projects` | Initialize new project with framework, best practices, and agent system |
 | `migrating-agent-systems` | Migrate existing systems to best practices architecture |
 
-### RCC-dev-helper (v2.0.0)
+### rcc-dev (v2.0.1)
 
 Development helper tools for creating Claude Code plugins with complete manifests, skills, and marketplaces.
 
@@ -110,12 +110,12 @@ Each skill links to a directory with:
 ```bash
 # From GitHub
 /plugin marketplace add wayne930242/Reflexive-Claude-Code
-/plugin install core@rcc
+/plugin install rcc@rcc
 # or
-/plugin install dev@rcc
+/plugin install rcc-dev@rcc
 
 # From local path
-/plugin install /path/to/Reflexive-Claude-Code/plugins/core
+/plugin install /path/to/Reflexive-Claude-Code/plugins/rcc
 ```
 
 ## Project Structure
@@ -125,8 +125,8 @@ Reflexive-Claude-Code/
 ├── .claude-plugin/
 │   └── marketplace.json     # Marketplace definition
 ├── plugins/
-│   ├── core/                # Core ACE plugin
-│   └── dev/                 # Development helper plugin
+│   ├── rcc/                 # Core ACE plugin
+│   └── rcc-dev/             # Development helper plugin
 ├── skills/
 │   ├── agent-architect/     # ACE-core: architecture advisor
 │   ├── project-discovery/   # ACE-core: project analysis

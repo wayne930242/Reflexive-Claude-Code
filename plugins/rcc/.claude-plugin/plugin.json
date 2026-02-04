@@ -1,7 +1,7 @@
 {
-  "name": "core",
+  "name": "rcc",
   "description": "Core ACE workflow with reflection, architecture guidance, modular rules, and skill authoring tools",
-  "version": "6.0.2",
+  "version": "6.0.3",
   "author": {
     "name": "Wei Hung",
     "email": "wayne930242@gmail.com"
