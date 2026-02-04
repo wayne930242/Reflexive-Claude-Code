@@ -1,78 +1,252 @@
 ---
 name: reflecting
-description: Analyzes conversation to extract learnings and integrate into skill library or rules. Consolidates experiences into reusable knowledge. Use when completing significant work, resolving complex problems, or discovering reusable patterns.
+description: Use when completing significant work to extract learnings. Use when user says "reflect", "what did we learn", "capture learnings". Use after resolving complex problems or discovering patterns.
 ---
 
-# Reflecting on Learnings
+# Reflecting
 
-Analyze the current conversation to extract learnings and integrate them appropriately.
+## Overview
 
-## Process
+**Reflecting IS converting experience into reusable knowledge.**
 
-### 1. Analyze Conversation
+Analyze what worked, what failed, and encode learnings into the appropriate component (law, skill, rule, or documentation).
 
-Review conversation history to identify:
-- **Successes**: Patterns that led to good outcomes
-- **Failures**: Errors or multiple attempts needed
-- **New Knowledge**: Project-specific insights discovered
-- **Repeated Patterns**: Actions performed multiple times
+**Core principle:** Experience without reflection is wasted. Capture it before context is lost.
 
-### 2. Classify Learnings
+**Violating the letter of the rules is violating the spirit of the rules.**
 
-Use the `agent-architect` skill to classify each learning:
+## Task Initialization (MANDATORY)
+
+Before ANY action, create task list using TaskCreate:
 
 ```
-Is it an IMMUTABLE LAW (must enforce every response)?
-├─ Yes → <law> block in CLAUDE.md
-└─ No → Is it a CAPABILITY (how to do)?
-    ├─ Yes → Skill
-    │   └─ Is it SHARED across multiple skills?
-    │       ├─ Yes → Extract to Rule (.claude/rules/)
-    │       └─ No → Keep in Skill
-    └─ No → Documentation only
+TaskCreate for EACH task below:
+- Subject: "[reflecting] Task N: <action>"
+- ActiveForm: "<doing action>"
 ```
 
-### 3. Extract Knowledge
+**Tasks:**
+1. Analyze conversation
+2. Identify learnings
+3. Classify each learning
+4. Integrate into components
+5. Verify integration
+6. Generate summary
 
-For each significant learning:
+Announce: "Created 6 tasks. Starting execution..."
 
+**Execution rules:**
+1. `TaskUpdate status="in_progress"` BEFORE starting each task
+2. `TaskUpdate status="completed"` ONLY after verification passes
+3. If task fails → stay in_progress, diagnose, retry
+4. NEVER skip to next task until current is completed
+5. At end, `TaskList` to confirm all completed
+
+## Task 1: Analyze Conversation
+
+**Goal:** Review the conversation to identify significant events.
+
+**Look for:**
+- **Successes:** Patterns that led to good outcomes
+- **Failures:** Errors, multiple attempts, dead ends
+- **Discoveries:** New insights about the project/domain
+- **Repetitions:** Actions performed multiple times
+
+**Document each event:**
+```
+Event: [What happened]
+Context: [When/where it occurred]
+Outcome: [Success/failure/discovery]
+```
+
+**Verification:** Listed at least 3 significant events.
+
+## Task 2: Identify Learnings
+
+**Goal:** Extract actionable learnings from events.
+
+**For each event, ask:**
+- What would have prevented this failure?
+- What made this succeed that could be repeated?
+- What did we learn that applies beyond this task?
+
+**Learning format:**
 ```yaml
 Learning:
   context: [When this applies]
   insight: [What was learned]
-  classification: [rule | skill | documentation]
-  action: [create_new | enhance_existing | document_only]
+  evidence: [Specific event that taught this]
 ```
 
-### 4. Integrate
+**Verification:** Each event has at least one learning.
 
-| Classification | Action |
-|---------------|--------|
-| Immutable Law | Add to `<law>` block in CLAUDE.md |
-| Skill | Use `writing-skills` skill |
-| Shared Rule | Use `writing-rules` skill |
-| Documentation | Add to appropriate `references/` |
+## Task 3: Classify Each Learning
 
-### 5. Review Existing Components
+**Goal:** Determine where each learning belongs.
 
-```bash
-ls .claude/rules/ 2>/dev/null
-find . -name "SKILL.md" -type f
+### Classification Decision Tree
+
+```
+Is it IMMUTABLE (must enforce every response)?
+├─ Yes → LAW in CLAUDE.md
+└─ No → Is it a CAPABILITY (how to do)?
+    ├─ Yes → SKILL
+    │   └─ Is it SHARED across multiple skills?
+    │       ├─ Yes → Also extract to RULE
+    │       └─ No → Keep in Skill only
+    └─ No → Is it a CONVENTION (what to do)?
+        ├─ Yes → RULE in .claude/rules/
+        └─ No → DOCUMENTATION only
 ```
 
-Determine if learnings enhance existing components or warrant new ones.
+### Classification Guide
 
-## Output Format
+| Type | Characteristics | Example |
+|------|-----------------|---------|
+| **Law** | Immutable, every response, critical | "Always display laws" |
+| **Skill** | How to do something, reusable | "How to write tests" |
+| **Rule** | Convention, path-scoped | "API responses use { data, error }" |
+| **Documentation** | Reference, not actionable | "Architecture overview" |
+
+**Verification:** Each learning has a classification.
+
+## Task 4: Integrate Into Components
+
+**Goal:** Add learnings to the appropriate components.
+
+### For Laws
+
+**Invoke `writing-claude-md` skill** or edit CLAUDE.md directly:
+```markdown
+**Law N: [Name]** - [Specific, verifiable constraint]
+```
+
+### For Skills
+
+**Invoke `writing-skills` skill** to create/update skill.
+
+### For Rules
+
+**Invoke `writing-rules` skill** to create rule file.
+
+### For Documentation
+
+Add to appropriate `references/` or `docs/` location.
+
+**CRITICAL:** Invoke the appropriate skill—don't create components directly.
+
+**Verification:** All learnings integrated into components.
+
+## Task 5: Verify Integration
+
+**Goal:** Confirm learnings are correctly integrated.
+
+**Check:**
+- [ ] New laws appear in `<law>` block
+- [ ] New skills pass validation
+- [ ] New rules have correct `paths:` scope
+- [ ] Documentation is in correct location
+
+**Test:**
+- Laws: Verify they display in responses
+- Skills: Verify they activate on triggers
+- Rules: Verify they inject on matching files
+
+**Verification:** All integrated components work correctly.
+
+## Task 6: Generate Summary
+
+**Goal:** Document what was captured.
+
+### Summary Format
 
 ```markdown
-## Session Learnings
+## Reflection Summary
 
-### Rules Created/Updated
-- [rule-file]: [constraint added]
+### Session Context
+[What work was done]
 
-### Skills Created/Updated
-- [skill-name]: [capability added]
+### Learnings Captured
+
+| Learning | Classification | Location |
+|----------|----------------|----------|
+| [insight] | law/skill/rule/doc | [path] |
+
+### Components Modified
+- Laws: [new/updated laws]
+- Skills: [new/updated skills]
+- Rules: [new/updated rules]
 
 ### Recommendations
-- [Follow-up actions]
+- [Future improvements]
 ```
+
+**Verification:** Summary accurately reflects all changes.
+
+## When to Reflect
+
+**Trigger reflection after:**
+- Completing a significant feature
+- Resolving a difficult bug
+- Multiple failed attempts → eventual success
+- Discovering something unexpected
+- End of long working session
+
+**Don't wait for "later"—context fades quickly.**
+
+## Red Flags - STOP
+
+These thoughts mean you're rationalizing. STOP and reconsider:
+
+- "Nothing worth capturing"
+- "I'll remember this"
+- "Too small to document"
+- "Reflection is overhead"
+- "Skip classification, just document"
+
+**All of these mean: You're about to lose valuable learnings. Follow the process.**
+
+## Common Rationalizations
+
+| Excuse | Reality |
+|--------|---------|
+| "Nothing learned" | Every session has learnings. Look harder. |
+| "I'll remember" | You won't. Context fades. Capture now. |
+| "Too small" | Small learnings compound. Capture them. |
+| "Overhead" | 10 minutes now saves hours later. |
+| "Skip classification" | Wrong location = unfindable. Classify properly. |
+
+## Flowchart: Reflection Process
+
+```dot
+digraph reflecting {
+    rankdir=TB;
+
+    start [label="Reflect on work", shape=doublecircle];
+    analyze [label="Task 1: Analyze\nconversation", shape=box];
+    identify [label="Task 2: Identify\nlearnings", shape=box];
+    classify [label="Task 3: Classify\neach learning", shape=box];
+    integrate [label="Task 4: Integrate into\ncomponents", shape=box];
+    verify [label="Task 5: Verify\nintegration", shape=box];
+    works [label="All\nworking?", shape=diamond];
+    summary [label="Task 6: Generate\nsummary", shape=box];
+    done [label="Reflection complete", shape=doublecircle];
+
+    start -> analyze;
+    analyze -> identify;
+    identify -> classify;
+    classify -> integrate;
+    integrate -> verify;
+    verify -> works;
+    works -> summary [label="yes"];
+    works -> integrate [label="no\nfix"];
+    summary -> done;
+}
+```
+
+## References
+
+- Use `writing-claude-md` for laws
+- Use `writing-skills` for capabilities
+- Use `writing-rules` for conventions
+- Use `agent-architect` for classification help

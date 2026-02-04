@@ -1,7 +1,7 @@
 {
   "name": "rcc",
-  "description": "Core ACE workflow with reflection, architecture guidance, modular rules, and skill authoring tools",
-  "version": "6.0.3",
+  "description": "Core ACE workflow with TDD-based skills, task enforcement, and quality reviewers",
+  "version": "7.0.0",
   "author": {
     "name": "Wei Hung",
     "email": "wayne930242@gmail.com"
@@ -13,7 +13,8 @@
     "plugin",
     "ACE",
     "agentic-context-engineering",
-    "reflection",
+    "TDD",
+    "task-driven",
     "skill-authoring"
   ]
 }

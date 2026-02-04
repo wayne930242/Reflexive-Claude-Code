@@ -2,7 +2,7 @@
 
 [English](README.md) | [繁體中文](README.zh-TW.md)
 
-A **skills-driven Agentic Context Engineering** workflow for Claude Code.
+A **skills-driven Agentic Context Engineering** workflow for Claude Code with TDD-based skill design.
 
 ## Core Philosophy
 
@@ -14,33 +14,47 @@ The agent maintains and refactors its own core prompts and agent system — not 
 - Through deliberate teaching, the agent integrates learnings into its skill library
 - Skills are abstract, reusable, and link to reference directories with examples and documentation
 
+## What's New in v7.0.0
+
+- **TDD-based skill design**: RED (baseline test) → GREEN (write skill) → REFACTOR (close loopholes)
+- **Mandatory task lists**: Every skill enforces TaskCreate/TaskUpdate for verifiable progress
+- **Quality reviewers**: Built-in subagents for skill, CLAUDE.md, and rule review
+- **Architecture advisor**: Consult in Task 1 of every skill workflow
+- **Anti-rationalization**: Red Flags and Rationalizations tables prevent skipping steps
+- **Flowcharts**: Visual process diagrams in every skill
+
 ## Plugins
 
 This marketplace provides two plugins:
 
-### rcc (v6.0.3)
+### rcc (v7.0.0)
 
-Core ACE workflow with reflection, architecture guidance, modular rules, and skill authoring tools.
+Core ACE workflow with TDD-based skills, task enforcement, and quality reviewers.
 
 **Skills:**
 
 | Skill | Description |
 |-------|-------------|
-| `agent-architect` | Architecture advisor for holistic guidance on component design |
-| `project-discovery` | Deep project analysis for architecture planning |
-| `writing-skills` | Create effective SKILL.md files following Anthropic's official patterns |
+| `writing-skills` | TDD-based skill creation with baseline testing and review |
 | `writing-claude-md` | Create CLAUDE.md with `<law>` constitution |
 | `writing-subagents` | Create subagent configurations for `.claude/agents/` |
 | `writing-rules` | Create rule files for `.claude/rules/` with conventions |
 | `writing-hooks` | Create hooks for static analysis and code quality |
 | `reflecting` | Reflect on conversation, classify learnings, integrate |
-| `improving-skills` | Optimize a skill by analyzing conventions and researching best practices |
-| `refactoring-skills` | Analyze and consolidate all skills - merge, optimize, remove redundancy |
-| `hunting-skills` | Search external skills via claude-skills-mcp, adapt as new project skills |
-| `refactoring-with-external-skills` | Refactor existing skills using external skill patterns |
-| `adding-laws` | Add a new law to the CLAUDE.md constitution |
-| `initializing-projects` | Initialize new project with framework, best practices, and agent system |
+| `improving-skills` | Optimize a skill through targeted improvements |
+| `refactoring-skills` | Analyze and consolidate all skills |
+| `initializing-projects` | Initialize new project with framework and agent system |
 | `migrating-agent-systems` | Migrate existing systems to best practices architecture |
+| `creating-plugins` | Scaffold a new Claude Code plugin |
+
+**Subagents (Reviewers):**
+
+| Agent | Description |
+|-------|-------------|
+| `architecture-advisor` | Architecture consultant for Task 1 of all workflows |
+| `skill-reviewer` | Quality review for skills |
+| `claudemd-reviewer` | Quality review for CLAUDE.md |
+| `rule-reviewer` | Quality review for rules |
 
 ### rcc-dev (v2.0.1)
 
@@ -74,18 +88,19 @@ Development helper tools for creating Claude Code plugins with complete manifest
 | **Subagents** | `.claude/agents/*.md` | Task tool | Isolated |
 | **CLAUDE.md** | `./CLAUDE.md` | Auto-inject | High |
 
-## Core Constitution
+## Skill Design Principles
 
-CLAUDE.md uses `<law>` blocks for Self-Reinforcing Display:
+All skills follow TDD-based design with these components:
 
-| Law | Purpose |
-|-----|---------|
-| **Communication** | Concise, actionable responses |
-| **Skill Discovery** | Check available skills before starting work |
-| **Rule Consultation** | Check `.claude/rules/` for domain conventions |
-| **Parallel Processing** | Use Task tool for independent operations |
-| **Reflexive Learning** | Remind user to reflect on important discoveries |
-| **Self-Reinforcing Display** | Display `<law>` block at start of every response |
+| Component | Purpose |
+|-----------|---------|
+| **Task Initialization** | Mandatory TaskCreate before any action |
+| **TDD Mapping** | RED → GREEN → REFACTOR phases |
+| **Verification Criteria** | Objective checks for each task |
+| **Red Flags** | Anti-rationalization triggers |
+| **Rationalizations Table** | Counter-arguments for common excuses |
+| **Flowchart** | Visual process diagram |
+| **Reviewer Gate** | Quality review before completion |
 
 ## Workflow
 
@@ -93,17 +108,13 @@ CLAUDE.md uses `<law>` blocks for Self-Reinforcing Display:
 ┌─────────────────────────────────────────────────────────────────┐
 │                   Work Session                                   │
 ├─────────────────────────────────────────────────────────────────┤
-│  1. Before Task     │  Review skill library                      │
-│  2. Do Work         │  Just work normally                        │
-│  3. Reflect         │  Classify → Rules or Skills → Integrate    │
-│  4. Refactor        │  Consolidate & optimize                    │
+│  1. Task 1        │  Consult architecture-advisor               │
+│  2. RED Phase     │  Baseline test - observe failures           │
+│  3. GREEN Phase   │  Create component addressing failures       │
+│  4. REFACTOR      │  Quality review via reviewer subagent       │
+│  5. Validate      │  Test in real usage                         │
 └─────────────────────────────────────────────────────────────────┘
 ```
-
-Each skill links to a directory with:
-- `SKILL.md` — Abstract instructions (progressive disclosure)
-- `references/` — Detailed docs loaded on-demand
-- `scripts/` — Executable utilities
 
 ## Installation
 
@@ -126,35 +137,21 @@ Reflexive-Claude-Code/
 │   └── marketplace.json     # Marketplace definition
 ├── plugins/
 │   ├── rcc/                 # Core ACE plugin
+│   │   ├── skills/          # All skills
+│   │   ├── agents/          # Reviewer subagents
+│   │   └── commands/        # Command aliases
 │   └── rcc-dev/             # Development helper plugin
-├── skills/
-│   ├── agent-architect/     # ACE-core: architecture advisor
-│   ├── project-discovery/   # ACE-core: project analysis
-│   ├── writing-skills/      # ACE-core: creates skills
-│   ├── writing-claude-md/   # ACE-core: creates CLAUDE.md
-│   ├── writing-subagents/   # ACE-core: creates subagents
-│   ├── writing-rules/       # ACE-core: creates rules
-│   ├── writing-hooks/       # ACE-core: creates hooks
-│   ├── reflecting/          # ACE-core: session reflection
-│   ├── improving-skills/    # ACE-core: skill optimization
-│   ├── refactoring-skills/  # ACE-core: skill consolidation
-│   ├── hunting-skills/      # ACE-core: external skill hunting
-│   ├── refactoring-with-external-skills/  # ACE-core: refactor with external
-│   ├── adding-laws/         # ACE-core: add constitution law
-│   ├── initializing-projects/  # ACE-core: project initialization
-│   ├── migrating-agent-systems/  # ACE-core: system migration
-│   ├── writing-plugins/     # RCC-dev-helper: creates plugins
-│   └── creating-plugins/    # RCC-dev-helper: plugin scaffolding
 └── README.md
 ```
 
-## Inspiration
+## Credits
 
-This project is inspired by the **Agentic Context Engineering (ACE)** framework:
+This project's skill design patterns are inspired by:
 
-> Zhang, Q., Hu, C., Upasani, S., Ma, B., Hong, F., Kamanuru, V., Rainton, J., Wu, C., Ji, M., Li, H., Thakker, U., Zou, J., & Olukotun, K. (2025). *Agentic Context Engineering: Evolving Contexts for Self-Improving Language Models*. arXiv:2510.04618. https://arxiv.org/abs/2510.04618
+- **[superpowers](https://github.com/anthropics/claude-code-superpowers)** - The TDD-based skill design, task enforcement, and verification patterns are adapted from the superpowers plugin by Anthropic. Special thanks for pioneering the "discipline-enforcing skill" pattern with Red Flags and Rationalization tables.
 
-The ACE framework's modular approach of **Generate → Reflect → Curate** directly influenced this project's skills-driven workflow, where users explicitly trigger learning moments and guide the agent's self-improvement through deliberate teaching.
+- **Agentic Context Engineering (ACE) Framework**:
+  > Zhang, Q., Hu, C., Upasani, S., Ma, B., Hong, F., Kamanuru, V., Rainton, J., Wu, C., Ji, M., Li, H., Thakker, U., Zou, J., & Olukotun, K. (2025). *Agentic Context Engineering: Evolving Contexts for Self-Improving Language Models*. arXiv:2510.04618. https://arxiv.org/abs/2510.04618
 
 ## License
 

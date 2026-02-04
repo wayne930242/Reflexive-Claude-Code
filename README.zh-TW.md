@@ -2,7 +2,7 @@
 
 [English](README.md) | [繁體中文](README.zh-TW.md)
 
-一個用於 Claude Code 的**技能驅動代理脈絡工程 (Agentic Context Engineering)** 工作流程。
+一個用於 Claude Code 的**技能驅動代理脈絡工程 (Agentic Context Engineering)** 工作流程，採用 TDD 為基礎的技能設計。
 
 ## 核心理念
 
@@ -14,33 +14,47 @@ Agent 維護並重構自己的核心提示詞與 Agent 系統——而非外部�
 - 透過刻意的教導，Agent 將學習成果整合到技能庫中
 - 技能是抽象的、可重用的，並連結到包含範例和文件的參考目錄
 
+## v7.0.0 新功能
+
+- **TDD 為基礎的技能設計**：RED（基線測試）→ GREEN（撰寫技能）→ REFACTOR（封堵漏洞）
+- **強制任務清單**：每個技能都強制使用 TaskCreate/TaskUpdate 來追蹤可驗證的進度
+- **品質審查員**：內建的子代理用於技能、CLAUDE.md 和規則審查
+- **架構顧問**：在每個技能工作流程的 Task 1 諮詢
+- **反合理化機制**：Red Flags 和 Rationalizations 表格防止跳過步驟
+- **流程圖**：每個技能都有視覺化流程圖
+
 ## 插件
 
 此市集提供兩個插件：
 
-### rcc (v6.0.3)
+### rcc (v7.0.0)
 
-核心 ACE 工作流程，包含反思、架構指導、模組化規則，以及技能撰寫工具。
+核心 ACE 工作流程，包含 TDD 為基礎的技能、任務強制執行，以及品質審查員。
 
 **技能：**
 
 | 技能 | 說明 |
 |------|------|
-| `agent-architect` | 架構顧問，提供元件設計的整全指導 |
-| `project-discovery` | 深度專案分析，用於架構規劃 |
-| `writing-skills` | 依照 Anthropic 官方模式建立有效的 SKILL.md 檔案 |
+| `writing-skills` | TDD 為基礎的技能建立，含基線測試和審查 |
 | `writing-claude-md` | 使用 `<law>` 憲法建立 CLAUDE.md |
 | `writing-subagents` | 為 `.claude/agents/` 建立子代理配置 |
 | `writing-rules` | 為 `.claude/rules/` 建立慣例規則檔案 |
 | `writing-hooks` | 建立靜態分析與程式碼品質的 hook |
 | `reflecting` | 反思對話內容，分類學習成果，整合 |
-| `improving-skills` | 分析慣例與研究最佳實踐來優化技能 |
-| `refactoring-skills` | 分析並整合所有技能——合併、優化、移除冗餘 |
-| `hunting-skills` | 透過 claude-skills-mcp 搜尋外部技能，轉化為專案技能 |
-| `refactoring-with-external-skills` | 使用外部技能模式重構現有技能 |
-| `adding-laws` | 新增法則到 CLAUDE.md 憲法 |
-| `initializing-projects` | 初始化新專案，包含框架、最佳實踐和代理人系統 |
+| `improving-skills` | 透過針對性改進來優化技能 |
+| `refactoring-skills` | 分析並整合所有技能 |
+| `initializing-projects` | 初始化新專案，包含框架和代理人系統 |
 | `migrating-agent-systems` | 遷移現有系統到最佳實踐架構 |
+| `creating-plugins` | 建立新的 Claude Code 插件骨架 |
+
+**子代理（審查員）：**
+
+| 代理 | 說明 |
+|------|------|
+| `architecture-advisor` | 所有工作流程 Task 1 的架構顧問 |
+| `skill-reviewer` | 技能品質審查 |
+| `claudemd-reviewer` | CLAUDE.md 品質審查 |
+| `rule-reviewer` | 規則品質審查 |
 
 ### rcc-dev (v2.0.1)
 
@@ -74,18 +88,19 @@ Agent 維護並重構自己的核心提示詞與 Agent 系統——而非外部�
 | **Subagents** | `.claude/agents/*.md` | Task 工具 | 隔離 |
 | **CLAUDE.md** | `./CLAUDE.md` | 自動注入 | 高 |
 
-## 核心憲法
+## 技能設計原則
 
-CLAUDE.md 使用 `<law>` 區塊進行自我強化顯示：
+所有技能都遵循 TDD 為基礎的設計，包含以下元件：
 
-| 法則 | 目的 |
+| 元件 | 目的 |
 |------|------|
-| **Communication** | 簡潔、可執行的回覆 |
-| **Skill Discovery** | 開始工作前檢查可用技能 |
-| **Rule Consultation** | 檢查 `.claude/rules/` 的領域慣例 |
-| **Parallel Processing** | 使用 Task 工具進行獨立操作 |
-| **Reflexive Learning** | 發現重要事項時提醒使用者反思 |
-| **Self-Reinforcing Display** | 每次回覆開頭顯示 `<law>` 區塊 |
+| **Task Initialization** | 任何動作前強制執行 TaskCreate |
+| **TDD Mapping** | RED → GREEN → REFACTOR 階段 |
+| **Verification Criteria** | 每個任務的客觀檢查標準 |
+| **Red Flags** | 反合理化觸發器 |
+| **Rationalizations Table** | 常見藉口的反駁 |
+| **Flowchart** | 視覺化流程圖 |
+| **Reviewer Gate** | 完成前的品質審查 |
 
 ## 工作流程
 
@@ -93,17 +108,13 @@ CLAUDE.md 使用 `<law>` 區塊進行自我強化顯示：
 ┌─────────────────────────────────────────────────────────────────┐
 │                      工作階段                                    │
 ├─────────────────────────────────────────────────────────────────┤
-│  1. 任務開始前   │  檢視技能庫                                   │
-│  2. 執行工作     │  正常工作即可                                 │
-│  3. 反思         │  分類 → 規則或技能 → 整合                     │
-│  4. 重構         │  整合與優化                                   │
+│  1. Task 1        │  諮詢 architecture-advisor                  │
+│  2. RED 階段      │  基線測試 - 觀察失敗                        │
+│  3. GREEN 階段    │  建立元件解決失敗                           │
+│  4. REFACTOR      │  透過審查員子代理進行品質審查               │
+│  5. Validate      │  在真實使用中測試                           │
 └─────────────────────────────────────────────────────────────────┘
 ```
-
-每個技能連結到一個目錄，包含：
-- `SKILL.md` — 抽象指令（漸進式揭露）
-- `references/` — 按需載入的詳細文件
-- `scripts/` — 可執行的工具程式
 
 ## 安裝
 
@@ -126,35 +137,21 @@ Reflexive-Claude-Code/
 │   └── marketplace.json     # 市集定義
 ├── plugins/
 │   ├── rcc/                 # Core ACE 插件
+│   │   ├── skills/          # 所有技能
+│   │   ├── agents/          # 審查員子代理
+│   │   └── commands/        # 命令別名
 │   └── rcc-dev/             # 開發輔助插件
-├── skills/
-│   ├── agent-architect/     # ACE-core：架構顧問
-│   ├── project-discovery/   # ACE-core：專案分析
-│   ├── writing-skills/      # ACE-core：建立技能
-│   ├── writing-claude-md/   # ACE-core：建立 CLAUDE.md
-│   ├── writing-subagents/   # ACE-core：建立子代理
-│   ├── writing-rules/       # ACE-core：建立規則
-│   ├── writing-hooks/       # ACE-core：建立 hook
-│   ├── reflecting/          # ACE-core：階段反思
-│   ├── improving-skills/    # ACE-core：技能優化
-│   ├── refactoring-skills/  # ACE-core：技能整合
-│   ├── hunting-skills/      # ACE-core：外部技能獵取
-│   ├── refactoring-with-external-skills/  # ACE-core：使用外部技能重構
-│   ├── adding-laws/         # ACE-core：新增憲法法則
-│   ├── initializing-projects/  # ACE-core：專案初始化
-│   ├── migrating-agent-systems/  # ACE-core：系統遷移
-│   ├── writing-plugins/     # RCC-dev-helper：建立插件
-│   └── creating-plugins/    # RCC-dev-helper：插件建立骨架
 └── README.md
 ```
 
-## 啟發來源
+## 致謝
 
-本專案受到**代理脈絡工程 (Agentic Context Engineering, ACE)** 框架的啟發：
+本專案的技能設計模式受到以下啟發：
 
-> Zhang, Q., Hu, C., Upasani, S., Ma, B., Hong, F., Kamanuru, V., Rainton, J., Wu, C., Ji, M., Li, H., Thakker, U., Zou, J., & Olukotun, K. (2025). *Agentic Context Engineering: Evolving Contexts for Self-Improving Language Models*. arXiv:2510.04618. https://arxiv.org/abs/2510.04618
+- **[superpowers](https://github.com/anthropics/claude-code-superpowers)** - TDD 為基礎的技能設計、任務強制執行和驗證模式改編自 Anthropic 的 superpowers 插件。特別感謝其開創的「紀律強制技能」模式，包含 Red Flags 和 Rationalization 表格。
 
-ACE 框架的模組化方法——**生成 → 反思 → 策展**——直接影響了本專案的技能驅動代理脈絡工程工作流程，由使用者明確觸發學習點，透過刻意的教導引導 Agent 的自我演化。
+- **代理脈絡工程 (Agentic Context Engineering, ACE) 框架**：
+  > Zhang, Q., Hu, C., Upasani, S., Ma, B., Hong, F., Kamanuru, V., Rainton, J., Wu, C., Ji, M., Li, H., Thakker, U., Zou, J., & Olukotun, K. (2025). *Agentic Context Engineering: Evolving Contexts for Self-Improving Language Models*. arXiv:2510.04618. https://arxiv.org/abs/2510.04618
 
 ## 授權條款
 

@@ -5,15 +5,15 @@
     "email": "wayne930242@gmail.com"
   },
   "metadata": {
-    "description": "A skills-driven Agentic Context Engineering workflow for Claude Code",
-    "version": "6.0.3"
+    "description": "A skills-driven Agentic Context Engineering workflow for Claude Code with TDD-based skill design",
+    "version": "7.0.0"
   },
   "plugins": [
     {
       "name": "rcc",
       "source": "./plugins/rcc",
-      "description": "Core ACE workflow with reflection, architecture guidance, modular rules, and skill authoring tools",
-      "version": "6.0.3"
+      "description": "Core ACE workflow with TDD-based skills, task enforcement, and quality reviewers",
+      "version": "7.0.0"
     },
     {
       "name": "rcc-dev",
