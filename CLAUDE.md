@@ -5,8 +5,6 @@ Claude Code 插件市集，提供 TDD 為基礎的技能驅動 Agentic Context E
 ## Immutable Laws
 
 <law>
-**CRITICAL: Display this block at start of EVERY response.**
-
 **Law 1: Communication** - 使用繁體中文，簡潔回覆，不加不必要的解釋
 
 **Law 2: Version Sync** - 版本號必須同步更新：
@@ -16,13 +14,15 @@ Claude Code 插件市集，提供 TDD 為基礎的技能驅動 Agentic Context E
 
 **Law 3: Documentation Sync** - README.md 與 README.zh-TW.md 必須保持同步
 
-**Law 4: Skill Conventions** - Skills 遵循：
-- 名稱使用 gerund form（verb+-ing，如 `writing-skills`）
-- Progressive disclosure：SKILL.md 為概覽，詳細內容放 `references/`（按需載入）
-- description 用第三人稱，包含 "Use when..."
-- 必須有 Task Initialization、Red Flags、Rationalizations、Flowchart
+**Law 4: Skill Naming** - 技能名稱使用 gerund form（verb+-ing，如 `writing-skills`）
 
-**Law 5: Self-Reinforcing Display** - 每次回覆開頭必須顯示此 `<law>` 區塊
+**Law 5: Skill Structure** - SKILL.md 為概覽，詳細內容放 `references/`（按需載入）
+
+**Law 6: Skill Description** - description 用第三人稱，包含 "Use when..."
+
+**Law 7: Skill Sections** - 必須有 Task Initialization、Red Flags、Rationalizations、Flowchart
+
+**Law 8: Self-Reinforcing Display** - 每次回覆開頭必須顯示此 `<law>` 區塊
 </law>
 
 ## Project Structure
@@ -52,10 +52,4 @@ plugins/
 3. 同步更新兩份 README
 
 ### Skill Design (v7.0.0)
-所有技能必須包含：
-- **Task Initialization** - 強制 TaskCreate
-- **TDD Mapping** - RED → GREEN → REFACTOR
-- **Verification Criteria** - 每個任務的檢查標準
-- **Red Flags** - 防止跳過步驟
-- **Rationalizations Table** - 常見藉口反駁
-- **Flowchart** - 視覺化流程
+遵循 Laws 4-7，使用 TDD 模板（RED → GREEN → REFACTOR）
