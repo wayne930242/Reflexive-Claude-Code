@@ -18,7 +18,7 @@ Agent 維護並重構自己的核心提示詞與 Agent 系統——而非外部�
 
 此市集提供兩個插件：
 
-### ace (v6.0.1)
+### core (v6.0.2)
 
 核心 ACE 工作流程，包含反思、架構指導、模組化規則，以及技能撰寫工具。
 
@@ -110,12 +110,12 @@ CLAUDE.md 使用 `<law>` 區塊進行自我強化顯示：
 ```bash
 # 從 GitHub 安裝
 /plugin marketplace add wayne930242/Reflexive-Claude-Code
-/plugin install ACE-core@weihung-marketplace
+/plugin install core@rcc
 # 或
-/plugin install RCC-dev-helper@weihung-marketplace
+/plugin install dev@rcc
 
 # 從本機路徑安裝
-/plugin install /path/to/Reflexive-Claude-Code
+/plugin install /path/to/Reflexive-Claude-Code/plugins/core
 ```
 
 ## 專案結構
@@ -123,9 +123,10 @@ CLAUDE.md 使用 `<law>` 區塊進行自我強化顯示：
 ```
 Reflexive-Claude-Code/
 ├── .claude-plugin/
-│   ├── marketplace.json     # 市集定義
-│   ├── ACE-core.json        # ACE-core 插件 manifest
-│   └── RCC-dev-helper.json  # RCC-dev-helper 插件 manifest
+│   └── marketplace.json     # 市集定義
+├── plugins/
+│   ├── core/                # Core ACE 插件
+│   └── dev/                 # 開發輔助插件
 ├── skills/
 │   ├── agent-architect/     # ACE-core：架構顧問
 │   ├── project-discovery/   # ACE-core：專案分析

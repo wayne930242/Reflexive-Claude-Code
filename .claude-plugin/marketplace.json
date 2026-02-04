@@ -1,23 +1,23 @@
 {
-  "name": "Reflexive-Claude-Code",
+  "name": "rcc",
   "owner": {
     "name": "Wei Hung",
     "email": "wayne930242@gmail.com"
   },
   "metadata": {
     "description": "A skills-driven Agentic Context Engineering workflow for Claude Code",
-    "version": "6.0.1"
+    "version": "6.0.2"
   },
   "plugins": [
     {
-      "name": "ace",
-      "source": "./plugins/ace",
+      "name": "core",
+      "source": "./plugins/core",
       "description": "Core ACE workflow with reflection, architecture guidance, modular rules, and skill authoring tools",
-      "version": "6.0.1"
+      "version": "6.0.2"
     },
     {
-      "name": "RCC-dev-helper",
-      "source": "./plugins/RCC-dev-helper",
+      "name": "dev",
+      "source": "./plugins/dev",
       "description": "Development helper tools for creating Claude Code plugins",
       "version": "2.0.0"
     }
