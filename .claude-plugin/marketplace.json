@@ -6,14 +6,14 @@
   },
   "metadata": {
     "description": "A skills-driven Agentic Context Engineering workflow for Claude Code with TDD-based skill design",
-    "version": "7.0.0"
+    "version": "7.0.1"
   },
   "plugins": [
     {
       "name": "rcc",
       "source": "./plugins/rcc",
       "description": "Core ACE workflow with TDD-based skills, task enforcement, and quality reviewers",
-      "version": "7.0.0"
+      "version": "7.0.1"
     },
     {
       "name": "rcc-dev",

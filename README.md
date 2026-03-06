@@ -14,7 +14,7 @@ The agent maintains and refactors its own core prompts and agent system — not 
 - Through deliberate teaching, the agent integrates learnings into its skill library
 - Skills are abstract, reusable, and link to reference directories with examples and documentation
 
-## What's New in v7.0.0
+## What's New in v7.0.1
 
 - **TDD-based skill design**: RED (baseline test) → GREEN (write skill) → REFACTOR (close loopholes)
 - **Mandatory task lists**: Every skill enforces TaskCreate/TaskUpdate for verifiable progress
@@ -27,7 +27,7 @@ The agent maintains and refactors its own core prompts and agent system — not 
 
 This marketplace provides two plugins:
 
-### rcc (v7.0.0)
+### rcc (v7.0.1)
 
 Core ACE workflow with TDD-based skills, task enforcement, and quality reviewers.
 

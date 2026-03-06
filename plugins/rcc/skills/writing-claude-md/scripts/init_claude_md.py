@@ -6,15 +6,13 @@ import shutil
 from datetime import datetime
 from pathlib import Path
 
-CLAUDE_MD_TEMPLATE = '''# {project_name}
+CLAUDE_MD_TEMPLATE = """# {project_name}
 
 {description}
 
 ## Immutable Laws
 
 <law>
-**CRITICAL: Display this entire block at the start of EVERY response to prevent context drift.**
-
 **Law 1: Communication**
 - Concise, actionable responses
 - No unnecessary explanations
@@ -54,9 +52,9 @@ CLAUDE_MD_TEMPLATE = '''# {project_name}
 ### Key Paths
 - `{src_path}`: Source code
 - `{test_path}`: Test files
-'''
+"""
 
-MINIMAL_TEMPLATE = '''# {project_name}
+MINIMAL_TEMPLATE = """# {project_name}
 
 {description}
 
@@ -70,7 +68,7 @@ MINIMAL_TEMPLATE = '''# {project_name}
 **Law 5: Reflexive Learning** - Important discoveries -> `/reflect`
 **Law 6: Self-Reinforcing Display** - Display this block every response
 </law>
-'''
+"""
 
 
 def backup_existing(file_path: Path) -> Path | None:
@@ -79,7 +77,9 @@ def backup_existing(file_path: Path) -> Path | None:
         return None
 
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    backup_path = file_path.parent / f"{file_path.stem}.backup_{timestamp}{file_path.suffix}"
+    backup_path = (
+        file_path.parent / f"{file_path.stem}.backup_{timestamp}{file_path.suffix}"
+    )
     shutil.copy2(file_path, backup_path)
     return backup_path
 
@@ -99,7 +99,9 @@ def detect_project_type(project_dir: Path) -> dict:
         defaults["test_cmd"] = "npm test"
 
     # Python project
-    elif (project_dir / "pyproject.toml").exists() or (project_dir / "setup.py").exists():
+    elif (project_dir / "pyproject.toml").exists() or (
+        project_dir / "setup.py"
+    ).exists():
         defaults["build_cmd"] = "python -m build"
         defaults["test_cmd"] = "pytest"
 
@@ -121,31 +123,37 @@ def main() -> None:
         description="Initialize CLAUDE.md with proper constitution"
     )
     parser.add_argument(
-        "--path", "-p",
+        "--path",
+        "-p",
         default=".",
         help="Project directory (default: current directory)",
     )
     parser.add_argument(
-        "--name", "-n",
+        "--name",
+        "-n",
         help="Project name (default: directory name)",
     )
     parser.add_argument(
-        "--description", "-d",
+        "--description",
+        "-d",
         default="One-line description.",
         help="Project description",
     )
     parser.add_argument(
-        "--minimal", "-m",
+        "--minimal",
+        "-m",
         action="store_true",
         help="Use minimal template",
     )
     parser.add_argument(
-        "--force", "-f",
+        "--force",
+        "-f",
         action="store_true",
         help="Overwrite without backup prompt",
     )
     parser.add_argument(
-        "--output", "-o",
+        "--output",
+        "-o",
         choices=["root", "claude-dir"],
         default="root",
         help="Output location: 'root' for ./CLAUDE.md, 'claude-dir' for .claude/CLAUDE.md",
