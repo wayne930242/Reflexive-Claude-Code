@@ -1,6 +1,6 @@
 ---
 name: writing-rules
-description: Use when creating rule files in .claude/rules/, adding project conventions, or scoping guidelines to specific paths. Use when user says "add rule", "create convention", "scope guideline". NOT for laws (use <law> in CLAUDE.md).
+description: Use when creating rule files in .claude/rules/, adding project conventions, or scoping guidelines to specific paths. Use when user says "add rule", "create convention", "scope guideline". NOT for broad project instructions (use CLAUDE.md).
 ---
 
 # Writing Rules
@@ -11,7 +11,7 @@ description: Use when creating rule files in .claude/rules/, adding project conv
 
 Rules auto-inject into context when files match their `paths:` glob. Keep them concise—every line costs tokens.
 
-**Core principle:** Rules = conventions for specific files. Laws = immutable constraints for ALL responses. Don't confuse them.
+**Core principle:** Rules = path-scoped conventions, auto-injected when matching files are read. CLAUDE.md = broad project instructions loaded every session. Use rules when different paths need different conventions.
 
 **Violating the letter of the rules is violating the spirit of the rules.**
 
@@ -59,16 +59,16 @@ Announce: "Created 6 tasks. Starting execution..."
 **Questions to answer:**
 - What convention needs enforcement?
 - Which files should this apply to?
-- Is this a LAW (immutable) or RULE (convention)?
+- Does this belong in CLAUDE.md (broad, always loaded) or rules (path-scoped)?
 - Does this rule already exist?
 
 **Decision:**
 ```
-Is it IMMUTABLE (must display every response)?
-├─ Yes → Use <law> in CLAUDE.md, NOT a rule
-└─ No → Is it scoped to specific files?
-    ├─ Yes → Use paths: glob
-    └─ No → Global rule (no paths:)
+Does it apply broadly to ALL project work?
+├─ Yes → Put in CLAUDE.md (loaded every session)
+└─ No → Is it scoped to specific file paths?
+    ├─ Yes → RULE with paths: glob
+    └─ No → Global rule (no paths:, but consider CLAUDE.md instead)
 ```
 
 **Verification:** Can state the convention in one sentence and specify the glob pattern.
@@ -179,7 +179,7 @@ Vague, unscoped, passive.
 - [ ] Body < 50 lines
 - [ ] Uses imperative language
 - [ ] No how-to instructions (belongs in skills)
-- [ ] Not duplicating a `<law>` in CLAUDE.md
+- [ ] Not duplicating content already in CLAUDE.md
 
 **Verification:** All checklist items pass.
 
@@ -188,7 +188,7 @@ Vague, unscoped, passive.
 **Goal:** Have rule reviewed by rule-reviewer subagent.
 
 ```
-Task tool:
+Agent tool:
 - subagent_type: "rcc:rule-reviewer"
 - prompt: "Review rule at [path]"
 ```
@@ -229,7 +229,7 @@ Task tool:
 
 These thoughts mean you're rationalizing. STOP and reconsider:
 
-- "This should be a law, but I'll make it a rule"
+- "This should be in CLAUDE.md, but I'll make it a rule"
 - "I don't need paths:, it applies everywhere"
 - "50 lines is too restrictive"
 - "Skip baseline, I know what's needed"
@@ -242,7 +242,7 @@ These thoughts mean you're rationalizing. STOP and reconsider:
 
 | Excuse | Reality |
 |--------|---------|
-| "Laws are overkill" | If it's immutable, it's a law. Period. |
+| "CLAUDE.md is overkill" | If it applies broadly to all work, it belongs in CLAUDE.md. |
 | "Global rules are fine" | Global = always injected. Scope it properly. |
 | "50 lines is arbitrary" | 50 lines × N matches = massive token cost. |
 | "I can add procedures here" | Rules = what. Skills = how. Keep them separate. |
@@ -256,8 +256,8 @@ digraph rule_creation {
 
     start [label="Need rule", shape=doublecircle];
     analyze [label="Task 1: Analyze\nrequirements", shape=box];
-    is_law [label="Is it\nimmutable?", shape=diamond];
-    use_law [label="Use <law>\nin CLAUDE.md", shape=box, style=filled, fillcolor="#ffcccc"];
+    is_broad [label="Applies to\nall work?", shape=diamond];
+    use_claudemd [label="Put in\nCLAUDE.md", shape=box, style=filled, fillcolor="#ffcccc"];
     baseline [label="Task 2: RED\nTest without rule", shape=box, style=filled, fillcolor="#ffcccc"];
     write [label="Task 3: GREEN\nWrite rule", shape=box, style=filled, fillcolor="#ccffcc"];
     validate [label="Task 4: Validate\nstructure", shape=box];
@@ -267,9 +267,9 @@ digraph rule_creation {
     done [label="Rule complete", shape=doublecircle];
 
     start -> analyze;
-    analyze -> is_law;
-    is_law -> use_law [label="yes"];
-    is_law -> baseline [label="no"];
+    analyze -> is_broad;
+    is_broad -> use_claudemd [label="yes"];
+    is_broad -> baseline [label="no"];
     baseline -> write;
     write -> validate;
     validate -> review;

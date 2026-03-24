@@ -1,6 +1,6 @@
 # Rule Examples by Domain
 
-> **Note**: Rules are for conventions/guidelines only. For immutable laws, use `<law>` blocks in CLAUDE.md.
+> **Note**: Rules are for path-scoped conventions. For broad project instructions, use CLAUDE.md directly.
 
 ## Code Style Conventions
 

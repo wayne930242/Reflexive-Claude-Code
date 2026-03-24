@@ -46,10 +46,10 @@ Announce: "Created 4 tasks. Starting execution..."
 ## Component Hierarchy (Priority Order)
 
 ```
-1. CLAUDE.md (highest)       - Constitution with <law> blocks
-   └─ Auto-injected every response
-   └─ Self-Reinforcing Display prevents drift
-   └─ IMMUTABLE constraints only
+1. CLAUDE.md (highest)       - Broad project instructions
+   └─ Loaded every session (expensive — keep < 200 lines)
+   └─ Only what Claude can't figure out from code
+   └─ Specific, verifiable instructions with MUST/NEVER emphasis
 
 2. Rules (.claude/rules/)    - Path-scoped conventions
    └─ Auto-injected when paths: glob matches
@@ -81,10 +81,10 @@ Announce: "Created 4 tasks. Starting execution..."
 ## Classification Decision Tree
 
 ```
-Is it IMMUTABLE (must display EVERY response)?
-├─ Yes → LAW in CLAUDE.md <law> block
-│   Examples: Communication style, version sync
-│   Key: Self-Reinforcing Display law required
+Does it apply BROADLY to all project work?
+├─ Yes → CLAUDE.md instruction
+│   Examples: Communication style, build commands, architecture
+│   Key: Keep < 200 lines, specific and verifiable
 │
 └─ No → What type of knowledge?
     │
@@ -148,7 +148,7 @@ Is it IMMUTABLE (must display EVERY response)?
 
 | If it... | Then it's a... |
 |----------|----------------|
-| Must display every response | LAW in CLAUDE.md |
+| Applies broadly to all project work | CLAUDE.md instruction |
 | Different paths need different conventions (monorepo, frontend vs backend) | RULE with paths: |
 | Teaches how to do something | SKILL |
 | Needs isolated execution context | AGENT (or skill with `context: fork`) |

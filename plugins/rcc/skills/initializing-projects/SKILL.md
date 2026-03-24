@@ -164,7 +164,7 @@ This handles:
 **Checklist:**
 - [ ] Project builds without errors
 - [ ] Project runs without errors
-- [ ] CLAUDE.md exists with `<law>` block
+- [ ] CLAUDE.md exists with specific, verifiable instructions
 - [ ] Hooks run on file changes (if configured)
 - [ ] README documents the setup
 

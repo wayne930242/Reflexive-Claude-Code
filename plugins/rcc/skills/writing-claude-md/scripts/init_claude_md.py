@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Initialize a CLAUDE.md with proper constitution for Claude Code."""
+"""Initialize a CLAUDE.md with project-specific instructions for Claude Code."""
 
 import argparse
 import shutil
@@ -10,64 +10,37 @@ CLAUDE_MD_TEMPLATE = """# {project_name}
 
 {description}
 
-## Immutable Laws
+## Code Style
 
-<law>
-**Law 1: Communication**
-- Concise, actionable responses
-- No unnecessary explanations
-- No summary files unless explicitly requested
+- [Add project-specific style rules that differ from defaults]
+- [Example: MUST use ES modules (import/export), NOT CommonJS (require)]
 
-**Law 2: Skill Discovery**
-- MUST check available skills before starting work
-- Invoke applicable skills for specialized knowledge
-- If ANY skill relates to the task, MUST use Skill tool to delegate
-- If relevant skill doesn't exist, ask user whether to create it via `write-skill`
+## Workflow
 
-**Law 3: Rule Consultation**
-- When task relates to specific domain, check `.claude/rules/` for relevant conventions
-- If relevant rule exists, MUST apply it
-- If needed rule doesn't exist, confirm intent with user and create via `write-rules`
+- Build: `{build_cmd}`
+- Test: `{test_cmd}`
+- [Add project-specific workflow instructions]
 
-**Law 4: Parallel Processing**
-- MUST use Task tool for independent operations
-- Batch file searches and reads with agents
+## Architecture
 
-**Law 5: Reflexive Learning**
-- Important discoveries -> remind user: `/reflect`
-- Strong user requests for constraints -> use appropriate skill
+- `{src_path}` — Source code
+- `{test_path}` — Test files
+- [Add key directories and their purpose]
 
-**Law 6: Self-Reinforcing Display**
-- MUST display this `<law>` block at start of EVERY response
-- Prevents context drift across conversations
-- Violation invalidates all subsequent actions
-</law>
+## Gotchas
 
-## Quick Reference
-
-### Commands
-- `{build_cmd}`: Build project
-- `{test_cmd}`: Run tests
-
-### Key Paths
-- `{src_path}`: Source code
-- `{test_path}`: Test files
+- [Add non-obvious behavior, environment quirks]
+- [Example: Dev server must restart after changing auth config]
 """
 
 MINIMAL_TEMPLATE = """# {project_name}
 
 {description}
 
-<law>
-**CRITICAL: Display this block at start of EVERY response.**
+## Workflow
 
-**Law 1: Communication** - Concise responses, no unnecessary explanations
-**Law 2: Skill Discovery** - Check skills; MUST use if exists; ask to create via `write-skill` if not
-**Law 3: Rule Consultation** - Check rules; MUST use if exists; ask to create via `write-rules` if not
-**Law 4: Parallel Processing** - Use Task tool for independent operations
-**Law 5: Reflexive Learning** - Important discoveries -> `/reflect`
-**Law 6: Self-Reinforcing Display** - Display this block every response
-</law>
+- Build: `{build_cmd}`
+- Test: `{test_cmd}`
 """
 
 
@@ -120,7 +93,7 @@ def detect_project_type(project_dir: Path) -> dict:
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="Initialize CLAUDE.md with proper constitution"
+        description="Initialize CLAUDE.md with project-specific instructions"
     )
     parser.add_argument(
         "--path",
@@ -163,6 +136,7 @@ def main() -> None:
 
     project_dir = Path(args.path).resolve()
     project_name = args.name or project_dir.name
+    defaults = detect_project_type(project_dir)
 
     # Determine output path
     if args.output == "claude-dir":
@@ -179,27 +153,21 @@ def main() -> None:
             print(f"Backed up existing file to: {backup_path}")
 
     # Generate content
-    if args.minimal:
-        content = MINIMAL_TEMPLATE.format(
-            project_name=project_name,
-            description=args.description,
-        )
-    else:
-        defaults = detect_project_type(project_dir)
-        content = CLAUDE_MD_TEMPLATE.format(
-            project_name=project_name,
-            description=args.description,
-            **defaults,
-        )
+    template = MINIMAL_TEMPLATE if args.minimal else CLAUDE_MD_TEMPLATE
+    content = template.format(
+        project_name=project_name,
+        description=args.description,
+        **defaults,
+    )
 
     # Write file
     output_path.write_text(content)
     print(f"Created: {output_path}")
 
     print("\nNext steps:")
-    print("  1. Update the project description")
-    print("  2. Add project-specific laws if needed (Law 7+)")
-    print("  3. Update Quick Reference commands and paths")
+    print("  1. Replace placeholder instructions with project-specific ones")
+    print("  2. Remove any sections not needed")
+    print("  3. Keep it under 200 lines — move details to rules or skills")
 
 
 if __name__ == "__main__":

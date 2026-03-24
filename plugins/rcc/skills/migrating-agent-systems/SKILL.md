@@ -86,9 +86,9 @@ Announce: "Created 7 tasks. Starting execution..."
 **CRITICAL: Invoke the `writing-claude-md` skill.**
 
 Do not write CLAUDE.md directly. The skill ensures:
-- Proper `<law>` block format
-- Verifiable, actionable laws
-- Self-Reinforcing Display law
+- Specific, verifiable instructions (not vague guidance)
+- Correct separation of concerns (CLAUDE.md vs rules vs skills vs hooks)
+- Token efficiency (< 200 lines target)
 - Quality review via claudemd-reviewer
 
 **Typical laws to consider:**
@@ -153,8 +153,8 @@ Do not write CLAUDE.md directly. The skill ensures:
 **Goal:** Verify the entire agent system works.
 
 **Checklist:**
-- [ ] CLAUDE.md exists with `<law>` block
-- [ ] Laws display at start of responses
+- [ ] CLAUDE.md exists with specific, verifiable instructions
+- [ ] CLAUDE.md is < 200 lines
 - [ ] Rules inject on matching files
 - [ ] Hooks block violations
 - [ ] Skills activate on triggers

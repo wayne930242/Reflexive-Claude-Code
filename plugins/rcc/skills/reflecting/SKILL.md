@@ -142,7 +142,7 @@ Add to appropriate `references/` or `docs/` location.
 **Goal:** Confirm learnings are correctly integrated.
 
 **Check:**
-- [ ] New laws appear in `<law>` block
+- [ ] New instructions added to CLAUDE.md (if broadly applicable)
 - [ ] New skills pass validation
 - [ ] New rules have correct `paths:` scope
 - [ ] Documentation is in correct location

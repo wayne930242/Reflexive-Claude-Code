@@ -305,7 +305,7 @@ python3 scripts/validate_skill.py <path/to/skill>
 **Goal:** Have skill reviewed by skill-reviewer subagent.
 
 ```
-Task tool:
+Agent tool:
 - subagent_type: "rcc:skill-reviewer"
 - prompt: "Review skill at [path/to/skill]"
 ```
