@@ -14,7 +14,7 @@ The agent maintains and refactors its own core prompts and agent system — not 
 - Through deliberate teaching, the agent integrates learnings into its skill library
 - Skills are abstract, reusable, and link to reference directories with examples and documentation
 
-## What's New in v8.0.0
+## What's New in v8.0.1
 
 - **Agent system skill chain**: Decomposed `migrating-agent-systems` into 5 specialized skills with chain invocation
   - `analyzing-agent-systems` — 8-category weakness detection for existing agent systems
@@ -31,7 +31,7 @@ The agent maintains and refactors its own core prompts and agent system — not 
 
 This marketplace provides two plugins:
 
-### rcc (v8.0.0)
+### rcc (v8.0.1)
 
 Core ACE workflow with TDD-based skills, task enforcement, and quality reviewers.
 
