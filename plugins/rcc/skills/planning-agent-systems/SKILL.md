@@ -157,17 +157,20 @@ Components MUST be created in this order:
 
 **Goal:** Present plan and get explicit approval.
 
-**Present:**
-1. Number of components to create/modify
-2. Execution order
-3. Which weaknesses will be fixed
-4. Estimated scope (how many writing-* invocations)
+**Present the FULL plan to user.** Do NOT summarize — show every detail:
+1. Each component to create/modify: name, type, purpose, and key content
+2. Execution order with rationale for sequencing
+3. Which weaknesses will be fixed and how each component addresses them
+4. Design decisions made and alternatives considered
+5. Estimated scope (how many writing-* invocations)
+
+**Anti-pattern:** Listing component names without explaining what they do or why they're needed is NOT presenting. The user must see enough detail to evaluate whether the plan is correct.
 
 **Ask:** "這個計畫看起來可以嗎？要開始建立元件嗎？"
 
 **Handoff:** After user confirms → invoke `applying-agent-systems` skill, pass plan path
 
-**Verification:** User has explicitly approved the plan.
+**Verification:** User has reviewed the full plan and explicitly approved.
 
 ## Red Flags - STOP
 
@@ -176,6 +179,7 @@ These thoughts mean you're rationalizing. STOP and reconsider:
 - "Create everything, we might need it later"
 - "Skip traceability, the components are obvious"
 - "Don't need user confirmation, the plan is solid"
+- "A brief summary is enough for the user to decide"
 - "Skip reuse check, just write new ones"
 - "One big rule instead of several small ones"
 

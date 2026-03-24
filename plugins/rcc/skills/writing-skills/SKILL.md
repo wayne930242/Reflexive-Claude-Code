@@ -55,17 +55,20 @@ Announce: "Created 7 tasks. Starting execution..."
 
 ## Task 1: Analyze Requirements
 
-**Goal:** Understand what skill to create and why.
+**Goal:** Understand what skill to create and why. Present full analysis to user for confirmation.
 
-Questions to answer:
+Analyze and answer ALL questions below:
 - What capability does this skill teach?
 - What triggers should activate it? (specific phrases, symptoms)
 - Is this reusable across projects, or project-specific?
 - Does a similar skill already exist?
-
-**Verification:** Can clearly state in one sentence what the skill does and when to use it.
+- What are the key design decisions? List alternatives considered and chosen approach with rationale.
 
 **External search (optional):** If `claude-skills-mcp` available, search for existing community skills to adapt.
+
+**MANDATORY: Present analysis to user.** Display ALL answers above in full detail, then ask user to confirm before proceeding. Do NOT summarize into a single sentence. Do NOT skip to next task without explicit user approval.
+
+**Verification:** User has reviewed the full analysis and confirmed the direction.
 
 ## Task 2: RED - Baseline Test
 

@@ -116,14 +116,18 @@ Announce: "Created 7 tasks. Starting execution..."
 
 **CRITICAL:** Do not proceed without explicit user confirmation.
 
-**Present:**
-- Summary of planned stack
-- Init command to run
-- Agent system components
+**Present the FULL blueprint content to user.** Do NOT summarize — show every section with detail:
+- Stack with exact versions and why each was chosen
+- Complete init command with flags explained
+- Project structure (directory tree)
+- Key dependencies with purpose of each
+- Agent system components planned and their rationale
 
-**Ask:** "Does this blueprint look correct? Should I proceed?"
+**Anti-pattern:** Listing 3-5 bullet points of one-liners is NOT presenting. The user must see enough detail to catch wrong versions, missing dependencies, or incorrect structure.
 
-**Verification:** User has explicitly approved the blueprint.
+**Ask:** "這個 blueprint 正確嗎？要開始執行嗎？"
+
+**Verification:** User has reviewed the full blueprint and explicitly approved.
 
 ## Task 5: Bootstrap Project
 
@@ -208,6 +212,7 @@ These thoughts mean you're rationalizing. STOP and reconsider:
 - "I know the current version"
 - "Skip research, I've done this before"
 - "Don't need user confirmation"
+- "A brief summary is enough for confirmation"
 - "Agent system can wait"
 - "Skip validation, it's a fresh project"
 
@@ -220,6 +225,7 @@ These thoughts mean you're rationalizing. STOP and reconsider:
 | "I know the version" | Versions change monthly. Verify. |
 | "Skip research" | Best practices evolve. Check official docs. |
 | "Skip confirmation" | Blueprint approval prevents wasted effort. |
+| "Brief summary is enough" | Brief summaries hide wrong decisions. Show full detail. |
 | "Agent system later" | Set it up now while context is fresh. |
 | "Fresh = working" | Fresh projects can have config issues. Validate. |
 

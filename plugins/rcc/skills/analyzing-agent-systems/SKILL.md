@@ -135,13 +135,15 @@ Announce: "Created 4 tasks. Starting execution..."
 
 ## Task 4: Present Findings to User
 
-**Goal:** Show the user a concise summary and get confirmation.
+**Goal:** Show the user the full analysis and get confirmation.
 
-**Present:**
-1. Component count and types found
-2. Critical issues (if any) — these need attention
-3. Warnings — recommended fixes
-4. Overall assessment (healthy / needs work / critical issues)
+**Present ALL findings with detail.** Do NOT summarize into brief bullet points:
+1. Component inventory: each component found, its type, and current state
+2. Critical issues: what's wrong, why it matters, and suggested fix
+3. Warnings: what could be improved and the impact of not fixing
+4. Overall assessment with rationale
+
+**Anti-pattern:** "Found 3 critical issues, 2 warnings" without explaining what they are is NOT presenting. The user must see enough detail to understand each finding.
 
 **Wait for user confirmation before proceeding.**
 
