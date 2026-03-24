@@ -12,37 +12,46 @@
 
 ```yaml
 # All files in specific directory
-paths: src/api/**
+paths:
+  - "src/api/**"
 
 # Only direct children
-paths: src/api/*
+paths:
+  - "src/api/*"
 
 # Specific subdirectory structure
-paths: src/**/utils/**
+paths:
+  - "src/**/utils/**"
 ```
 
 ## Extension Patterns
 
 ```yaml
 # Single extension
-paths: **/*.ts
+paths:
+  - "**/*.ts"
 
 # Multiple extensions (brace expansion)
-paths: **/*.{ts,tsx}
+paths:
+  - "**/*.{ts,tsx}"
 
 # Exclude test files (use separate rule instead)
-paths: src/**/*.ts
-# Then create another rule for tests with paths: **/*.test.ts
+paths:
+  - "src/**/*.ts"
+# Then create another rule for tests with paths: ["**/*.test.ts"]
 ```
 
 ## Multiple Path Patterns
 
 ```yaml
-# Comma-separated
-paths: src/**/*.ts, lib/**/*.ts
+# Multiple paths
+paths:
+  - "src/**/*.ts"
+  - "lib/**/*.ts"
 
 # Brace expansion for directories
-paths: {src,lib,packages}/**/*.ts
+paths:
+  - "{src,lib,packages}/**/*.ts"
 ```
 
 ## Common Configurations
@@ -51,52 +60,69 @@ paths: {src,lib,packages}/**/*.ts
 
 ```yaml
 # Components
-paths: src/components/**/*.{tsx,jsx}
+paths:
+  - "src/components/**/*.{tsx,jsx}"
 
 # Styles
-paths: src/**/*.{css,scss,less}
+paths:
+  - "src/**/*.{css,scss,less}"
 
 # State management
-paths: src/store/**/*.ts
+paths:
+  - "src/store/**/*.ts"
 ```
 
 ### Backend Project
 
 ```yaml
 # API routes
-paths: src/api/**/*.ts, src/routes/**/*.ts
+paths:
+  - "src/api/**/*.ts"
+  - "src/routes/**/*.ts"
 
 # Database
-paths: src/db/**/*.ts, src/models/**/*.ts
+paths:
+  - "src/db/**/*.ts"
+  - "src/models/**/*.ts"
 
 # Middleware
-paths: src/middleware/**/*.ts
+paths:
+  - "src/middleware/**/*.ts"
 ```
 
 ### Monorepo
 
 ```yaml
 # Specific package
-paths: packages/core/**/*.ts
+paths:
+  - "packages/core/**/*.ts"
 
 # All packages
-paths: packages/**/src/**/*.ts
+paths:
+  - "packages/**/src/**/*.ts"
 
 # Shared code
-paths: {packages,libs}/shared/**/*.ts
+paths:
+  - "{packages,libs}/shared/**/*.ts"
 ```
 
 ## Testing Rules
 
 ```yaml
 # All test files
-paths: **/*.test.ts, **/*.spec.ts
+paths:
+  - "**/*.test.ts"
+  - "**/*.spec.ts"
 
 # Specific test directory
-paths: tests/**/*.ts, __tests__/**/*.ts
+paths:
+  - "tests/**/*.ts"
+  - "__tests__/**/*.ts"
 
 # E2E tests only
-paths: e2e/**/*.ts, cypress/**/*.ts
+paths:
+  - "e2e/**/*.ts"
+  - "cypress/**/*.ts"
 ```
 
 ## Priority Notes

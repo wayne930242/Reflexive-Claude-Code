@@ -9,7 +9,7 @@ description: Use when creating specialized Claude Code subagents in .claude/agen
 
 **Writing subagents IS creating specialized workers with isolated contexts.**
 
-Subagents run via the Task tool with their own context window, tools, and system prompt. Use for tasks that benefit from focused expertise.
+Subagents run via the Agent tool with their own context window, tools, and system prompt. Use for tasks that benefit from focused expertise.
 
 **Core principle:** One agent, one responsibility. Bloated agents become unfocused.
 
@@ -67,6 +67,16 @@ Announce: "Created 6 tasks. Starting execution..."
 - Task would pollute main conversation
 - Task is repetitive and well-defined
 - Task benefits from specialized system prompt
+
+**Built-in subagent types (consider BEFORE creating custom agents):**
+
+| Type | Model | Tools | Use Case |
+|------|-------|-------|----------|
+| `Explore` | Haiku | Read-only (no Write/Edit) | Fast codebase search, analysis |
+| `Plan` | Inherit | Read-only | Research and planning |
+| `general-purpose` | Inherit | All | Complex multi-step tasks |
+
+**Decision:** Can a built-in type handle this? If yes, use it directly via the Agent tool — no agent file needed.
 
 **Verification:** Can describe the agent's single responsibility in one sentence.
 
@@ -128,9 +138,19 @@ System prompt for the agent.
 | `name` | Yes | Lowercase with hyphens: `code-reviewer` |
 | `description` | Yes | Include "Use proactively when..." for auto-invoke |
 | `tools` | No | CSV list; omit = inherit all |
-| `model` | No | `sonnet`, `opus`, `haiku`, `inherit` |
+| `disallowedTools` | No | Tools to exclude (more flexible than allowlist) |
+| `model` | No | `sonnet`, `opus`, `haiku`, `inherit`, or full model ID |
+| `maxTurns` | No | Maximum agentic turns |
 | `skills` | No | Auto-load skills when invoked |
 | `permissionMode` | No | `default`, `acceptEdits`, `bypassPermissions`, `plan` |
+| `effort` | No | `low`, `medium`, `high`, `max` (Opus 4.6 only) |
+| `isolation` | No | `worktree` = run in temporary git worktree |
+| `background` | No | `true` = always run in background |
+| `memory` | No | Persistent memory scope: `user`, `project`, `local` |
+| `mcpServers` | No | Available MCP servers |
+| `hooks` | No | Lifecycle hooks |
+
+**Plugin agents security note:** Plugin agents do NOT support `hooks`, `mcpServers`, or `permissionMode`.
 
 ### Model Selection
 
@@ -139,6 +159,51 @@ System prompt for the agent.
 | `haiku` | Fast exploration, simple validation | $ |
 | `sonnet` | Balanced (default) | $$ |
 | `opus` | Complex reasoning, architecture | $$$ |
+
+### Skill with `context: fork` vs Custom Agent
+
+Before creating a custom agent file, consider if a **skill with `context: fork`** is sufficient:
+
+| Approach | When to Use |
+|----------|-------------|
+| Skill + `context: fork` | Guidance-oriented, needs skill body as instructions |
+| Custom agent file | Worker-oriented, needs specialized system prompt |
+| Built-in subagent type | Standard tasks (explore, plan, general-purpose) |
+
+```yaml
+# Lightweight alternative: skill with fork
+---
+context: fork
+agent: Explore
+argument-hint: "[target-path] [analysis-focus]"
+---
+```
+
+**CRITICAL: Context isolation = context amnesia.** When using `context: fork` or custom agents:
+- Forked context does NOT inherit the main conversation
+- Only receives: skill body (or agent system prompt) + `$ARGUMENTS` (or agent prompt)
+- **Design `argument-hint` to demand sufficient context** — without it, the isolated agent works blind
+
+<Good>
+```yaml
+argument-hint: "[file-or-directory-path] [specific-requirement]"
+```
+Forces user to provide target and intent.
+</Good>
+
+<Bad>
+No argument-hint → user types `/my-skill` with no args → forked agent has zero context.
+</Bad>
+
+### Tool Permissions
+
+**CRITICAL: Subagents CANNOT request permissions at runtime.** Unlike the main conversation where Claude can ask the user for tool approval, subagents only have access to tools declared upfront in their `tools` field. If a tool is not listed, the subagent silently fails or skips the action — no prompt, no fallback.
+
+**Rules:**
+- `tools` field = the COMPLETE set of available tools. No additions at runtime.
+- Omitting `tools` = inherit ALL tools (use only when you trust the agent fully)
+- Use `disallowedTools` as an alternative: inherit all EXCEPT listed tools
+- Test tool access in Task 5 — verify the agent can do everything it needs
 
 ### Tool Recommendations
 
@@ -171,11 +236,11 @@ System prompt for the agent.
 
 ## Task 5: Test Invocation
 
-**Goal:** Verify agent can be invoked via Task tool.
+**Goal:** Verify agent can be invoked via Agent tool.
 
 **Test:**
 ```
-Task tool:
+Agent tool:
 - subagent_type: "[plugin:]agent-name"
 - prompt: "Test invocation"
 ```
@@ -281,3 +346,4 @@ digraph subagent_creation {
 
 - [references/examples.md](references/examples.md) - Subagent templates
 - [references/tools.md](references/tools.md) - Available tools reference
+- See also: `advising-architecture` skill for component classification guidance

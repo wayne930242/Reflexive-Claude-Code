@@ -92,19 +92,21 @@ Is it IMMUTABLE (must display every response)?
 ### Rule Location
 
 ```
-.claude/rules/
-├── code-style.md         # Global rule (no paths:)
+~/.claude/rules/             # User-level (global, all projects)
+.claude/rules/               # Project-level
+├── code-style.md            # Global rule (no paths:)
 ├── api/
-│   └── conventions.md    # paths: src/api/**
+│   └── conventions.md       # paths: ["src/api/**"]
 └── testing/
-    └── guidelines.md     # paths: **/*.test.ts
+    └── guidelines.md        # paths: ["**/*.test.ts"]
 ```
 
 ### Rule Format
 
 ```yaml
 ---
-paths: src/api/**/*.ts    # Omit for global rules
+paths:                        # Omit for global rules
+  - "src/api/**/*.ts"
 ---
 
 # Rule Title
@@ -112,6 +114,15 @@ paths: src/api/**/*.ts    # Omit for global rules
 - Constraint 1 (imperative: "MUST", "NEVER")
 - Constraint 2
 ```
+
+### Injection Mechanism
+
+Rules are Markdown content injected into context (same as CLAUDE.md):
+- **No `paths`** → loaded at session start (always active, like CLAUDE.md)
+- **With `paths`** → loaded when Claude reads a file matching the glob
+- There is no special "rule blob" format — the rule body IS the injected content
+- User-level `~/.claude/rules/` loads before project-level `.claude/rules/` (project takes precedence)
+- Symlinks are supported for sharing rules across projects
 
 ### Writing Rules
 
@@ -124,7 +135,8 @@ paths: src/api/**/*.ts    # Omit for global rules
 <Good>
 ```yaml
 ---
-paths: src/api/**/*.ts
+paths:
+  - "src/api/**/*.ts"
 ---
 
 # API Conventions

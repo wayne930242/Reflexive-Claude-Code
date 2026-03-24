@@ -15,9 +15,15 @@ Version 1.1 (2026-01)
 
 | Field | Description |
 |-------|-------------|
-| `license` | License identifier |
-| `allowed-tools` | List of pre-approved tools |
-| `metadata` | Key-value pairs for client use |
+| `argument-hint` | Autocomplete hint, e.g., `[issue-number]` |
+| `disable-model-invocation` | `true` = only manual `/name` invocation |
+| `user-invocable` | `false` = hidden from `/` menu, only Claude invokes |
+| `allowed-tools` | Tools auto-approved when skill activates |
+| `model` | Model override: `sonnet`, `opus`, `haiku`, or full ID |
+| `effort` | Thinking effort: `low`, `medium`, `high`, `max` (Opus 4.6 only) |
+| `context` | `fork` = run in isolated subagent context |
+| `agent` | Subagent type for `context: fork` (`Explore`, `Plan`, `general-purpose`, or custom agent name) |
+| `hooks` | Skill lifecycle hooks |
 
 ## Name Requirements
 

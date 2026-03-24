@@ -161,13 +161,49 @@ argument-hint: [optional-hint]
 | `disable-model-invocation` | `true` = only user can invoke via `/name` |
 | `user-invocable` | `false` = hide from `/` menu, only Claude invokes |
 | `allowed-tools` | Tools Claude can use without permission |
-| `context` | `fork` = run in isolated subagent |
-| `agent` | Subagent type when `context: fork` |
+| `model` | Model to use: `sonnet`, `opus`, `haiku`, or full model ID |
+| `effort` | Thinking effort: `low`, `medium`, `high`, `max` |
+| `context` | `fork` = run in isolated subagent context |
+| `agent` | Subagent type when `context: fork` (e.g., `Explore`, `Plan`, `general-purpose`) |
+| `hooks` | Skill lifecycle hooks |
 
 **Arguments substitution:**
 - `$ARGUMENTS` - all arguments from `/skill-name arg1 arg2`
 - `$ARGUMENTS[0]`, `$ARGUMENTS[1]` - by index
 - `$0`, `$1` - shorthand for `$ARGUMENTS[N]`
+
+**Model selection guidelines:**
+| Model | Use Case |
+|-------|----------|
+| `haiku` | Fast exploration, simple validation, low cost |
+| `sonnet` | Balanced reasoning and speed (default) |
+| `opus` | Complex reasoning, architecture decisions |
+
+**`context: fork` guidelines:**
+- Use `context: fork` for skills that perform isolated analysis (review, audit, exploration)
+- Forked context does NOT inherit the main conversation — only receives skill body + `$ARGUMENTS`
+- **CRITICAL:** When using `context: fork`, design `argument-hint` to ensure sufficient context is passed:
+
+<Good>
+```yaml
+---
+context: fork
+agent: Explore
+argument-hint: "[target-path] [specific-requirement]"
+---
+```
+User provides: `/review-code src/api/ "check error handling"`
+Forked agent has clear target and scope.
+</Good>
+
+<Bad>
+```yaml
+---
+context: fork
+---
+```
+No argument-hint. User types `/review-code`. Forked agent has zero context about what to review.
+</Bad>
 
 **Description rules (CRITICAL):**
 - Start with "Use when..." (triggering conditions ONLY)

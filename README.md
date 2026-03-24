@@ -14,20 +14,21 @@ The agent maintains and refactors its own core prompts and agent system — not 
 - Through deliberate teaching, the agent integrates learnings into its skill library
 - Skills are abstract, reusable, and link to reference directories with examples and documentation
 
-## What's New in v7.0.1
+## What's New in v7.1.0
 
-- **TDD-based skill design**: RED (baseline test) → GREEN (write skill) → REFACTOR (close loopholes)
-- **Mandatory task lists**: Every skill enforces TaskCreate/TaskUpdate for verifiable progress
-- **Quality reviewers**: Built-in subagents for skill, CLAUDE.md, and rule review
-- **Architecture advisor**: Consult in Task 1 of every skill workflow
-- **Anti-rationalization**: Red Flags and Rationalizations tables prevent skipping steps
-- **Flowcharts**: Visual process diagrams in every skill
+- **Aligned with Claude Code docs**: All skills updated to match latest Claude Code documentation
+- **`advising-architecture` skill**: Converted from agent to skill with `context: fork` + `argument-hint` for isolated analysis
+- **Model & effort guidance**: `writing-skills` now covers `model`, `effort`, `context: fork` best practices
+- **Built-in subagent types**: `writing-subagents` now recommends Explore/Plan/general-purpose before custom agents
+- **Context amnesia warning**: Skills using `context: fork` must design `argument-hint` to pass sufficient context
+- **Rule injection mechanism**: `writing-rules` explains when/how rules load, user-level rules, symlink support
+- **Agent frontmatter completeness**: Full field reference including `isolation`, `background`, `memory`, `maxTurns`
 
 ## Plugins
 
 This marketplace provides two plugins:
 
-### rcc (v7.0.1)
+### rcc (v7.1.0)
 
 Core ACE workflow with TDD-based skills, task enforcement, and quality reviewers.
 
@@ -46,12 +47,12 @@ Core ACE workflow with TDD-based skills, task enforcement, and quality reviewers
 | `initializing-projects` | Initialize new project with framework and agent system |
 | `migrating-agent-systems` | Migrate existing systems to best practices architecture |
 | `creating-plugins` | Scaffold a new Claude Code plugin |
+| `advising-architecture` | Validate approach, classify knowledge type, check for component conflicts |
 
 **Subagents (Reviewers):**
 
 | Agent | Description |
 |-------|-------------|
-| `architecture-advisor` | Architecture consultant for Task 1 of all workflows |
 | `skill-reviewer` | Quality review for skills |
 | `claudemd-reviewer` | Quality review for CLAUDE.md |
 | `rule-reviewer` | Quality review for rules |
@@ -108,7 +109,7 @@ All skills follow TDD-based design with these components:
 ┌─────────────────────────────────────────────────────────────────┐
 │                   Work Session                                   │
 ├─────────────────────────────────────────────────────────────────┤
-│  1. Task 1        │  Consult architecture-advisor               │
+│  1. Task 1        │  Consult advising-architecture               │
 │  2. RED Phase     │  Baseline test - observe failures           │
 │  3. GREEN Phase   │  Create component addressing failures       │
 │  4. REFACTOR      │  Quality review via reviewer subagent       │
