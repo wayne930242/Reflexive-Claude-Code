@@ -1,9 +1,9 @@
 ---
 name: advising-architecture
-description: Use when starting any skill/agent/rule workflow to validate approach. Use when classifying knowledge type (law vs rule vs skill vs agent). Use when checking for component conflicts.
+description: Use when starting any skill/agent/rule workflow to validate approach. Use when classifying knowledge type (CLAUDE.md vs rule vs skill vs agent vs hook). Use when checking for component conflicts.
 context: fork
 agent: Explore
-argument-hint: "[component-description] [intended-type: law|rule|skill|agent]"
+argument-hint: "[component-description] [intended-type: claudemd|rule|skill|agent|hook]"
 ---
 
 # Advising Architecture
@@ -12,9 +12,9 @@ argument-hint: "[component-description] [intended-type: law|rule|skill|agent]"
 
 **Advising architecture IS classifying knowledge into the correct Claude Code component.**
 
-One concept, one location. Misclassification wastes tokens (global rule that should be scoped) or loses enforcement (rule that should be a law).
+One concept, one location. Misclassification wastes tokens (global rule that should be scoped) or misses enforcement (advisory instruction that should be a deterministic hook).
 
-**Core principle:** Laws = immutable display. Rules = scoped conventions. Skills = capabilities. Agents = isolated workers.
+**Core principle:** CLAUDE.md = broad project instructions. Rules = path-scoped conventions. Skills = on-demand capabilities. Agents = isolated workers. Hooks = deterministic enforcement.
 
 **Violating the letter of the rules is violating the spirit of the rules.**
 
@@ -118,15 +118,55 @@ Does it apply BROADLY to all project work?
         Configure in settings.json
 ```
 
+## Best Practices per Component
+
+### CLAUDE.md
+- **< 200 lines** (60 lines optimal) — loaded every session, every line costs tokens
+- Only include what Claude **can't figure out from reading the code**
+- Specific and verifiable: "Use 2-space indentation" not "Format code properly"
+- Use `MUST`/`NEVER`/`IMPORTANT` sparingly for critical rules
+- If Claude ignores an instruction, file is probably too long
+- **NOT for**: linter-enforceable rules (use hooks), path-scoped conventions (use rules), multi-step workflows (use skills)
+
+### Rules (.claude/rules/)
+- **< 50 lines each** — auto-injected = expensive
+- Use `paths:` YAML array to scope to specific file patterns
+- Imperative language: "MUST", "NEVER" (not "try to", "consider")
+- Best for: monorepo with different frameworks per package, frontend vs backend conventions
+- User-level `~/.claude/rules/` for cross-project conventions; symlinks for sharing
+- **NOT for**: procedures/how-to (use skills), broad instructions (use CLAUDE.md)
+
+### Skills (.claude/skills/)
+- Loaded **on-demand** = token efficient (only description preloaded)
+- Use `context: fork` for analysis-oriented skills (review, audit) — but design `argument-hint` to pass sufficient context
+- Use `model` frontmatter to optimize cost (`haiku` for fast exploration, `opus` for complex reasoning)
+- Use `disable-model-invocation: true` to prevent auto-loading (manual `/name` only)
+- **NOT for**: conventions (use rules), broad instructions (use CLAUDE.md)
+
+### Agents (.claude/agents/)
+- **First consider** built-in types: `Explore` (haiku, read-only), `Plan` (inherit, read-only), `general-purpose` (inherit, all tools)
+- **Then consider** skill with `context: fork` as lightweight alternative
+- Tool permissions are declared **upfront** — subagents CANNOT request tools at runtime
+- Use `disallowedTools` as alternative to `tools` allowlist
+- Plugin agents do NOT support `hooks`, `mcpServers`, `permissionMode`
+- **NOT for**: guidance/teaching (use skills), conventions (use rules)
+
+### Hooks (.claude/hooks/)
+- **Deterministic enforcement** — unlike CLAUDE.md which is advisory, hooks guarantee execution
+- Exit code 2 = block the action
+- Keep < 5 seconds execution time
+- Best for: lint checks, format validation, commit message enforcement
+- **NOT for**: complex workflows (use skills), advisory guidelines (use CLAUDE.md/rules)
+
 ## Task 1: Understand the Request
 
 **Goal:** Clarify what is being created or modified.
 
 **Questions to answer:**
 - What knowledge is being encoded?
-- Is it immutable or contextual?
-- Is it scoped to specific files?
-- Does it teach a capability or enforce a convention?
+- Does it apply broadly to all project work, or only to specific paths?
+- Does it teach a capability (how to) or enforce a convention (what to)?
+- Does it need deterministic enforcement (hook) or advisory guidance (CLAUDE.md/rule)?
 
 **Verification:** Can state the knowledge type in one sentence.
 
@@ -135,7 +175,7 @@ Does it apply BROADLY to all project work?
 **Goal:** Check existing components for overlaps.
 
 **Process:**
-1. Check CLAUDE.md for related laws
+1. Check CLAUDE.md for related instructions
 2. Check `.claude/rules/` for overlapping conventions
 3. Check skills/ for duplicate capabilities
 4. Check agents/ for overlapping responsibilities
@@ -166,7 +206,7 @@ Does it apply BROADLY to all project work?
 
 **Request:** [What you're trying to create]
 
-**Classification:** [law / skill / rule / hook / agent]
+**Classification:** [CLAUDE.md / rule / skill / agent / hook]
 
 **Rationale:** [Why this classification]
 
@@ -188,7 +228,7 @@ Does it apply BROADLY to all project work?
 These thoughts mean you're rationalizing. STOP and reconsider:
 
 - "This is both a rule AND a skill"
-- "Laws are overkill, a rule is fine"
+- "CLAUDE.md is overkill, a rule is fine"
 - "Global rule is fine without paths:"
 - "Skip conflict scan, it's obviously new"
 - "Agent is needed" (before considering built-in types or context: fork)
@@ -200,7 +240,7 @@ These thoughts mean you're rationalizing. STOP and reconsider:
 | Excuse | Reality |
 |--------|---------|
 | "It's a bit of both" | Every knowledge has ONE correct location. Classify precisely. |
-| "Laws are too heavy" | If it must be immutable, it's a law. Period. |
+| "CLAUDE.md is too heavy" | If it applies broadly, it belongs in CLAUDE.md. If it must be enforced, use a hook. |
 | "Global rule is simpler" | Global = always injected = token cost. Scope it. |
 | "Need a custom agent" | Built-in types or context: fork often suffice. |
 | "Conflict scan is overkill" | Duplicated knowledge = contradictions. Always scan. |
@@ -217,8 +257,8 @@ digraph architecture_assessment {
     conflicts [label="Conflicts\nfound?", shape=diamond];
     resolve [label="Resolve conflicts\n(merge/replace)", shape=box, style=filled, fillcolor="#ffcccc"];
     classify [label="Task 3: Classify\ncomponent type", shape=box];
-    is_immutable [label="Immutable?", shape=diamond];
-    law [label="LAW\nin CLAUDE.md", shape=box, style=filled, fillcolor="#ffcccc"];
+    is_broad [label="Broadly\napplicable?", shape=diamond];
+    claudemd [label="CLAUDE.md\ninstruction", shape=box, style=filled, fillcolor="#ffcccc"];
     is_capability [label="Capability?", shape=diamond];
     skill [label="SKILL\nin skills/", shape=box, style=filled, fillcolor="#ccffcc"];
     is_scoped [label="File-scoped\nconvention?", shape=diamond];
@@ -235,16 +275,16 @@ digraph architecture_assessment {
     conflicts -> resolve [label="yes"];
     conflicts -> classify [label="no"];
     resolve -> classify;
-    classify -> is_immutable;
-    is_immutable -> law [label="yes"];
-    is_immutable -> is_capability [label="no"];
+    classify -> is_broad;
+    is_broad -> claudemd [label="yes"];
+    is_broad -> is_capability [label="no"];
     is_capability -> skill [label="yes"];
     is_capability -> is_scoped [label="no"];
     is_scoped -> rule [label="yes"];
     is_scoped -> is_isolated [label="no"];
     is_isolated -> agent [label="yes"];
     is_isolated -> hook [label="no"];
-    law -> recommend;
+    claudemd -> recommend;
     skill -> recommend;
     rule -> recommend;
     agent -> recommend;
