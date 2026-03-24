@@ -14,21 +14,24 @@ The agent maintains and refactors its own core prompts and agent system — not 
 - Through deliberate teaching, the agent integrates learnings into its skill library
 - Skills are abstract, reusable, and link to reference directories with examples and documentation
 
-## What's New in v7.1.0
+## What's New in v8.0.0
 
-- **Aligned with Claude Code docs**: All skills updated to match latest Claude Code documentation
-- **`advising-architecture` skill**: Converted from agent to skill with `context: fork` + `argument-hint` for isolated analysis
-- **Model & effort guidance**: `writing-skills` now covers `model`, `effort`, `context: fork` best practices
-- **Built-in subagent types**: `writing-subagents` now recommends Explore/Plan/general-purpose before custom agents
-- **Context amnesia warning**: Skills using `context: fork` must design `argument-hint` to pass sufficient context
-- **Rule injection mechanism**: `writing-rules` explains when/how rules load, user-level rules, symlink support
-- **Agent frontmatter completeness**: Full field reference including `isolation`, `background`, `memory`, `maxTurns`
+- **Agent system skill chain**: Decomposed `migrating-agent-systems` into 5 specialized skills with chain invocation
+  - `analyzing-agent-systems` — 8-category weakness detection for existing agent systems
+  - `brainstorming-workflows` — Role-template-guided workflow exploration (not dev-only)
+  - `planning-agent-systems` — Traceable component planning with reuse analysis
+  - `applying-agent-systems` — Orchestrated writing-* skill invocation
+  - `refactoring-agent-systems` — Before/after comparison and cleanup
+- **`migrating-agent-systems` slim router**: Now detects existing system and routes to the correct chain entry
+- **Subagent write constraint**: All skills enforce main-conversation writes; subagents are read-only for `.claude/` paths
+- **`initializing-projects` chain integration**: Task 6 now invokes the full skill chain
+- **`refactoring-skills` analysis delegation**: Task 2 delegates to `analyzing-agent-systems`
 
 ## Plugins
 
 This marketplace provides two plugins:
 
-### rcc (v7.1.0)
+### rcc (v8.0.0)
 
 Core ACE workflow with TDD-based skills, task enforcement, and quality reviewers.
 
@@ -37,7 +40,7 @@ Core ACE workflow with TDD-based skills, task enforcement, and quality reviewers
 | Skill | Description |
 |-------|-------------|
 | `writing-skills` | TDD-based skill creation with baseline testing and review |
-| `writing-claude-md` | Create CLAUDE.md with `<law>` constitution |
+| `writing-claude-md` | Create CLAUDE.md with standard markdown format |
 | `writing-subagents` | Create subagent configurations for `.claude/agents/` |
 | `writing-rules` | Create rule files for `.claude/rules/` with conventions |
 | `writing-hooks` | Create hooks for static analysis and code quality |
@@ -45,9 +48,23 @@ Core ACE workflow with TDD-based skills, task enforcement, and quality reviewers
 | `improving-skills` | Optimize a skill through targeted improvements |
 | `refactoring-skills` | Analyze and consolidate all skills |
 | `initializing-projects` | Initialize new project with framework and agent system |
-| `migrating-agent-systems` | Migrate existing systems to best practices architecture |
+| `migrating-agent-systems` | Route to analysis or brainstorming based on project state |
+| `analyzing-agent-systems` | Scan and detect weaknesses in existing agent systems |
+| `brainstorming-workflows` | Role-based workflow exploration for agent system design |
+| `planning-agent-systems` | Plan agent system components with traceability |
+| `applying-agent-systems` | Execute component plan via writing-* skill chain |
+| `refactoring-agent-systems` | Review and cleanup agent system after creation |
 | `creating-plugins` | Scaffold a new Claude Code plugin |
 | `advising-architecture` | Validate approach, classify knowledge type, check for component conflicts |
+
+**Agent System Skill Chain:**
+
+```
+migrating-agent-systems (router)
+  ├─ Existing system → analyzing-agent-systems → brainstorming-workflows → ...
+  └─ New project → brainstorming-workflows → planning-agent-systems
+                       → applying-agent-systems → refactoring-agent-systems
+```
 
 **Subagents (Reviewers):**
 

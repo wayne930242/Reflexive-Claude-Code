@@ -65,26 +65,30 @@ ls -la .claude/skills/ 2>/dev/null
 
 ## Task 2: Analyze and Classify
 
-**Goal:** Classify each skill for action.
+**Goal:** Classify each skill for action, informed by systematic weakness analysis.
+
+**First: Invoke `analyzing-agent-systems` skill** to get a comprehensive analysis report covering all 8 weakness categories. This replaces manual analysis.
+
+**Then classify each skill using both the analysis report and manual assessment:**
 
 ### Classification Matrix
 
 | Status | Criteria | Action |
 |--------|----------|--------|
-| **Keep** | Well-structured, unique purpose, follows standards | None |
-| **Refactor** | Has issues but valuable | Use writing-skills to improve |
-| **Merge** | Overlaps with another skill | Consolidate into primary |
-| **Extract** | Has conventions shared by others | Move to rule file |
+| **Keep** | Well-structured, unique purpose, no weaknesses flagged | None |
+| **Refactor** | Analysis flagged weaknesses but valuable | Use writing-skills to improve |
+| **Merge** | Analysis found overlap with another skill | Consolidate into primary |
+| **Extract** | Analysis found duplicated conventions | Move to rule file |
 | **Delete** | Redundant, unused, or superseded | Remove entirely |
 
-### Analysis Questions
+### Analysis-Informed Questions
 
-For each skill:
-1. Is the purpose clear and unique?
-2. Does it overlap with another skill?
-3. Does it contain shared conventions (→ extract to rule)?
-4. Is it actually used?
-5. Does it follow current standards?
+For each skill, check against analysis report:
+1. Did analysis flag routing/trigger weaknesses for this skill?
+2. Did analysis find context management issues?
+3. Did analysis detect overlap with other skills?
+4. Is this skill referenced in any broken chain?
+5. Does it follow current standards? (frontmatter, line count, sections)
 
 **Optional: External Search**
 
@@ -95,7 +99,7 @@ mcp__claude-skills-mcp__search_skills query="[skill domain]"
 
 Compare with community implementations. Better patterns exist?
 
-**Verification:** Each skill has a classification and action.
+**Verification:** Each skill has a classification and action, informed by analysis report.
 
 ## Task 3: Execute Refactoring Plan
 

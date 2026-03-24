@@ -147,15 +147,17 @@ cd my-app && npm run dev
 
 **Goal:** Configure Claude Code for the new project.
 
-**CRITICAL: Invoke the `migrating-agent-systems` skill.**
+**Since this is a new project, skip analysis and go directly to workflow exploration.**
 
-This handles:
-- Create CLAUDE.md with project-specific laws
-- Setup rules for code conventions
-- Configure hooks for linting/formatting
-- Create useful skills if needed
+**CRITICAL: Invoke the `brainstorming-workflows` skill.**
 
-**Verification:** Agent system is configured and working.
+The skill chain will automatically continue:
+1. `brainstorming-workflows` → explore user's workflows
+2. `planning-agent-systems` → plan components
+3. `applying-agent-systems` → create components via writing-* skills
+4. `refactoring-agent-systems` → review and cleanup
+
+**Verification:** Agent system is configured and verified by the skill chain.
 
 ## Task 7: Final Validation
 
@@ -164,7 +166,7 @@ This handles:
 **Checklist:**
 - [ ] Project builds without errors
 - [ ] Project runs without errors
-- [ ] CLAUDE.md exists with specific, verifiable instructions
+- [ ] CLAUDE.md exists, under 200 lines, uses standard markdown format
 - [ ] Hooks run on file changes (if configured)
 - [ ] README documents the setup
 
