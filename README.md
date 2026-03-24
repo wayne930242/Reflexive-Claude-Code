@@ -14,21 +14,22 @@ The agent maintains and refactors its own core prompts and agent system — not 
 - Through deliberate teaching, the agent integrates learnings into its skill library
 - Skills are abstract, reusable, and link to reference directories with examples and documentation
 
-## What's New in v8.0.3
+## What's New in v8.1.0
 
-- **User confirmation UX improvement**: Skills now require full detail presentation before asking for user approval
-  - Fixed "brief summary then ask to choose" anti-pattern across 4 skills
-  - `initializing-projects`: Task 4 requires full blueprint display, not summary
-  - `planning-agent-systems`: Task 5 requires detailed plan with rationale for each component
-  - `analyzing-agent-systems`: Task 4 requires full findings with impact explanation
-  - `writing-skills`: Task 1 requires presenting complete analysis before proceeding
-  - Added anti-pattern warnings and rationalizations to prevent agents from showing insufficient context
+- **Review step in core chain**: Split review from refactor into dedicated step
+  - New `reviewing-agent-systems` skill: orchestrates all 5 reviewer agents
+  - New `hook-reviewer` agent: reviews hook exit codes, performance, registration
+  - New `subagent-reviewer` agent: reviews single responsibility, tool minimalism, model selection
+  - Core chain is now: analyze → brainstorm → plan → apply → **review** → refactor
+  - `writing-hooks` and `writing-subagents` now include REFACTOR quality review step
+  - `reflecting` now runs reviewer agents on newly integrated components
+  - `refactoring-agent-systems` now receives review report instead of self-analyzing
 
 ## Plugins
 
 This marketplace provides two plugins:
 
-### rcc (v8.0.3)
+### rcc (v8.1.0)
 
 Core ACE workflow with TDD-based skills, task enforcement, and quality reviewers.
 
@@ -50,7 +51,8 @@ Core ACE workflow with TDD-based skills, task enforcement, and quality reviewers
 | `brainstorming-workflows` | Role-based workflow exploration for agent system design |
 | `planning-agent-systems` | Plan agent system components with traceability |
 | `applying-agent-systems` | Execute component plan via writing-* skill chain |
-| `refactoring-agent-systems` | Review and cleanup agent system after creation |
+| `reviewing-agent-systems` | Quality review with all 5 reviewer agents |
+| `refactoring-agent-systems` | Fix issues from review report |
 | `creating-plugins` | Scaffold a new Claude Code plugin |
 | `advising-architecture` | Validate approach, classify knowledge type, check for component conflicts |
 
@@ -60,7 +62,7 @@ Core ACE workflow with TDD-based skills, task enforcement, and quality reviewers
 migrating-agent-systems (router)
   ├─ Existing system → analyzing-agent-systems → brainstorming-workflows → ...
   └─ New project → brainstorming-workflows → planning-agent-systems
-                       → applying-agent-systems → refactoring-agent-systems
+       → applying-agent-systems → reviewing-agent-systems → refactoring-agent-systems
 ```
 
 **Subagents (Reviewers):**
@@ -70,6 +72,8 @@ migrating-agent-systems (router)
 | `skill-reviewer` | Quality review for skills |
 | `claudemd-reviewer` | Quality review for CLAUDE.md |
 | `rule-reviewer` | Quality review for rules |
+| `hook-reviewer` | Quality review for hooks |
+| `subagent-reviewer` | Quality review for subagents |
 
 ### rcc-dev (v2.0.1)
 

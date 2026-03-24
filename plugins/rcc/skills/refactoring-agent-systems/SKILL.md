@@ -26,8 +26,8 @@ TaskCreate for EACH task below:
 ```
 
 **Tasks:**
-1. Re-analyze current state
-2. Compare with prior analysis
+1. Load review findings
+2. Prioritize issues
 3. Execute refactoring
 4. Final verification
 5. Produce refactoring report
@@ -41,31 +41,35 @@ Announce: "Created 5 tasks. Starting execution..."
 4. NEVER skip to next task until current is completed
 5. At end, `TaskList` to confirm all completed
 
-## Task 1: Re-analyze Current State
+## Task 1: Load Review Findings
 
-**Goal:** Run a fresh analysis of the agent system.
+**Goal:** Load the review report as the basis for refactoring.
 
-**Invoke `analyzing-agent-systems` skill** to produce a new analysis report.
+**If review report path was provided** (from `reviewing-agent-systems`):
+1. Read the review report
+2. Extract all Critical and Major issues
+3. These are your refactoring targets
 
-This gives us the "after" snapshot to compare with the "before" analysis (if one exists).
+**If no review report** (standalone invocation):
+1. Invoke `reviewing-agent-systems` skill first to produce a report
+2. Then continue with the report's findings
 
-**Verification:** New analysis report exists at `docs/agent-system/{timestamp}-analysis.md`.
+**Verification:** Have a list of specific issues to fix from the review report.
 
-## Task 2: Compare With Prior Analysis
+## Task 2: Prioritize Issues
 
-**Goal:** Identify what improved, what remains, and what's new.
+**Goal:** Classify and order issues from the review report for fixing.
 
-**If prior analysis exists:**
+**Priority order:**
+1. **Critical** — must fix before shipping
+2. **Major** — should fix for quality
+3. **Minor** — nice to have, fix if time permits
 
-| Category | Before | After | Status |
-|----------|--------|-------|--------|
-| [weakness] | CRITICAL | resolved | FIXED |
-| [weakness] | WARNING | WARNING | REMAINING |
-| [new issue] | — | WARNING | NEW |
+**Present the prioritized list to user.** Do NOT summarize — show each issue with its component, severity, and planned fix.
 
-**If no prior analysis:** Use the new analysis as baseline. All findings are actionable.
+**Ask:** "這些修正項目正確嗎？要開始修正嗎？"
 
-**Verification:** Comparison table complete with clear status for each finding.
+**Verification:** User has confirmed the prioritized fix list.
 
 ## Task 3: Execute Refactoring
 
@@ -96,16 +100,16 @@ This gives us the "after" snapshot to compare with the "before" analysis (if one
 
 **Goal:** Confirm no critical issues remain.
 
-**Run `analyzing-agent-systems` one more time** (lightweight — focus on critical/warning only).
+**Re-run the relevant reviewer agents** on components that were modified in Task 3.
 
 **Pass criteria:**
-- Zero CRITICAL issues
-- WARNING count decreased or stable
+- Zero CRITICAL issues from any reviewer
+- All Major issues from the original review are resolved
 - No new issues introduced by refactoring
 
 **If critical issues remain:** Return to Task 3 and fix.
 
-**Verification:** Analysis shows zero critical issues.
+**Verification:** All modified components pass their reviewer.
 
 ## Task 5: Produce Refactoring Report
 
@@ -170,8 +174,8 @@ digraph refactor_agent {
     rankdir=TB;
 
     start [label="Refactor agent\nsystem", shape=doublecircle];
-    analyze [label="Task 1: Re-analyze\ncurrent state", shape=box];
-    compare [label="Task 2: Compare\nwith prior", shape=box];
+    analyze [label="Task 1: Load\nreview findings", shape=box];
+    compare [label="Task 2: Prioritize\nissues", shape=box];
     refactor [label="Task 3: Execute\nrefactoring", shape=box];
     verify [label="Task 4: Final\nverification", shape=box];
     clean [label="Zero\ncritical?", shape=diamond];

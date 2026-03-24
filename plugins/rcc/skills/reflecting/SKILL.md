@@ -30,10 +30,11 @@ TaskCreate for EACH task below:
 2. Identify learnings
 3. Classify each learning
 4. Integrate into components
-5. Verify integration
-6. Generate summary
+5. Review integrated components
+6. Verify integration
+7. Generate summary
 
-Announce: "Created 6 tasks. Starting execution..."
+Announce: "Created 7 tasks. Starting execution..."
 
 **Execution rules:**
 1. `TaskUpdate status="in_progress"` BEFORE starting each task
@@ -137,7 +138,31 @@ Add to appropriate `references/` or `docs/` location.
 
 **Verification:** All learnings integrated into components.
 
-## Task 5: Verify Integration
+## Task 5: Review Integrated Components
+
+**Goal:** Run reviewer agents on all newly created/modified components.
+
+**For each component created in Task 4, invoke its reviewer:**
+
+| Component Type | Reviewer Agent |
+|----------------|----------------|
+| CLAUDE.md (law) | `claudemd-reviewer` |
+| Skill | `skill-reviewer` |
+| Rule | `rule-reviewer` |
+| Hook | `hook-reviewer` |
+| Subagent | `subagent-reviewer` |
+
+```
+Agent tool:
+- subagent_type: "rcc:[reviewer-name]"
+- prompt: "Review [component type] at [path]"
+```
+
+**If reviewer returns "Needs Fix" or "Fail":** Fix the issues before proceeding.
+
+**Verification:** All new/modified components pass their reviewer.
+
+## Task 6: Verify Integration
 
 **Goal:** Confirm learnings are correctly integrated.
 
@@ -154,7 +179,7 @@ Add to appropriate `references/` or `docs/` location.
 
 **Verification:** All integrated components work correctly.
 
-## Task 6: Generate Summary
+## Task 7: Generate Summary
 
 **Goal:** Document what was captured.
 
@@ -227,16 +252,21 @@ digraph reflecting {
     identify [label="Task 2: Identify\nlearnings", shape=box];
     classify [label="Task 3: Classify\neach learning", shape=box];
     integrate [label="Task 4: Integrate into\ncomponents", shape=box];
-    verify [label="Task 5: Verify\nintegration", shape=box];
+    review [label="Task 5: Review\ncomponents", shape=box, style=filled, fillcolor="#e8e8ff"];
+    review_pass [label="All\npassed?", shape=diamond];
+    verify [label="Task 6: Verify\nintegration", shape=box];
     works [label="All\nworking?", shape=diamond];
-    summary [label="Task 6: Generate\nsummary", shape=box];
+    summary [label="Task 7: Generate\nsummary", shape=box];
     done [label="Reflection complete", shape=doublecircle];
 
     start -> analyze;
     analyze -> identify;
     identify -> classify;
     classify -> integrate;
-    integrate -> verify;
+    integrate -> review;
+    review -> review_pass;
+    review_pass -> verify [label="yes"];
+    review_pass -> integrate [label="no\nfix"];
     verify -> works;
     works -> summary [label="yes"];
     works -> integrate [label="no\nfix"];

@@ -159,7 +159,8 @@ The skill chain will automatically continue:
 1. `brainstorming-workflows` → explore user's workflows
 2. `planning-agent-systems` → plan components
 3. `applying-agent-systems` → create components via writing-* skills
-4. `refactoring-agent-systems` → review and cleanup
+4. `reviewing-agent-systems` → quality review with all reviewer agents
+5. `refactoring-agent-systems` → fix issues from review
 
 **Verification:** Agent system is configured and verified by the skill chain.
 

@@ -32,8 +32,9 @@ TaskCreate for EACH task below:
 4. Validate structure
 5. Test invocation
 6. Verify behavior
+7. REFACTOR - Quality review
 
-Announce: "Created 6 tasks. Starting execution..."
+Announce: "Created 7 tasks. Starting execution..."
 
 **Execution rules:**
 1. `TaskUpdate status="in_progress"` BEFORE starting each task
@@ -202,6 +203,25 @@ Agent tool:
 - Agent uses only granted tools
 - Agent doesn't exceed its scope
 
+## Task 7: REFACTOR - Quality Review
+
+**Goal:** Have subagent reviewed by subagent-reviewer.
+
+```
+Agent tool:
+- subagent_type: "rcc:subagent-reviewer"
+- prompt: "Review subagent at [path/to/agent.md]"
+```
+
+**Outcomes:**
+- **Pass** → Subagent complete
+- **Needs Fix** → Fix issues, re-run reviewer, repeat until Pass
+- **Fail** → Major problems, return to Task 3
+
+**This is the REFACTOR phase:** Close loopholes identified by reviewer.
+
+**Verification:** subagent-reviewer returns "Pass" rating.
+
 ## Trigger Patterns
 
 ### Proactive (Auto-Invoke)
@@ -260,6 +280,8 @@ digraph subagent_creation {
     invoke [label="Task 5: Test\ninvocation", shape=box];
     invoke_pass [label="Invocation\nworks?", shape=diamond];
     verify [label="Task 6: Verify\nbehavior", shape=box];
+    review [label="Task 7: REFACTOR\nQuality review", shape=box, style=filled, fillcolor="#ccccff"];
+    review_pass [label="Review\npassed?", shape=diamond];
     done [label="Agent complete", shape=doublecircle];
 
     start -> analyze;
@@ -272,7 +294,10 @@ digraph subagent_creation {
     invoke -> invoke_pass;
     invoke_pass -> verify [label="yes"];
     invoke_pass -> write [label="no"];
-    verify -> done;
+    verify -> review;
+    review -> review_pass;
+    review_pass -> done [label="pass"];
+    review_pass -> write [label="fail\nfix issues"];
 }
 ```
 

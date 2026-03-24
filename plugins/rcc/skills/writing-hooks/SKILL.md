@@ -32,8 +32,9 @@ TaskCreate for EACH task below:
 4. Configure settings.json
 5. Validate behavior
 6. Test blocking
+7. REFACTOR - Quality review
 
-Announce: "Created 6 tasks. Starting execution..."
+Announce: "Created 7 tasks. Starting execution..."
 
 **Execution rules:**
 1. `TaskUpdate status="in_progress"` BEFORE starting each task
@@ -221,6 +222,25 @@ echo $?  # Should be 0 (pass) or 2 (block)
 - Hook blocks violating code
 - Claude receives feedback and fixes the issue
 
+## Task 7: REFACTOR - Quality Review
+
+**Goal:** Have hook reviewed by hook-reviewer subagent.
+
+```
+Agent tool:
+- subagent_type: "rcc:hook-reviewer"
+- prompt: "Review hook at [path/to/hook] with settings at [path/to/.claude/settings.json]"
+```
+
+**Outcomes:**
+- **Pass** → Hook complete
+- **Needs Fix** → Fix issues, re-run reviewer, repeat until Pass
+- **Fail** → Major problems, return to Task 3
+
+**This is the REFACTOR phase:** Close loopholes identified by reviewer.
+
+**Verification:** hook-reviewer returns "Pass" rating.
+
 ## Common Hook Patterns
 
 See [references/static-checks.md](references/static-checks.md) for linting, type checking, and auto-fix examples.
@@ -262,6 +282,8 @@ digraph hook_creation {
     validate [label="Task 5: Validate\nbehavior", shape=box];
     validate_pass [label="Tests\npassed?", shape=diamond];
     test [label="Task 6: Test\nblocking", shape=box];
+    review [label="Task 7: REFACTOR\nQuality review", shape=box, style=filled, fillcolor="#ccccff"];
+    review_pass [label="Review\npassed?", shape=diamond];
     done [label="Hook complete", shape=doublecircle];
 
     start -> analyze;
@@ -272,7 +294,10 @@ digraph hook_creation {
     validate -> validate_pass;
     validate_pass -> test [label="yes"];
     validate_pass -> write [label="no"];
-    test -> done;
+    test -> review;
+    review -> review_pass;
+    review_pass -> done [label="pass"];
+    review_pass -> write [label="fail\nfix issues"];
 }
 ```
 

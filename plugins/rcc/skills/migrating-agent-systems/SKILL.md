@@ -62,12 +62,12 @@ Announce: "Created 2 tasks. Starting execution..."
 **If existing system:**
 - Announce: 「偵測到現有 agent system，開始分析...」
 - Invoke `analyzing-agent-systems` skill
-- The chain will automatically continue: analyzing → brainstorming → planning → applying → refactoring
+- The chain will automatically continue: analyzing → brainstorming → planning → applying → reviewing → refactoring
 
 **If new project:**
 - Announce: 「全新專案，開始探索工作流程...」
 - Invoke `brainstorming-workflows` skill
-- The chain will automatically continue: brainstorming → planning → applying → refactoring
+- The chain will automatically continue: brainstorming → planning → applying → reviewing → refactoring
 
 **Verification:** Correct skill invoked based on detection result.
 

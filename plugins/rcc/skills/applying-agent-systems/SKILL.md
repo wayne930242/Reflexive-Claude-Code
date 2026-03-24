@@ -92,8 +92,8 @@ Announce: "Created N tasks. Starting execution..."
 - [ ] No conflicts between CLAUDE.md and rules
 - [ ] No duplicate logic across components
 
-**Handoff:** "所有元件已建立並驗證。要進行 review 和重構嗎？"
-- If yes → invoke `refactoring-agent-systems` skill
+**Handoff:** "所有元件已建立並驗證。要進行品質審查嗎？"
+- If yes → invoke `reviewing-agent-systems` skill
 
 **Verification:** All checklist items pass.
 
@@ -134,7 +134,7 @@ digraph apply_agent {
     agents [label="Create\nagents", shape=box];
     verify [label="Verify system\nintegration", shape=box];
     pass [label="All\npassed?", shape=diamond];
-    handoff [label="Invoke\nrefactoring-agent-systems", shape=box];
+    handoff [label="Invoke\nreviewing-agent-systems", shape=box];
     done [label="Apply complete", shape=doublecircle];
 
     start -> read;
