@@ -51,5 +51,5 @@ plugins/
 2. 遵循 TDD 模板：Task Initialization → Tasks → Red Flags → Flowchart
 3. 同步更新兩份 README
 
-### Skill Design (v7.0.0)
+### Skill Design
 遵循 Laws 4-7，使用 TDD 模板（RED → GREEN → REFACTOR）

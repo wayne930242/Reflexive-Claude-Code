@@ -1,6 +1,6 @@
 ---
 name: refactoring-skills
-description: Use when analyzing and refactoring skills in a project. Use when user says "refactor skills", "cleanup skills", "consolidate skills", "skill review". Use when skills are messy or overlapping.
+description: Use when analyzing and refactoring multiple skills across a project. Use when user says "refactor skills", "cleanup skills", "consolidate skills", "skill review". Use when skills overlap, are redundant, or need cross-skill consolidation. NOT for improving a single skill (use improving-skills instead).
 ---
 
 # Refactoring Skills

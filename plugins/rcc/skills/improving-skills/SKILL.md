@@ -1,6 +1,6 @@
 ---
 name: improving-skills
-description: Use when optimizing an existing skill. Use when user says "improve skill", "optimize skill", "update skill", "skill needs work". Use when a skill is outdated or underperforming.
+description: Use when optimizing a single existing skill. Use when user says "improve skill", "optimize skill", "update skill", "skill needs work". Use when one specific skill is outdated or underperforming. NOT for multi-skill consolidation (use refactoring-skills instead).
 ---
 
 # Improving Skills

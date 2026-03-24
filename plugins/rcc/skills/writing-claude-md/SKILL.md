@@ -102,63 +102,13 @@ Announce: "Created 7 tasks. Starting execution..."
 
 ### CLAUDE.md Structure
 
-```markdown
-# Project Name
-
-One-line description.
-
-## Code Style
-
-- Use 2-space indentation (not 4)
-- MUST use ES modules (import/export), NOT CommonJS (require)
-- Prefer named exports over default exports
-
-## Workflow
-
-- Run `npm test -- --filter [name]` for single test (NOT full suite)
-- MUST typecheck with `npx tsc --noEmit` before committing
-- Branch naming: `feature/TICKET-123-description`
-
-## Architecture
-
-- API handlers: `src/api/handlers/`
-- Database models: `src/db/models/`
-- Shared types: `src/types/` (single source of truth)
-
-## Gotchas
-
-- The `auth` middleware caches tokens for 5 min — restart dev server after changing auth logic
-- `npm run build` must complete before `npm run e2e` (no watch mode for e2e)
-```
+Sections: Code Style, Workflow, Architecture, Gotchas. See [references/examples.md](references/examples.md) for complete example.
 
 ### Writing Rules
 
-Instructions MUST be:
-- **SPECIFIC** — "Use 2-space indentation" not "Format code properly"
-- **VERIFIABLE** — Can objectively check compliance
-- **NON-OBVIOUS** — Claude wouldn't know this from reading code
-- **ACTIONABLE** — Tells agent exactly what to do/not do
+Instructions MUST be **SPECIFIC**, **VERIFIABLE**, **NON-OBVIOUS**, and **ACTIONABLE**.
 
-**Use emphasis for critical rules:**
-- `MUST`, `NEVER`, `IMPORTANT` increase adherence
-- But use sparingly — if everything is critical, nothing is
-
-<Good>
-```markdown
-- MUST validate all API input with zod schemas before processing
-- Run `pytest -x --tb=short` for quick test feedback (NOT `pytest` alone)
-```
-Specific, verifiable, non-obvious.
-</Good>
-
-<Bad>
-```markdown
-- Write clean, maintainable code
-- Test your changes thoroughly
-- Follow best practices
-```
-Vague, obvious, unverifiable. Claude already tries to do these.
-</Bad>
+Use `MUST`/`NEVER`/`IMPORTANT` sparingly — if everything is critical, nothing is.
 
 ### When to Use Other Mechanisms Instead
 
@@ -317,4 +267,5 @@ digraph claudemd_creation {
 
 ## References
 
+- [references/examples.md](references/examples.md) — Complete CLAUDE.md example and good/bad instructions
 - Script: `scripts/init_claude_md.py`

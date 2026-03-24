@@ -65,14 +65,7 @@ Questions to answer:
 
 **Verification:** Can clearly state in one sentence what the skill does and when to use it.
 
-**External search (optional):**
-If `claude-skills-mcp` is available:
-```
-mcp__claude-skills-mcp__search_skills query="[capability]"
-```
-Analyze existing community skills for patterns to adapt.
-
-If MCP unavailable → skip, continue with internal knowledge.
+**External search (optional):** If `claude-skills-mcp` available, search for existing community skills to adapt.
 
 ## Task 2: RED - Baseline Test
 
@@ -81,44 +74,14 @@ If MCP unavailable → skip, continue with internal knowledge.
 This is "write failing test first" - you MUST see what agents naturally do wrong.
 
 **Process:**
-1. Create realistic pressure scenario (see Pressure Scenarios below)
+1. Create realistic pressure scenario with 3+ pressures (time, sunk cost, authority, exhaustion)
 2. Run scenario in fresh context WITHOUT skill loaded
 3. Document agent's choices and rationalizations **verbatim**
 4. Identify patterns in failures
 
+See [references/testing-with-subagents.md](references/testing-with-subagents.md) for pressure scenario examples and templates.
+
 **Verification:** Have documented at least 3 specific failure modes or rationalizations.
-
-### Pressure Scenarios
-
-**Bad scenario (no pressure):**
-```
-You need to implement a feature. What should you do?
-```
-Too academic. Agent just recites best practices.
-
-**Good scenario (multiple pressures):**
-```
-IMPORTANT: This is a real scenario. Choose and act.
-
-You spent 3 hours on this. It's working perfectly.
-You manually tested all edge cases. It's 6pm, dinner at 6:30pm.
-You just realized you skipped [the practice this skill enforces].
-
-Options:
-A) Start over with correct approach
-B) Continue as-is, fix later
-C) Quick partial fix now
-
-Choose A, B, or C. Be honest.
-```
-
-**Pressure types to combine (use 3+):**
-| Pressure | Example |
-|----------|---------|
-| Time | Deadline, end of day |
-| Sunk cost | Hours of work already done |
-| Authority | Senior says skip it |
-| Exhaustion | Already tired |
 
 ## Task 3: GREEN - Write SKILL.md
 
@@ -143,88 +106,12 @@ skill-name/
 
 ### SKILL.md Format
 
-```yaml
----
-name: skill-name
-description: Use when [trigger]. Use when [symptom]. Use when [context].
-argument-hint: [optional-hint]
----
-```
+See [references/spec.md](references/spec.md) for full frontmatter specification (fields, arguments, model selection, context:fork).
 
-**Frontmatter fields:**
-
-| Field | Description |
-|-------|-------------|
-| `name` | Becomes `/slash-command`. Lowercase, hyphens only. |
-| `description` | When to use. Claude uses this for auto-invocation. |
-| `argument-hint` | Autocomplete hint, e.g., `[issue-number]` |
-| `disable-model-invocation` | `true` = only user can invoke via `/name` |
-| `user-invocable` | `false` = hide from `/` menu, only Claude invokes |
-| `allowed-tools` | Tools Claude can use without permission |
-| `model` | Model to use: `sonnet`, `opus`, `haiku`, or full model ID |
-| `effort` | Thinking effort: `low`, `medium`, `high`, `max` |
-| `context` | `fork` = run in isolated subagent context |
-| `agent` | Subagent type when `context: fork` (e.g., `Explore`, `Plan`, `general-purpose`) |
-| `hooks` | Skill lifecycle hooks |
-
-**Arguments substitution:**
-- `$ARGUMENTS` - all arguments from `/skill-name arg1 arg2`
-- `$ARGUMENTS[0]`, `$ARGUMENTS[1]` - by index
-- `$0`, `$1` - shorthand for `$ARGUMENTS[N]`
-
-**Model selection guidelines:**
-| Model | Use Case |
-|-------|----------|
-| `haiku` | Fast exploration, simple validation, low cost |
-| `sonnet` | Balanced reasoning and speed (default) |
-| `opus` | Complex reasoning, architecture decisions |
-
-**`context: fork` guidelines:**
-- Use `context: fork` for skills that perform isolated analysis (review, audit, exploration)
-- Forked context does NOT inherit the main conversation — only receives skill body + `$ARGUMENTS`
-- **CRITICAL:** When using `context: fork`, design `argument-hint` to ensure sufficient context is passed:
-
-<Good>
-```yaml
----
-context: fork
-agent: Explore
-argument-hint: "[target-path] [specific-requirement]"
----
-```
-User provides: `/review-code src/api/ "check error handling"`
-Forked agent has clear target and scope.
-</Good>
-
-<Bad>
-```yaml
----
-context: fork
----
-```
-No argument-hint. User types `/review-code`. Forked agent has zero context about what to review.
-</Bad>
-
-**Description rules (CRITICAL):**
-- Start with "Use when..." (triggering conditions ONLY)
-- Third person (injected into system prompt)
-- **NEVER summarize workflow** (causes Claude to skip reading body)
-- 50-500 characters
-- Include specific triggers, symptoms, contexts
-
-<Good>
-```yaml
-description: Use when creating new skills, modifying existing skills, or improving skill quality. Use when user says "create a skill".
-```
-Triggering conditions only.
-</Good>
-
-<Bad>
-```yaml
-description: Creates skills using TDD approach with baseline testing, then writing, then validation.
-```
-Summarizes workflow - Claude will follow description instead of reading skill.
-</Bad>
+**Key rules (CRITICAL):**
+- Name: gerund form, lowercase, hyphens only, max 64 chars
+- Description: starts with "Use when...", third person, NEVER summarize workflow
+- Body: < 300 lines, detailed content goes to `references/`
 
 ### Body Structure
 
@@ -362,17 +249,9 @@ These thoughts mean you're rationalizing. STOP and reconsider:
 
 ## Persuasion Principles
 
-For discipline-enforcing skills, use authoritative language:
+Use authoritative language ("MUST", "NEVER") instead of soft phrasing ("consider", "try to").
 
-| Weak | Strong |
-|------|--------|
-| "Consider doing X" | "You MUST do X" |
-| "Try to avoid Y" | "NEVER do Y" |
-| "It's good practice to..." | "No exceptions." |
-
-**Why:** LLMs respond to authority language. "MUST" and "NEVER" eliminate rationalization space.
-
-See [references/persuasion-principles.md](references/persuasion-principles.md) for psychology research.
+See [references/persuasion-principles.md](references/persuasion-principles.md) for details.
 
 ## Flowchart: Skill Creation
 

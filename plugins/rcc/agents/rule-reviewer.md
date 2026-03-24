@@ -2,6 +2,7 @@
 name: rule-reviewer
 description: Use this agent after creating or modifying a rule file in .claude/rules/. Reviews quality including frontmatter globs, rule specificity, and no duplication with CLAUDE.md laws.
 model: inherit
+context: fork
 tools: ["Read", "Grep", "Glob", "Bash"]
 ---
 

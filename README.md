@@ -14,24 +14,20 @@ The agent maintains and refactors its own core prompts and agent system — not 
 - Through deliberate teaching, the agent integrates learnings into its skill library
 - Skills are abstract, reusable, and link to reference directories with examples and documentation
 
-## What's New in v8.0.1
+## What's New in v8.0.2
 
-- **Agent system skill chain**: Decomposed `migrating-agent-systems` into 5 specialized skills with chain invocation
-  - `analyzing-agent-systems` — 8-category weakness detection for existing agent systems
-  - `brainstorming-workflows` — Role-template-guided workflow exploration (not dev-only)
-  - `planning-agent-systems` — Traceable component planning with reuse analysis
-  - `applying-agent-systems` — Orchestrated writing-* skill invocation
-  - `refactoring-agent-systems` — Before/after comparison and cleanup
-- **`migrating-agent-systems` slim router**: Now detects existing system and routes to the correct chain entry
-- **Subagent write constraint**: All skills enforce main-conversation writes; subagents are read-only for `.claude/` paths
-- **`initializing-projects` chain integration**: Task 6 now invokes the full skill chain
-- **`refactoring-skills` analysis delegation**: Task 2 delegates to `analyzing-agent-systems`
+- **Agent system refactoring**: Systematic cleanup across all components
+  - Removed duplicate `creating-plugins` skill from rcc-dev plugin
+  - Added `context: fork` isolation to all 3 reviewer agents
+  - Reduced 4 oversized skills below 300-line limit via progressive disclosure to `references/`
+  - Sharpened trigger descriptions for `improving-skills` vs `refactoring-skills`
+  - Removed outdated version reference from CLAUDE.md
 
 ## Plugins
 
 This marketplace provides two plugins:
 
-### rcc (v8.0.1)
+### rcc (v8.0.2)
 
 Core ACE workflow with TDD-based skills, task enforcement, and quality reviewers.
 

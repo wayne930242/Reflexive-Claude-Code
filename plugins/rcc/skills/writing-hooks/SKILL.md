@@ -223,36 +223,7 @@ echo $?  # Should be 0 (pass) or 2 (block)
 
 ## Common Hook Patterns
 
-### Linting (ESLint/Ruff)
-```python
-result = subprocess.run(
-    ['npx', 'eslint', '--format', 'compact', file_path],
-    capture_output=True, text=True
-)
-if result.returncode != 0:
-    print(result.stdout[:1000], file=sys.stderr)
-    sys.exit(2)
-```
-
-### Type Checking
-```python
-result = subprocess.run(
-    ['npx', 'tsc', '--noEmit'],
-    capture_output=True, text=True
-)
-errors = [l for l in result.stdout.split('\n') if file_path in l]
-if errors:
-    print('\n'.join(errors[:5]), file=sys.stderr)
-    sys.exit(2)
-```
-
-### Auto-Fix (Format)
-```python
-# Auto-fix instead of blocking
-subprocess.run(['npx', 'prettier', '--write', file_path])
-print(f"Auto-formatted: {file_path}")
-sys.exit(0)  # Don't block, just fix
-```
+See [references/static-checks.md](references/static-checks.md) for linting, type checking, and auto-fix examples.
 
 ## Red Flags - STOP
 
