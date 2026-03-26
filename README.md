@@ -14,22 +14,20 @@ The agent maintains and refactors its own core prompts and agent system — not 
 - Through deliberate teaching, the agent integrates learnings into its skill library
 - Skills are abstract, reusable, and link to reference directories with examples and documentation
 
-## What's New in v8.1.0
+## What's New in v8.2.0
 
-- **Review step in core chain**: Split review from refactor into dedicated step
-  - New `reviewing-agent-systems` skill: orchestrates all 5 reviewer agents
-  - New `hook-reviewer` agent: reviews hook exit codes, performance, registration
-  - New `subagent-reviewer` agent: reviews single responsibility, tool minimalism, model selection
-  - Core chain is now: analyze → brainstorm → plan → apply → **review** → refactor
-  - `writing-hooks` and `writing-subagents` now include REFACTOR quality review step
-  - `reflecting` now runs reviewer agents on newly integrated components
-  - `refactoring-agent-systems` now receives review report instead of self-analyzing
+- **New `refactoring-plugins` skill**: Plugin migration and refactoring against official Claude Code best practices
+  - Cross-platform Python health check script (`validate_plugin.py`, supports `uv run`)
+  - Integrates official `claude plugin validate` CLI
+  - 8-category plugin health checklist (manifest, structure, skills, commands, agents, paths, version sync, distribution)
+  - Skill trigger overlap detection across all skills
+  - New `/refactor-plugin` command
 
 ## Plugins
 
 This marketplace provides two plugins:
 
-### rcc (v8.1.0)
+### rcc (v8.2.0)
 
 Core ACE workflow with TDD-based skills, task enforcement, and quality reviewers.
 
@@ -54,6 +52,7 @@ Core ACE workflow with TDD-based skills, task enforcement, and quality reviewers
 | `reviewing-agent-systems` | Quality review with all 5 reviewer agents |
 | `refactoring-agent-systems` | Fix issues from review report |
 | `creating-plugins` | Scaffold a new Claude Code plugin |
+| `refactoring-plugins` | Refactor plugins against official best practices with health check |
 | `advising-architecture` | Validate approach, classify knowledge type, check for component conflicts |
 
 **Agent System Skill Chain:**
