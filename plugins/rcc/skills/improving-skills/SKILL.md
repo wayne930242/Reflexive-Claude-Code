@@ -15,6 +15,12 @@ Analyze current state, research best practices, apply targeted improvements.
 
 **Violating the letter of the rules is violating the spirit of the rules.**
 
+## Routing
+
+**Pattern:** Node
+**Handoff:** none
+**Next:** none
+
 ## Task Initialization (MANDATORY)
 
 Before ANY action, create task list using TaskCreate:

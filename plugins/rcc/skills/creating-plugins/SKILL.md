@@ -15,6 +15,12 @@ Plugins contain skills, commands, agents, and rules that can be installed via `c
 
 **Violating the letter of the rules is violating the spirit of the rules.**
 
+## Routing
+
+**Pattern:** Skill Steps
+**Handoff:** none
+**Next:** none
+
 ## Task Initialization (MANDATORY)
 
 Before ANY action, create task list using TaskCreate:

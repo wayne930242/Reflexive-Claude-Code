@@ -15,6 +15,13 @@ Don't just create files—set up the full development environment including Clau
 
 **Violating the letter of the rules is violating the spirit of the rules.**
 
+## Routing
+
+**Pattern:** Chain
+**Handoff:** user-confirmation
+**Next:** `brainstorming-workflows`
+**Chain:** bootstrap
+
 ## Task Initialization (MANDATORY)
 
 Before ANY action, create task list using TaskCreate:
@@ -153,7 +160,9 @@ cd my-app && npm run dev
 
 **Since this is a new project, skip analysis and go directly to workflow exploration.**
 
-**CRITICAL: Invoke the `brainstorming-workflows` skill.**
+**Handoff:** "專案已建立並通過驗證。要繼續設定 agent system 嗎？"
+- If yes → invoke `brainstorming-workflows` skill
+- If no → end
 
 The skill chain will automatically continue:
 1. `brainstorming-workflows` → explore user's workflows
@@ -262,3 +271,13 @@ digraph init_project {
     valid -> bootstrap [label="no\nfix"];
 }
 ```
+
+## Skill Chain Reference (Bootstrap)
+
+| Step | Skill | Purpose |
+|------|-------|---------|
+| 1 | `brainstorming-workflows` | Role-based workflow exploration |
+| 2 | `planning-agent-systems` | Component planning |
+| 3 | `applying-agent-systems` | Invoke writing-* skills |
+| 4 | `reviewing-agent-systems` | Quality review with reviewer agents |
+| 5 | `refactoring-agent-systems` | Fix issues from review |

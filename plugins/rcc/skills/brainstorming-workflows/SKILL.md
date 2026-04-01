@@ -15,6 +15,13 @@ Use role templates to quickly identify the user's context, then explore their sp
 
 **Violating the letter of the rules is violating the spirit of the rules.**
 
+## Routing
+
+**Pattern:** Chain
+**Handoff:** user-confirmation
+**Next:** `planning-agent-systems`
+**Chain:** main
+
 ## Task Initialization (MANDATORY)
 
 Before ANY action, create task list using TaskCreate:
@@ -91,7 +98,15 @@ Announce: "Created 4 tasks. Starting execution..."
 - **Adapt to answers** — if user reveals something unexpected, explore it
 - **5-8 questions maximum** — don't exhaust the user
 
-**Verification:** Have enough information to map workflows to agent system components.
+**After workflow exploration, classify routing patterns:**
+
+For each workflow identified, determine its routing pattern using [references/routing-patterns.md](references/routing-patterns.md):
+- Contains decision points → **Tree**
+- Part of multi-skill sequential workflow → **Chain**
+- Simple, single task → **Node** (consider `context: fork`, `model: haiku`)
+- Internal steps only → **Skill Steps**
+
+**Verification:** Have enough information to map workflows to agent system components AND routing patterns.
 
 ## Task 4: Produce Workflow Summary
 
@@ -117,6 +132,11 @@ Announce: "Created 4 tasks. Starting execution..."
 
 ## Conventions to Enforce
 - [Convention] → suggested component type (rule/hook)
+
+## Routing Design
+| Workflow | Pattern | Entry Point | Next/Chain |
+|----------|---------|-------------|------------|
+| [workflow] | Tree/Chain/Node/Skill Steps | [skill-name] | [next-skill or none] |
 
 ## Component Recommendations
 | Component | Action | Rationale |

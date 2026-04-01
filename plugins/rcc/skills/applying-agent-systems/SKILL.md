@@ -15,6 +15,13 @@ Read the component plan, invoke the appropriate writing-* skill for each compone
 
 **Violating the letter of the rules is violating the spirit of the rules.**
 
+## Routing
+
+**Pattern:** Chain
+**Handoff:** user-confirmation
+**Next:** `reviewing-agent-systems`
+**Chain:** main
+
 ## Task Initialization (MANDATORY)
 
 Before ANY action, create task list using TaskCreate:

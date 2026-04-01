@@ -14,20 +14,22 @@ The agent maintains and refactors its own core prompts and agent system — not 
 - Through deliberate teaching, the agent integrates learnings into its skill library
 - Skills are abstract, reusable, and link to reference directories with examples and documentation
 
-## What's New in v8.2.0
+## What's New in v8.3.0
 
-- **New `refactoring-plugins` skill**: Plugin migration and refactoring against official Claude Code best practices
-  - Cross-platform Python health check script (`validate_plugin.py`, supports `uv run`)
-  - Integrates official `claude plugin validate` CLI
-  - 8-category plugin health checklist (manifest, structure, skills, commands, agents, paths, version sync, distribution)
-  - Skill trigger overlap detection across all skills
-  - New `/refactor-plugin` command
+- **Formalized routing patterns**: All 20 skills now declare their routing pattern (Tree/Chain/Node/Skill Steps)
+  - New `routing-patterns.md` reference document with selection guide and global routing map
+  - Standardized `## Routing` section in every SKILL.md
+  - `brainstorming-workflows` now teaches routing pattern selection during agent system design
+  - `advising-architecture` decision tree includes routing pattern classification
+  - `weakness-checklist` adds 7 routing-specific checks
+  - Skill Chain Reference tables added to all entry-point skills
+  - `writing-plugins` (rcc-dev) rewritten for full Law 7 compliance
 
 ## Plugins
 
 This marketplace provides two plugins:
 
-### rcc (v8.2.0)
+### rcc (v8.3.0)
 
 Core ACE workflow with TDD-based skills, task enforcement, and quality reviewers.
 

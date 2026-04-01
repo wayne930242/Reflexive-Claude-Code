@@ -15,6 +15,13 @@ After components are built, each one must pass its corresponding reviewer agent 
 
 **Violating the letter of the rules is violating the spirit of the rules.**
 
+## Routing
+
+**Pattern:** Chain
+**Handoff:** user-confirmation
+**Next:** `refactoring-agent-systems`
+**Chain:** main
+
 ## Task Initialization (MANDATORY)
 
 Before ANY action, create task list using TaskCreate:

@@ -18,6 +18,12 @@ One concept, one location. Misclassification wastes tokens (global rule that sho
 
 **Violating the letter of the rules is violating the spirit of the rules.**
 
+## Routing
+
+**Pattern:** Node
+**Handoff:** none
+**Next:** none
+
 ## Task Initialization (MANDATORY)
 
 Before ANY action, create task list using TaskCreate:
@@ -91,7 +97,12 @@ Does it apply BROADLY to all project work?
     ├─ HOW TO DO something (capability)?
     │   → SKILL in skills/
     │   Naming: gerund form (writing-*, creating-*)
-    │   Structure: Overview → Tasks → Red Flags → Flowchart
+    │   Structure: Overview → Routing → Tasks → Red Flags → Flowchart
+    │   Routing pattern:
+    │     ├─ Contains decision points → Tree
+    │     ├─ Part of multi-skill workflow → Chain
+    │     ├─ Simple, single task → Node (context: fork, model: haiku)
+    │     └─ Internal steps only → Skill Steps
     │   Consider: context: fork for analysis-oriented skills
     │   Consider: model selection (haiku for fast, opus for complex)
     │
@@ -121,42 +132,29 @@ Does it apply BROADLY to all project work?
 ## Best Practices per Component
 
 ### CLAUDE.md
-- **< 200 lines** (60 lines optimal) — loaded every session, every line costs tokens
-- Only include what Claude **can't figure out from reading the code**
-- Specific and verifiable: "Use 2-space indentation" not "Format code properly"
-- Use `MUST`/`NEVER`/`IMPORTANT` sparingly for critical rules
-- If Claude ignores an instruction, file is probably too long
-- **NOT for**: linter-enforceable rules (use hooks), path-scoped conventions (use rules), multi-step workflows (use skills)
+- **< 200 lines** — loaded every session; only what Claude can't figure out from code
+- Specific and verifiable; use `MUST`/`NEVER` sparingly
+- NOT for: linter-enforceable rules (hooks), path-scoped (rules), workflows (skills)
 
 ### Rules (.claude/rules/)
-- **< 50 lines each** — auto-injected = expensive
-- Use `paths:` YAML array to scope to specific file patterns
-- Imperative language: "MUST", "NEVER" (not "try to", "consider")
-- Best for: monorepo with different frameworks per package, frontend vs backend conventions
-- User-level `~/.claude/rules/` for cross-project conventions; symlinks for sharing
-- **NOT for**: procedures/how-to (use skills), broad instructions (use CLAUDE.md)
+- **< 50 lines each**; use `paths:` YAML array to scope to file patterns
+- Imperative language; best for monorepo/frontend-vs-backend conventions
+- NOT for: procedures (skills), broad instructions (CLAUDE.md)
 
 ### Skills (.claude/skills/)
-- Loaded **on-demand** = token efficient (only description preloaded)
-- Use `context: fork` for analysis-oriented skills (review, audit) — but design `argument-hint` to pass sufficient context
-- Use `model` frontmatter to optimize cost (`haiku` for fast exploration, `opus` for complex reasoning)
-- Use `disable-model-invocation: true` to prevent auto-loading (manual `/name` only)
-- **NOT for**: conventions (use rules), broad instructions (use CLAUDE.md)
+- On-demand loading = token efficient; use `context: fork` for analysis tasks
+- Use `model` to optimize cost; `disable-model-invocation: true` for manual-only
+- NOT for: conventions (rules), broad instructions (CLAUDE.md)
 
 ### Agents (.claude/agents/)
-- **First consider** built-in types: `Explore` (haiku, read-only), `Plan` (inherit, read-only), `general-purpose` (inherit, all tools)
-- **Then consider** skill with `context: fork` as lightweight alternative
-- Tool permissions are declared **upfront** — subagents CANNOT request tools at runtime
-- Use `disallowedTools` as alternative to `tools` allowlist
-- Plugin agents do NOT support `hooks`, `mcpServers`, `permissionMode`
-- **NOT for**: guidance/teaching (use skills), conventions (use rules)
+- First consider built-in types (Explore/Plan/general-purpose), then `context: fork`
+- Tools declared upfront — subagents CANNOT request at runtime
+- NOT for: guidance (skills), conventions (rules)
 
 ### Hooks (.claude/hooks/)
-- **Deterministic enforcement** — unlike CLAUDE.md which is advisory, hooks guarantee execution
-- Exit code 2 = block the action
-- Keep < 5 seconds execution time
+- Deterministic enforcement; exit code 2 = block; keep < 5 seconds
 - Best for: lint checks, format validation, commit message enforcement
-- **NOT for**: complex workflows (use skills), advisory guidelines (use CLAUDE.md/rules)
+- NOT for: complex workflows (skills), advisory guidelines (CLAUDE.md/rules)
 
 ## Task 1: Understand the Request
 

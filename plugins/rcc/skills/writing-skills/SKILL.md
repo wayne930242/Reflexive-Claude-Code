@@ -15,6 +15,12 @@ Write baseline test (watch agent fail without skill), write skill addressing fai
 
 **Violating the letter of the rules is violating the spirit of the rules.**
 
+## Routing
+
+**Pattern:** Skill Steps
+**Handoff:** none
+**Next:** none
+
 ## Task Initialization (MANDATORY)
 
 Before ANY action, create task list using TaskCreate:
@@ -118,32 +124,7 @@ See [references/spec.md](references/spec.md) for full frontmatter specification 
 
 ### Body Structure
 
-```markdown
-# Skill Name
-
-## Overview
-Core principle in 1-2 sentences.
-"Violating the letter of the rules is violating the spirit of the rules."
-
-## Task Initialization (MANDATORY)
-[Task list with TaskCreate]
-
-## Tasks
-### Task 1: [Action]
-[Instructions + Verification criteria]
-
-### Task N: Quality Review
-[Reviewer subagent call]
-
-## Red Flags
-[Self-check table]
-
-## Common Rationalizations
-[Excuse | Reality table]
-
-## References
-[Links to references/]
-```
+Required sections: Overview, Routing, Task Initialization, Tasks (with verification each), Red Flags, Common Rationalizations, Flowchart, References. See [references/patterns.md](references/patterns.md) for full template.
 
 ### Verification
 

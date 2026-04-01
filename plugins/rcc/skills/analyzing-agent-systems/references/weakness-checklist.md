@@ -18,6 +18,13 @@ For each category, check every item. Mark severity:
 - [ ] More than 20 skills loaded (route saturation risk)
 - [ ] Skill triggers use jargon users wouldn't naturally say
 - [ ] Infinite handoff loop possible between skills
+- [ ] Skill has no declared routing pattern (Tree/Chain/Node/Skill Steps) in Routing section
+- [ ] Chain skill missing handoff to next skill
+- [ ] Tree skill flowchart missing decision point (diamond node)
+- [ ] Node skill not using `context: fork` when analysis-only
+- [ ] Skill Steps skill missing internal verification gates between tasks
+- [ ] Handoff uses auto-invoke where user confirmation is needed (state-changing chains)
+- [ ] Entry-point skill missing Skill Chain Reference table
 
 ## 2. Context Management
 

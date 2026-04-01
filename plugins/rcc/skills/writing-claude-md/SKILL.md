@@ -15,6 +15,12 @@ CLAUDE.md is context, not enforced configuration. Claude treats it as high-prior
 
 **Violating the letter of the rules is violating the spirit of the rules.**
 
+## Routing
+
+**Pattern:** Skill Steps
+**Handoff:** none
+**Next:** none
+
 ## Task Initialization (MANDATORY)
 
 Before ANY action, create task list using TaskCreate:

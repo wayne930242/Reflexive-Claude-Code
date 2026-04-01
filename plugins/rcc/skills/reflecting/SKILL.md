@@ -15,6 +15,12 @@ Analyze what worked, what failed, and encode learnings into the appropriate comp
 
 **Violating the letter of the rules is violating the spirit of the rules.**
 
+## Routing
+
+**Pattern:** Tree
+**Handoff:** auto-invoke (per classification)
+**Next:** `writing-claude-md` | `writing-skills` | `writing-rules`
+
 ## Task Initialization (MANDATORY)
 
 Before ANY action, create task list using TaskCreate:

@@ -15,6 +15,13 @@ Scan every component (CLAUDE.md, rules, hooks, skills, agents), check against 8 
 
 **Violating the letter of the rules is violating the spirit of the rules.**
 
+## Routing
+
+**Pattern:** Chain
+**Handoff:** user-confirmation
+**Next:** `brainstorming-workflows`
+**Chain:** main
+
 ## Task Initialization (MANDATORY)
 
 Before ANY action, create task list using TaskCreate:

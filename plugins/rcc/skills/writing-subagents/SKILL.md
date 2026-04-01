@@ -15,6 +15,12 @@ Subagents run via the Agent tool with their own context window, tools, and syste
 
 **Violating the letter of the rules is violating the spirit of the rules.**
 
+## Routing
+
+**Pattern:** Skill Steps
+**Handoff:** none
+**Next:** none
+
 ## Task Initialization (MANDATORY)
 
 Before ANY action, create task list using TaskCreate:
@@ -91,13 +97,7 @@ Announce: "Created 7 tasks. Starting execution..."
 3. Note where specialized focus would help
 4. Document specific problems
 
-**Common problems without subagents:**
-- Context window fills with review comments
-- Main agent loses focus on primary task
-- Repeated tasks lack consistency
-- No clean handoff point
-
-**Verification:** Documented at least 1 issue from running task in main context.
+**Verification:** Documented at least 1 issue (context pollution, focus loss, inconsistency) from running task in main context.
 
 ## Task 3: GREEN - Write Agent File
 
@@ -224,23 +224,8 @@ Agent tool:
 
 ## Trigger Patterns
 
-### Proactive (Auto-Invoke)
-
-Include in description:
-- "Use proactively when..."
-- "Use immediately after..."
-- "MUST BE USED when..."
-
-```yaml
-description: Reviews code quality. Use proactively when completing any implementation task.
-```
-
-### Manual (Explicit Invoke)
-
-Omit proactive triggers:
-```yaml
-description: Deep security analysis of authentication code.
-```
+- **Proactive:** Include "Use proactively when..." in description for auto-invoke
+- **Manual:** Omit proactive triggers for explicit-only invocation
 
 ## Red Flags - STOP
 

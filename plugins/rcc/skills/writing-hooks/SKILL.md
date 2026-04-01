@@ -15,6 +15,12 @@ Hooks run on Claude Code events (PreToolUse, PostToolUse, etc.) and can block ac
 
 **Violating the letter of the rules is violating the spirit of the rules.**
 
+## Routing
+
+**Pattern:** Skill Steps
+**Handoff:** none
+**Next:** none
+
 ## Task Initialization (MANDATORY)
 
 Before ANY action, create task list using TaskCreate:
@@ -108,35 +114,7 @@ Announce: "Created 7 tasks. Starting execution..."
 
 ### Hook Template
 
-```python
-#!/usr/bin/env python3
-"""Hook: [Description]"""
-import json
-import subprocess
-import sys
-
-# Read hook input
-data = json.load(sys.stdin)
-file_path = data.get('tool_input', {}).get('file_path', '')
-
-# Filter by extension
-if not file_path.endswith(('.ts', '.tsx', '.js', '.jsx')):
-    sys.exit(0)
-
-# Run check
-result = subprocess.run(
-    ['npx', 'eslint', '--format', 'compact', file_path],
-    capture_output=True,
-    text=True
-)
-
-# Block on failure
-if result.returncode != 0:
-    print(f"Lint errors:\\n{result.stdout}", file=sys.stderr)
-    sys.exit(2)  # BLOCK
-
-sys.exit(0)  # PASS
-```
+See [references/static-checks.md](references/static-checks.md) for complete hook templates. Key pattern: read JSON from stdin, filter by extension, run check, exit 2 to block.
 
 ### Critical Requirements
 

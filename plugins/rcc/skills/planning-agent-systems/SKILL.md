@@ -15,6 +15,13 @@ Read the analysis report and workflow summary, decide what to create/modify/dele
 
 **Violating the letter of the rules is violating the spirit of the rules.**
 
+## Routing
+
+**Pattern:** Chain
+**Handoff:** user-confirmation
+**Next:** `applying-agent-systems`
+**Chain:** main
+
 ## Task Initialization (MANDATORY)
 
 Before ANY action, create task list using TaskCreate:

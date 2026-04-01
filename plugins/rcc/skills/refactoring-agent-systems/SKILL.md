@@ -15,6 +15,13 @@ Re-analyze after changes, compare before/after, fix remaining issues, simplify o
 
 **Violating the letter of the rules is violating the spirit of the rules.**
 
+## Routing
+
+**Pattern:** Skill Steps
+**Handoff:** none
+**Next:** none
+**Chain:** main (terminal)
+
 ## Task Initialization (MANDATORY)
 
 Before ANY action, create task list using TaskCreate:

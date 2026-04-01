@@ -15,6 +15,13 @@ Detect whether an agent system already exists, then invoke the appropriate skill
 
 **Violating the letter of the rules is violating the spirit of the rules.**
 
+## Routing
+
+**Pattern:** Tree
+**Handoff:** auto-invoke
+**Next:** `analyzing-agent-systems` | `brainstorming-workflows`
+**Chain:** main
+
 ## Task Initialization (MANDATORY)
 
 Before ANY action, create task list using TaskCreate:

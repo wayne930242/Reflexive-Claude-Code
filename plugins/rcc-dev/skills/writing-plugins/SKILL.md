@@ -1,285 +1,252 @@
 ---
 name: writing-plugins
-description: Creates complete Claude Code plugin packages with manifests, agents, skills, hooks, and marketplaces following official schema. Use when creating new plugins, building marketplaces, or packaging skills for distribution.
+description: Use when creating complete Claude Code plugin packages with manifests, agents, skills, hooks, and marketplaces. Use when user says "create plugin", "new plugin", "scaffold plugin", "build marketplace", "package skills".
 ---
 
-# Plugin & Skill Authoring Expert
+# Writing Plugins
 
-You are an expert at creating Claude Code plugins and skills that follow the official Anthropic 2025 schema and best practices.
+## Overview
 
-## Your Role
+**Writing plugins IS packaging reusable skills for distribution.**
 
-Help users create high-quality Claude Code plugins by:
-- Designing complete plugin structures with all components
-- Writing effective SKILL.md files for automatic activation
-- Creating useful slash commands
-- Setting up marketplaces for distribution
+Plugins contain skills, commands, agents, and rules installable via `claude plugin add`. Follow the official Anthropic 2025 schema.
 
-## Plugin Architecture Overview
+**Core principle:** Plugins are distributable — correctness of manifest, structure, and auto-discovery matters more than content volume.
 
-### Complete Plugin Structure
+**Violating the letter of the rules is violating the spirit of the rules.**
+
+## Routing
+
+**Pattern:** Skill Steps
+**Handoff:** none
+**Next:** none
+
+## Task Initialization (MANDATORY)
+
+Before ANY action, create task list using TaskCreate:
 
 ```
-project-root/
-└── .claude/
-    ├── commands/                 # Slash commands
-    │   └── my-command.md
-    ├── agents/                   # Custom agents
-    │   └── my-agent.md
-    ├── skills/                   # Agent Skills (auto-activated)
-    │   └── my-skill/
-    │       └── SKILL.md
-    ├── hooks/                    # Event handlers
-    │   └── hooks.json
-    └── settings.json             # Project settings (optional)
+TaskCreate for EACH task below:
+- Subject: "[writing-plugins] Task N: <action>"
+- ActiveForm: "<doing action>"
 ```
 
-For standalone plugins (distributable):
+**Tasks:**
+1. Gather requirements
+2. Create plugin structure
+3. Generate manifests
+4. Create initial skill
+5. Write README
+6. Test installation
+7. Validate and review
+
+Announce: "Created 7 tasks. Starting execution..."
+
+**Execution rules:**
+1. `TaskUpdate status="in_progress"` BEFORE starting each task
+2. `TaskUpdate status="completed"` ONLY after verification passes
+3. If task fails → stay in_progress, diagnose, retry
+4. NEVER skip to next task until current is completed
+5. At end, `TaskList` to confirm all completed
+
+## Task 1: Gather Requirements
+
+**Goal:** Understand what the plugin should contain.
+
+**Ask:**
+- Plugin name (kebab-case, max 64 chars, avoid `helper`/`utils`/`anthropic`/`claude`)
+- Purpose (one sentence)
+- Skills to include
+- Author name/email
+- Is this a marketplace or single plugin?
+
+**Verification:** Can state plugin name and purpose in one sentence.
+
+## Task 2: Create Plugin Structure
+
+**Goal:** Scaffold the directory layout.
+
+**Single plugin:**
 ```
-my-plugin/
+<plugin-name>/
 ├── .claude-plugin/
-│   ├── plugin.json          # Plugin manifest (required)
-│   └── marketplace.json     # Marketplace manifest (if distributing)
-├── commands/
+│   └── plugin.json
 ├── skills/
+│   └── <skill-name>/
+│       └── SKILL.md
+├── commands/            # Optional
+├── agents/              # Optional
 └── README.md
 ```
 
-**Key Rule**: For project-level customization, use `.claude/` directory. For distributable plugins, use `.claude-plugin/` with component directories at plugin root.
+**Marketplace:**
+```
+<marketplace>/
+├── .claude-plugin/
+│   └── marketplace.json
+└── plugins/
+    └── <plugin-name>/
+        ├── .claude-plugin/
+        │   └── plugin.json
+        └── skills/
+```
 
-## Plugin Creation Process
+**Key rule:** Component directories at plugin root, NOT inside `.claude-plugin/`.
 
-### Step 1: Create Plugin Manifest
+**Verification:** Directory structure matches layout above.
 
-Create `.claude-plugin/plugin.json`:
+## Task 3: Generate Manifests
 
+**Goal:** Create plugin.json (and marketplace.json if needed).
+
+**plugin.json:**
 ```json
 {
   "name": "plugin-name",
-  "description": "Brief description of what this plugin does",
+  "description": "What this plugin does",
   "version": "1.0.0",
-  "author": {
-    "name": "Your Name",
-    "email": "your@email.com"
-  },
-  "repository": "https://github.com/you/plugin-repo",
-  "license": "MIT",
-  "keywords": ["claude-code", "your-domain"]
+  "author": { "name": "Name", "email": "email" }
 }
 ```
 
-**Naming conventions**:
-- Use lowercase letters, numbers, and hyphens
-- Be descriptive: `git-workflow`, `code-review`, `api-tester`
+Skills are auto-discovered from `skills/*/SKILL.md`.
 
-### Step 2: Create Skills (Auto-Activated)
-
-Skills activate automatically based on conversation context. Create `skills/<skill-name>/SKILL.md`:
-
-```markdown
----
-name: skill-name
-description: [Role]. [Capabilities]. Use when [triggers].
----
-
-# Skill Title
-
-You are [role definition].
-
-## Your Role
-[What this skill accomplishes]
-
-## Process
-### 1. [Step Name]
-[Instructions with code examples]
-
-## Examples
-### Example: [Scenario]
-**Input**: [User provides]
-**Output**: [Skill produces]
-
-## Important Rules
-- [Critical rules]
-```
-
-**Description Formula**:
-```
-[Expert role]. [2-3 capabilities]. Use when [specific triggers].
-```
-
-### Step 3: Create Commands (Explicit Activation)
-
-Commands require `/command` to trigger. Create `commands/my-command.md`:
-
-```markdown
----
-name: my-command
-description: What this command does
-arguments:
-  - name: arg1
-    description: First argument
-    required: true
-  - name: arg2
-    description: Optional argument
-    required: false
----
-
-# Command Instructions
-
-When invoked, perform these steps:
-
-1. [First step]
-2. [Second step]
-3. [Output format]
-```
-
-### Step 4: Create Marketplace (For Distribution)
-
-Create `.claude-plugin/marketplace.json`:
-
+**marketplace.json** (if applicable):
 ```json
 {
-  "name": "your-marketplace",
-  "owner": {
-    "name": "Your Name",
-    "email": "your@email.com"
-  },
-  "metadata": {
-    "description": "Description of your marketplace",
-    "version": "1.0.0"
-  },
+  "name": "marketplace-name",
+  "owner": { "name": "Name", "email": "email" },
+  "metadata": { "description": "...", "version": "1.0.0" },
   "plugins": [
-    {
-      "name": "plugin-one",
-      "source": "./plugins/plugin-one",
-      "description": "First plugin",
-      "version": "1.0.0"
-    },
-    {
-      "name": "plugin-two",
-      "source": {
-        "source": "github",
-        "repo": "owner/plugin-two"
-      },
-      "description": "External plugin"
-    }
+    { "name": "plugin", "source": "./plugins/plugin", "description": "..." }
   ]
 }
 ```
 
-**Source options**:
-- Relative path: `"./plugins/my-plugin"`
-- GitHub: `{"source": "github", "repo": "owner/repo"}`
-- Git URL: `{"source": "url", "url": "https://gitlab.com/..."}`
+**Source options:** relative path, `{"source": "github", "repo": "owner/repo"}`, or `{"source": "url", "url": "..."}`.
+
+**Verification:** Manifests are valid JSON with all required fields.
+
+## Task 4: Create Initial Skill
+
+**Goal:** Create the first skill using proper workflow.
+
+**CRITICAL: Invoke the `writing-skills` skill.** Do not write SKILL.md directly.
+
+**Verification:** Initial skill created and passes skill-reviewer.
+
+## Task 5: Write README
+
+**Goal:** Document the plugin for users.
+
+**Template:**
+```markdown
+# Plugin Name
+
+One-line description.
+
+## Installation
+\`\`\`bash
+claude plugin add <path-or-url>
+\`\`\`
+
+## Skills
+| Skill | Description |
+|-------|-------------|
+
+## Usage
+[Examples]
+```
+
+**Verification:** README has installation instructions and skill list.
+
+## Task 6: Test Installation
+
+**Goal:** Verify plugin installs and works.
+
+```bash
+claude plugin add <path>
+# Verify skills appear
+claude plugin remove <name>
+```
+
+**Verification:** Plugin installs without errors, skills are discoverable.
+
+## Task 7: Validate and Review
+
+**Goal:** Final quality check.
+
+**Checklist:**
+- [ ] `.claude-plugin/plugin.json` exists with name, description, version
+- [ ] Component directories at plugin root (not inside .claude-plugin)
+- [ ] All skills have valid frontmatter (name + "Use when..." description)
+- [ ] README has installation and skill list
+- [ ] Plugin installs and uninstalls cleanly
+
+**Verification:** All checklist items pass.
 
 ## Skills vs Commands
 
 | Aspect | Skills | Commands |
 |--------|--------|----------|
 | Activation | Automatic (context-based) | Explicit (`/command`) |
-| Location | `.claude/skills/<name>/SKILL.md` | `.claude/commands/<name>.md` |
+| Location | `skills/<name>/SKILL.md` | `commands/<name>.md` |
 | Use case | Recurring workflows | On-demand actions |
-| Discovery | Claude decides | User invokes |
 
-**When to use Skills**:
-- Tasks performed frequently (5+ times)
-- Domain expertise needed consistently
-- Multi-step workflows
+## Red Flags - STOP
 
-**When to use Commands**:
-- One-off actions
-- User wants explicit control
-- Actions with required parameters
+These thoughts mean you're rationalizing. STOP and reconsider:
 
-## Best Practices
+- "Skip skill creation, I'll add it later"
+- "Don't need README for a simple plugin"
+- "Skip testing, the manifest is valid"
+- "Put everything in one mega-skill"
+- "Write SKILL.md directly, skip writing-skills"
 
-### DO
+**All of these mean: You're about to create a weak plugin. Follow the process.**
 
-1. **Specific descriptions** - Include triggers
-   ```yaml
-   ✅ description: Git commit expert. Creates semantic commits. Use when committing code.
-   ❌ description: Helps with git.
-   ```
+## Common Rationalizations
 
-2. **Exact instructions** - Provide copy-paste commands
-   ```markdown
-   ✅ Run: `npm run test -- --coverage`
-   ❌ Run the tests
-   ```
+| Excuse | Reality |
+|--------|---------|
+| "Add skills later" | Empty plugins are useless. Ship with at least one. |
+| "Skip README" | Undocumented plugins don't get used. |
+| "Skip testing" | Broken installs frustrate users. Test it. |
+| "One big skill" | Multiple focused skills > one bloated skill. |
+| "Write directly" | writing-skills encodes TDD + review. Bypass = weak skill. |
 
-3. **Show comparisons** - Good vs bad examples
-   ```markdown
-   ✅ Good: `feat(auth): add OAuth2`
-   ❌ Bad: `added auth stuff`
-   ```
+## Flowchart: Plugin Creation
 
-4. **Scannable format** - Headers, bullets, code blocks
+```dot
+digraph plugin_creation {
+    rankdir=TB;
 
-### DON'T
+    start [label="Create plugin", shape=doublecircle];
+    gather [label="Task 1: Gather\nrequirements", shape=box];
+    structure [label="Task 2: Create\nstructure", shape=box];
+    manifest [label="Task 3: Generate\nmanifests", shape=box];
+    skill [label="Task 4: Create\ninitial skill", shape=box];
+    readme [label="Task 5: Write\nREADME", shape=box];
+    test [label="Task 6: Test\ninstallation", shape=box];
+    validate [label="Task 7: Validate\nand review", shape=box];
+    pass [label="All\npassed?", shape=diamond];
+    done [label="Plugin complete", shape=doublecircle];
 
-1. **Vague instructions** - Be specific
-2. **Missing triggers** - Description must say WHEN to use
-3. **Monolithic skills** - Split if > 500 lines
-4. **Unnecessary restrictions** - Only use `allowed-tools` when needed
-
-## Installation & Testing
-
-### Local Testing
-
-```bash
-# Add local marketplace
-/plugin marketplace add ./path/to/marketplace
-
-# Install plugin
-/plugin install plugin-name@marketplace-name
-
-# Or install directly from path
-/plugin install ./path/to/plugin
+    start -> gather;
+    gather -> structure;
+    structure -> manifest;
+    manifest -> skill;
+    skill -> readme;
+    readme -> test;
+    test -> validate;
+    validate -> pass;
+    pass -> done [label="yes"];
+    pass -> manifest [label="no\nfix"];
+}
 ```
 
-### Publishing to GitHub
+## Publishing
 
-1. Push plugin to GitHub repository
-2. Users install with:
-   ```
-   /plugin marketplace add owner/repo
-   /plugin install plugin-name@owner
-   ```
-
-## Validation Checklist
-
-**Plugin Structure**:
-- [ ] `.claude-plugin/plugin.json` exists with name, description, version, author
-- [ ] Component directories at plugin root (not inside .claude-plugin)
-
-**Skills**:
-- [ ] YAML front matter has `name` and `description`
-- [ ] Description includes role, capabilities, AND triggers
-- [ ] Specific steps with code examples
-- [ ] Important rules section
-
-**Commands**:
-- [ ] Clear argument definitions
-- [ ] Step-by-step instructions
-- [ ] Output format specified
-
-**Marketplace**:
-- [ ] `marketplace.json` has name, owner, plugins array
-- [ ] Each plugin has name, source, description
-
-## Output Format
-
-When creating a plugin, provide:
-
-1. **Complete file contents** for all components
-2. **Directory structure** visualization
-3. **Installation command** for testing
-4. **Example usage** to trigger the plugin
-
-## Important Rules
-
-- Always include `description` with WHEN to use (triggers)
-- Skills = automatic, Commands = explicit `/command`
-- Component directories go at plugin root, NOT in `.claude-plugin/`
-- Test with Haiku, Sonnet, and Opus models
-- Never include secrets in plugins (use environment variables)
+1. **Local:** share directory path
+2. **GitHub:** `claude plugin add github:username/repo`
+3. **npm:** publish to npm registry

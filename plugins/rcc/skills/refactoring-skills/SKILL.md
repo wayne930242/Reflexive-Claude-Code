@@ -15,6 +15,13 @@ Consolidate, simplify, extract shared conventions, remove redundancy.
 
 **Violating the letter of the rules is violating the spirit of the rules.**
 
+## Routing
+
+**Pattern:** Tree
+**Handoff:** mixed (auto-invoke per classification)
+**Next:** `analyzing-agent-systems` | `writing-skills` | `writing-rules`
+**Chain:** maintenance
+
 ## Task Initialization (MANDATORY)
 
 Before ANY action, create task list using TaskCreate:
@@ -236,6 +243,15 @@ digraph refactor_skills {
     report -> done;
 }
 ```
+
+## Skill Chain Reference (Maintenance)
+
+| Step | Skill | Purpose |
+|------|-------|---------|
+| 1 | `analyzing-agent-systems` | Weakness analysis (invoked in Task 2) |
+| 2 | `writing-skills` | Refactor individual skills (invoked in Task 3) |
+| 3 | `writing-rules` | Extract shared conventions (invoked in Task 4) |
+| 4 | `skill-reviewer` | Quality validation (subagent, Task 5) |
 
 ## References
 
