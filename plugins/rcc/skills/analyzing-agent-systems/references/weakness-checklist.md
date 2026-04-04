@@ -85,3 +85,14 @@ For each category, check every item. Mark severity:
 - [ ] CLAUDE.md contains domain knowledge that belongs in skills
 - [ ] CLAUDE.md contains conventions that belong in rules
 - [ ] CLAUDE.md contains procedures that belongs in skills
+
+## 9. Project Context Completeness
+
+- [ ] No account names or org identifiers documented (e.g., npm org, Expo account, cloud project)
+- [ ] No directory convention documented (where plugins, scripts, configs go)
+- [ ] No deployment target documented (servers, environments, deploy commands)
+- [ ] Languages used in project have no matching PostToolUse hooks (e.g., Go without `go build`, TS without `tsc --noEmit`)
+- [ ] Languages used in project have no matching rules in `.claude/rules/`
+- [ ] User-root rules exist at `~/.claude/rules/` but project has no project-level specialization
+- [ ] No `settings.local.json` for sensitive project-specific data (accounts, IPs, tokens)
+- [ ] Project uses deployment tooling (rsync, Ansible, Docker) but has no deploy safety rules

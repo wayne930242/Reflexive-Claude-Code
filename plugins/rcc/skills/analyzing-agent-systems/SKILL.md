@@ -58,18 +58,27 @@ Announce: "Created 4 tasks. Starting execution..."
 - `.claude/skills/` or plugin skill directories
 - `.claude/agents/` or subagent definitions
 - `~/.claude/rules/` (user-level rules)
+- `~/.claude/CLAUDE.md` (user-level constitution)
+- `~/.claude/skills/` (user-level skills)
 
 **For each component found, record:**
 - Type (CLAUDE.md / rule / hook / skill / agent)
+- Scope (user-root / project)
 - Path
 - Line count
 - Brief purpose (from frontmatter or first heading)
 
-**Verification:** Complete inventory of all components with paths and types.
+**User-root gap analysis:**
+Compare `~/.claude/rules/` against `.claude/rules/`:
+- Which user-root rules have no project-level specialization?
+- Which languages/frameworks are used in the project but have no matching rules or hooks?
+- Does the project have a `settings.local.json` for sensitive data?
+
+**Verification:** Complete inventory of all components with paths, types, and scope. Gap analysis between user-root and project level documented.
 
 ## Task 2: Run Weakness Analysis
 
-**Goal:** Check every component against the 8-category weakness checklist.
+**Goal:** Check every component against the 9-category weakness checklist.
 
 **CRITICAL:** Read [references/weakness-checklist.md](references/weakness-checklist.md) for the full checklist.
 
@@ -208,4 +217,4 @@ digraph analyze_agent {
 
 ## References
 
-- [references/weakness-checklist.md](references/weakness-checklist.md) — Full 8-category weakness checklist
+- [references/weakness-checklist.md](references/weakness-checklist.md) — Full 9-category weakness checklist

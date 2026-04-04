@@ -14,6 +14,12 @@ The agent maintains and refactors its own core prompts and agent system — not 
 - Through deliberate teaching, the agent integrates learnings into its skill library
 - Skills are abstract, reusable, and link to reference directories with examples and documentation
 
+## What's New in v8.4.0
+
+- **Project context completeness**: New weakness category (#9) checks for missing account names, directory conventions, deployment targets, language-specific hooks, and user-root gap analysis
+  - `analyzing-agent-systems` now scans `~/.claude/` alongside `.claude/` and compares coverage
+  - `reflecting` classification tree adds user-root scope — cross-project learnings route to `~/.claude/CLAUDE.md` or `~/.claude/rules/`
+
 ## What's New in v8.3.0
 
 - **Formalized routing patterns**: All 20 skills now declare their routing pattern (Tree/Chain/Node/Skill Steps)
@@ -29,7 +35,7 @@ The agent maintains and refactors its own core prompts and agent system — not 
 
 This marketplace provides two plugins:
 
-### rcc (v8.3.0)
+### rcc (v8.4.0)
 
 Core ACE workflow with TDD-based skills, task enforcement, and quality reviewers.
 

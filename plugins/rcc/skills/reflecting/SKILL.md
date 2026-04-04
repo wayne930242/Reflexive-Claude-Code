@@ -94,23 +94,40 @@ Learning:
 ### Classification Decision Tree
 
 ```
-Is it IMMUTABLE (must enforce every response)?
-├─ Yes → LAW in CLAUDE.md
-└─ No → Is it a CAPABILITY (how to do)?
-    ├─ Yes → SKILL
-    │   └─ Is it SHARED across multiple skills?
-    │       ├─ Yes → Also extract to RULE
-    │       └─ No → Keep in Skill only
-    └─ No → Is it a CONVENTION (what to do)?
-        ├─ Yes → RULE in .claude/rules/
-        └─ No → DOCUMENTATION only
+Is it true across ALL projects?
+├─ Yes → USER ROOT (~/.claude/)
+│   ├─ Universal behavior → ~/.claude/CLAUDE.md
+│   └─ Convention/pattern → ~/.claude/rules/*.md
+└─ No → PROJECT LEVEL (.claude/)
+    ├─ Is it IMMUTABLE (must enforce every response)?
+    │   ├─ Yes → LAW in .claude/CLAUDE.md
+    │   └─ No → Is it a CAPABILITY (how to do)?
+    │       ├─ Yes → SKILL
+    │       │   └─ Is it SHARED across multiple skills?
+    │       │       ├─ Yes → Also extract to RULE
+    │       │       └─ No → Keep in Skill only
+    │       └─ No → Is it a CONVENTION (what to do)?
+    │           ├─ Yes → RULE in .claude/rules/
+    │           └─ No → DOCUMENTATION only
 ```
+
+### Scope Signals
+
+| Signal | Scope |
+|--------|-------|
+| "This applies regardless of language or framework" | User root |
+| "This is about how I work, not what I'm building" | User root |
+| "This mistake could happen in any project" | User root |
+| "This is specific to this codebase's architecture" | Project |
+| "This convention only makes sense here" | Project |
 
 ### Classification Guide
 
 | Type | Characteristics | Example |
 |------|-----------------|---------|
-| **Law** | Immutable, every response, critical | "Always display laws" |
+| **User-root law** | Universal, every project | "Show reasoning for decisions" |
+| **User-root rule** | Cross-project convention | "Go edits must combine imports" |
+| **Project law** | Immutable, this project only | "Always display laws" |
 | **Skill** | How to do something, reusable | "How to write tests" |
 | **Rule** | Convention, path-scoped | "API responses use { data, error }" |
 | **Documentation** | Reference, not actionable | "Architecture overview" |
@@ -121,12 +138,16 @@ Is it IMMUTABLE (must enforce every response)?
 
 **Goal:** Add learnings to the appropriate components.
 
-### For Laws
+### For User-Root Learnings
 
-**Invoke `writing-claude-md` skill** or edit CLAUDE.md directly:
-```markdown
-**Law N: [Name]** - [Specific, verifiable constraint]
-```
+1. Read current `~/.claude/CLAUDE.md` and relevant `~/.claude/rules/*.md`
+2. Check: does an existing rule already cover this? → update, don't duplicate
+3. If new rule needed → edit `~/.claude/rules/` directly (user-root has no writing-* skill chain)
+4. Keep rules concise. One learning = one line.
+
+### For Project-Level Laws
+
+**Invoke `writing-claude-md` skill** or edit CLAUDE.md directly.
 
 ### For Skills
 
@@ -140,7 +161,7 @@ Is it IMMUTABLE (must enforce every response)?
 
 Add to appropriate `references/` or `docs/` location.
 
-**CRITICAL:** Invoke the appropriate skill—don't create components directly.
+**CRITICAL:** Invoke the appropriate skill for project-level components—don't create them directly.
 
 **Verification:** All learnings integrated into components.
 
