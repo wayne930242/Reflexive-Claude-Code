@@ -7,9 +7,9 @@ description: Use when creating a new Claude Code plugin package. Use when user s
 
 ## Overview
 
-**Creating plugins IS scaffolding a distributable skill package.**
+**Creating plugins IS scaffolding a distributable agent engineering package.**
 
-Plugins contain skills, commands, agents, and rules that can be installed via `claude plugin add`.
+A plugin is the distribution unit for agent engineering — it bundles skills, commands, agents, hooks, MCP servers, and LSP configs into a single installable package. Plugins are not just "skill containers" — they can provide complete workflows with automated enforcement (hooks), external tool access (MCP), and language intelligence (LSP).
 
 **Core principle:** Plugins are reusable across projects. Keep them focused and well-documented.
 
@@ -75,15 +75,36 @@ Announce: "Created 6 tasks. Starting execution..."
 <plugin-name>/
 ├── .claude-plugin/
 │   └── plugin.json      # Manifest
-├── skills/
+├── skills/              # Capabilities (auto-discovered)
 │   └── <skill-name>/
-│       └── SKILL.md
-├── commands/            # Optional
+│       ├── SKILL.md
+│       └── references/  # On-demand loaded docs
+├── commands/            # Slash command aliases (auto-discovered)
 │   └── <command>.md
-├── agents/              # Optional
+├── agents/              # Subagent definitions (auto-discovered)
 │   └── <agent>.md
+├── hooks/               # Lifecycle hooks (auto-discovered)
+│   └── hooks.json
+├── .mcp.json            # MCP server configs (auto-discovered)
+├── .lsp.json            # Language server configs (auto-discovered)
 └── README.md
 ```
+
+### Key Variables for Plugin Skills
+
+Skills inside a plugin can reference these variables (substituted at runtime):
+
+| Variable | Purpose |
+|----------|---------|
+| `${CLAUDE_SKILL_DIR}` | This skill's directory — reference bundled scripts/data |
+| `${CLAUDE_PLUGIN_ROOT}` | Plugin install directory (changes on update) |
+| `${CLAUDE_PLUGIN_DATA}` | Persistent data directory (survives updates) |
+| `$ARGUMENTS` / `$N` | Arguments passed when invoking the skill |
+
+Skills can also inject live data using shell commands:
+- Inline: `` !`git status` `` (runs before Claude sees the content)
+- Multi-line: `` ```! `` code block
+- PowerShell: set `shell: powershell` in frontmatter (user must have `CLAUDE_CODE_USE_POWERSHELL_TOOL=1`)
 
 **Verification:** Directory structure created with all required paths.
 
@@ -91,29 +112,7 @@ Announce: "Created 6 tasks. Starting execution..."
 
 **Goal:** Create the plugin.json manifest file.
 
-### Manifest Format
-
-```json
-{
-  "name": "plugin-name",
-  "description": "What this plugin does",
-  "version": "1.0.0",
-  "author": "Author Name",
-  "skills": []
-}
-```
-
-**Fields:**
-
-| Field | Required | Description |
-|-------|----------|-------------|
-| `name` | Yes | Plugin identifier (kebab-case) |
-| `description` | Yes | One-line description |
-| `version` | Yes | Semantic version |
-| `author` | No | Author name or org |
-| `skills` | No | Leave empty for auto-discovery |
-
-**Note:** Skills are auto-discovered from `skills/*/SKILL.md`. Only specify explicitly if you need to limit which skills are exposed.
+**CRITICAL:** Read [references/plugin-templates.md](references/plugin-templates.md) for manifest format, required fields, and marketplace structure.
 
 **Verification:** plugin.json is valid JSON with required fields.
 
@@ -134,33 +133,7 @@ Do not write SKILL.md directly. The writing-skills skill ensures:
 
 **Goal:** Document the plugin for users.
 
-### README Template
-
-```markdown
-# Plugin Name
-
-One-line description.
-
-## Installation
-
-\`\`\`bash
-claude plugin add <path-or-url>
-\`\`\`
-
-## Skills
-
-| Skill | Description |
-|-------|-------------|
-| skill-name | What it does |
-
-## Usage
-
-[Examples of how to use the plugin]
-
-## License
-
-[License]
-```
+**CRITICAL:** Read [references/plugin-templates.md](references/plugin-templates.md) for README template.
 
 **Verification:** README has installation instructions and skill list.
 
@@ -168,39 +141,14 @@ claude plugin add <path-or-url>
 
 **Goal:** Verify the plugin installs and works correctly.
 
-**Process:**
-1. Install the plugin locally:
-   ```bash
-   claude plugin add <path>
-   ```
-2. Verify skills appear in skill list
-3. Trigger a skill and verify it loads
-4. Uninstall and clean up:
-   ```bash
-   claude plugin remove <name>
-   ```
+Install locally (`claude plugin add <path>`), verify skills are discoverable and load correctly, then clean up (`claude plugin remove <name>`).
 
-**Verification:**
-- Plugin installs without errors
-- Skills are discoverable
-- Skills load correctly
+**Verification:** Plugin installs without errors, skills are discoverable and load correctly.
 
 ## Red Flags - STOP
 
-These thoughts mean you're rationalizing. STOP and reconsider:
-
-- "Skip skill creation, I'll add it later"
-- "Don't need README for a simple plugin"
-- "Skip testing, the manifest is valid"
-- "Put everything in one mega-skill"
-- "Don't need version numbers yet"
-
-**All of these mean: You're about to create a weak plugin. Follow the process.**
-
-## Common Rationalizations
-
-| Excuse | Reality |
-|--------|---------|
+| Thought | Reality |
+|---------|---------|
 | "Add skills later" | Empty plugins are useless. Ship with at least one. |
 | "Skip README" | Undocumented plugins don't get used. |
 | "Skip testing" | Broken installs frustrate users. Test it. |
@@ -242,10 +190,11 @@ Once your plugin is ready:
 1. **Local sharing:** Share the directory path
 2. **Git hosting:** Push to GitHub/GitLab
    ```bash
-   claude plugin add github:username/repo
+   /plugin marketplace add username/repo
+   /plugin install plugin-name@marketplace-name
    ```
 3. **npm (if applicable):** Publish to npm registry
 
 ## References
 
-- Plugin specification: https://docs.anthropic.com/claude-code/plugins
+- [references/plugin-templates.md](references/plugin-templates.md) — Manifest format, marketplace structure, README template

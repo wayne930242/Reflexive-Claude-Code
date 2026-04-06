@@ -79,10 +79,20 @@ For each category, check every item. Mark severity:
 
 - [ ] No hardcoded local paths
 - [ ] No environment-specific assumptions
-- [ ] `${CLAUDE_PLUGIN_ROOT}` used for self-references
-- [ ] `${CLAUDE_PLUGIN_DATA}` used for persistent data
+- [ ] `${CLAUDE_PLUGIN_ROOT}` used for self-references (not persistent data)
+- [ ] `${CLAUDE_PLUGIN_DATA}` used for persistent data (not `${CLAUDE_PLUGIN_ROOT}`)
 - [ ] No secrets or credentials in plugin files
 - [ ] Plugin works after fresh install (no implicit dependencies)
+
+## 9. Skill Variables & Shell Context
+
+- [ ] Skills that reference bundled files use `${CLAUDE_SKILL_DIR}` (not relative `./` or hardcoded paths)
+- [ ] Skills that need session-unique temp files use `${CLAUDE_SESSION_ID}` in the filename
+- [ ] Skills accepting arguments document `$ARGUMENTS` usage and set `argument-hint` in frontmatter
+- [ ] Skills using `!` shell commands have fallbacks for missing tools (e.g., `!`cmd 2>/dev/null || echo "not available"`)
+- [ ] Skills needing PowerShell set `shell: powershell` in frontmatter and document `CLAUDE_CODE_USE_POWERSHELL_TOOL=1` requirement
+- [ ] No `!` commands that assume a specific CWD — use `${CLAUDE_SKILL_DIR}` for plugin-relative paths
+- [ ] Skills using `context: fork` design `argument-hint` to carry sufficient context (forked context loses parent conversation)
 
 ---
 
@@ -96,3 +106,5 @@ For each category, check every item. Mark severity:
 | Version numbers are synchronized | plugin.json, marketplace.json, READMEs | CRITICAL |
 | No duplicate logic across skills | All skills | WARNING |
 | README documents all components | README vs actual | WARNING |
+| Skills use `${CLAUDE_SKILL_DIR}` not `${CLAUDE_PLUGIN_ROOT}` for own files | All skills | WARNING |
+| `!` commands work cross-platform or `shell` is set | All skills with shell context | INFO |

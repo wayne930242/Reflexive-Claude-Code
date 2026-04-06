@@ -13,6 +13,7 @@ For each category, check every item. Mark severity:
 
 - [ ] Skill description is vague or generic (e.g., "improve code")
 - [ ] Description summarizes workflow instead of stating triggers
+- [ ] Description lacks concrete "Use when..." phrases with user-said examples
 - [ ] Two or more skills have overlapping trigger conditions
 - [ ] No fallback when no skill matches user request
 - [ ] More than 20 skills loaded (route saturation risk)
@@ -30,11 +31,13 @@ For each category, check every item. Mark severity:
 
 - [ ] Reviewer/analyzer subagents lack `context: fork` isolation
 - [ ] CLAUDE.md exceeds 200 lines
-- [ ] Skill SKILL.md exceeds 300 lines
-- [ ] Reference files loaded eagerly instead of on-demand
+- [ ] Skill SKILL.md exceeds 300 lines or ~2,000 tokens (activation quality degrades beyond this)
+- [ ] Reference files loaded eagerly instead of on-demand via reference links
+- [ ] Skill embeds large content inline instead of using `!command` for dynamic context injection
 - [ ] Subagent receives full parent conversation (context pollution)
 - [ ] Handoff between skills loses intent or context
 - [ ] Rule files exceed 50 lines
+- [ ] No compaction strategy — long conversations degrade without summarization checkpoints
 
 ## 3. Workflow Continuity
 
@@ -62,6 +65,8 @@ For each category, check every item. Mark severity:
 - [ ] No input validation hook (UserPromptSubmit)
 - [ ] Hook timeout too generous (>30 seconds)
 - [ ] No file path filtering in hooks (checks all files, not just relevant ones)
+- [ ] Skill with side effects (deploy, commit, delete) missing `disable-model-invocation: true`
+- [ ] Skill missing `allowed-tools` restriction when it should be read-only or limited
 
 ## 6. Observability
 
@@ -96,3 +101,9 @@ For each category, check every item. Mark severity:
 - [ ] User-root rules exist at `~/.claude/rules/` but project has no project-level specialization
 - [ ] No `settings.local.json` for sensitive project-specific data (accounts, IPs, tokens)
 - [ ] Project uses deployment tooling (rsync, Ansible, Docker) but has no deploy safety rules
+
+## 10. Cross-Tool Migration
+
+- [ ] Other AI tool configs exist (`.cursorrules`, `.github/copilot-instructions.md`, `.windsurfrules`) but not integrated into agent system
+- [ ] Existing AI configs contain conventions/rules not reflected in CLAUDE.md or `.claude/rules/`
+- [ ] Project has `.editorconfig` or linter configs with rules that should be mirrored in agent rules

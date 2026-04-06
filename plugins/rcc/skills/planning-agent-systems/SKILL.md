@@ -34,8 +34,8 @@ TaskCreate for EACH task below:
 
 **Tasks:**
 1. Read inputs
-2. Plan components
-3. Check skill reuse
+2. Design architecture flowchart
+3. Plan components (includes reuse check)
 4. Produce component plan
 5. Get user confirmation
 
@@ -64,99 +64,44 @@ Announce: "Created 5 tasks. Starting execution..."
 
 **Verification:** Have a clear list of requirements from both sources.
 
-## Task 2: Plan Components
+## Task 2: Design Architecture Flowchart
+
+**Goal:** Visualize the entire agent system topology before deciding individual components.
+
+**Why this comes first:** Component lists hide dependency gaps and workflow disconnects. A flowchart forces you to see the whole picture — entry points, decision branches, data flow, and handoff points — before committing to any component.
+
+**CRITICAL:** Read [references/anthropic-patterns.md](references/anthropic-patterns.md) for the six Anthropic workflow patterns, DOT flowchart conventions, and dependency graph template.
+
+**Step 1 — Classify workflows into Anthropic patterns** using the reference table.
+
+**Step 2 — Draw the architecture flowchart** in DOT format using the reference conventions.
+
+**Step 3 — Build the dependency graph** from the flowchart, assigning phases by dependency depth.
+
+**Step 4 — Identify the simplest viable subset:**
+
+Ask: "What is the minimum set of components that delivers value?"
+- Mark each component as **core** (must-have for any workflow to work) or **enhancement** (improves but not required)
+- Phase 1 should contain ONLY core components
+- Present the phased rollout to user for early feedback
+
+**Verification:** Architecture flowchart produced showing all workflows, patterns identified, dependency graph built, phases assigned.
+
+## Task 3: Plan Components
 
 **Goal:** Decide action for each component type.
 
-**For each component type, evaluate:**
+**CRITICAL:** Read [references/component-planning.md](references/component-planning.md) for the evaluation table, decision criteria, size constraints, and writing skill assignments.
 
-| Component | Input Sources | Decision |
-|-----------|--------------|----------|
-| CLAUDE.md | Workflow conventions + analysis constitution findings | Create / Modify / Keep |
-| Rules | Workflow conventions + analysis path-match findings | Which rules, with paths: globs |
-| Hooks | Workflow quality checks + analysis security findings | Which hooks, which events |
-| Skills | Workflow repeated tasks | Which skills |
-| Agents | Workflow isolated analysis needs | Which agents (read-only only) |
+**Use the dependency graph from Task 2** to determine execution order. Do NOT use a fixed order — let dependencies drive sequencing. Components in the same phase with no mutual dependencies can be built in parallel.
 
-**Decision criteria:**
-- Does this component trace to a workflow need? → Create
-- Does this fix an analysis weakness? → Create/Modify
-- Does it already exist and work? → Keep
-- Does it conflict with another component? → Modify/Delete
-- Is it speculative? → **Don't create (YAGNI)**
-
-**CRITICAL constraints:**
-- CLAUDE.md MUST stay under 200 lines
-- Each rule MUST stay under 50 lines
-- Each skill MUST stay under 300 lines
-- Agents MUST be read-only (no `.claude/` writes)
-- All `.claude/` writes happen via main conversation, never subagents
-
-**Verification:** Each planned component has a traced rationale.
-
-## Task 3: Check Skill Reuse
-
-**Goal:** Identify which existing writing-* skills to invoke for each component.
-
-**Available skills:**
-
-| Component | Writing Skill | Notes |
-|-----------|--------------|-------|
-| CLAUDE.md | `writing-claude-md` | Uses official markdown format |
-| Rules | `writing-rules` | One invocation per rule |
-| Hooks | `writing-hooks` | One invocation per hook |
-| Skills | `writing-skills` | One invocation per skill |
-| Agents | `writing-subagents` | One invocation per agent |
-
-**Check for conflicts:**
-- Will new components duplicate existing ones?
-- Will new rules conflict with existing CLAUDE.md content?
-- Will new hooks overlap with existing hooks?
-
-**Verification:** Each component has an assigned writing-* skill and no conflicts identified.
+**Verification:** Each planned component has a traced rationale and assigned writing-* skill. No conflicts identified.
 
 ## Task 4: Produce Component Plan
 
 **Goal:** Write structured plan to `docs/agent-system/{timestamp}-plan.md`.
 
-**Plan format:**
-
-```markdown
-# Agent System Component Plan
-
-**Date:** YYYY-MM-DD HH:MM
-**Based on:** [analysis report path] + [workflow summary path]
-
-## Execution Order
-
-Components MUST be created in this order:
-1. CLAUDE.md (foundation)
-2. Rules (conventions)
-3. Hooks (enforcement)
-4. Skills (capabilities)
-5. Agents (analysis)
-
-## Components
-
-### 1. CLAUDE.md
-- **Action:** create / modify
-- **Key content:** [bullet list of what to include]
-- **Writing skill:** `writing-claude-md`
-- **Traces to:** [workflow/weakness references]
-
-### 2. Rule: [name]
-- **Action:** create
-- **Paths:** `[glob pattern]`
-- **Key constraints:** [bullet list]
-- **Writing skill:** `writing-rules`
-- **Traces to:** [workflow/weakness references]
-
-[...repeat for each component...]
-
-## Expected Fixes
-| Weakness | Component | How It Fixes |
-|----------|-----------|-------------|
-```
+**CRITICAL:** Read [references/plan-template.md](references/plan-template.md) for the full plan format including architecture flowchart, pattern mapping, dependency graph, and component sections.
 
 **Verification:** Plan written with complete execution order and traceability.
 
@@ -164,14 +109,9 @@ Components MUST be created in this order:
 
 **Goal:** Present plan and get explicit approval.
 
-**Present the FULL plan to user.** Do NOT summarize — show every detail:
-1. Each component to create/modify: name, type, purpose, and key content
-2. Execution order with rationale for sequencing
-3. Which weaknesses will be fixed and how each component addresses them
-4. Design decisions made and alternatives considered
-5. Estimated scope (how many writing-* invocations)
+**Present the FULL plan to user.** Show: architecture flowchart, pattern mapping, dependency graph with phases, each component's purpose and content, weakness fixes, core/enhancement classification, and estimated scope per phase.
 
-**Anti-pattern:** Listing component names without explaining what they do or why they're needed is NOT presenting. The user must see enough detail to evaluate whether the plan is correct.
+**Anti-pattern:** Listing component names without explaining what they do is NOT presenting.
 
 **Ask:** "這個計畫看起來可以嗎？要開始建立元件嗎？"
 
@@ -183,24 +123,15 @@ Components MUST be created in this order:
 
 These thoughts mean you're rationalizing. STOP and reconsider:
 
-- "Create everything, we might need it later"
-- "Skip traceability, the components are obvious"
-- "Don't need user confirmation, the plan is solid"
-- "A brief summary is enough for the user to decide"
-- "Skip reuse check, just write new ones"
-- "One big rule instead of several small ones"
-
-**All of these mean: You're about to create an over-engineered system. Follow the process.**
-
-## Common Rationalizations
-
-| Excuse | Reality |
-|--------|---------|
+| Thought | Reality |
+|---------|---------|
+| "Skip the flowchart" | Component lists hide dependency gaps. The flowchart reveals what's missing. |
 | "Create everything" | YAGNI. Only create what traces to a need. |
 | "Skip traceability" | Untraceable components become mystery debt. |
 | "Skip confirmation" | User approval prevents wasted effort. |
 | "Skip reuse check" | Duplicating existing skills creates conflicts. |
 | "One big rule" | Multiple focused rules > one bloated rule. |
+| "Fixed order is fine" | Dependencies vary per project. Let the graph decide. |
 
 ## Flowchart: Agent System Planning
 
@@ -210,8 +141,8 @@ digraph plan_agent {
 
     start [label="Plan agent\nsystem", shape=doublecircle];
     read [label="Task 1: Read\ninputs", shape=box];
-    plan [label="Task 2: Plan\ncomponents", shape=box];
-    reuse [label="Task 3: Check\nskill reuse", shape=box];
+    flowchart [label="Task 2: Design\narchitecture flowchart", shape=box, style=filled, fillcolor="#ffffcc"];
+    plan [label="Task 3: Plan\ncomponents", shape=box];
     produce [label="Task 4: Produce\ncomponent plan", shape=box];
     confirm [label="Task 5: User\nconfirmation", shape=box];
     approved [label="Approved?", shape=diamond];
@@ -219,13 +150,19 @@ digraph plan_agent {
     done [label="Planning complete", shape=doublecircle];
 
     start -> read;
-    read -> plan;
-    plan -> reuse;
-    reuse -> produce;
+    read -> flowchart;
+    flowchart -> plan;
+    plan -> produce;
     produce -> confirm;
     confirm -> approved;
     approved -> handoff [label="yes"];
-    approved -> plan [label="no\nrevise"];
+    approved -> flowchart [label="no\nrevise"];
     handoff -> done;
 }
 ```
+
+## References
+
+- [references/anthropic-patterns.md](references/anthropic-patterns.md) — Six Anthropic workflow patterns, DOT conventions, dependency graph template
+- [references/component-planning.md](references/component-planning.md) — Evaluation table, decision criteria, size constraints, writing skills
+- [references/plan-template.md](references/plan-template.md) — Full component plan document format

@@ -14,6 +14,26 @@ The agent maintains and refactors its own core prompts and agent system — not 
 - Through deliberate teaching, the agent integrates learnings into its skill library
 - Skills are abstract, reusable, and link to reference directories with examples and documentation
 
+## What's New in v9.0.0
+
+Major release aligning with current agent engineering best practices.
+
+- **Architecture-first planning**: `planning-agent-systems` now requires drawing an architecture flowchart (DOT format) before deciding components — visualize entry points, decision branches, data flow, and parallel lanes before committing to any component
+  - Maps workflows to Anthropic's six production patterns (Prompt Chaining, Routing, Parallelization, Orchestrator-Workers, Evaluator-Optimizer, Autonomous Agent)
+  - Dependency-driven execution order replaces fixed order — phases assigned by dependency depth
+  - Core vs enhancement classification for phased rollout
+- **Simplicity-first brainstorming**: `brainstorming-workflows` adds a complexity ladder (Level 1-6) that challenges every workflow for the simplest viable approach before designing components
+  - Two-layer classification: Anthropic workflow patterns + skill routing patterns
+  - Walkthrough-style questions replace inventory-style questions across all role templates
+  - Past failures exploration: "What have you tried before? What didn't work?"
+- **10-category weakness analysis**: `analyzing-agent-systems` adds Category 10 (Cross-Tool Migration) for detecting `.cursorrules`, copilot instructions, and other AI tool configs
+  - New checks: skill token budget (< 2,000 tokens), `disable-model-invocation`, `allowed-tools`, dynamic context injection, compaction strategy
+  - Scans `.cursorrules`, `.github/copilot-instructions.md`, `.windsurfrules`, `.editorconfig`
+- **Maturity-graded migration**: `migrating-agent-systems` replaces binary detection with 4-level maturity grading (None → Seed → Partial → Established)
+  - Seed level imports other AI tool configs as starting context
+  - Recommends English for all prompt files for optimal model performance
+- **Progressive disclosure**: Templates and reference tables extracted to `references/` across all four skills — all SKILL.md files now under 200 lines
+
 ## What's New in v8.4.0
 
 - **Project context completeness**: New weakness category (#9) checks for missing account names, directory conventions, deployment targets, language-specific hooks, and user-root gap analysis
@@ -35,7 +55,7 @@ The agent maintains and refactors its own core prompts and agent system — not 
 
 This marketplace provides two plugins:
 
-### rcc (v8.4.0)
+### rcc (v9.0.0)
 
 Core ACE workflow with TDD-based skills, task enforcement, and quality reviewers.
 
@@ -52,10 +72,10 @@ Core ACE workflow with TDD-based skills, task enforcement, and quality reviewers
 | `improving-skills` | Optimize a skill through targeted improvements |
 | `refactoring-skills` | Analyze and consolidate all skills |
 | `initializing-projects` | Initialize new project with framework and agent system |
-| `migrating-agent-systems` | Route to analysis or brainstorming based on project state |
-| `analyzing-agent-systems` | Scan and detect weaknesses in existing agent systems |
-| `brainstorming-workflows` | Role-based workflow exploration for agent system design |
-| `planning-agent-systems` | Plan agent system components with traceability |
+| `migrating-agent-systems` | Maturity-graded routing with cross-tool config detection |
+| `analyzing-agent-systems` | 10-category weakness detection with cross-tool migration checks |
+| `brainstorming-workflows` | Walkthrough-based workflow exploration with complexity ladder |
+| `planning-agent-systems` | Architecture-first planning with Anthropic pattern mapping |
 | `applying-agent-systems` | Execute component plan via writing-* skill chain |
 | `reviewing-agent-systems` | Quality review with all 5 reviewer agents |
 | `refactoring-agent-systems` | Fix issues from review report |
@@ -66,10 +86,12 @@ Core ACE workflow with TDD-based skills, task enforcement, and quality reviewers
 **Agent System Skill Chain:**
 
 ```
-migrating-agent-systems (router)
-  ├─ Existing system → analyzing-agent-systems → brainstorming-workflows → ...
-  └─ New project → brainstorming-workflows → planning-agent-systems
-       → applying-agent-systems → reviewing-agent-systems → refactoring-agent-systems
+migrating-agent-systems (maturity-graded router)
+  ├─ None → brainstorming-workflows → planning-agent-systems → ...
+  ├─ Seed (other AI configs) → import configs → brainstorming-workflows → ...
+  └─ Partial/Established → analyzing-agent-systems → brainstorming-workflows
+       → planning-agent-systems → applying-agent-systems
+       → reviewing-agent-systems → refactoring-agent-systems
 ```
 
 **Subagents (Reviewers):**

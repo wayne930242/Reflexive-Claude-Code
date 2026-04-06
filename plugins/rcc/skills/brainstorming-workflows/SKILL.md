@@ -1,6 +1,6 @@
 ---
 name: brainstorming-workflows
-description: Use when exploring user workflows to design an agent system. Use when user says "explore workflows", "setup agent" for a new project. Use when called by analyzing-agent-systems or migrating-agent-systems.
+description: Use when exploring user workflows to design an agent system. Use when user says "explore workflows", "brainstorm workflows", "what workflows should I automate". Use when called by analyzing-agent-systems or migrating-agent-systems.
 ---
 
 # Brainstorming Workflows
@@ -36,9 +36,10 @@ TaskCreate for EACH task below:
 1. Import analysis findings (if available)
 2. Role selection
 3. Workflow exploration
-4. Produce workflow summary
+4. Identify simplest viable approach
+5. Produce workflow summary
 
-Announce: "Created 4 tasks. Starting execution..."
+Announce: "Created 5 tasks. Starting execution..."
 
 **Execution rules:**
 1. `TaskUpdate status="in_progress"` BEFORE starting each task
@@ -97,55 +98,44 @@ Announce: "Created 4 tasks. Starting execution..."
 - **Multiple choice when possible** — easier for user to answer
 - **Adapt to answers** — if user reveals something unexpected, explore it
 - **5-8 questions maximum** — don't exhaust the user
+- **Ask about failures** — "What have you tried before? What didn't work?" reveals more than "What do you want?"
+- **Ask for a walkthrough** — "Walk me through the last time you did X, step by step" beats generic "What tools do you use?"
 
-**After workflow exploration, classify routing patterns:**
+**After workflow exploration, classify into two layers:**
 
-For each workflow identified, determine its routing pattern using [references/routing-patterns.md](references/routing-patterns.md):
-- Contains decision points → **Tree**
-- Part of multi-skill sequential workflow → **Chain**
-- Simple, single task → **Node** (consider `context: fork`, `model: haiku`)
-- Internal steps only → **Skill Steps**
+**Layer 1 — Anthropic workflow patterns** (how workflows execute):
+Read [references/anthropic-patterns.md](references/anthropic-patterns.md) for the six patterns and their signal phrases from user answers.
 
-**Verification:** Have enough information to map workflows to agent system components AND routing patterns.
+**Layer 2 — Skill routing patterns** (how skills connect):
+Read [references/routing-patterns.md](references/routing-patterns.md) for Tree/Chain/Node/Skill Steps classification.
 
-## Task 4: Produce Workflow Summary
+**Verification:** Have enough information to map workflows to BOTH Anthropic patterns and skill routing patterns.
+
+## Task 4: Identify Simplest Viable Approach
+
+**Goal:** Before producing the summary, challenge every workflow for simplicity.
+
+**Core question:** "What is the simplest approach that works for each workflow?"
+
+Anthropic's guidance: "Success in the LLM space isn't about building the most sophisticated system. It's about building the right level of complexity for your needs."
+
+**For each workflow, ask:**
+1. Can this be solved with a single CLAUDE.md instruction instead of a skill?
+2. Can this be a rule instead of a hook?
+3. Can this be a simple prompt chain instead of a multi-agent orchestration?
+4. Does this need a custom skill, or does an existing skill/plugin already handle it?
+
+Read [references/anthropic-patterns.md](references/anthropic-patterns.md) for the complexity ladder (Levels 1-6). Prefer the lowest level that works.
+
+**Present the assessment to the user:** Show each workflow with its proposed complexity level and ask if they agree. Users often accept over-engineering without questioning — push back gently.
+
+**Verification:** Every workflow has an assigned complexity level, and the user has confirmed the approach.
+
+## Task 5: Produce Workflow Summary
 
 **Goal:** Write structured summary to `docs/agent-system/{timestamp}-workflows.md`.
 
-**Summary format:**
-
-```markdown
-# Workflow Summary
-
-**Date:** YYYY-MM-DD HH:MM
-**Role:** [selected role]
-
-## Core Workflows
-1. [Workflow description]
-2. [Workflow description]
-
-## Tasks to Automate
-- [Task] → suggested component type (hook/skill/rule)
-
-## Weaknesses to Fix (from analysis)
-- [Finding] → planned fix
-
-## Conventions to Enforce
-- [Convention] → suggested component type (rule/hook)
-
-## Routing Design
-| Workflow | Pattern | Entry Point | Next/Chain |
-|----------|---------|-------------|------------|
-| [workflow] | Tree/Chain/Node/Skill Steps | [skill-name] | [next-skill or none] |
-
-## Component Recommendations
-| Component | Action | Rationale |
-|-----------|--------|-----------|
-| CLAUDE.md | create/modify | [reason] |
-| Rule: [name] | create | [reason] |
-| Hook: [name] | create | [reason] |
-| Skill: [name] | create | [reason] |
-```
+**CRITICAL:** Read [references/summary-template.md](references/summary-template.md) for the full summary format.
 
 **Handoff:** "工作流摘要完成。要繼續規劃 agent system 元件嗎？"
 - If yes → invoke `planning-agent-systems` skill, pass workflow summary path
@@ -156,23 +146,15 @@ For each workflow identified, determine its routing pattern using [references/ro
 
 These thoughts mean you're rationalizing. STOP and reconsider:
 
-- "The user is obviously a developer, skip role selection"
-- "I know what workflows they need"
-- "Ask all questions at once to save time"
-- "Skip analysis import, start fresh"
-- "Don't need a summary, just proceed to planning"
-
-**All of these mean: You're about to design for assumptions, not reality. Follow the process.**
-
-## Common Rationalizations
-
-| Excuse | Reality |
-|--------|---------|
+| Thought | Reality |
+|---------|---------|
 | "Obviously a developer" | PMs, analysts, creators all use agent systems. Ask. |
 | "I know the workflows" | You know common workflows. Theirs may differ. |
 | "Multiple questions saves time" | Multiple questions overwhelm. One at a time. |
 | "Skip analysis" | Analysis findings prevent redundant questions. Use them. |
 | "Summary is overhead" | Summary is the contract for planning. Essential. |
+| "This needs a skill" | Most workflows need less than you think. Check the complexity ladder. |
+| "Skip past failures" | Past failures are the highest-value context. Always ask. |
 
 ## Flowchart: Workflow Brainstorming
 
@@ -186,7 +168,8 @@ digraph brainstorm_workflows {
     confirm_fixes [label="User selects\nfindings to fix", shape=box];
     role [label="Task 2: Role\nselection", shape=box];
     explore [label="Task 3: Workflow\nexploration", shape=box];
-    summary [label="Task 4: Produce\nworkflow summary", shape=box];
+    simplify [label="Task 4: Simplest\nviable approach", shape=box, style=filled, fillcolor="#ffffcc"];
+    summary [label="Task 5: Produce\nworkflow summary", shape=box];
     handoff [label="Invoke\nplanning-agent-systems", shape=box];
     done [label="Brainstorm complete", shape=doublecircle];
 
@@ -196,7 +179,8 @@ digraph brainstorm_workflows {
     has_analysis -> role [label="no"];
     confirm_fixes -> role;
     role -> explore;
-    explore -> summary;
+    explore -> simplify;
+    simplify -> summary;
     summary -> handoff [label="continue"];
     summary -> done [label="stop here"];
     handoff -> done;
@@ -206,3 +190,5 @@ digraph brainstorm_workflows {
 ## References
 
 - [references/role-templates.md](references/role-templates.md) — Role-specific deep-dive questions and component mappings
+- [references/anthropic-patterns.md](references/anthropic-patterns.md) — Six Anthropic workflow patterns and complexity ladder
+- [references/summary-template.md](references/summary-template.md) — Workflow summary document format

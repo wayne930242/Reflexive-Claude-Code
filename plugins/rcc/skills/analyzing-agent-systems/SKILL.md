@@ -9,7 +9,7 @@ description: Use when analyzing an existing agent system for weaknesses. Use whe
 
 **Analyzing agent systems IS systematic weakness detection across all agent components.**
 
-Scan every component (CLAUDE.md, rules, hooks, skills, agents), check against 8 weakness categories, produce a severity-rated report.
+Scan every component (CLAUDE.md, rules, hooks, skills, agents), check against 10 weakness categories, produce a severity-rated report.
 
 **Core principle:** You cannot fix what you haven't measured. Analyze before changing anything.
 
@@ -60,6 +60,8 @@ Announce: "Created 4 tasks. Starting execution..."
 - `~/.claude/rules/` (user-level rules)
 - `~/.claude/CLAUDE.md` (user-level constitution)
 - `~/.claude/skills/` (user-level skills)
+- `.cursorrules`, `.github/copilot-instructions.md`, `.windsurfrules` (other AI tool configs)
+- `.editorconfig`, linter configs (conventions that should be mirrored)
 
 **For each component found, record:**
 - Type (CLAUDE.md / rule / hook / skill / agent)
@@ -78,12 +80,12 @@ Compare `~/.claude/rules/` against `.claude/rules/`:
 
 ## Task 2: Run Weakness Analysis
 
-**Goal:** Check every component against the 9-category weakness checklist.
+**Goal:** Check every component against the 10-category weakness checklist.
 
 **CRITICAL:** Read [references/weakness-checklist.md](references/weakness-checklist.md) for the full checklist.
 
 **For each weakness found, record:**
-- Category (1-8)
+- Category (1-10)
 - Severity: **CRITICAL** / **WARNING** / **INFO**
 - Component affected
 - Specific finding (what's wrong)
@@ -108,44 +110,7 @@ Compare `~/.claude/rules/` against `.claude/rules/`:
 
 **Goal:** Write structured report to `docs/agent-system/{timestamp}-analysis.md`.
 
-**Report format:**
-
-```markdown
-# Agent System Analysis Report
-
-**Date:** YYYY-MM-DD HH:MM
-**Project:** [project name]
-
-## Component Inventory
-
-| # | Type | Path | Lines | Status |
-|---|------|------|-------|--------|
-| 1 | CLAUDE.md | ./CLAUDE.md | N | OK/NEEDS_FIX/MISSING |
-
-## Weakness Findings
-
-### CRITICAL (must fix)
-
-| # | Category | Component | Finding | Suggested Fix |
-|---|----------|-----------|---------|---------------|
-
-### WARNING (should fix)
-
-| # | Category | Component | Finding | Suggested Fix |
-|---|----------|-----------|---------|---------------|
-
-### INFO (nice to fix)
-
-| # | Category | Component | Finding | Suggested Fix |
-|---|----------|-----------|---------|---------------|
-
-## Summary
-
-- Components scanned: N
-- Critical issues: N
-- Warnings: N
-- Info: N
-```
+**CRITICAL:** Read [references/report-template.md](references/report-template.md) for the full report format.
 
 **Verification:** Report written with all findings categorized by severity.
 
@@ -171,23 +136,13 @@ Compare `~/.claude/rules/` against `.claude/rules/`:
 
 These thoughts mean you're rationalizing. STOP and reconsider:
 
-- "I can see the issues already, skip the checklist"
-- "Only check the obvious categories"
-- "Skip cross-component checks, they're probably fine"
-- "Don't need a report, I'll just tell the user"
-- "This component looks fine, skip detailed analysis"
-
-**All of these mean: You're about to miss critical weaknesses. Follow the checklist.**
-
-## Common Rationalizations
-
-| Excuse | Reality |
-|--------|---------|
+| Thought | Reality |
+|---------|---------|
 | "I know the issues" | Systematic checklist catches what intuition misses. |
 | "Only major issues matter" | INFO issues compound. Document everything. |
 | "Skip the report" | Reports enable before/after comparison. Essential for refactoring. |
 | "Cross-checks take too long" | Cross-component issues are the hardest to find later. Check now. |
-| "One pass is enough" | Different categories reveal different issues. Check all 8. |
+| "One pass is enough" | Different categories reveal different issues. Check all 10. |
 
 ## Flowchart: Agent System Analysis
 
@@ -217,4 +172,5 @@ digraph analyze_agent {
 
 ## References
 
-- [references/weakness-checklist.md](references/weakness-checklist.md) — Full 9-category weakness checklist
+- [references/weakness-checklist.md](references/weakness-checklist.md) — Full 10-category weakness checklist
+- [references/report-template.md](references/report-template.md) — Analysis report document format

@@ -69,26 +69,11 @@ Announce: "Created 6 tasks. Starting execution..."
 
 **Goal:** Execute the automated health check script.
 
-**Step 1 — Official CLI validation** (if available):
-```bash
-claude plugin validate <plugin-path>
-```
+**Step 1:** Run `claude plugin validate <plugin-path>` (official CLI).
 
-**Step 2 — Extended health check script:**
-```bash
-uv run scripts/validate_plugin.py <plugin-path>
-# or: python3 scripts/validate_plugin.py <plugin-path>
-```
+**Step 2:** Run extended health check: `uv run scripts/validate_plugin.py <plugin-path>` (or `python3`). The script integrates CLI validation and adds checks for manifest, structure, skills quality, commands, agents, path safety, and version sync.
 
-The script integrates `claude plugin validate` automatically and adds extended checks:
-- Manifest integrity (JSON syntax, required fields, naming, semver)
-- Directory structure (components at root, not inside `.claude-plugin/`)
-- Skills quality (frontmatter, gerund naming, line count, mandatory sections, trigger overlap)
-- Commands and agents validation
-- Path safety (no absolute paths)
-- Version sync with marketplace.json
-
-**Capture output:** Save results for analysis in Task 3.
+**Capture output** for analysis in Task 3.
 
 **Verification:** Health check completed with error/warning counts.
 
@@ -112,7 +97,7 @@ The script integrates `claude plugin validate` automatically and adds extended c
 - Specific issue
 - Suggested fix
 
-**Verification:** All 8 checklist categories evaluated.
+**Verification:** All 9 checklist categories evaluated.
 
 ## Task 4: Present Refactoring Plan
 
@@ -154,51 +139,16 @@ The script integrates `claude plugin validate` automatically and adds extended c
 
 **If issues remain:** Return to Task 5 and fix.
 
-**Produce final report:**
-
-```markdown
-# Plugin Refactoring Report
-
-**Date:** YYYY-MM-DD HH:MM
-**Plugin:** [name]
-
-## Changes Made
-
-| # | Component | Change | Rationale |
-|---|-----------|--------|-----------|
-
-## Health Check Results
-
-| Metric | Before | After |
-|--------|--------|-------|
-| Errors | N | 0 |
-| Warnings | N | N |
-| Skills | N | N |
-| Commands | N | N |
-| Agents | N | N |
-```
+**Produce final report** with changes made (component, change, rationale) and before/after health check metrics.
 
 **Verification:** Health check passes with zero errors.
 
 ## Red Flags - STOP
 
-These thoughts mean you're rationalizing. STOP and reconsider:
-
-- "Skip the health check script, I can see the issues"
-- "The structure looks fine, skip the checklist"
-- "Fix it directly without showing the user"
-- "Skip re-verification, I just fixed it"
-- "This plugin is simple, skip manual analysis"
-- "Move components without checking references"
-
-**All of these mean: You're about to leave a broken plugin. Follow the process.**
-
-## Common Rationalizations
-
-| Excuse | Reality |
-|--------|---------|
+| Thought | Reality |
+|---------|---------|
 | "Skip health check" | Scripts catch what eyes miss. Always run it. |
-| "Structure looks fine" | Anti-patterns hide in config files. Check all 8 categories. |
+| "Structure looks fine" | Anti-patterns hide in config files. Check all 9 categories. |
 | "Fix without showing" | User must confirm before structural changes. |
 | "Skip re-verification" | Fixes can break other things. Re-run the script. |
 | "Simple plugin" | Simple plugins still need valid manifests and naming. |
@@ -237,5 +187,5 @@ digraph refactor_plugin {
 
 ## References
 
-- [references/plugin-health-checklist.md](references/plugin-health-checklist.md) — Full 8-category plugin health checklist
+- [references/plugin-health-checklist.md](references/plugin-health-checklist.md) — Full 9-category plugin health checklist
 - Health check script: `scripts/validate_plugin.py` (cross-platform, supports `uv run`)
