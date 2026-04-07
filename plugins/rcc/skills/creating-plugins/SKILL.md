@@ -92,19 +92,26 @@ Announce: "Created 6 tasks. Starting execution..."
 
 ### Key Variables for Plugin Skills
 
-Skills inside a plugin can reference these variables (substituted at runtime):
+**In SKILL.md content (substituted at runtime):**
 
 | Variable | Purpose |
 |----------|---------|
-| `${CLAUDE_SKILL_DIR}` | This skill's directory — reference bundled scripts/data |
-| `${CLAUDE_PLUGIN_ROOT}` | Plugin install directory (changes on update) |
-| `${CLAUDE_PLUGIN_DATA}` | Persistent data directory (survives updates) |
+| `${CLAUDE_SKILL_DIR}` | This skill's directory — use to reference bundled scripts/data regardless of CWD |
+| `${CLAUDE_SESSION_ID}` | Current session ID |
 | `$ARGUMENTS` / `$N` | Arguments passed when invoking the skill |
 
-Skills can also inject live data using shell commands:
-- Inline: `` !`git status` `` (runs before Claude sees the content)
+**In hooks/hooks.json only — NOT available in SKILL.md content:**
+
+| Variable | Purpose |
+|----------|---------|
+| `${CLAUDE_PLUGIN_ROOT}` | Plugin install directory (changes on update — do not write here) |
+| `${CLAUDE_PLUGIN_DATA}` | Persistent data directory that survives updates (`~/.claude/plugins/data/{id}/`) |
+
+Skills can also inject live data using shell commands (execute as preprocessing before Claude sees content):
+- Inline: `` !`git status` `` — workspace operations (CWD = user's project)
+- Plugin-internal files: `` !`cat "${CLAUDE_SKILL_DIR}/references/context.md"` ``
 - Multi-line: `` ```! `` code block
-- PowerShell: set `shell: powershell` in frontmatter (user must have `CLAUDE_CODE_USE_POWERSHELL_TOOL=1`)
+- PowerShell: set `shell: powershell` in frontmatter AND user must set `CLAUDE_CODE_USE_POWERSHELL_TOOL=1`. Ask the user which shell they use if the plugin needs cross-platform support.
 
 **Verification:** Directory structure created with all required paths.
 

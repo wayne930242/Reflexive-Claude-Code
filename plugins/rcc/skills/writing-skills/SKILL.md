@@ -159,7 +159,7 @@ Can answer YES to all:
 **Goal:** Verify skill structure is correct.
 
 ```bash
-python3 scripts/validate_skill.py <path/to/skill>
+python3 "${CLAUDE_SKILL_DIR}/scripts/validate_skill.py" <path/to/skill>
 ```
 
 **Manual checklist if script unavailable:**
