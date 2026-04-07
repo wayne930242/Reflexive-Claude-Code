@@ -74,8 +74,12 @@ def check_skill_md(path: Path) -> list[str]:
             warnings.append(f"orphaned file: {rel}")
 
     # ④ hooks-only variables used in SKILL.md content
+    # Strip fenced code blocks and inline code spans first to avoid false positives
+    # in documentation tables that mention these variables as examples.
+    text_plain = re.sub(r"```[\s\S]*?```", "", text)
+    text_plain = re.sub(r"`[^`\n]+`", "", text_plain)
     for var in HOOKS_ONLY_VARS:
-        if var in text:
+        if var in text_plain:
             warnings.append(f"invalid variable in SKILL.md: {var} (hooks/hooks.json only)")
 
     return warnings
