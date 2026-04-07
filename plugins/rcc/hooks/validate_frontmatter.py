@@ -39,6 +39,48 @@ def parse_frontmatter(text: str) -> dict[str, str] | None:
     return fields
 
 
+def extract_markdown_links(text: str) -> list[str]:
+    """Return relative paths from markdown links [text](path), excluding http(s)."""
+    pattern = r'\[(?:[^\]]*)\]\(([^)]+)\)'
+    links = re.findall(pattern, text)
+    return [l for l in links if not l.startswith("http://") and not l.startswith("https://")]
+
+
+def check_skill_md(path: Path) -> list[str]:
+    """Run all four checks on a SKILL.md file."""
+    warnings: list[str] = []
+    text = path.read_text(encoding="utf-8")
+    skill_dir = path.parent
+
+    # ① Extra frontmatter fields
+    fields = parse_frontmatter(text)
+    if fields is not None:
+        for f in sorted(set(fields.keys()) - SKILL_ALLOWED_FIELDS):
+            warnings.append(f'extra frontmatter field: "{f}"')
+
+    # ② Broken markdown links
+    for link in extract_markdown_links(text):
+        target = skill_dir / link
+        if not target.exists():
+            warnings.append(f"broken link: {link}")
+
+    # ③ Orphaned files (not mentioned in any link)
+    linked = set(extract_markdown_links(text))
+    for f in skill_dir.rglob("*"):
+        if f == path or f.is_dir():
+            continue
+        rel = str(f.relative_to(skill_dir)).replace("\\", "/")
+        if rel not in linked:
+            warnings.append(f"orphaned file: {rel}")
+
+    # ④ hooks-only variables used in SKILL.md content
+    for var in HOOKS_ONLY_VARS:
+        if var in text:
+            warnings.append(f"invalid variable in SKILL.md: {var} (hooks/hooks.json only)")
+
+    return warnings
+
+
 def main() -> None:
     sys.exit(0)
 
