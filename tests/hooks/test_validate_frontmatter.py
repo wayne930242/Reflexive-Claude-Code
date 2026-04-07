@@ -98,7 +98,8 @@ def test_check_skill_md_valid_link_no_warn(tmp_path):
     assert not any("broken link" in w for w in warnings)
 
 
-def test_check_skill_md_orphaned_file_warns(tmp_path):
+def test_check_skill_md_orphaned_md_warns(tmp_path):
+    """Unlisted .md reference file should be warned."""
     mod = _load_module()
     skill_dir = tmp_path / "my-skill"
     ref_dir = skill_dir / "references"
@@ -107,6 +108,49 @@ def test_check_skill_md_orphaned_file_warns(tmp_path):
     (skill_dir / "SKILL.md").write_text("---\nname: x\ndescription: y\n---\n# No links\n")
     warnings = mod.check_skill_md(skill_dir / "SKILL.md")
     assert any("orphan.md" in w for w in warnings)
+
+
+def test_check_skill_md_script_mentioned_in_text_no_warn(tmp_path):
+    """Script referenced via ${CLAUDE_SKILL_DIR}/scripts/foo.py plain text should NOT warn."""
+    mod = _load_module()
+    skill_dir = tmp_path / "my-skill"
+    scripts_dir = skill_dir / "scripts"
+    scripts_dir.mkdir(parents=True)
+    (scripts_dir / "helper.py").write_text("# script")
+    content = "---\nname: x\ndescription: y\n---\n\nRun `${CLAUDE_SKILL_DIR}/scripts/helper.py`\n"
+    (skill_dir / "SKILL.md").write_text(content)
+    warnings = mod.check_skill_md(skill_dir / "SKILL.md")
+    assert not any("helper.py" in w and "orphaned" in w for w in warnings)
+
+
+def test_check_skill_md_script_not_mentioned_warns(tmp_path):
+    """Script that is never mentioned anywhere in SKILL.md should warn."""
+    mod = _load_module()
+    skill_dir = tmp_path / "my-skill"
+    scripts_dir = skill_dir / "scripts"
+    scripts_dir.mkdir(parents=True)
+    (scripts_dir / "unused.py").write_text("# unused")
+    (skill_dir / "SKILL.md").write_text("---\nname: x\ndescription: y\n---\n# No script refs\n")
+    warnings = mod.check_skill_md(skill_dir / "SKILL.md")
+    assert any("unused.py" in w for w in warnings)
+
+
+def test_check_skill_md_ts_script_mentioned_no_warn(tmp_path):
+    """TypeScript/Go/JS scripts mentioned via plain text should NOT warn."""
+    mod = _load_module()
+    skill_dir = tmp_path / "my-skill"
+    scripts_dir = skill_dir / "scripts"
+    scripts_dir.mkdir(parents=True)
+    (scripts_dir / "runner.ts").write_text("// ts script")
+    (scripts_dir / "tool.go").write_text("// go script")
+    content = (
+        "---\nname: x\ndescription: y\n---\n\n"
+        "Run `${CLAUDE_SKILL_DIR}/scripts/runner.ts`\n"
+        "Also uses scripts/tool.go\n"
+    )
+    (skill_dir / "SKILL.md").write_text(content)
+    warnings = mod.check_skill_md(skill_dir / "SKILL.md")
+    assert not any("runner.ts" in w or "tool.go" in w for w in warnings)
 
 
 def test_check_skill_md_hooks_only_var_warns(tmp_path):

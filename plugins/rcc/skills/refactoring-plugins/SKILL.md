@@ -71,7 +71,11 @@ Announce: "Created 6 tasks. Starting execution..."
 
 **Step 1:** Run `claude plugin validate <plugin-path>` (official CLI).
 
-**Step 2:** Run extended health check: `uv run scripts/validate_plugin.py <plugin-path>` (or `python3`). The script integrates CLI validation and adds checks for manifest, structure, skills quality, commands, agents, path safety, and version sync.
+**Step 2:** Run extended health check (or `python3` fallback):
+```bash
+uv run "${CLAUDE_SKILL_DIR}/scripts/validate_plugin.py" <plugin-path>
+```
+The script integrates CLI validation and adds checks for manifest, structure, skills quality, commands, agents, path safety, and version sync.
 
 **Capture output** for analysis in Task 3.
 
@@ -132,7 +136,7 @@ Announce: "Created 6 tasks. Starting execution..."
 **Goal:** Re-run health check to confirm all issues resolved.
 
 **Process:**
-1. Re-run `validate_plugin.py` on the refactored plugin
+1. Re-run `uv run "${CLAUDE_SKILL_DIR}/scripts/validate_plugin.py" <plugin-path>` on the refactored plugin
 2. Verify zero CRITICAL errors
 3. Verify all WARNING items from Task 3 are resolved
 4. Check no new issues introduced
@@ -188,4 +192,4 @@ digraph refactor_plugin {
 ## References
 
 - [references/plugin-health-checklist.md](references/plugin-health-checklist.md) — Full 9-category plugin health checklist
-- Health check script: `scripts/validate_plugin.py` (cross-platform, supports `uv run`)
+- Health check script: `${CLAUDE_SKILL_DIR}/scripts/validate_plugin.py` (cross-platform, supports `uv run`)

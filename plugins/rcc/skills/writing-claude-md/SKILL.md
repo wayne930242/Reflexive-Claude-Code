@@ -274,4 +274,4 @@ digraph claudemd_creation {
 ## References
 
 - [references/examples.md](references/examples.md) — Complete CLAUDE.md example and good/bad instructions
-- Script: `scripts/init_claude_md.py`
+- Scaffold script: `${CLAUDE_SKILL_DIR}/scripts/init_claude_md.py` — generates initial CLAUDE.md from project structure

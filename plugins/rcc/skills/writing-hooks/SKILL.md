@@ -283,3 +283,4 @@ digraph hook_creation {
 
 - [references/static-checks.md](references/static-checks.md) - Complete hook examples
 - [references/events.md](references/events.md) - Hook events reference
+- Scaffold script: `${CLAUDE_SKILL_DIR}/scripts/add_hook.py` — scaffolds a new hook file and registers it in settings.json
