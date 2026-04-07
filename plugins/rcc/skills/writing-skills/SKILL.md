@@ -158,6 +158,8 @@ Can answer YES to all:
 
 **Goal:** Verify skill structure is correct.
 
+Use [scripts/validate_skill.py](scripts/validate_skill.py) to run automated validation:
+
 ```bash
 python3 "${CLAUDE_SKILL_DIR}/scripts/validate_skill.py" <path/to/skill>
 ```
