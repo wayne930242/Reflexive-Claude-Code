@@ -117,3 +117,16 @@ def test_check_skill_md_hooks_only_var_warns(tmp_path):
     (skill_dir / "SKILL.md").write_text(content)
     warnings = mod.check_skill_md(skill_dir / "SKILL.md")
     assert any("CLAUDE_PLUGIN_ROOT" in w for w in warnings)
+
+
+def test_check_skill_md_dot_slash_link_no_orphan_warn(tmp_path):
+    """Links with ./ prefix should not cause orphan false positives."""
+    mod = _load_module()
+    skill_dir = tmp_path / "my-skill"
+    ref_dir = skill_dir / "references"
+    ref_dir.mkdir(parents=True)
+    (ref_dir / "real.md").write_text("# Real")
+    content = "---\nname: x\ndescription: y\n---\n\n[ref](./references/real.md)\n"
+    (skill_dir / "SKILL.md").write_text(content)
+    warnings = mod.check_skill_md(skill_dir / "SKILL.md")
+    assert not any("real.md" in w and "orphaned" in w for w in warnings)

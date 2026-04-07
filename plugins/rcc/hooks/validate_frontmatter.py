@@ -65,12 +65,12 @@ def check_skill_md(path: Path) -> list[str]:
             warnings.append(f"broken link: {link}")
 
     # ③ Orphaned files (not mentioned in any link)
-    linked = set(extract_markdown_links(text))
+    linked_normalized = {str(Path(l)).replace("\\", "/") for l in extract_markdown_links(text)}
     for f in skill_dir.rglob("*"):
         if f == path or f.is_dir():
             continue
         rel = str(f.relative_to(skill_dir)).replace("\\", "/")
-        if rel not in linked:
+        if rel not in linked_normalized:
             warnings.append(f"orphaned file: {rel}")
 
     # ④ hooks-only variables used in SKILL.md content
