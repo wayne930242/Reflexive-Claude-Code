@@ -155,37 +155,41 @@ def main() -> None:
     except Exception:
         sys.exit(0)
 
-    file_path_str = data.get("tool_input", {}).get("file_path", "")
-    cwd_str = data.get("cwd", "")
-    if not file_path_str:
-        sys.exit(0)
+    try:
+        file_path_str = data.get("tool_input", {}).get("file_path", "")
+        cwd_str = data.get("cwd", "")
+        if not file_path_str:
+            sys.exit(0)
 
-    cwd = Path(cwd_str) if cwd_str else Path.cwd()
-    path = Path(file_path_str)
-    if not path.is_absolute():
-        path = cwd / path
-    if not path.exists():
-        sys.exit(0)
+        cwd = Path(cwd_str) if cwd_str else Path.cwd()
+        path = Path(file_path_str)
+        if not path.is_absolute():
+            path = cwd / path
+        if not path.exists():
+            sys.exit(0)
 
-    skill_dirs, agent_dirs = discover_skill_and_agent_dirs(cwd)
-    rules_dir = cwd / ".claude" / "rules"
-    warnings: list[str] = []
+        skill_dirs, agent_dirs = discover_skill_and_agent_dirs(cwd)
+        rules_dir = cwd / ".claude" / "rules"
+        warnings: list[str] = []
 
-    # .claude-plugin/ JSON files → run claude plugin validate on parent dir
-    if path.parent.name == ".claude-plugin" and path.suffix == ".json":
-        warnings = check_plugin_validate(path.parent.parent)
-    elif path.name == "SKILL.md" and any(path.is_relative_to(sd) for sd in skill_dirs):
-        warnings = check_skill_md(path)
-    elif path.suffix == ".md" and any(path.is_relative_to(ad) for ad in agent_dirs):
-        warnings = check_agent_md(path)
-    elif path.suffix == ".md" and rules_dir.exists() and path.is_relative_to(rules_dir):
-        warnings = check_rules_md(path)
+        # .claude-plugin/ JSON files → run claude plugin validate on parent dir
+        if path.parent.name == ".claude-plugin" and path.suffix == ".json":
+            warnings = check_plugin_validate(path.parent.parent)
+        elif path.name == "SKILL.md" and any(path.is_relative_to(sd) for sd in skill_dirs):
+            warnings = check_skill_md(path)
+        elif path.suffix == ".md" and any(path.is_relative_to(ad) for ad in agent_dirs):
+            warnings = check_agent_md(path)
+        elif path.suffix == ".md" and rules_dir.exists() and path.is_relative_to(rules_dir):
+            warnings = check_rules_md(path)
 
-    if warnings:
-        rel = path.relative_to(cwd) if path.is_relative_to(cwd) else path
-        lines = "\n".join(f"  - {w}" for w in warnings)
-        msg = f"⚠ validate-frontmatter [{rel}]:\n{lines}"
-        print(json.dumps({"systemMessage": msg}))
+        if warnings:
+            rel = path.relative_to(cwd) if path.is_relative_to(cwd) else path
+            lines = "\n".join(f"  - {w}" for w in warnings)
+            msg = f"⚠ validate-frontmatter [{rel}]:\n{lines}"
+            print(json.dumps({"systemMessage": msg}))
+
+    except Exception:
+        pass  # never block Claude on validator errors (file may be mid-edit)
 
     sys.exit(0)
 
