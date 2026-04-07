@@ -81,6 +81,28 @@ def check_skill_md(path: Path) -> list[str]:
     return warnings
 
 
+def check_agent_md(path: Path) -> list[str]:
+    """Check agent frontmatter for extra fields."""
+    warnings: list[str] = []
+    text = path.read_text(encoding="utf-8")
+    fields = parse_frontmatter(text)
+    if fields is not None:
+        for f in sorted(set(fields.keys()) - AGENT_ALLOWED_FIELDS):
+            warnings.append(f'extra frontmatter field: "{f}"')
+    return warnings
+
+
+def check_rules_md(path: Path) -> list[str]:
+    """Check rules frontmatter for extra fields."""
+    warnings: list[str] = []
+    text = path.read_text(encoding="utf-8")
+    fields = parse_frontmatter(text)
+    if fields is not None:
+        for f in sorted(set(fields.keys()) - RULES_ALLOWED_FIELDS):
+            warnings.append(f'extra frontmatter field: "{f}"')
+    return warnings
+
+
 def main() -> None:
     sys.exit(0)
 

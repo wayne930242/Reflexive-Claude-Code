@@ -130,3 +130,38 @@ def test_check_skill_md_dot_slash_link_no_orphan_warn(tmp_path):
     (skill_dir / "SKILL.md").write_text(content)
     warnings = mod.check_skill_md(skill_dir / "SKILL.md")
     assert not any("real.md" in w and "orphaned" in w for w in warnings)
+
+
+def test_check_agent_md_extra_field_warns(tmp_path):
+    mod = _load_module()
+    (tmp_path / "my-agent.md").write_text("---\nname: my-agent\ndescription: x\nmodel: inherit\ncontext: fork\ntools: []\ntags: bad\n---\n")
+    warnings = mod.check_agent_md(tmp_path / "my-agent.md")
+    assert any("tags" in w for w in warnings)
+
+
+def test_check_agent_md_allowed_fields_no_warn(tmp_path):
+    mod = _load_module()
+    (tmp_path / "my-agent.md").write_text("---\nname: my-agent\ndescription: x\nmodel: inherit\ncontext: fork\ntools: []\n---\n")
+    warnings = mod.check_agent_md(tmp_path / "my-agent.md")
+    assert warnings == []
+
+
+def test_check_rules_md_extra_field_warns(tmp_path):
+    mod = _load_module()
+    (tmp_path / "my-rule.md").write_text("---\npaths: src/**\ntags: bad\n---\n# Rule\n")
+    warnings = mod.check_rules_md(tmp_path / "my-rule.md")
+    assert any("tags" in w for w in warnings)
+
+
+def test_check_rules_md_paths_only_no_warn(tmp_path):
+    mod = _load_module()
+    (tmp_path / "my-rule.md").write_text("---\npaths: src/**\n---\n# Rule\n")
+    warnings = mod.check_rules_md(tmp_path / "my-rule.md")
+    assert warnings == []
+
+
+def test_check_rules_md_no_frontmatter_no_warn(tmp_path):
+    mod = _load_module()
+    (tmp_path / "my-rule.md").write_text("# Rule without frontmatter\n")
+    warnings = mod.check_rules_md(tmp_path / "my-rule.md")
+    assert warnings == []
