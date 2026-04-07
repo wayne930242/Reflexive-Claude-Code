@@ -165,3 +165,40 @@ def test_check_rules_md_no_frontmatter_no_warn(tmp_path):
     (tmp_path / "my-rule.md").write_text("# Rule without frontmatter\n")
     warnings = mod.check_rules_md(tmp_path / "my-rule.md")
     assert warnings == []
+
+
+def test_discover_finds_plugin_skills_dir(tmp_path):
+    mod = _load_module()
+    plugin_dir = tmp_path / "my-plugin"
+    (plugin_dir / ".claude-plugin").mkdir(parents=True)
+    (plugin_dir / ".claude-plugin" / "plugin.json").write_text('{"name":"x"}')
+    (plugin_dir / "skills").mkdir()
+    skill_dirs, agent_dirs = mod.discover_skill_and_agent_dirs(tmp_path)
+    assert plugin_dir / "skills" in skill_dirs
+
+
+def test_discover_respects_custom_skills_field(tmp_path):
+    mod = _load_module()
+    plugin_dir = tmp_path / "my-plugin"
+    (plugin_dir / ".claude-plugin").mkdir(parents=True)
+    (plugin_dir / ".claude-plugin" / "plugin.json").write_text('{"name":"x","skills":"custom-skills"}')
+    (plugin_dir / "custom-skills").mkdir()
+    skill_dirs, _ = mod.discover_skill_and_agent_dirs(tmp_path)
+    assert plugin_dir / "custom-skills" in skill_dirs
+
+
+def test_discover_includes_claude_skills(tmp_path):
+    mod = _load_module()
+    (tmp_path / ".claude" / "skills").mkdir(parents=True)
+    skill_dirs, _ = mod.discover_skill_and_agent_dirs(tmp_path)
+    assert tmp_path / ".claude" / "skills" in skill_dirs
+
+
+def test_discover_skips_nonexistent_dirs(tmp_path):
+    mod = _load_module()
+    plugin_dir = tmp_path / "my-plugin"
+    (plugin_dir / ".claude-plugin").mkdir(parents=True)
+    (plugin_dir / ".claude-plugin" / "plugin.json").write_text('{"name":"x"}')
+    # skills/ does NOT exist
+    skill_dirs, _ = mod.discover_skill_and_agent_dirs(tmp_path)
+    assert plugin_dir / "skills" not in skill_dirs

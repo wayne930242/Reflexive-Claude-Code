@@ -103,6 +103,35 @@ def check_rules_md(path: Path) -> list[str]:
     return warnings
 
 
+def discover_skill_and_agent_dirs(cwd: Path) -> tuple[list[Path], list[Path]]:
+    """Find valid skill and agent directories from plugin roots and .claude/."""
+    skill_dirs: list[Path] = []
+    agent_dirs: list[Path] = []
+
+    for plugin_json_path in cwd.rglob(".claude-plugin/plugin.json"):
+        plugin_root = plugin_json_path.parent.parent
+        try:
+            data = json.loads(plugin_json_path.read_text(encoding="utf-8"))
+        except Exception:
+            data = {}
+
+        for field, target_list in [("skills", skill_dirs), ("agents", agent_dirs)]:
+            default = field  # "skills" or "agents"
+            value = data.get(field, default)
+            if isinstance(value, str):
+                candidate = plugin_root / value
+                if candidate.exists() and candidate not in target_list:
+                    target_list.append(candidate)
+
+    # Project-level .claude/skills and .claude/agents
+    for subdir, target_list in [("skills", skill_dirs), ("agents", agent_dirs)]:
+        candidate = cwd / ".claude" / subdir
+        if candidate.exists() and candidate not in target_list:
+            target_list.append(candidate)
+
+    return skill_dirs, agent_dirs
+
+
 def main() -> None:
     sys.exit(0)
 
