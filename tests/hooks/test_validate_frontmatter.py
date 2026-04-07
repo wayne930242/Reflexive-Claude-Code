@@ -202,3 +202,35 @@ def test_discover_skips_nonexistent_dirs(tmp_path):
     # skills/ does NOT exist
     skill_dirs, _ = mod.discover_skill_and_agent_dirs(tmp_path)
     assert plugin_dir / "skills" not in skill_dirs
+
+
+def test_hook_silent_on_unrelated_file(tmp_path):
+    """Files outside plugin paths produce no output."""
+    (tmp_path / "random.md").write_text("---\ntags: foo\n---\n# hi\n")
+    result = run_hook(str(tmp_path / "random.md"), str(tmp_path))
+    assert result == {}
+
+
+def test_hook_warns_on_skill_extra_field(tmp_path):
+    """SKILL.md with extra frontmatter field triggers systemMessage."""
+    plugin_dir = tmp_path / "my-plugin"
+    (plugin_dir / ".claude-plugin").mkdir(parents=True)
+    (plugin_dir / ".claude-plugin" / "plugin.json").write_text('{"name":"x"}')
+    skill_dir = plugin_dir / "skills" / "my-skill"
+    skill_dir.mkdir(parents=True)
+    (skill_dir / "SKILL.md").write_text("---\nname: my-skill\ndescription: x\ntags: bad\n---\n# Body\n")
+    result = run_hook(str(skill_dir / "SKILL.md"), str(tmp_path))
+    assert "systemMessage" in result
+    assert "tags" in result["systemMessage"]
+
+
+def test_hook_silent_on_valid_skill(tmp_path):
+    """Valid SKILL.md produces no output."""
+    plugin_dir = tmp_path / "my-plugin"
+    (plugin_dir / ".claude-plugin").mkdir(parents=True)
+    (plugin_dir / ".claude-plugin" / "plugin.json").write_text('{"name":"x"}')
+    skill_dir = plugin_dir / "skills" / "my-skill"
+    skill_dir.mkdir(parents=True)
+    (skill_dir / "SKILL.md").write_text("---\nname: my-skill\ndescription: x\n---\n# Body\n")
+    result = run_hook(str(skill_dir / "SKILL.md"), str(tmp_path))
+    assert result == {}

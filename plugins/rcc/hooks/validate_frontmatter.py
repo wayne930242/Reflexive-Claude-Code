@@ -132,7 +132,61 @@ def discover_skill_and_agent_dirs(cwd: Path) -> tuple[list[Path], list[Path]]:
     return skill_dirs, agent_dirs
 
 
+def check_plugin_validate(plugin_dir: Path) -> list[str]:
+    """Run `claude plugin validate` on plugin_dir (the dir containing .claude-plugin/)."""
+    try:
+        result = subprocess.run(
+            ["claude", "plugin", "validate", str(plugin_dir)],
+            capture_output=True, text=True, timeout=30
+        )
+        output = (result.stdout + result.stderr).strip()
+        if result.returncode != 0 and output:
+            return [f"plugin validate: {line}" for line in output.splitlines() if line.strip()]
+    except FileNotFoundError:
+        pass  # claude CLI not available
+    except Exception as e:
+        return [f"plugin validate failed: {e}"]
+    return []
+
+
 def main() -> None:
+    try:
+        data = json.loads(sys.stdin.read())
+    except Exception:
+        sys.exit(0)
+
+    file_path_str = data.get("tool_input", {}).get("file_path", "")
+    cwd_str = data.get("cwd", "")
+    if not file_path_str:
+        sys.exit(0)
+
+    cwd = Path(cwd_str) if cwd_str else Path.cwd()
+    path = Path(file_path_str)
+    if not path.is_absolute():
+        path = cwd / path
+    if not path.exists():
+        sys.exit(0)
+
+    skill_dirs, agent_dirs = discover_skill_and_agent_dirs(cwd)
+    rules_dir = cwd / ".claude" / "rules"
+    warnings: list[str] = []
+
+    # .claude-plugin/ JSON files → run claude plugin validate on parent dir
+    if path.parent.name == ".claude-plugin" and path.suffix == ".json":
+        warnings = check_plugin_validate(path.parent.parent)
+    elif path.name == "SKILL.md" and any(path.is_relative_to(sd) for sd in skill_dirs):
+        warnings = check_skill_md(path)
+    elif path.suffix == ".md" and any(path.is_relative_to(ad) for ad in agent_dirs):
+        warnings = check_agent_md(path)
+    elif path.suffix == ".md" and rules_dir.exists() and path.is_relative_to(rules_dir):
+        warnings = check_rules_md(path)
+
+    if warnings:
+        rel = path.relative_to(cwd) if path.is_relative_to(cwd) else path
+        lines = "\n".join(f"  - {w}" for w in warnings)
+        msg = f"⚠ validate-frontmatter [{rel}]:\n{lines}"
+        print(json.dumps({"systemMessage": msg}))
+
     sys.exit(0)
 
 
