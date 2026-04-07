@@ -1,4 +1,5 @@
 {
+  "description": "Validate frontmatter and structure of SKILL.md, agent, and rule files after editing",
   "hooks": {
     "PostToolUse": [
       {
