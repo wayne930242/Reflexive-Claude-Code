@@ -98,8 +98,21 @@ def test_check_skill_md_valid_link_no_warn(tmp_path):
     assert not any("broken link" in w for w in warnings)
 
 
+def test_check_skill_md_md_mentioned_in_text_no_warn(tmp_path):
+    """.md file mentioned in plain text (not markdown link) should NOT warn."""
+    mod = _load_module()
+    skill_dir = tmp_path / "my-skill"
+    ref_dir = skill_dir / "references"
+    ref_dir.mkdir(parents=True)
+    (ref_dir / "spec.md").write_text("# Spec")
+    content = "---\nname: x\ndescription: y\n---\n\nSee references/spec.md for details.\n"
+    (skill_dir / "SKILL.md").write_text(content)
+    warnings = mod.check_skill_md(skill_dir / "SKILL.md")
+    assert not any("spec.md" in w and "orphaned" in w for w in warnings)
+
+
 def test_check_skill_md_orphaned_md_warns(tmp_path):
-    """Unlisted .md reference file should be warned."""
+    """Unlisted .md reference file (not in link AND not in text) should warn."""
     mod = _load_module()
     skill_dir = tmp_path / "my-skill"
     ref_dir = skill_dir / "references"

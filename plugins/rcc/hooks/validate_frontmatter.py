@@ -65,21 +65,19 @@ def check_skill_md(path: Path) -> list[str]:
             warnings.append(f"broken link: {link}")
 
     # ③ Orphaned files
-    # .md reference files must appear in a markdown link (they are loaded on-demand by Claude).
-    # Executable scripts (.py, .sh, .js, .mjs, .cjs, .ts, .go, etc.) only need to be mentioned
-    # anywhere in the text (e.g. via ${CLAUDE_SKILL_DIR}/scripts/foo.py or plain text reference).
+    # A file is considered referenced if EITHER condition is true:
+    #   - it appears in a markdown link [text](path)
+    #   - its relative path or filename is mentioned anywhere in the text
+    # Either form is sufficient — one handles the other's edge cases.
     linked_normalized = {str(Path(l)).replace("\\", "/") for l in extract_markdown_links(text)}
     for f in skill_dir.rglob("*"):
         if f == path or f.is_dir():
             continue
         rel = str(f.relative_to(skill_dir)).replace("\\", "/")
-        if f.suffix == ".md":
-            if rel not in linked_normalized:
-                warnings.append(f"orphaned file: {rel}")
-        else:
-            # Scripts etc.: mentioned anywhere in text (path or filename) is sufficient
-            if rel not in text and f.name not in text:
-                warnings.append(f"orphaned file: {rel}")
+        in_link = rel in linked_normalized
+        in_text = rel in text or f.name in text
+        if not (in_link or in_text):
+            warnings.append(f"orphaned file: {rel}")
 
     # ④ hooks-only variables used in SKILL.md content
     # Strip fenced code blocks and inline code spans first to avoid false positives
