@@ -149,6 +149,15 @@ The script integrates CLI validation and adds checks for manifest, structure, sk
 
 ## Red Flags - STOP
 
+- "Skip health check"
+- "Structure looks fine"
+- "Fix without showing"
+- "Skip re-verification"
+- "Simple plugin"
+- "I know the official structure"
+
+## Common Rationalizations
+
 | Thought | Reality |
 |---------|---------|
 | "Skip health check" | Scripts catch what eyes miss. Always run it. |

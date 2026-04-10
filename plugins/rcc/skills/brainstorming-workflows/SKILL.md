@@ -146,6 +146,16 @@ Read [references/anthropic-patterns.md](references/anthropic-patterns.md) for th
 
 These thoughts mean you're rationalizing. STOP and reconsider:
 
+- "Obviously a developer"
+- "I know the workflows"
+- "Multiple questions saves time"
+- "Skip analysis"
+- "Summary is overhead"
+- "This needs a skill"
+- "Skip past failures"
+
+## Common Rationalizations
+
 | Thought | Reality |
 |---------|---------|
 | "Obviously a developer" | PMs, analysts, creators all use agent systems. Ask. |

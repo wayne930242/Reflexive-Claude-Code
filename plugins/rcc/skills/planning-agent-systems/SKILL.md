@@ -123,6 +123,16 @@ Ask: "What is the minimum set of components that delivers value?"
 
 These thoughts mean you're rationalizing. STOP and reconsider:
 
+- "Skip the flowchart"
+- "Create everything"
+- "Skip traceability"
+- "Skip confirmation"
+- "Skip reuse check"
+- "One big rule"
+- "Fixed order is fine"
+
+## Common Rationalizations
+
 | Thought | Reality |
 |---------|---------|
 | "Skip the flowchart" | Component lists hide dependency gaps. The flowchart reveals what's missing. |

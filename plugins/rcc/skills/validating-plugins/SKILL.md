@@ -98,6 +98,15 @@ Ask user to confirm before applying any fixes.
 - "Guess what the fix should be" — derive from the warning type table above
 - "Run the script without capturing report path" — the path is needed for Task 2
 
+## Common Rationalizations
+
+| Excuse | Reality |
+|--------|---------|
+| "The validator already ran clean" | Validator checks structure, not content quality. Manual review catches semantic issues. |
+| "It's just frontmatter" | Wrong frontmatter means skills don't trigger, agents get wrong tools, hooks don't fire. |
+| "I'll fix it later" | Invalid plugin files silently degrade. Fix now or users hit confusing errors. |
+| "Only one file has issues" | One broken link or orphaned file signals systemic neglect. Check everything. |
+
 ## Flowchart
 
 ```dot

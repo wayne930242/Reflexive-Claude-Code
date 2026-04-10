@@ -154,6 +154,14 @@ Install locally (`claude plugin add <path>`), verify skills are discoverable and
 
 ## Red Flags - STOP
 
+- "Add skills later"
+- "Skip README"
+- "Skip testing"
+- "One big skill"
+- "Version later"
+
+## Common Rationalizations
+
 | Thought | Reality |
 |---------|---------|
 | "Add skills later" | Empty plugins are useless. Ship with at least one. |

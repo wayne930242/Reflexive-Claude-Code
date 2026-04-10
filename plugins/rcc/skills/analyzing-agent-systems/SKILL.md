@@ -152,6 +152,14 @@ Thresholds: CLAUDE.md > 200 lines = WARNING. Session-start total > 300 = WARNING
 
 These thoughts mean you're rationalizing. STOP and reconsider:
 
+- "I know the issues"
+- "Only major issues matter"
+- "Skip the report"
+- "Cross-checks take too long"
+- "One pass is enough"
+
+## Common Rationalizations
+
 | Thought | Reality |
 |---------|---------|
 | "I know the issues" | Systematic checklist catches what intuition misses. |
