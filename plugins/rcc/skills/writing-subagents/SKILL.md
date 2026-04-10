@@ -149,6 +149,31 @@ See [references/agent-spec.md](references/agent-spec.md) for full configuration 
 | Explorer | `Read, Glob, Grep, Bash` |
 | Writer | `Read, Edit, Write` |
 
+### Model Selection Guide
+
+| Use Case | Model | Rationale |
+|----------|-------|-----------|
+| Read-only analysis, review | `sonnet` | Fast, cost-effective, sufficient for static analysis |
+| Simple lookup, exploration | `haiku` | Fastest, cheapest, good for read-only tasks |
+| Complex reasoning, multi-step | `inherit` or `opus` | Needs full capability |
+| Default | `inherit` | Safe default, matches user's session model |
+
+### Isolation Guide
+
+| Use Case | Isolation | Rationale |
+|----------|-----------|-----------|
+| Read-only reviewer | (none) | No file changes, no conflict risk |
+| Code generation that may conflict | `worktree` | Isolated git worktree prevents conflicts with main workspace |
+| Parallel writing agents | `worktree` | Each gets its own copy of the repo |
+
+### Effort Guide
+
+| Use Case | Effort | Rationale |
+|----------|--------|-----------|
+| Static analysis, review | `medium` | Sufficient for pattern matching and checklist evaluation |
+| Complex architecture decisions | `high` | Needs deeper reasoning |
+| Simple formatting, lookup | `low` | Minimal reasoning needed |
+
 **Verification:**
 - [ ] Name is lowercase with hyphens
 - [ ] Description has clear trigger
