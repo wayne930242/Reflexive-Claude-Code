@@ -87,6 +87,35 @@ Each `writing-*` skill follows TDD with a reviewer gate:
 | `writing-skills` | `.claude/skills/*/SKILL.md` | `skill-reviewer` |
 | `writing-subagents` | `.claude/agents/*.md` | `subagent-reviewer` |
 
+### Plugin Pipeline
+
+Separate pipeline for creating and maintaining Claude Code plugins:
+
+```
+migrate-plugin → validate → refactor
+                 ↑
+        (or) create from scratch / convert from scripts
+```
+
+| Maturity | Detection | Route |
+|----------|-----------|-------|
+| **None** | No `.claude-plugin/` | → `creating-plugins` (from scratch) |
+| **Pre-plugin** | Script project without plugin structure | → Propose conversion table → `creating-plugins` (with proposal) |
+| **Minimal** | Has manifest, missing components | → `validating-plugins` → `refactoring-plugins` |
+| **Complete** | Full plugin | → `validating-plugins` → `refactoring-plugins` |
+
+### Skill Assets
+
+Each skill can bundle three types of supporting assets:
+
+| Directory | Role | Example |
+|-----------|------|---------|
+| `references/` | Documentation Claude reads on demand | Checklists, pattern catalogs |
+| `scripts/` | Executable automation | Scaffolders, validators |
+| `templates/` | Reusable file skeletons | Report formats, config files |
+
+The planner decides which assets each skill needs; the reviewer checks they exist; the refactorer creates missing ones directly.
+
 ### Model Recommendations
 
 | Use Case | Model |
@@ -103,7 +132,7 @@ Each `writing-*` skill follows TDD with a reviewer gate:
 | Skill | Purpose |
 |-------|---------|
 | `migrating-agent-systems` | Maturity-graded routing with rules refactoring proposal |
-| `migrating-plugins` | Plugin maturity detection, routes to create or validate+refactor |
+| `migrating-plugins` | Plugin maturity detection (None/Pre-plugin/Minimal/Complete), script-to-plugin conversion |
 | `analyzing-agent-systems` | 11-category weakness detection with Rules Health Summary |
 | `brainstorming-workflows` | Complexity ladder + Anthropic pattern mapping |
 | `planning-agent-systems` | Architecture-first planning with dependency ordering |

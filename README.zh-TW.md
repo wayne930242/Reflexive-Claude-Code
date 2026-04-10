@@ -87,6 +87,35 @@ migrate → analyze → brainstorm → plan → apply → review → refactor
 | `writing-skills` | `.claude/skills/*/SKILL.md` | `skill-reviewer` |
 | `writing-subagents` | `.claude/agents/*.md` | `subagent-reviewer` |
 
+### Plugin Pipeline
+
+獨立的 pipeline 用於建立和維護 Claude Code 插件：
+
+```
+migrate-plugin → validate → refactor
+                 ↑
+        （或）從零建立 / 從腳本專案轉換
+```
+
+| 成熟度 | 偵測 | 路由 |
+|--------|------|------|
+| **None** | 沒有 `.claude-plugin/` | → `creating-plugins`（從零開始） |
+| **Pre-plugin** | 腳本專案，無 plugin 結構 | → 提出轉換建議 → `creating-plugins`（帶 proposal） |
+| **Minimal** | 有 manifest，缺元件 | → `validating-plugins` → `refactoring-plugins` |
+| **Complete** | 完整插件 | → `validating-plugins` → `refactoring-plugins` |
+
+### Skill 資產
+
+每個 skill 可打包三種輔助資產：
+
+| 目錄 | 角色 | 範例 |
+|------|------|------|
+| `references/` | 按需載入的文件 | 清單、模式目錄 |
+| `scripts/` | 可執行的自動化腳本 | Scaffolder、驗證器 |
+| `templates/` | 可重用的檔案骨架 | 報告格式、設定檔 |
+
+規劃器決定每個 skill 需要哪些資產；審查器檢查是否存在；重構器直接建立缺少的資產。
+
 ### 模型建議
 
 | 使用場景 | 模型 |
@@ -103,7 +132,7 @@ migrate → analyze → brainstorm → plan → apply → review → refactor
 | Skill | 用途 |
 |-------|------|
 | `migrating-agent-systems` | 成熟度分級路由 + rules 重構建議 |
-| `migrating-plugins` | 偵測插件成熟度，路由至建立或驗證+重構 |
+| `migrating-plugins` | 偵測插件成熟度（None/Pre-plugin/Minimal/Complete），腳本轉插件 |
 | `analyzing-agent-systems` | 11 類弱點偵測 + Rules Health Summary |
 | `brainstorming-workflows` | 複雜度階梯 + Anthropic 模式對應 |
 | `planning-agent-systems` | 架構優先規劃 + 相依排序 |
