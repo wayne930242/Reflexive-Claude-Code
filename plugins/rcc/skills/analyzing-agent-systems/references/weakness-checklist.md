@@ -107,3 +107,15 @@ For each category, check every item. Mark severity:
 - [ ] Other AI tool configs exist (`.cursorrules`, `.github/copilot-instructions.md`, `.windsurfrules`) but not integrated into agent system
 - [ ] Existing AI configs contain conventions/rules not reflected in CLAUDE.md or `.claude/rules/`
 - [ ] Project has `.editorconfig` or linter configs with rules that should be mirrored in agent rules
+
+## 11. Rules Health
+
+- [ ] Individual rule file > 50 lines (token cost scales with matches)
+- [ ] Rule has no `paths:` but content clearly targets specific file types or directories
+- [ ] Rule content overlaps with another rule (partial or full duplication)
+- [ ] Rule duplicates instructions already in CLAUDE.md
+- [ ] Path-scoped rule glob matches zero files in the project (dead glob)
+- [ ] CLAUDE.md + global rules (no `paths:`) total exceeds 300 lines (session-start context overload)
+- [ ] CLAUDE.md single file exceeds 200 lines (official recommended limit)
+- [ ] Rule or CLAUDE.md contains multi-step procedures (should be a skill, not a directive)
+- [ ] Rule or CLAUDE.md contains code blocks used as process instructions (should be flowchart or skill)
