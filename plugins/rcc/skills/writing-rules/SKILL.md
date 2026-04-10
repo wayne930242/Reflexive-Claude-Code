@@ -68,13 +68,30 @@ Announce: "Created 6 tasks. Starting execution..."
 - Does this belong in CLAUDE.md (broad, always loaded) or rules (path-scoped)?
 - Does this rule already exist?
 
-**Decision:**
-```
-Does it apply broadly to ALL project work?
-├─ Yes → Put in CLAUDE.md (loaded every session)
-└─ No → Is it scoped to specific file paths?
-    ├─ Yes → RULE with paths: glob
-    └─ No → Global rule (no paths:, but consider CLAUDE.md instead)
+**Decision tree:**
+
+```dot
+digraph rule_decision {
+    rankdir=TB;
+
+    start [label="New directive needed", shape=doublecircle];
+    q1 [label="Applies to\nall files?", shape=diamond];
+    q3 [label="Contains steps\nor code?", shape=diamond];
+    q4 [label="CLAUDE.md\nalready > 180 lines?", shape=diamond];
+
+    claudemd [label="CLAUDE.md"];
+    global_rule [label="Global rule\n(no paths)"];
+    scoped_rule [label="Path-scoped rule"];
+    skill [label="Not a rule\nuse writing-skills"];
+
+    start -> q1;
+    q1 -> q3 [label="yes"];
+    q1 -> scoped_rule [label="no"];
+    q3 -> skill [label="yes"];
+    q3 -> q4 [label="no"];
+    q4 -> global_rule [label="yes"];
+    q4 -> claudemd [label="no"];
+}
 ```
 
 **Verification:** Can state the convention in one sentence and specify the glob pattern.
