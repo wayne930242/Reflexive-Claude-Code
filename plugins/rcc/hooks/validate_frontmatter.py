@@ -196,7 +196,13 @@ def main() -> None:
             rel = path.relative_to(cwd) if path.is_relative_to(cwd) else path
             lines = "\n".join(f"  - {w}" for w in warnings)
             msg = f"⚠ validate-frontmatter [{rel}]:\n{lines}"
-            print(json.dumps({"systemMessage": msg}))
+            print(json.dumps({
+                "hookSpecificOutput": {
+                    "hookEventName": "PostToolUse",
+                    "additionalContext": msg,
+                },
+                "systemMessage": msg,
+            }))
 
     except Exception:
         pass  # never block Claude on validator errors (file may be mid-edit)

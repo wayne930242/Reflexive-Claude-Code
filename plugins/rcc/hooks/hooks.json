@@ -7,7 +7,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "command -v python3 >/dev/null 2>&1 && python3 \"${CLAUDE_PLUGIN_ROOT}/hooks/validate_frontmatter.py\" || echo '{\"systemMessage\":\"⚠ python3 not found — install Python 3.11+ to enable frontmatter validation hook\"}'",
+            "command": "command -v python3 >/dev/null 2>&1 && python3 \"${CLAUDE_PLUGIN_ROOT}/hooks/validate_frontmatter.py\" || echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PostToolUse\",\"additionalContext\":\"⚠ python3 not found — install Python 3.11+ to enable frontmatter validation hook\"},\"systemMessage\":\"⚠ python3 not found — install Python 3.11+ to enable frontmatter validation hook\"}'",
             "timeout": 15
           }
         ]
