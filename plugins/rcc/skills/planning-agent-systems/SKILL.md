@@ -55,12 +55,14 @@ Announce: "Created 5 tasks. Starting execution..."
 **Read:**
 - `docs/agent-system/*-analysis.md` (most recent, if exists)
 - `docs/agent-system/*-workflows.md` (most recent)
+- `docs/agent-system/*-reflection.md` (most recent, if exists)
 
 **Extract:**
 - Weaknesses marked for fixing
 - Workflows to support
 - Conventions to enforce
-- Component recommendations from workflow summary
+- Component recommendations from workflow summary or reflection report
+- Learnings and suggested components from reflection report (if available)
 
 **Verification:** Have a clear list of requirements from both sources.
 
