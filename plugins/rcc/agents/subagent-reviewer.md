@@ -1,7 +1,8 @@
 ---
 name: subagent-reviewer
 description: Use this agent after creating or modifying a subagent. Reviews quality including single responsibility, tool minimalism, model selection, context isolation, and trigger clarity.
-model: inherit
+model: sonnet
+effort: medium
 context: fork
 tools: ["Read", "Grep", "Glob", "Bash"]
 ---
