@@ -153,10 +153,11 @@ See [references/agent-spec.md](references/agent-spec.md) for full configuration 
 
 | Use Case | Model | Rationale |
 |----------|-------|-----------|
+| Implementation, code generation | `sonnet` | Best balance of capability and speed for writing code |
 | Read-only analysis, review | `sonnet` | Fast, cost-effective, sufficient for static analysis |
-| Simple lookup, exploration | `haiku` | Fastest, cheapest, good for read-only tasks |
-| Complex reasoning, multi-step | `inherit` or `opus` | Needs full capability |
-| Default | `inherit` | Safe default, matches user's session model |
+| Simple lookup, exploration | `haiku` | Fastest, cheapest, good for read-only search tasks |
+| Complex architecture, multi-file refactor | `inherit` | Inherits user's session model for full capability |
+| Default | `sonnet` | Recommended default for most use cases |
 
 ### Isolation Guide
 
