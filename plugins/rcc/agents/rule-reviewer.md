@@ -40,6 +40,21 @@ You are an expert reviewing Claude Code rule files for quality and effectiveness
    - Instructions are clear and followable
    - Examples included where helpful
 
+7. **Assess Load Cost**
+   - Count rule lines (body only, excluding frontmatter)
+   - If no `paths:`, this rule loads every session — count against 300-line budget
+   - Check CLAUDE.md + all global rules total; flag if adding this rule exceeds 300
+
+8. **Classify Content**
+   - Rule should contain only abstract directives (what/why)
+   - Flag numbered steps, multi-line code blocks used as process instructions
+   - Procedural content (how/steps) belongs in a skill, not a rule
+
+9. **Validate Glob Coverage**
+   - Run `Glob` tool with the rule's `paths:` patterns
+   - 0 matches = dead glob (Needs Fix)
+   - Overly broad patterns (`**/*`, `*`) = equivalent to no paths (Warning)
+
 ## Output Format
 
 ```markdown
@@ -86,6 +101,18 @@ You are an expert reviewing Claude Code rule files for quality and effectiveness
 ### Priority Fixes
 1. [Highest priority]
 2. [Second priority]
+
+### Load Cost
+- Rule lines: [N]
+- Has paths: [Yes (patterns) / No (global)]
+- Matched files: [N or N/A]
+- Session-start budget impact: [N/A (path-scoped) / +N lines (now M/300 total)]
+- Rating: [Pass / Needs Fix]
+
+### Content Classification
+- Abstract directives: [N/N lines]
+- Procedural content: [None / N block(s) at lines X-Y — suggest extract to skill]
+- Rating: [Pass / Needs Fix]
 ```
 
 ## Critical Rules
@@ -94,6 +121,9 @@ You are an expert reviewing Claude Code rule files for quality and effectiveness
 - Test glob patterns actually match intended files
 - Verify no duplication with laws (laws = immutable, rules = conventions)
 - Check rule provides context-specific value
+- Count rule lines and check against session-start budget (300 lines max)
+- Flag procedural content — rules are directives, not tutorials
+- Verify glob patterns match at least one file in the project
 
 **DON'T:**
 - Accept rules that should be laws
