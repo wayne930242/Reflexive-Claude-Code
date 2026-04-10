@@ -31,6 +31,19 @@ Write the report to `docs/agent-system/{timestamp}-analysis.md` using this forma
 | # | Category | Component | Finding | Suggested Fix |
 |---|----------|-----------|---------|---------------|
 
+## Rules Health Summary
+
+| Metric                        | Value | Status |
+|-------------------------------|-------|--------|
+| CLAUDE.md lines               |       |        |
+| Global rules count / lines    |       |        |
+| Session-start total lines     |       |        |
+| Path-scoped rules             |       |        |
+| Rules with procedural content |       |        |
+| Dead glob patterns            |       |        |
+
+Status values: `ok`, `>200` (CLAUDE.md lines), `>300` (session total), count for others.
+
 ## Summary
 
 - Components scanned: N
