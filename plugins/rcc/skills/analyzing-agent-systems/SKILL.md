@@ -85,7 +85,7 @@ Compare `~/.claude/rules/` against `.claude/rules/`:
 **CRITICAL:** Read [references/weakness-checklist.md](references/weakness-checklist.md) for the full 11-category checklist.
 
 **For each weakness found, record:**
-- Category (1-10)
+- Category (1-11)
 - Severity: **CRITICAL** / **WARNING** / **INFO**
 - Component affected
 - Specific finding (what's wrong)
