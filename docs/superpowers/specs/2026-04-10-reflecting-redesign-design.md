@@ -127,12 +127,50 @@ digraph reflecting_v2 {
 }
 ```
 
+## Pipeline Document Archiving
+
+### Problem
+
+The pipeline produces intermediate documents in `docs/agent-system/` — analysis reports, workflow summaries, component plans, review reports, reflection reports, and refactoring reports. After the pipeline completes, these accumulate without cleanup.
+
+### Solution
+
+Add a **Task 6: Archive pipeline documents** to `refactoring-agent-systems` (the terminal skill in the chain).
+
+After producing the refactoring report (Task 5), move all pipeline documents from the current run to `docs/agent-system/archive/`:
+
+```
+docs/agent-system/
+├── archive/
+│   └── {YYYY-MM-DD}/           ← one directory per pipeline run
+│       ├── *-analysis.md
+│       ├── *-workflows.md
+│       ├── *-plan.md
+│       ├── *-reflection.md
+│       ├── *-review-report.md
+│       └── *-refactoring-report.md
+└── (empty after archiving)
+```
+
+**Rules:**
+- Archive ALL `*.md` files in `docs/agent-system/` (excluding the `archive/` directory itself)
+- Group by date directory to keep runs together
+- Commit the archive move as part of the refactoring commit
+- If `archive/` doesn't exist, create it
+
+### Required change to refactoring-agent-systems
+
+- Add Task 6 after Task 5
+- Update task count from 5 to 6
+- Update flowchart to include archive step after report
+
 ## Scope
 
 ### In scope
 - Rewrite reflecting SKILL.md with 5-task flow
 - Create reflection report template in `references/report-template.md`
 - Update planning-agent-systems Task 1 to also read `*-reflection.md`
+- Add archive task (Task 6) to refactoring-agent-systems
 
 ### Out of scope
 - Changes to analyzing-agent-systems, brainstorming-workflows, applying-agent-systems
