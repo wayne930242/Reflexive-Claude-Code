@@ -32,6 +32,19 @@ For each component type, evaluate:
 - Agents MUST be read-only (no `.claude/` writes)
 - All `.claude/` writes happen via main conversation, never subagents
 
+## Script and Template Planning
+
+For each planned skill, evaluate whether it needs automation support:
+
+| Signal | Asset to Plan | Example |
+|--------|--------------|---------|
+| Skill creates files with boilerplate | `scripts/` scaffolder | `add_hook.py` in writing-hooks |
+| Skill produces structured reports | `references/` template | `report-template.md` in analyzing |
+| Skill validates file format | `scripts/` validator | `validate_skill.py` in writing-skills |
+| Skill has a complex multi-file setup | `scripts/` initializer | `init_claude_md.py` in writing-claude-md |
+
+**Decision:** If a skill will be invoked repeatedly and involves file creation or structured output, plan a script or template alongside it. Do not defer — scaffolders are part of the skill, not an afterthought.
+
 ## Available Writing Skills
 
 | Component | Writing Skill | Notes |

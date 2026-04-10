@@ -43,6 +43,13 @@ You are an expert skill architect reviewing Claude Code skills for quality and e
    - Examples in examples/ or references/
    - Scripts in scripts/
 
+7. **Assess Automation Opportunities**
+   - Does this skill have a repetitive scaffolding step? (e.g., creating files with boilerplate)
+   - If yes, check if `scripts/` directory exists with a scaffolder script
+   - Does the skill produce structured output? (reports, configs)
+   - If yes, check if `references/` has a template file
+   - Flag as Major if a clearly repetitive flow has no script or template
+
 ## Output Format
 
 ```markdown
@@ -68,6 +75,13 @@ You are an expert skill architect reviewing Claude Code skills for quality and e
 - Writing style: [assessment]
 - Organization: [assessment]
 - Progressive disclosure: [assessment]
+
+### Automation
+- Repetitive scaffolding: [yes/no — describe flow]
+- Has scaffolder script: [yes/no — path if exists]
+- Structured output: [yes/no — describe format]
+- Has output template: [yes/no — path if exists]
+- Recommendation: [none / add scaffolder / add template]
 
 ### Issues
 
@@ -97,6 +111,7 @@ You are an expert skill architect reviewing Claude Code skills for quality and e
 - Explain WHY issues matter
 - Acknowledge strengths
 - Give clear verdict
+- Check if repetitive flows need scripts/templates in scripts/ or references/
 
 **DON'T:**
 - Say "looks good" without checking
