@@ -2,204 +2,154 @@
 
 [English](README.md) | [繁體中文](README.zh-TW.md)
 
-A **skills-driven Agentic Context Engineering** workflow for Claude Code with TDD-based skill design.
+A Claude Code plugin marketplace for **skills-driven Agentic Context Engineering (ACE)** — build, analyze, and maintain agent systems with TDD-based workflows.
 
-## Core Philosophy
+## What This Does
 
-The agent maintains and refactors its own core prompts and agent system — not external documents or memory banks.
+Reflexive Claude Code gives Claude Code a complete toolkit for managing its own agent system: CLAUDE.md, rules, skills, subagents, and hooks. Every component goes through a TDD cycle (RED → GREEN → REFACTOR) with automated quality review.
 
-**Skills-driven Agentic Context Engineering** means:
-- Before each task, the agent reviews the skill library for relevant capabilities
-- Users explicitly trigger learning moments through skills like `reflecting`
-- Through deliberate teaching, the agent integrates learnings into its skill library
-- Skills are abstract, reusable, and link to reference directories with examples and documentation
+**Key capabilities:**
 
-## What's New in v9.0.0
-
-Major release aligning with current agent engineering best practices.
-
-- **Architecture-first planning**: `planning-agent-systems` now requires drawing an architecture flowchart (DOT format) before deciding components — visualize entry points, decision branches, data flow, and parallel lanes before committing to any component
-  - Maps workflows to Anthropic's six production patterns (Prompt Chaining, Routing, Parallelization, Orchestrator-Workers, Evaluator-Optimizer, Autonomous Agent)
-  - Dependency-driven execution order replaces fixed order — phases assigned by dependency depth
-  - Core vs enhancement classification for phased rollout
-- **Simplicity-first brainstorming**: `brainstorming-workflows` adds a complexity ladder (Level 1-6) that challenges every workflow for the simplest viable approach before designing components
-  - Two-layer classification: Anthropic workflow patterns + skill routing patterns
-  - Walkthrough-style questions replace inventory-style questions across all role templates
-  - Past failures exploration: "What have you tried before? What didn't work?"
-- **10-category weakness analysis**: `analyzing-agent-systems` adds Category 10 (Cross-Tool Migration) for detecting `.cursorrules`, copilot instructions, and other AI tool configs
-  - New checks: skill token budget (< 2,000 tokens), `disable-model-invocation`, `allowed-tools`, dynamic context injection, compaction strategy
-  - Scans `.cursorrules`, `.github/copilot-instructions.md`, `.windsurfrules`, `.editorconfig`
-- **Maturity-graded migration**: `migrating-agent-systems` replaces binary detection with 4-level maturity grading (None → Seed → Partial → Established)
-  - Seed level imports other AI tool configs as starting context
-  - Recommends English for all prompt files for optimal model performance
-- **Progressive disclosure**: Templates and reference tables extracted to `references/` across all four skills — all SKILL.md files now under 200 lines
-
-## What's New in v8.4.0
-
-- **Project context completeness**: New weakness category (#9) checks for missing account names, directory conventions, deployment targets, language-specific hooks, and user-root gap analysis
-  - `analyzing-agent-systems` now scans `~/.claude/` alongside `.claude/` and compares coverage
-  - `reflecting` classification tree adds user-root scope — cross-project learnings route to `~/.claude/CLAUDE.md` or `~/.claude/rules/`
-
-## What's New in v8.3.0
-
-- **Formalized routing patterns**: All 20 skills now declare their routing pattern (Tree/Chain/Node/Skill Steps)
-  - New `routing-patterns.md` reference document with selection guide and global routing map
-  - Standardized `## Routing` section in every SKILL.md
-  - `brainstorming-workflows` now teaches routing pattern selection during agent system design
-  - `advising-architecture` decision tree includes routing pattern classification
-  - `weakness-checklist` adds 7 routing-specific checks
-  - Skill Chain Reference tables added to all entry-point skills
-  - `writing-plugins` (rcc-dev) rewritten for full Law 7 compliance
-
-## Plugins
-
-This marketplace provides two plugins:
-
-### rcc (v9.3.2)
-
-Core ACE workflow with TDD-based skills, task enforcement, and quality reviewers.
-
-**Skills:**
-
-| Skill | Description |
-|-------|-------------|
-| `writing-skills` | TDD-based skill creation with baseline testing and review |
-| `writing-claude-md` | Create CLAUDE.md with standard markdown format |
-| `writing-subagents` | Create subagent configurations for `.claude/agents/` |
-| `writing-rules` | Create rule files for `.claude/rules/` with conventions |
-| `writing-hooks` | Create hooks for static analysis and code quality |
-| `reflecting` | Reflect on conversation, classify learnings, integrate |
-| `improving-skills` | Optimize a skill through targeted improvements |
-| `refactoring-skills` | Analyze and consolidate all skills |
-| `initializing-projects` | Initialize new project with framework and agent system |
-| `migrating-agent-systems` | Maturity-graded routing with cross-tool config detection |
-| `analyzing-agent-systems` | 10-category weakness detection with cross-tool migration checks |
-| `brainstorming-workflows` | Walkthrough-based workflow exploration with complexity ladder |
-| `planning-agent-systems` | Architecture-first planning with Anthropic pattern mapping |
-| `applying-agent-systems` | Execute component plan via writing-* skill chain |
-| `reviewing-agent-systems` | Quality review with all 5 reviewer agents |
-| `refactoring-agent-systems` | Fix issues from review report |
-| `creating-plugins` | Scaffold a new Claude Code plugin |
-| `refactoring-plugins` | Refactor plugins against official best practices with health check |
-| `advising-architecture` | Validate approach, classify knowledge type, check for component conflicts |
-
-**Agent System Skill Chain:**
-
-```
-migrating-agent-systems (maturity-graded router)
-  ├─ None → brainstorming-workflows → planning-agent-systems → ...
-  ├─ Seed (other AI configs) → import configs → brainstorming-workflows → ...
-  └─ Partial/Established → analyzing-agent-systems → brainstorming-workflows
-       → planning-agent-systems → applying-agent-systems
-       → reviewing-agent-systems → refactoring-agent-systems
-```
-
-**Subagents (Reviewers):**
-
-| Agent | Description |
-|-------|-------------|
-| `skill-reviewer` | Quality review for skills |
-| `claudemd-reviewer` | Quality review for CLAUDE.md |
-| `rule-reviewer` | Quality review for rules |
-| `hook-reviewer` | Quality review for hooks |
-| `subagent-reviewer` | Quality review for subagents |
-
-### rcc-dev (v2.0.1)
-
-Development helper tools for creating Claude Code plugins with complete manifests, skills, and marketplaces.
-
-**Skills:**
-
-| Skill | Description |
-|-------|-------------|
-| `writing-plugins` | Create complete plugin packages with manifests, skills, and marketplaces |
-| `creating-plugins` | Scaffold a new Claude Code plugin |
-
-## Component Architecture
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                    Claude Code Context                          │
-├─────────────────────────────────────────────────────────────────┤
-│  Auto-Injected                     │  On-Demand                  │
-│  ─────────────                     │  ─────────                  │
-│  • CLAUDE.md (high-level)          │  • Skills (capabilities)    │
-│  • .claude/rules/*.md (conventions)│  • Subagents (isolated ctx) │
-│    └─ paths: conditional trigger   │                             │
-└─────────────────────────────────────────────────────────────────┘
-```
-
-| Component | Location | Trigger | Token Impact |
-|-----------|----------|---------|--------------|
-| **Rules** | `.claude/rules/*.md` | Auto-inject | High |
-| **Skills** | `.claude/skills/*/SKILL.md` | Claude decides | Progressive disclosure |
-| **Subagents** | `.claude/agents/*.md` | Task tool | Isolated |
-| **CLAUDE.md** | `./CLAUDE.md` | Auto-inject | High |
-
-## Skill Design Principles
-
-All skills follow TDD-based design with these components:
-
-| Component | Purpose |
-|-----------|---------|
-| **Task Initialization** | Mandatory TaskCreate before any action |
-| **TDD Mapping** | RED → GREEN → REFACTOR phases |
-| **Verification Criteria** | Objective checks for each task |
-| **Red Flags** | Anti-rationalization triggers |
-| **Rationalizations Table** | Counter-arguments for common excuses |
-| **Flowchart** | Visual process diagram |
-| **Reviewer Gate** | Quality review before completion |
-
-## Workflow
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                   Work Session                                   │
-├─────────────────────────────────────────────────────────────────┤
-│  1. Task 1        │  Consult advising-architecture               │
-│  2. RED Phase     │  Baseline test - observe failures           │
-│  3. GREEN Phase   │  Create component addressing failures       │
-│  4. REFACTOR      │  Quality review via reviewer subagent       │
-│  5. Validate      │  Test in real usage                         │
-└─────────────────────────────────────────────────────────────────┘
-```
+- **Build agent systems from scratch** — detect project maturity, explore workflows, plan architecture, then create all components in dependency order
+- **Analyze existing systems** — 11-category weakness checklist covering routing, context management, security, rules health, and cross-tool migration
+- **Validate on every edit** — PostToolUse hook checks frontmatter, broken links, orphaned files, and invalid variables in real time
+- **Enforce quality gates** — 5 specialized reviewer agents (skill, CLAUDE.md, rule, hook, subagent) run after every creation or modification
 
 ## Installation
 
 ```bash
-# From GitHub
 /plugin marketplace add wayne930242/Reflexive-Claude-Code
 /plugin install rcc@rcc
-# or
-/plugin install rcc-dev@rcc
-
-# From local path
-/plugin install /path/to/Reflexive-Claude-Code/plugins/rcc
 ```
+
+## How It Works
+
+### Agent System Pipeline
+
+The full pipeline runs through 6 stages, each a dedicated skill:
+
+```
+migrate → analyze → brainstorm → plan → apply → review → refactor
+```
+
+| Stage | Skill | What it does |
+|-------|-------|-------------|
+| **Migrate** | `migrating-agent-systems` | Detect maturity (None/Seed/Partial/Established), propose rules refactoring, route to correct chain |
+| **Analyze** | `analyzing-agent-systems` | Scan all components, run 11-category weakness checklist, produce Rules Health Summary |
+| **Brainstorm** | `brainstorming-workflows` | Explore workflows with complexity ladder (L1-L6), map to Anthropic patterns |
+| **Plan** | `planning-agent-systems` | Architecture flowchart first, then dependency-driven component plan |
+| **Apply** | `applying-agent-systems` | Invoke writing-* skills in order: CLAUDE.md → rules → hooks → skills → agents |
+| **Review** | `reviewing-agent-systems` | Run all 5 reviewer agents, produce structured report |
+
+### Quality Checks
+
+**11-category weakness analysis** (via `analyzing-agent-systems`):
+
+| # | Category | Key checks |
+|---|----------|-----------|
+| 1 | Routing / Triggers | Vague descriptions, overlapping triggers, missing handoffs |
+| 2 | Context Management | Oversized CLAUDE.md, eager loading, context pollution |
+| 3 | Workflow Continuity | Broken chains, missing verification gates |
+| 4 | Redundancy / Conflicts | Duplicate rules, contradicting instructions |
+| 5 | Security / Safety | Unprotected sensitive files, excessive permissions |
+| 6 | Observability | Missing structured output, opaque routing |
+| 7 | Architecture / Scaling | Flat topology, over-orchestration |
+| 8 | Constitution Stability | Procedures in CLAUDE.md, vague instructions |
+| 9 | Project Context | Missing deployment docs, language coverage gaps |
+| 10 | Cross-Tool Migration | Unimported `.cursorrules`, copilot instructions |
+| 11 | Rules Health | Lines > 50, missing `paths:`, dead globs, session-start > 300 lines |
+
+**Rules Health Summary** (produced during analysis):
+
+| Metric | Threshold |
+|--------|-----------|
+| CLAUDE.md lines | > 200 = warning |
+| Session-start total (CLAUDE.md + global rules) | > 300 = warning |
+| Individual rule lines | > 50 = warning |
+| Path-scoped rule with 0 file matches | dead glob |
+| Procedural content in rules | should be a skill |
+
+**Real-time validation hook** (`validate_frontmatter.py`):
+- Fires on every Edit/Write to skill, agent, or rule files
+- Checks for invalid frontmatter fields against official spec
+- Detects broken markdown links and orphaned files in skill directories
+- Outputs `additionalContext` so Claude can self-correct immediately
+
+### Component Writing Skills
+
+Each `writing-*` skill follows TDD with a reviewer gate:
+
+| Skill | Creates | Reviewer |
+|-------|---------|----------|
+| `writing-claude-md` | `CLAUDE.md` | `claudemd-reviewer` |
+| `writing-rules` | `.claude/rules/*.md` | `rule-reviewer` |
+| `writing-hooks` | `.claude/hooks/*` | `hook-reviewer` |
+| `writing-skills` | `.claude/skills/*/SKILL.md` | `skill-reviewer` |
+| `writing-subagents` | `.claude/agents/*.md` | `subagent-reviewer` |
+
+### Model Recommendations
+
+| Use Case | Model |
+|----------|-------|
+| Implementation, code generation | `sonnet` |
+| Planning, architecture design | `opus` |
+| Read-only analysis, review | `sonnet` |
+| Simple lookup, exploration | `haiku` |
+
+## Full Skill List
+
+### rcc (v9.3.2)
+
+| Skill | Purpose |
+|-------|---------|
+| `migrating-agent-systems` | Maturity-graded routing with rules refactoring proposal |
+| `analyzing-agent-systems` | 11-category weakness detection with Rules Health Summary |
+| `brainstorming-workflows` | Complexity ladder + Anthropic pattern mapping |
+| `planning-agent-systems` | Architecture-first planning with dependency ordering |
+| `applying-agent-systems` | Execute component plan via writing-* chain |
+| `reviewing-agent-systems` | Run all 5 reviewer agents |
+| `refactoring-agent-systems` | Fix issues from review report |
+| `writing-skills` | TDD-based skill creation |
+| `writing-claude-md` | CLAUDE.md with standard format |
+| `writing-subagents` | Subagent config with model/isolation guide |
+| `writing-rules` | Rules with decision tree and content validation |
+| `writing-hooks` | Hooks for static analysis and quality gates |
+| `reflecting` | Extract learnings, route to skills or rules |
+| `improving-skills` | Optimize a single skill |
+| `refactoring-skills` | Consolidate and deduplicate across skills |
+| `advising-architecture` | Classify knowledge type, validate approach |
+| `initializing-projects` | Bootstrap new project with agent system |
+| `creating-plugins` | Scaffold a new Claude Code plugin |
+| `refactoring-plugins` | Health-check plugins against official best practices |
+| `validating-plugins` | Batch scan all plugin files for errors |
+
+### rcc-dev (v2.0.1)
+
+| Skill | Purpose |
+|-------|---------|
+| `writing-plugins` | Create complete plugin packages |
+| `creating-plugins` | Scaffold plugin structure |
 
 ## Project Structure
 
 ```
 Reflexive-Claude-Code/
 ├── .claude-plugin/
-│   └── marketplace.json     # Marketplace definition
+│   └── marketplace.json
 ├── plugins/
-│   ├── rcc/                 # Core ACE plugin
-│   │   ├── skills/          # All skills
-│   │   ├── agents/          # Reviewer subagents
-│   │   └── commands/        # Command aliases
-│   └── rcc-dev/             # Development helper plugin
+│   ├── rcc/
+│   │   ├── skills/          # 20 skills
+│   │   ├── agents/          # 5 reviewer subagents
+│   │   └── hooks/           # Frontmatter validation hook
+│   └── rcc-dev/
 └── README.md
 ```
 
 ## Credits
 
-This project's skill design patterns are inspired by:
-
-- **[superpowers](https://github.com/anthropics/claude-code-superpowers)** - The TDD-based skill design, task enforcement, and verification patterns are adapted from the superpowers plugin by Anthropic. Special thanks for pioneering the "discipline-enforcing skill" pattern with Red Flags and Rationalization tables.
-
-- **Agentic Context Engineering (ACE) Framework**:
-  > Zhang, Q., Hu, C., Upasani, S., Ma, B., Hong, F., Kamanuru, V., Rainton, J., Wu, C., Ji, M., Li, H., Thakker, U., Zou, J., & Olukotun, K. (2025). *Agentic Context Engineering: Evolving Contexts for Self-Improving Language Models*. arXiv:2510.04618. https://arxiv.org/abs/2510.04618
+- **[superpowers](https://github.com/anthropics/claude-code-superpowers)** — TDD-based skill design and discipline-enforcing patterns adapted from Anthropic's superpowers plugin.
+- **Agentic Context Engineering (ACE)**:
+  > Zhang, Q., et al. (2025). *Agentic Context Engineering: Evolving Contexts for Self-Improving Language Models*. arXiv:2510.04618.
 
 ## License
 

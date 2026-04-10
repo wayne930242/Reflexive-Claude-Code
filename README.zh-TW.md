@@ -2,204 +2,154 @@
 
 [English](README.md) | [繁體中文](README.zh-TW.md)
 
-一個用於 Claude Code 的**技能驅動代理脈絡工程 (Agentic Context Engineering)** 工作流程，採用 TDD 為基礎的技能設計。
+Claude Code 插件市集，提供**技能驅動的代理脈絡工程 (Agentic Context Engineering, ACE)** — 以 TDD 工作流程建立、分析、維護 agent 系統。
 
-## 核心理念
+## 功能簡介
 
-Agent 維護並重構自己的核心提示詞與 Agent 系統——而非外部文件或記憶庫。
+Reflexive Claude Code 讓 Claude Code 擁有一套完整的 agent 系統管理工具：CLAUDE.md、rules、skills、subagents、hooks。每個元件都經過 TDD 循環（RED → GREEN → REFACTOR）並搭配自動品質審查。
 
-**技能驅動代理脈絡工程**意味著：
-- 每次任務開始前，Agent 會檢視技能庫中相關的能力
-- 使用者透過 `reflecting` 等技能明確觸發學習點
-- 透過刻意的教導，Agent 將學習成果整合到技能庫中
-- 技能是抽象的、可重用的，並連結到包含範例和文件的參考目錄
+**核心能力：**
 
-## v9.0.0 新功能
-
-對齊最新 agent 工程最佳實踐的重大版本。
-
-- **架構優先規劃**：`planning-agent-systems` 現在要求在決定元件之前，先畫出架構流程圖（DOT 格式）——在確定任何元件之前，先視覺化入口點、決策分支、資料流和並行通道
-  - 將工作流對應到 Anthropic 六大生產模式（Prompt Chaining、Routing、Parallelization、Orchestrator-Workers、Evaluator-Optimizer、Autonomous Agent）
-  - 依賴驅動的執行順序取代固定順序——以依賴深度分配階段
-  - Core vs Enhancement 分類用於分階段交付
-- **簡化優先探索**：`brainstorming-workflows` 新增複雜度階梯（Level 1-6），在設計元件前挑戰每個工作流的最簡可行方案
-  - 雙層分類：Anthropic 工作流模式 + 技能路由模式
-  - 所有角色模板改用 walkthrough 式問題取代清單式問題
-  - 失敗經驗探索：「你之前試過什麼？什麼沒有用？」
-- **10 類弱點分析**：`analyzing-agent-systems` 新增類別 10（跨工具遷移），偵測 `.cursorrules`、copilot instructions 等其他 AI 工具設定
-  - 新增檢查：技能 token 預算（< 2,000 tokens）、`disable-model-invocation`、`allowed-tools`、動態 context 注入、compaction 策略
-  - 掃描 `.cursorrules`、`.github/copilot-instructions.md`、`.windsurfrules`、`.editorconfig`
-- **成熟度分級遷移**：`migrating-agent-systems` 以 4 級成熟度分級（None → Seed → Partial → Established）取代二元偵測
-  - Seed 級匯入其他 AI 工具設定作為起始 context
-  - 建議所有提示詞文件使用英文撰寫，以獲得最佳模型效能
-- **漸進式揭露**：模板和參考表格抽取到 `references/`——所有 SKILL.md 現在都在 200 行以內
-
-## v8.4.0 新功能
-
-- **專案脈絡完整度**：新增弱點類別（#9），檢查帳號名稱、目錄慣例、部署目標、語言專用 hooks 及 user-root 差距分析
-  - `analyzing-agent-systems` 現在會掃描 `~/.claude/` 並與 `.claude/` 比較覆蓋率
-  - `reflecting` 分類決策樹新增 user-root scope — 跨專案 learning 路由至 `~/.claude/CLAUDE.md` 或 `~/.claude/rules/`
-
-## v8.3.0 新功能
-
-- **路由模式正式化**：全部 20 個技能現在都宣告其路由模式（Tree/Chain/Node/Skill Steps）
-  - 新增 `routing-patterns.md` 參考文件，含選擇指南與全局路由圖
-  - 每個 SKILL.md 加入標準化 `## Routing` 區段
-  - `brainstorming-workflows` 在設計 agent system 時教導路由模式選擇
-  - `advising-architecture` 決策樹加入路由模式分類
-  - `weakness-checklist` 新增 7 項路由相關檢查
-  - 所有入口技能加入 Skill Chain Reference 表
-  - `writing-plugins` (rcc-dev) 完整重寫符合 Law 7
-
-## 插件
-
-此市集提供兩個插件：
-
-### rcc (v9.3.2)
-
-核心 ACE 工作流程，包含 TDD 為基礎的技能、任務強制執行，以及品質審查員。
-
-**技能：**
-
-| 技能 | 說明 |
-|------|------|
-| `writing-skills` | TDD 為基礎的技能建立，含基線測試和審查 |
-| `writing-claude-md` | 使用標準 markdown 格式建立 CLAUDE.md |
-| `writing-subagents` | 為 `.claude/agents/` 建立子代理配置 |
-| `writing-rules` | 為 `.claude/rules/` 建立慣例規則檔案 |
-| `writing-hooks` | 建立靜態分析與程式碼品質的 hook |
-| `reflecting` | 反思對話內容，分類學習成果，整合 |
-| `improving-skills` | 透過針對性改進來優化技能 |
-| `refactoring-skills` | 分析並整合所有技能 |
-| `initializing-projects` | 初始化新專案，包含框架和代理人系統 |
-| `migrating-agent-systems` | 成熟度分級路由，含跨工具設定偵測 |
-| `analyzing-agent-systems` | 10 類弱點偵測，含跨工具遷移檢查 |
-| `brainstorming-workflows` | Walkthrough 式工作流探索，含複雜度階梯 |
-| `planning-agent-systems` | 架構優先規劃，含 Anthropic 模式對應 |
-| `applying-agent-systems` | 透過 writing-* 技能鏈執行元件計畫 |
-| `reviewing-agent-systems` | 使用全部 5 個 reviewer agents 進行品質審查 |
-| `refactoring-agent-systems` | 根據 review 報告修正問題 |
-| `creating-plugins` | 建立新的 Claude Code 插件骨架 |
-| `refactoring-plugins` | 根據官方最佳實踐重構插件，含健康檢查 |
-| `advising-architecture` | 驗證方法、分類知識類型、檢查元件衝突 |
-
-**Agent System 技能鏈：**
-
-```
-migrating-agent-systems（成熟度分級路由器）
-  ├─ None → brainstorming-workflows → planning-agent-systems → ...
-  ├─ Seed（其他 AI 設定）→ 匯入設定 → brainstorming-workflows → ...
-  └─ Partial/Established → analyzing-agent-systems → brainstorming-workflows
-       → planning-agent-systems → applying-agent-systems
-       → reviewing-agent-systems → refactoring-agent-systems
-```
-
-**子代理（審查員）：**
-
-| 代理 | 說明 |
-|------|------|
-| `skill-reviewer` | 技能品質審查 |
-| `claudemd-reviewer` | CLAUDE.md 品質審查 |
-| `rule-reviewer` | 規則品質審查 |
-| `hook-reviewer` | Hook 品質審查 |
-| `subagent-reviewer` | 子代理品質審查 |
-
-### rcc-dev (v2.0.1)
-
-開發輔助工具，用於建立完整的 Claude Code 插件，包含 manifest、技能和市集設定。
-
-**技能：**
-
-| 技能 | 說明 |
-|------|------|
-| `writing-plugins` | 建立完整的插件套件，包含 manifest、技能和市集設定 |
-| `creating-plugins` | 建立新的 Claude Code 插件骨架 |
-
-## 元件架構
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                    Claude Code Context                          │
-├─────────────────────────────────────────────────────────────────┤
-│  自動注入                          │  按需調用                   │
-│  ─────────                         │  ─────────                  │
-│  • CLAUDE.md（高層次）              │  • Skills（能力）           │
-│  • .claude/rules/*.md（約束）       │  • Subagents（隔離脈絡）    │
-│    └─ paths: 條件式觸發            │                             │
-└─────────────────────────────────────────────────────────────────┘
-```
-
-| 元件 | 位置 | 觸發方式 | Token 影響 |
-|------|------|----------|------------|
-| **Rules** | `.claude/rules/*.md` | 自動注入 | 高 |
-| **Skills** | `.claude/skills/*/SKILL.md` | Claude 決定 | 漸進式揭露 |
-| **Subagents** | `.claude/agents/*.md` | Task 工具 | 隔離 |
-| **CLAUDE.md** | `./CLAUDE.md` | 自動注入 | 高 |
-
-## 技能設計原則
-
-所有技能都遵循 TDD 為基礎的設計，包含以下元件：
-
-| 元件 | 目的 |
-|------|------|
-| **Task Initialization** | 任何動作前強制執行 TaskCreate |
-| **TDD Mapping** | RED → GREEN → REFACTOR 階段 |
-| **Verification Criteria** | 每個任務的客觀檢查標準 |
-| **Red Flags** | 反合理化觸發器 |
-| **Rationalizations Table** | 常見藉口的反駁 |
-| **Flowchart** | 視覺化流程圖 |
-| **Reviewer Gate** | 完成前的品質審查 |
-
-## 工作流程
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                      工作階段                                    │
-├─────────────────────────────────────────────────────────────────┤
-│  1. Task 1        │  諮詢 advising-architecture                  │
-│  2. RED 階段      │  基線測試 - 觀察失敗                        │
-│  3. GREEN 階段    │  建立元件解決失敗                           │
-│  4. REFACTOR      │  透過審查員子代理進行品質審查               │
-│  5. Validate      │  在真實使用中測試                           │
-└─────────────────────────────────────────────────────────────────┘
-```
+- **從零建立 agent 系統** — 偵測專案成熟度、探索工作流、規劃架構，再依相依順序建立所有元件
+- **分析既有系統** — 11 類弱點檢查清單，涵蓋路由、context 管理、安全性、rules 健康度、跨工具遷移
+- **即時驗證** — PostToolUse hook 在每次編輯 skill、agent、rule 檔案時檢查 frontmatter、壞連結、孤立檔案
+- **品質閘門** — 5 個專用 reviewer agent（skill、CLAUDE.md、rule、hook、subagent）在每次建立或修改後執行
 
 ## 安裝
 
 ```bash
-# 從 GitHub 安裝
 /plugin marketplace add wayne930242/Reflexive-Claude-Code
 /plugin install rcc@rcc
-# 或
-/plugin install rcc-dev@rcc
-
-# 從本機路徑安裝
-/plugin install /path/to/Reflexive-Claude-Code/plugins/rcc
 ```
+
+## 運作方式
+
+### Agent System Pipeline
+
+完整 pipeline 有 6 個階段，各由專門的 skill 負責：
+
+```
+migrate → analyze → brainstorm → plan → apply → review → refactor
+```
+
+| 階段 | Skill | 功能 |
+|------|-------|------|
+| **遷移** | `migrating-agent-systems` | 偵測成熟度（None/Seed/Partial/Established），提出 rules 重構建議，路由至正確鏈 |
+| **分析** | `analyzing-agent-systems` | 掃描所有元件，執行 11 類弱點清單，產出 Rules Health Summary |
+| **探索** | `brainstorming-workflows` | 複雜度階梯（L1-L6）探索工作流，對應 Anthropic 模式 |
+| **規劃** | `planning-agent-systems` | 先畫架構流程圖，再依相依性排序元件計畫 |
+| **執行** | `applying-agent-systems` | 依序呼叫 writing-* skills：CLAUDE.md → rules → hooks → skills → agents |
+| **審查** | `reviewing-agent-systems` | 執行全部 5 個 reviewer agent，產出結構化報告 |
+
+### 品質檢查
+
+**11 類弱點分析**（透過 `analyzing-agent-systems`）：
+
+| # | 類別 | 主要檢查項 |
+|---|------|-----------|
+| 1 | 路由 / 觸發 | 模糊描述、重疊觸發、缺失 handoff |
+| 2 | Context 管理 | CLAUDE.md 過大、急切載入、context 污染 |
+| 3 | 工作流連續性 | 斷裂鏈、缺少驗證閘門 |
+| 4 | 冗餘 / 衝突 | 重複規則、矛盾指令 |
+| 5 | 安全 | 未保護敏感檔案、過度權限 |
+| 6 | 可觀測性 | 缺少結構化輸出、不透明路由 |
+| 7 | 架構 / 擴展 | 扁平拓撲、過度編排 |
+| 8 | Constitution 穩定性 | CLAUDE.md 含程序、模糊指令 |
+| 9 | 專案脈絡完整度 | 缺少部署文件、語言覆蓋率缺口 |
+| 10 | 跨工具遷移 | 未匯入 `.cursorrules`、copilot instructions |
+| 11 | Rules 健康度 | 行數 > 50、缺少 `paths:`、dead glob、session-start > 300 行 |
+
+**Rules Health Summary**（分析時產出）：
+
+| 指標 | 閾值 |
+|------|------|
+| CLAUDE.md 行數 | > 200 = 警告 |
+| Session-start 總計（CLAUDE.md + global rules） | > 300 = 警告 |
+| 單一 rule 行數 | > 50 = 警告 |
+| 有 `paths:` 但匹配 0 個檔案 | dead glob |
+| rules 含程序性內容 | 應抽成 skill |
+
+**即時驗證 hook**（`validate_frontmatter.py`）：
+- 每次 Edit/Write skill、agent 或 rule 檔案時觸發
+- 依官方規格檢查無效 frontmatter 欄位
+- 偵測 skill 目錄中的壞連結和孤立檔案
+- 輸出 `additionalContext` 讓 Claude 立即自我修正
+
+### 元件撰寫 Skills
+
+每個 `writing-*` skill 遵循 TDD 並搭配 reviewer 閘門：
+
+| Skill | 建立 | Reviewer |
+|-------|------|----------|
+| `writing-claude-md` | `CLAUDE.md` | `claudemd-reviewer` |
+| `writing-rules` | `.claude/rules/*.md` | `rule-reviewer` |
+| `writing-hooks` | `.claude/hooks/*` | `hook-reviewer` |
+| `writing-skills` | `.claude/skills/*/SKILL.md` | `skill-reviewer` |
+| `writing-subagents` | `.claude/agents/*.md` | `subagent-reviewer` |
+
+### 模型建議
+
+| 使用場景 | 模型 |
+|---------|------|
+| 實作、程式碼產生 | `sonnet` |
+| 規劃、架構設計 | `opus` |
+| 唯讀分析、審查 | `sonnet` |
+| 簡單查詢、探索 | `haiku` |
+
+## 完整 Skill 列表
+
+### rcc (v9.3.2)
+
+| Skill | 用途 |
+|-------|------|
+| `migrating-agent-systems` | 成熟度分級路由 + rules 重構建議 |
+| `analyzing-agent-systems` | 11 類弱點偵測 + Rules Health Summary |
+| `brainstorming-workflows` | 複雜度階梯 + Anthropic 模式對應 |
+| `planning-agent-systems` | 架構優先規劃 + 相依排序 |
+| `applying-agent-systems` | 透過 writing-* 鏈執行元件計畫 |
+| `reviewing-agent-systems` | 執行全部 5 個 reviewer agent |
+| `refactoring-agent-systems` | 依 review 報告修正問題 |
+| `writing-skills` | TDD 技能建立 |
+| `writing-claude-md` | 標準格式 CLAUDE.md |
+| `writing-subagents` | 含 model/isolation 指南的 subagent 設定 |
+| `writing-rules` | 含決策樹和內容驗證的 rules |
+| `writing-hooks` | 靜態分析和品質閘門的 hooks |
+| `reflecting` | 擷取學習成果，路由至 skills 或 rules |
+| `improving-skills` | 優化單一 skill |
+| `refactoring-skills` | 跨 skill 整合與去重 |
+| `advising-architecture` | 分類知識類型、驗證方法 |
+| `initializing-projects` | 從零建立專案 + agent 系統 |
+| `creating-plugins` | 建立新 Claude Code 插件骨架 |
+| `refactoring-plugins` | 依官方最佳實踐檢查插件健康度 |
+| `validating-plugins` | 批次掃描所有插件檔案錯誤 |
+
+### rcc-dev (v2.0.1)
+
+| Skill | 用途 |
+|-------|------|
+| `writing-plugins` | 建立完整插件套件 |
+| `creating-plugins` | 建立插件骨架 |
 
 ## 專案結構
 
 ```
 Reflexive-Claude-Code/
 ├── .claude-plugin/
-│   └── marketplace.json     # 市集定義
+│   └── marketplace.json
 ├── plugins/
-│   ├── rcc/                 # Core ACE 插件
-│   │   ├── skills/          # 所有技能
-│   │   ├── agents/          # 審查員子代理
-│   │   └── commands/        # 命令別名
-│   └── rcc-dev/             # 開發輔助插件
+│   ├── rcc/
+│   │   ├── skills/          # 20 個 skills
+│   │   ├── agents/          # 5 個 reviewer subagents
+│   │   └── hooks/           # Frontmatter 驗證 hook
+│   └── rcc-dev/
 └── README.md
 ```
 
 ## 致謝
 
-本專案的技能設計模式受到以下啟發：
-
-- **[superpowers](https://github.com/anthropics/claude-code-superpowers)** - TDD 為基礎的技能設計、任務強制執行和驗證模式改編自 Anthropic 的 superpowers 插件。特別感謝其開創的「紀律強制技能」模式，包含 Red Flags 和 Rationalization 表格。
-
-- **代理脈絡工程 (Agentic Context Engineering, ACE) 框架**：
-  > Zhang, Q., Hu, C., Upasani, S., Ma, B., Hong, F., Kamanuru, V., Rainton, J., Wu, C., Ji, M., Li, H., Thakker, U., Zou, J., & Olukotun, K. (2025). *Agentic Context Engineering: Evolving Contexts for Self-Improving Language Models*. arXiv:2510.04618. https://arxiv.org/abs/2510.04618
+- **[superpowers](https://github.com/anthropics/claude-code-superpowers)** — TDD 技能設計與紀律強制模式改編自 Anthropic 的 superpowers 插件。
+- **代理脈絡工程 (Agentic Context Engineering, ACE)**：
+  > Zhang, Q., et al. (2025). *Agentic Context Engineering: Evolving Contexts for Self-Improving Language Models*. arXiv:2510.04618.
 
 ## 授權條款
 
