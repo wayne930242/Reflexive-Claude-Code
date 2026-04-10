@@ -55,7 +55,7 @@ Major release aligning with current agent engineering best practices.
 
 This marketplace provides two plugins:
 
-### rcc (v9.0.0)
+### rcc (v9.1.1)
 
 Core ACE workflow with TDD-based skills, task enforcement, and quality reviewers.
 
