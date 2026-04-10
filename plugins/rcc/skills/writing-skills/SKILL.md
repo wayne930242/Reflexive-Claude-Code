@@ -117,6 +117,26 @@ skill-name/
 
 See [references/spec.md](references/spec.md) for full frontmatter specification (fields, arguments, model selection, context:fork).
 
+### Context and Agent Selection
+
+| Use Case | context | agent | Rationale |
+|----------|---------|-------|-----------|
+| Inline knowledge (conventions, patterns) | (none) | (none) | Runs in main conversation, Claude applies alongside current context |
+| Analysis or exploration task | `fork` | `Explore` | Isolated context, read-only tools, prevents context pollution |
+| Planning task | `fork` | `Plan` | Isolated context, research-focused |
+| Task with side effects (deploy, commit) | `fork` | (none) | Isolated from main conversation, uses general-purpose agent |
+| Default for most skills | (none) | (none) | Runs inline, cheapest, fastest |
+
+**When to use `context: fork`:**
+- Skill generates large output that would pollute main context
+- Skill is a self-contained task (not reference material)
+- Skill needs different tools than the main conversation
+
+**When NOT to use `context: fork`:**
+- Skill provides conventions or guidelines (needs main context to apply them)
+- Skill content is reference material for ongoing work
+- Skill needs access to conversation history
+
 **Key rules (CRITICAL):**
 - Name: gerund form, lowercase, hyphens only, max 64 chars
 - Description: starts with "Use when...", third person, NEVER summarize workflow
