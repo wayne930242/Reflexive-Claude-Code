@@ -98,7 +98,7 @@ Each `writing-*` skill follows TDD with a reviewer gate:
 
 ## Full Skill List
 
-### rcc (v9.4.2)
+### rcc (v9.5.0)
 
 | Skill | Purpose |
 |-------|---------|

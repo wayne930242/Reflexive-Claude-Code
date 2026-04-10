@@ -98,7 +98,7 @@ migrate → analyze → brainstorm → plan → apply → review → refactor
 
 ## 完整 Skill 列表
 
-### rcc (v9.4.2)
+### rcc (v9.5.0)
 
 | Skill | 用途 |
 |-------|------|
