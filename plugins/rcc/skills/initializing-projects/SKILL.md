@@ -7,9 +7,9 @@ description: Use when bootstrapping a new project from scratch. Use when user sa
 
 ## Overview
 
-**Initializing projects IS bootstrapping with modern best practices AND agent system.**
+**Initializing projects IS bootstrapping with modern best practices, then optionally setting up an agent system.**
 
-Don't just create files—set up the full development environment including Claude Code integration.
+Don't just create files—research current docs, confirm with the user, then build.
 
 **Core principle:** Research current best practices. Don't assume—verify with official docs.
 
@@ -19,7 +19,7 @@ Don't just create files—set up the full development environment including Clau
 
 **Pattern:** Chain
 **Handoff:** user-confirmation
-**Next:** `brainstorming-workflows`
+**Next:** `migrating-agent-systems` (if user wants agent system)
 **Chain:** bootstrap
 
 ## Task Initialization (MANDATORY)
@@ -35,13 +35,12 @@ TaskCreate for EACH task below:
 **Tasks:**
 1. Gather requirements
 2. Research best practices
-3. Write blueprint
-4. Get user confirmation
-5. Bootstrap project
-6. Setup agent system
-7. Final validation
+3. Write blueprint and get confirmation
+4. Bootstrap project
+5. Validate project
+6. Offer agent system setup
 
-Announce: "Created 7 tasks. Starting execution..."
+Announce: "Created 6 tasks. Starting execution..."
 
 **Execution rules:**
 1. `TaskUpdate status="in_progress"` BEFORE starting each task
@@ -74,69 +73,47 @@ Announce: "Created 7 tasks. Starting execution..."
 
 **Use WebSearch to find:**
 - Latest stable version of framework
-- Official CLI/init command
+- Official CLI/init command with current flags
 - Recommended project structure
-- Current best practices (2025/2026)
+- Current best practices
 
-**CRITICAL:** Don't assume. Official docs change frequently.
+**CRITICAL:** Don't assume versions or flags from training data. Official docs change frequently.
 
-**Verification:** Have official init command and current version numbers.
+**Verification:** Have official init command and current version numbers from live sources.
 
-## Task 3: Write Blueprint
+## Task 3: Write Blueprint and Get Confirmation
 
-**Goal:** Create a blueprint document for user review.
+**Goal:** Present a complete plan for user approval before creating anything.
 
-**Write to:** `/docs/blueprint.md`
+**Present the blueprint directly to the user** (do NOT write to a file — the project directory doesn't exist yet).
 
 ### Blueprint Format
 
-```markdown
-# Project Blueprint
-
+```
 ## Stack
 - Language: [name] [version]
 - Framework: [name] [version]
 - Package manager: [choice]
 
 ## Initialization Command
-\`\`\`bash
-[official CLI command]
-\`\`\`
+[official CLI command with flags]
 
 ## Project Structure
 [Expected directory layout after init]
 
 ## Key Dependencies
-[Core packages to add]
-
-## Agent System Plan
-- CLAUDE.md: [key laws]
-- Rules: [planned rules]
-- Hooks: [planned quality gates]
+[Core packages to add, with purpose]
 ```
 
-**Verification:** Blueprint is written and covers all sections.
-
-## Task 4: Get User Confirmation
-
-**Goal:** Have user approve the blueprint before execution.
-
-**CRITICAL:** Do not proceed without explicit user confirmation.
-
-**Present the FULL blueprint content to user.** Do NOT summarize — show every section with detail:
-- Stack with exact versions and why each was chosen
-- Complete init command with flags explained
-- Project structure (directory tree)
-- Key dependencies with purpose of each
-- Agent system components planned and their rationale
-
-**Anti-pattern:** Listing 3-5 bullet points of one-liners is NOT presenting. The user must see enough detail to catch wrong versions, missing dependencies, or incorrect structure.
+**CRITICAL:** Present FULL detail. The user must see exact versions, flags, and dependency list to catch mistakes.
 
 **Ask:** "這個 blueprint 正確嗎？要開始執行嗎？"
 
+**If rejected:** Revise based on feedback, present again.
+
 **Verification:** User has reviewed the full blueprint and explicitly approved.
 
-## Task 5: Bootstrap Project
+## Task 4: Bootstrap Project
 
 **Goal:** Run the official CLI to create the project.
 
@@ -144,76 +121,42 @@ Announce: "Created 7 tasks. Starting execution..."
 1. Run the official init command from blueprint
 2. Install additional dependencies if needed
 3. Apply any post-init configurations
-4. Verify project builds/runs
 
-**Example:**
-```bash
-npx create-next-app@latest my-app --typescript --tailwind --eslint
-cd my-app && npm run dev
-```
+**Verification:** Project directory exists with expected structure.
 
-**Verification:** Project builds and runs without errors.
+## Task 5: Validate Project
 
-## Task 6: Setup Agent System
-
-**Goal:** Configure Claude Code for the new project.
-
-**Since this is a new project, skip analysis and go directly to workflow exploration.**
-
-**Handoff:** "專案已建立並通過驗證。要繼續設定 agent system 嗎？"
-- If yes → invoke `brainstorming-workflows` skill
-- If no → end
-
-The skill chain will automatically continue:
-1. `brainstorming-workflows` → explore user's workflows
-2. `planning-agent-systems` → plan components
-3. `applying-agent-systems` → create components via writing-* skills
-4. `reviewing-agent-systems` → quality review with all reviewer agents
-5. `refactoring-agent-systems` → fix issues from review
-
-**Verification:** Agent system is configured and verified by the skill chain.
-
-## Task 7: Final Validation
-
-**Goal:** Verify everything works together.
+**Goal:** Verify the project builds and runs.
 
 **Checklist:**
 - [ ] Project builds without errors
-- [ ] Project runs without errors
-- [ ] CLAUDE.md exists, under 200 lines, uses standard markdown format
-- [ ] Hooks run on file changes (if configured)
-- [ ] README documents the setup
+- [ ] Project runs without errors (dev server starts, CLI executes, tests pass)
+- [ ] Directory structure matches blueprint
+
+**If validation fails:** Fix issues before proceeding. Do NOT skip to agent system setup with a broken project.
 
 **Verification:** All checklist items pass.
 
-## Project Type Quick Reference
+## Task 6: Offer Agent System Setup
 
-### Frontend SPA
-```bash
-npx create-next-app@latest --typescript --tailwind
-# or
-npm create vite@latest -- --template react-ts
-```
+**Goal:** Ask the user if they want a Claude Code agent system for this project.
 
-### Full-stack App
-```bash
-npx create-next-app@latest --typescript
-# Add: prisma, next-auth, zod
-```
+**Present options:**
+- **Full agent system** — CLAUDE.md, rules, skills, hooks, agents (recommended for team projects)
+- **Minimal setup** — CLAUDE.md only (sufficient for simple projects or solo work)
+- **Skip** — no agent system
 
-### API Service
-```bash
-npm init -y && npm install express typescript
-# or
-cargo new --name api
-```
+**If Full:**
+- Invoke `migrating-agent-systems` skill
+- It will detect maturity = None and route to the full pipeline (brainstorm → plan → apply → review)
 
-### CLI Tool
-```bash
-npm init -y && npm install commander
-# or
-cargo new --name cli
-```
+**If Minimal:**
+- Invoke `writing-claude-md` skill to create a basic CLAUDE.md
+
+**If Skip:**
+- End
+
+**Verification:** User's choice is executed or skipped.
 
 ## Red Flags - STOP
 
@@ -223,7 +166,7 @@ These thoughts mean you're rationalizing. STOP and reconsider:
 - "Skip research, I've done this before"
 - "Don't need user confirmation"
 - "A brief summary is enough for confirmation"
-- "Agent system can wait"
+- "Write the blueprint to a file first"
 - "Skip validation, it's a fresh project"
 
 **All of these mean: You're about to create a weak foundation. Follow the process.**
@@ -232,11 +175,11 @@ These thoughts mean you're rationalizing. STOP and reconsider:
 
 | Excuse | Reality |
 |--------|---------|
-| "I know the version" | Versions change monthly. Verify. |
-| "Skip research" | Best practices evolve. Check official docs. |
+| "I know the version" | Versions change monthly. Verify with official docs. |
+| "Skip research" | Best practices evolve. Check live sources. |
 | "Skip confirmation" | Blueprint approval prevents wasted effort. |
-| "Brief summary is enough" | Brief summaries hide wrong decisions. Show full detail. |
-| "Agent system later" | Set it up now while context is fresh. |
+| "Brief summary" | Brief summaries hide wrong decisions. Show full detail. |
+| "Write blueprint to file" | Project directory doesn't exist yet. Present inline. |
 | "Fresh = working" | Fresh projects can have config issues. Validate. |
 
 ## Flowchart: Project Initialization
@@ -248,27 +191,33 @@ digraph init_project {
     start [label="New project", shape=doublecircle];
     gather [label="Task 1: Gather\nrequirements", shape=box];
     research [label="Task 2: Research\nbest practices", shape=box];
-    blueprint [label="Task 3: Write\nblueprint", shape=box];
-    confirm [label="Task 4: User\nconfirmation", shape=box];
+    blueprint [label="Task 3: Blueprint\n+ user confirmation", shape=box];
     confirmed [label="Approved?", shape=diamond];
-    bootstrap [label="Task 5: Bootstrap\nproject", shape=box];
-    agent [label="Task 6: Setup\nagent system", shape=box];
-    validate [label="Task 7: Final\nvalidation", shape=box];
-    valid [label="All\npasses?", shape=diamond];
+    bootstrap [label="Task 4: Bootstrap\nproject", shape=box];
+    validate [label="Task 5: Validate\nproject", shape=box];
+    valid [label="Builds and\nruns?", shape=diamond];
+    offer [label="Task 6: Offer\nagent system", shape=box];
+    choice [label="User\nchoice?", shape=diamond];
+    migrate [label="Invoke\nmigrating-agent-systems", shape=box];
+    claudemd [label="Invoke\nwriting-claude-md", shape=box];
     done [label="Project ready", shape=doublecircle];
 
     start -> gather;
     gather -> research;
     research -> blueprint;
-    blueprint -> confirm;
-    confirm -> confirmed;
+    blueprint -> confirmed;
     confirmed -> bootstrap [label="yes"];
     confirmed -> blueprint [label="no\nrevise"];
-    bootstrap -> agent;
-    agent -> validate;
+    bootstrap -> validate;
     validate -> valid;
-    valid -> done [label="yes"];
+    valid -> offer [label="yes"];
     valid -> bootstrap [label="no\nfix"];
+    offer -> choice;
+    choice -> migrate [label="full"];
+    choice -> claudemd [label="minimal"];
+    choice -> done [label="skip"];
+    migrate -> done;
+    claudemd -> done;
 }
 ```
 
@@ -276,8 +225,5 @@ digraph init_project {
 
 | Step | Skill | Purpose |
 |------|-------|---------|
-| 1 | `brainstorming-workflows` | Role-based workflow exploration |
-| 2 | `planning-agent-systems` | Component planning |
-| 3 | `applying-agent-systems` | Invoke writing-* skills |
-| 4 | `reviewing-agent-systems` | Quality review with reviewer agents |
-| 5 | `refactoring-agent-systems` | Fix issues from review |
+| full | `migrating-agent-systems` | Detects None maturity → brainstorm → plan → apply → review |
+| minimal | `writing-claude-md` | Create basic CLAUDE.md only |
