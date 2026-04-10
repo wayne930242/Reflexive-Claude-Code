@@ -16,7 +16,12 @@ SKILL_ALLOWED_FIELDS = {
     "user-invocable", "allowed-tools", "model", "effort", "context",
     "agent", "hooks", "paths", "shell",
 }
-AGENT_ALLOWED_FIELDS = {"name", "description", "model", "context", "tools"}
+AGENT_ALLOWED_FIELDS = {
+    "name", "description", "model", "context", "tools",
+    "disallowedTools", "permissionMode", "maxTurns", "skills",
+    "mcpServers", "hooks", "memory", "background", "effort",
+    "isolation", "color", "initialPrompt",
+}
 RULES_ALLOWED_FIELDS = {"paths"}
 HOOKS_ONLY_VARS = {"${CLAUDE_PLUGIN_ROOT}", "${CLAUDE_PLUGIN_DATA}"}
 
