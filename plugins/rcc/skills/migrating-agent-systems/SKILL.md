@@ -34,9 +34,10 @@ TaskCreate for EACH task below:
 
 **Tasks:**
 1. Detect and assess existing agent system
-2. Route to appropriate skill chain
+2. Rules refactoring proposal
+3. Route to appropriate skill chain
 
-Announce: "Created 2 tasks. Starting execution..."
+Announce: "Created 3 tasks. Starting execution..."
 
 **Execution rules:**
 1. `TaskUpdate status="in_progress"` BEFORE starting each task
@@ -80,7 +81,39 @@ Announce: "Created 2 tasks. Starting execution..."
 
 **Verification:** Clear maturity classification with evidence (which components found, which missing).
 
-## Task 2: Route to Appropriate Skill Chain
+## Task 2: Rules Refactoring Proposal
+
+**Goal:** Analyze CLAUDE.md and rules content, propose splitting into appropriate locations.
+
+**Skip condition:** If maturity is None or Seed, skip this task (no existing content to refactor).
+
+**Process:**
+
+1. Read all CLAUDE.md files and `.claude/rules/*.md`
+2. For each content block, classify:
+
+| Category | Criteria | Action |
+|----------|----------|--------|
+| Abstract directive (what/why) | Broad, applies to all work | Keep in CLAUDE.md |
+| Path-related directive | Targets specific file types or directories | Extract to path-scoped rule |
+| Procedural content (how/steps) | Multi-step process, code blocks as instructions | Extract to skill |
+| Outdated/duplicate | Conflicts with or duplicates other content | Delete |
+
+3. Produce refactoring proposal table:
+
+```
+## Rules Refactoring Proposal
+
+| # | Source | Summary | Category | Action | Target |
+|---|--------|---------|----------|--------|--------|
+```
+
+4. Present proposal to user for confirmation
+5. If confirmed, invoke `writing-rules` or `writing-skills` for each item
+
+**Verification:** User has confirmed or skipped the proposal.
+
+## Task 3: Route to Appropriate Skill Chain
 
 **Goal:** Invoke the correct starting skill based on maturity level.
 
@@ -139,19 +172,24 @@ digraph migrate_agent {
     start [label="Setup/migrate\nagent system", shape=doublecircle];
     detect [label="Task 1: Detect\nand assess", shape=box];
     maturity [label="Maturity\nlevel?", shape=diamond];
-    import_cfg [label="Import other\nAI configs", shape=box, style=filled, fillcolor="#ffffcc"];
-    brainstorm [label="Invoke\nbrainstorming-workflows", shape=box, style=filled, fillcolor="#ccffcc"];
-    analyze [label="Invoke\nanalyzing-agent-systems", shape=box, style=filled, fillcolor="#ccffcc"];
-    done [label="Routed to\nskill chain", shape=doublecircle];
+    import_cfg [label="Import other\nAI configs", shape=box];
+    refactor [label="Task 2: Rules\nrefactoring proposal", shape=box];
+    confirm [label="User\nconfirms?", shape=diamond];
+    execute [label="Execute split\n(writing-rules/skills)"];
+    brainstorm [label="Task 3: Route to\nskill chain", shape=box];
+    done [label="Routed", shape=doublecircle];
 
     start -> detect;
     detect -> maturity;
     maturity -> brainstorm [label="none"];
     maturity -> import_cfg [label="seed"];
-    maturity -> analyze [label="partial /\nestablished"];
+    maturity -> refactor [label="partial /\nestablished"];
     import_cfg -> brainstorm;
+    refactor -> confirm;
+    confirm -> execute [label="yes"];
+    confirm -> brainstorm [label="skip"];
+    execute -> brainstorm;
     brainstorm -> done;
-    analyze -> done;
 }
 ```
 
@@ -159,7 +197,7 @@ digraph migrate_agent {
 
 | Step | Skill | Purpose |
 |------|-------|---------|
-| 0 | `analyzing-agent-systems` | Scan + 10-category weakness detection (if partial/established) |
+| 0 | `analyzing-agent-systems` | Scan + 11-category weakness detection (if partial/established) |
 | 1 | `brainstorming-workflows` | Role-based workflow exploration + simplicity assessment |
 | 2 | `planning-agent-systems` | Architecture flowchart + dependency-driven component planning |
 | 3 | `applying-agent-systems` | Invoke writing-* skills per phase |
