@@ -8,7 +8,6 @@
   },
   "repository": "https://github.com/wayne930242/Reflexive-Claude-Code",
   "license": "MIT",
-  "hooks": "./hooks/hooks.json",
   "keywords": [
     "claude-code",
     "plugin",
