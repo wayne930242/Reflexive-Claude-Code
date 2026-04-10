@@ -7,11 +7,11 @@ description: Use when setting up or migrating a Claude Code plugin. Use when use
 
 ## Overview
 
-**Migrating plugins IS routing to the correct workflow based on plugin state.**
+**Migrating plugins IS identifying which plugin to work on, then routing to the correct workflow.**
 
-Detect whether a plugin already exists, assess its completeness, then invoke the appropriate skill chain. This skill is a thin router — all logic lives in the specialized skills.
+A workspace may contain multiple plugins. This skill first locates all plugins, asks the user which one to target, resolves its root path, then routes to the appropriate chain.
 
-**Core principle:** Detect, don't assume. Route, don't implement.
+**Core principle:** Ask which plugin. Resolve the path. Then route.
 
 **Violating the letter of the rules is violating the spirit of the rules.**
 
@@ -33,10 +33,11 @@ TaskCreate for EACH task below:
 ```
 
 **Tasks:**
-1. Detect and assess plugin state
-2. Route to appropriate skill chain
+1. Discover and select target plugin
+2. Assess plugin state
+3. Route to appropriate skill chain
 
-Announce: "Created 2 tasks. Starting execution..."
+Announce: "Created 3 tasks. Starting execution..."
 
 **Execution rules:**
 1. `TaskUpdate status="in_progress"` BEFORE starting each task
@@ -63,11 +64,47 @@ Plugins have a different structure than projects. Do NOT look for project-level 
 | .lsp.json | ✗ | ✓ |
 | bin/ | ✗ | ✓ |
 
-## Task 1: Detect and Assess Plugin State
+## Task 1: Discover and Select Target Plugin
 
-**Goal:** Determine whether a plugin exists and its completeness level.
+**Goal:** Find all plugins in the workspace and let the user choose which one to work on.
 
-**Check for plugin components:**
+**Discovery strategy (try in order):**
+
+1. **Check for marketplace.json** — scan for `**/. claude-plugin/marketplace.json`. If found, read the `plugins` array to get all plugin names and `source` paths (relative to marketplace.json location).
+
+2. **Check for standalone plugins** — scan for `**/.claude-plugin/plugin.json`. Each parent directory of `.claude-plugin/` is a plugin root.
+
+3. **Check user-specified path** — if the user provided a path in their request, use it directly.
+
+**For each plugin found, record:**
+- Name (from plugin.json `name` field)
+- Root path (the directory containing `.claude-plugin/`)
+- Version (from plugin.json `version` field)
+- Source path (from marketplace.json `source` if applicable)
+
+**If multiple plugins found:**
+- Present a numbered list to the user
+- Ask: "Which plugin do you want to work on?"
+- Wait for user selection
+
+**If exactly one plugin found:**
+- Confirm with user: "Found plugin '[name]' at [path]. Proceed?"
+
+**If no plugins found:**
+- Announce: "No existing plugins found. Do you want to create a new one?"
+- If yes → route to `creating-plugins` in Task 3
+
+**Set the target plugin root path** — all subsequent tasks and skill invocations use this path as their working context.
+
+**Verification:** A single plugin is selected, its root path is resolved to an absolute path, and the user has confirmed.
+
+## Task 2: Assess Plugin State
+
+**Goal:** Scan the selected plugin's components and classify its maturity.
+
+**Working directory:** Use the plugin root path from Task 1.
+
+**Check for plugin components (relative to plugin root):**
 - `.claude-plugin/plugin.json` (manifest — required)
 - `skills/` directory with `*/SKILL.md` files
 - `agents/` directory with `*.md` files
@@ -78,11 +115,7 @@ Plugins have a different structure than projects. Do NOT look for project-level 
 - `settings.json` (default settings)
 - `bin/` (executables)
 
-**Check for marketplace (if this is a marketplace repo):**
-- `.claude-plugin/marketplace.json`
-- Multiple plugin directories under `plugins/`
-
-**Run `claude plugin validate`** on the plugin directory to catch structural issues.
+**Run `claude plugin validate`** on the plugin root directory.
 
 **Maturity classification:**
 
@@ -94,51 +127,53 @@ Plugins have a different structure than projects. Do NOT look for project-level 
 
 **For each component found, record:**
 - Type (manifest / skill / agent / hook / command / mcp / lsp)
-- Path
+- Path (relative to plugin root)
 - Line count
 - Brief purpose (from frontmatter or filename)
 
-**Verification:** Clear maturity classification with evidence (which components found, which missing).
+**Verification:** Clear maturity classification with component inventory. Plugin root path confirmed.
 
-## Task 2: Route to Appropriate Skill Chain
+## Task 3: Route to Appropriate Skill Chain
 
-**Goal:** Invoke the correct starting skill based on plugin state.
+**Goal:** Invoke the correct starting skill, passing the plugin root path.
+
+**CRITICAL:** When invoking downstream skills, always specify the plugin root path so they operate on the correct target. Do NOT assume the current working directory is the plugin root.
 
 **If None:**
-- Announce: "No plugin found. Starting plugin creation..."
+- Announce: "No plugin found at [path]. Starting plugin creation..."
 - Invoke `creating-plugins` skill
 
 **If Minimal or Complete:**
-- Announce: "Existing plugin detected ([list components found]). Starting validation..."
-- Invoke `validating-plugins` skill to produce a validation report
-- After validation, invoke `refactoring-plugins` skill with the report as context
+- Announce: "Plugin '[name]' at [path] — [maturity]. Starting validation..."
+- Invoke `validating-plugins` skill with the plugin root path
+- After validation, invoke `refactoring-plugins` skill with the validation report and plugin root path
 - Chain: validating → refactoring
 
-**Verification:** Correct skill invoked based on maturity level, with appropriate context passed.
+**Verification:** Correct skill invoked with plugin root path passed as context.
 
 ## Red Flags - STOP
 
 These thoughts mean you're rationalizing. STOP and reconsider:
 
-- "I can see there's no plugin, skip detection"
+- "I know which plugin they mean"
+- "There's only one plugin, skip asking"
 - "The plugin.json exists so it's complete"
 - "Skip validation, just refactor"
 - "Handle creation here instead of routing"
-- "It has skills so it must be fine"
-- "Ignore the hooks directory, it's optional"
+- "I'll just use the current directory"
 
-**All of these mean: You're about to bypass the specialized skills. Route correctly.**
+**All of these mean: You're about to guess instead of verify. Ask, resolve, then route.**
 
 ## Common Rationalizations
 
 | Excuse | Reality |
 |--------|---------|
-| "Skip detection" | Hidden issues exist. Always scan. |
+| "I know which one" | Multiple plugins can exist. Always list and confirm. |
+| "Only one plugin" | Even with one, confirm the path. User may want a different directory. |
 | "Has manifest = complete" | A 3-field plugin.json is minimal at best. Check all components. |
-| "Skip validation" | `claude plugin validate` catches issues you can't see by reading. Run it. |
-| "Handle here" | This skill is a router. Creation and refactoring logic live in specialized skills. |
-| "Has skills = fine" | Skills without proper frontmatter silently fail to trigger. Validate. |
-| "Hooks are optional" | Optional doesn't mean skip checking. If hooks exist, they must be valid. |
+| "Skip validation" | `claude plugin validate` catches structural issues you can't see by reading. |
+| "Handle here" | This skill is a router. Logic lives in specialized skills. |
+| "Use current directory" | Plugin root may be nested. Resolve from marketplace.json or plugin.json location. |
 
 ## Flowchart: Plugin Migration
 
@@ -147,15 +182,23 @@ digraph migrate_plugin {
     rankdir=TB;
 
     start [label="Setup/migrate\nplugin", shape=doublecircle];
-    detect [label="Task 1: Detect\nand assess", shape=box];
+    discover [label="Task 1: Discover\nplugins in workspace", shape=box];
+    multiple [label="Multiple\nplugins?", shape=diamond];
+    ask [label="Ask user\nwhich plugin", shape=box];
+    assess [label="Task 2: Assess\nplugin state", shape=box];
     maturity [label="Plugin\nstate?", shape=diamond];
     create [label="Invoke\ncreating-plugins", shape=box];
-    validate [label="Invoke\nvalidating-plugins", shape=box];
-    refactor [label="Invoke\nrefactoring-plugins", shape=box];
-    done [label="Routed to\nskill chain", shape=doublecircle];
+    validate [label="Invoke\nvalidating-plugins\n(with plugin root)", shape=box];
+    refactor [label="Invoke\nrefactoring-plugins\n(with plugin root)", shape=box];
+    done [label="Routed", shape=doublecircle];
 
-    start -> detect;
-    detect -> maturity;
+    start -> discover;
+    discover -> multiple;
+    multiple -> ask [label="yes"];
+    multiple -> assess [label="one"];
+    multiple -> create [label="none"];
+    ask -> assess;
+    assess -> maturity;
     maturity -> create [label="none"];
     maturity -> validate [label="minimal /\ncomplete"];
     create -> done;
