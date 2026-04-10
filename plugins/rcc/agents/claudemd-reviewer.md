@@ -3,7 +3,6 @@ name: claudemd-reviewer
 description: Use this agent after creating or modifying a CLAUDE.md file. Reviews quality including instruction specificity, token efficiency, correct separation of concerns, and actionability.
 model: sonnet
 effort: medium
-context: fork
 tools: ["Read", "Grep", "Glob", "Bash"]
 ---
 

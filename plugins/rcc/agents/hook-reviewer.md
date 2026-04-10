@@ -3,7 +3,6 @@ name: hook-reviewer
 description: Use this agent after creating or modifying a hook. Reviews quality including exit code contract, performance, file filtering, settings.json registration, and security.
 model: sonnet
 effort: medium
-context: fork
 tools: ["Read", "Grep", "Glob", "Bash"]
 ---
 

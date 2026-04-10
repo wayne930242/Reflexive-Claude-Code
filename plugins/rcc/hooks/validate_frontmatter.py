@@ -17,7 +17,7 @@ SKILL_ALLOWED_FIELDS = {
     "agent", "hooks", "paths", "shell",
 }
 AGENT_ALLOWED_FIELDS = {
-    "name", "description", "model", "context", "tools",
+    "name", "description", "model", "tools",
     "disallowedTools", "permissionMode", "maxTurns", "skills",
     "mcpServers", "hooks", "memory", "background", "effort",
     "isolation", "color", "initialPrompt",

@@ -3,7 +3,6 @@ name: rule-reviewer
 description: Use this agent after creating or modifying a rule file in .claude/rules/. Reviews quality including frontmatter paths, rule specificity, and no duplication with CLAUDE.md laws.
 model: sonnet
 effort: medium
-context: fork
 tools: ["Read", "Grep", "Glob", "Bash"]
 ---
 

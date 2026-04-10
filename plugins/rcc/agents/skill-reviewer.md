@@ -3,7 +3,6 @@ name: skill-reviewer
 description: Use this agent after creating or modifying a skill. Reviews skill quality against best practices including frontmatter, description triggers, line count, naming conventions, and progressive disclosure.
 model: sonnet
 effort: medium
-context: fork
 tools: ["Read", "Grep", "Glob", "Bash"]
 ---
 
