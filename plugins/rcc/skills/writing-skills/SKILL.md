@@ -7,11 +7,11 @@ description: Use when creating new skills, modifying existing skills, or improvi
 
 ## Overview
 
-**Writing skills IS Test-Driven Development applied to process documentation.**
+**Writing skills IS structured documentation creation for process guidance.**
 
-Write baseline test (watch agent fail without skill), write skill addressing failures, verify agent now complies, refactor to close loopholes.
+Analyze requirements clearly, design skill structure thoughtfully, implement with precision, validate functionality, and iterate based on feedback.
 
-**Core principle:** If you didn't watch an agent fail without the skill, you don't know if the skill teaches the right thing.
+**Core principle:** Clear requirements and structured design lead to effective skills that truly guide agent behavior.
 
 **Violating the letter of the rules is violating the spirit of the rules.**
 
@@ -33,11 +33,11 @@ TaskCreate for EACH task below:
 
 **Tasks:**
 1. Analyze requirements
-2. RED - Run baseline test
-3. GREEN - Write SKILL.md
+2. Design skill structure  
+3. Implement SKILL.md
 4. Add references (if needed)
 5. Validate structure
-6. REFACTOR - Quality review
+6. Review and improve
 7. Test with real usage
 
 Announce: "Created 7 tasks. Starting execution..."
@@ -49,15 +49,15 @@ Announce: "Created 7 tasks. Starting execution..."
 4. NEVER skip to next task until current is completed
 5. At end, `TaskList` to confirm all completed
 
-## TDD Mapping for Skills
+## Skill Creation Process
 
-| TDD Phase | Skill Creation | What You Do |
-|-----------|----------------|-------------|
-| **RED** | Baseline test | Run scenario WITHOUT skill, watch agent fail |
-| **Verify RED** | Capture failures | Document exact rationalizations verbatim |
-| **GREEN** | Write skill | Address specific baseline failures |
-| **Verify GREEN** | Pressure test | Run scenario WITH skill, verify compliance |
-| **REFACTOR** | Close loopholes | Find new rationalizations, add counters |
+| Phase | Focus | What You Do |
+|-------|-------|-------------|
+| **Requirements** | Understanding | Analyze what capability is needed and why |
+| **Design** | Structure | Plan skill organization, triggers, and content |
+| **Implementation** | Creation | Write skill following design and best practices |
+| **Validation** | Testing | Verify skill works correctly in real scenarios |
+| **Improvement** | Refinement | Iterate based on feedback and usage patterns |
 
 ## Task 1: Analyze Requirements
 
@@ -76,25 +76,27 @@ Analyze and answer ALL questions below:
 
 **Verification:** User has reviewed the full analysis and confirmed the direction.
 
-## Task 2: RED - Baseline Test
+## Task 2: Design Skill Structure
 
-**Goal:** Run scenario WITHOUT the skill. Watch agent fail. Document failures.
+**Goal:** Plan the skill's organization, triggers, and content.
 
-This is "write failing test first" - you MUST see what agents naturally do wrong.
+**Design considerations:**
+1. What specific capability does this skill provide?
+2. When should the skill be triggered? (specific phrases, symptoms)
+3. What are the key tasks and workflow steps?
+4. What supporting materials are needed? (references, examples)
 
-**Process:**
-1. Create realistic pressure scenario with 3+ pressures (time, sunk cost, authority, exhaustion)
-2. Run scenario in fresh context WITHOUT skill loaded
-3. Document agent's choices and rationalizations **verbatim**
-4. Identify patterns in failures
+**Structure planning:**
+- Clear trigger conditions in description
+- Logical task sequence
+- Verification criteria for each task
+- Red flags and common mistakes
 
-See [references/testing-with-subagents.md](references/testing-with-subagents.md) for pressure scenario examples and templates.
+**Verification:** Have clear design plan with triggers, tasks, and structure defined.
 
-**Verification:** Have documented at least 3 specific failure modes or rationalizations.
+## Task 3: Implement SKILL.md
 
-## Task 3: GREEN - Write SKILL.md
-
-**Goal:** Write skill that addresses the specific baseline failures you documented.
+**Goal:** Create the skill following the design plan and best practices.
 
 ### Skill Structure
 
@@ -208,7 +210,7 @@ Agent tool:
 - **Needs Fix** → Fix issues, re-run reviewer, repeat until Pass
 - **Fail** → Major problems, return to Task 3
 
-**This is the REFACTOR phase:** Close loopholes identified by reviewer.
+**This is the improvement phase:** Address issues and refine quality based on reviewer feedback.
 
 **Verification:** skill-reviewer returns "Pass" rating.
 
@@ -232,7 +234,7 @@ Agent tool:
 
 These thoughts mean you're rationalizing. STOP and reconsider:
 
-- "Skip baseline test, I know what agents do wrong"
+- "Skip requirements analysis, I know what's needed"
 - "Description can summarize the workflow"
 - "300 lines is too restrictive"
 - "Skip reviewer, the skill is obviously good"
@@ -267,12 +269,12 @@ digraph skill_creation {
 
     start [label="Need new skill", shape=doublecircle];
     analyze [label="Task 1: Analyze\nrequirements", shape=box];
-    baseline [label="Task 2: RED\nBaseline test", shape=box, style=filled, fillcolor="#ffcccc"];
+    baseline [label="Task 2: Design\nskill structure", shape=box];
     verify_red [label="Failures\ndocumented?", shape=diamond];
-    write [label="Task 3: GREEN\nWrite SKILL.md", shape=box, style=filled, fillcolor="#ccffcc"];
+    write [label="Task 3: Write\nSKILL.md", shape=box];
     refs [label="Task 4: Add\nreferences", shape=box];
     validate [label="Task 5: Validate\nstructure", shape=box];
-    review [label="Task 6: REFACTOR\nQuality review", shape=box, style=filled, fillcolor="#ccccff"];
+    review [label="Task 6: Quality\nreview", shape=box];
     review_pass [label="Review\npassed?", shape=diamond];
     test [label="Task 7: Test\nreal usage", shape=box];
     done [label="Skill complete", shape=doublecircle];

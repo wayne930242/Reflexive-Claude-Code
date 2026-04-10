@@ -1,12 +1,12 @@
-# Testing Skills with Baseline Scenarios
+# Validating Skills with Real Scenarios
 
 ## Overview
 
-**Testing skills = TDD for documentation.**
+**Skill validation = structured testing for documentation effectiveness.**
 
-Run scenarios without skill (RED), write skill addressing failures (GREEN), close loopholes (REFACTOR).
+Analyze requirements thoroughly, design clear structure, implement with precision, validate in realistic scenarios, iterate based on feedback.
 
-**Core principle:** If you didn't watch an agent fail without the skill, you don't know if the skill teaches the right thing.
+**Core principle:** Skills must be validated in realistic usage scenarios to ensure they provide clear, actionable guidance.
 
 ## When to Test
 

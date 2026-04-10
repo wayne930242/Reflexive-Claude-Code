@@ -2,11 +2,11 @@
 
 [English](README.md) | [繁體中文](README.zh-TW.md)
 
-Claude Code 插件市集，提供**技能驅動的代理脈絡工程 (Agentic Context Engineering, ACE)** — 以 TDD 工作流程建立、分析、維護 agent 系統。
+Claude Code 插件市集，提供**技能驅動的代理脈絡工程 (Agentic Context Engineering, ACE)** — 以結構化工作流程建立、分析、維護 agent 系統。
 
 ## 功能簡介
 
-Reflexive Claude Code 讓 Claude Code 擁有一套完整的 agent 系統管理工具：CLAUDE.md、rules、skills、subagents、hooks。每個元件都經過 TDD 循環（RED → GREEN → REFACTOR）並搭配自動品質審查。
+Reflexive Claude Code 讓 Claude Code 擁有一套完整的 agent 系統管理工具：CLAUDE.md、rules、skills、subagents、hooks。每個元件都遵循結構化創建流程並搭配自動品質審查。
 
 **核心能力：**
 
@@ -77,7 +77,7 @@ migrate → analyze → brainstorm → plan → apply → review → refactor
 
 ### 元件撰寫 Skills
 
-每個 `writing-*` skill 遵循 TDD 並搭配 reviewer 閘門：
+每個 `writing-*` skill 遵循結構化流程並搭配 reviewer 閘門：
 
 | Skill | 建立 | Reviewer |
 |-------|------|----------|
@@ -127,7 +127,7 @@ migrate-plugin → validate → refactor
 
 ## 完整 Skill 列表
 
-### rcc (v9.9.0)
+### rcc (v9.10.0)
 
 | Skill | 用途 |
 |-------|------|
@@ -139,7 +139,7 @@ migrate-plugin → validate → refactor
 | `applying-agent-systems` | 透過 writing-* 鏈執行元件計畫 |
 | `reviewing-agent-systems` | 執行全部 5 個 reviewer agent |
 | `refactoring-agent-systems` | 依 review 報告修正問題 |
-| `writing-skills` | TDD 技能建立 |
+| `writing-skills` | 結構化技能建立 |
 | `writing-claude-md` | 標準格式 CLAUDE.md |
 | `writing-subagents` | 含 model/isolation 指南的 subagent 設定 |
 | `writing-rules` | 含決策樹和內容驗證的 rules |

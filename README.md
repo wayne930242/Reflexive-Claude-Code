@@ -2,11 +2,11 @@
 
 [English](README.md) | [繁體中文](README.zh-TW.md)
 
-A Claude Code plugin marketplace for **skills-driven Agentic Context Engineering (ACE)** — build, analyze, and maintain agent systems with TDD-based workflows.
+A Claude Code plugin marketplace for **skills-driven Agentic Context Engineering (ACE)** — build, analyze, and maintain agent systems with structured workflows.
 
 ## What This Does
 
-Reflexive Claude Code gives Claude Code a complete toolkit for managing its own agent system: CLAUDE.md, rules, skills, subagents, and hooks. Every component goes through a TDD cycle (RED → GREEN → REFACTOR) with automated quality review.
+Reflexive Claude Code gives Claude Code a complete toolkit for managing its own agent system: CLAUDE.md, rules, skills, subagents, and hooks. Every component follows a structured creation process with automated quality review.
 
 **Key capabilities:**
 
@@ -77,7 +77,7 @@ migrate → analyze → brainstorm → plan → apply → review → refactor
 
 ### Component Writing Skills
 
-Each `writing-*` skill follows TDD with a reviewer gate:
+Each `writing-*` skill follows a structured process with a reviewer gate:
 
 | Skill | Creates | Reviewer |
 |-------|---------|----------|
@@ -127,7 +127,7 @@ The planner decides which assets each skill needs; the reviewer checks they exis
 
 ## Full Skill List
 
-### rcc (v9.9.0)
+### rcc (v9.10.0)
 
 | Skill | Purpose |
 |-------|---------|
@@ -139,7 +139,7 @@ The planner decides which assets each skill needs; the reviewer checks they exis
 | `applying-agent-systems` | Execute component plan via writing-* chain |
 | `reviewing-agent-systems` | Run all 5 reviewer agents |
 | `refactoring-agent-systems` | Fix issues from review report |
-| `writing-skills` | TDD-based skill creation |
+| `writing-skills` | Structured skill creation |
 | `writing-claude-md` | CLAUDE.md with standard format |
 | `writing-subagents` | Subagent config with model/isolation guide |
 | `writing-rules` | Rules with decision tree and content validation |

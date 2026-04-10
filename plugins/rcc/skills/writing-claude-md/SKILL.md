@@ -33,12 +33,13 @@ TaskCreate for EACH task below:
 
 **Tasks:**
 1. Analyze current state
-2. RED - Test without proper CLAUDE.md
-3. GREEN - Write CLAUDE.md
-4. Add project content
-5. Validate structure
-6. REFACTOR - Quality review
-7. Test with new session
+2. Identify documentation gaps
+3. Design instruction structure
+4. Write CLAUDE.md
+5. Add project content
+6. Validate structure
+7. Review and optimize
+8. Test with new session
 
 Announce: "Created 7 tasks. Starting execution..."
 
@@ -49,15 +50,15 @@ Announce: "Created 7 tasks. Starting execution..."
 4. NEVER skip to next task until current is completed
 5. At end, `TaskList` to confirm all completed
 
-## TDD Mapping for CLAUDE.md
+## Documentation Creation Process
 
-| TDD Phase | CLAUDE.md Creation | What You Do |
-|-----------|-------------------|-------------|
-| **RED** | Test without CLAUDE.md | Observe agent missing conventions, using wrong commands |
-| **Verify RED** | Document gaps | Note what Claude got wrong or had to guess |
-| **GREEN** | Write CLAUDE.md | Create specific instructions addressing gaps |
-| **Verify GREEN** | Test in new session | Verify Claude follows instructions correctly |
-| **REFACTOR** | Trim and sharpen | Remove redundant/obvious content, improve specificity |
+| Phase | Focus | What You Do |
+|-------|-------|-------------|
+| **Analysis** | Current state | Understand existing setup and identify gaps |
+| **Requirements** | Needs assessment | Document what Claude needs to know that isn't in code |
+| **Design** | Structure planning | Organize instructions logically and prioritize content |
+| **Implementation** | Writing | Create clear, specific, and actionable instructions |
+| **Refinement** | Optimization | Remove redundancy, improve clarity and specificity |
 
 ## Task 1: Analyze Current State
 
@@ -238,14 +239,14 @@ digraph claudemd_creation {
 
     start [label="Need CLAUDE.md", shape=doublecircle];
     analyze [label="Task 1: Analyze\ncurrent state", shape=box];
-    baseline [label="Task 2: RED\nTest without CLAUDE.md", shape=box, style=filled, fillcolor="#ffcccc"];
+    baseline [label="Task 2: RED\nTest without CLAUDE.md", shape=box];
     verify_red [label="Gaps\ndocumented?", shape=diamond];
-    write [label="Task 3: GREEN\nWrite instructions", shape=box, style=filled, fillcolor="#ccffcc"];
+    write [label="Task 3: GREEN\nWrite instructions", shape=box];
     content [label="Task 4: Add\nproject content", shape=box];
     validate [label="Task 5: Validate\nstructure", shape=box];
     too_long [label="< 200\nlines?", shape=diamond];
     extract [label="Extract to\nrules/skills", shape=box];
-    review [label="Task 6: REFACTOR\nQuality review", shape=box, style=filled, fillcolor="#ccccff"];
+    review [label="Task 6: REFACTOR\nQuality review", shape=box];
     review_pass [label="Review\npassed?", shape=diamond];
     test [label="Task 7: Test\nnew session", shape=box];
     test_pass [label="Works?", shape=diamond];

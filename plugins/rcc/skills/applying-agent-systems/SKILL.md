@@ -81,7 +81,7 @@ Announce: "Created N tasks. Starting execution..."
 **CRITICAL CONSTRAINTS:**
 
 - **All writes happen in main conversation.** NEVER delegate writing-* skill invocations to subagents. Subagents cannot reliably write to `.claude/` directories.
-- **One component at a time.** Don't batch. Each writing-* skill has its own TDD process.
+- **One component at a time.** Don't batch. Each writing-* skill has its own creation process.
 - **Pass plan context.** When invoking a writing-* skill, provide the relevant section from the component plan as context.
 
 **Verification:** Each component exists and passes the writing-* skill's own validation.
@@ -120,7 +120,7 @@ These thoughts mean you're rationalizing. STOP and reconsider:
 
 | Excuse | Reality |
 |--------|---------|
-| "Write directly" | Writing-* skills encode TDD + review. Bypass = weak components. |
+| "Write directly" | Writing-* skills encode structured process + review. Bypass = weak components. |
 | "Use subagent" | Subagents can't write to `.claude/`. Will silently fail. |
 | "Parallel creation" | Components depend on each other. CLAUDE.md before rules before hooks. |
 | "Skip verification" | Integration issues only appear when components interact. Verify. |

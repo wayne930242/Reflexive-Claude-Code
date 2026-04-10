@@ -33,12 +33,12 @@ TaskCreate for EACH task below:
 
 **Tasks:**
 1. Analyze requirements
-2. RED - Test without subagent
-3. GREEN - Write agent file
-4. Validate structure
-5. Test invocation
-6. Verify behavior
-7. REFACTOR - Quality review
+2. Document problem context
+3. Design agent configuration
+4. Implement agent file
+5. Validate structure
+6. Test invocation
+7. Review and optimize
 
 Announce: "Created 7 tasks. Starting execution..."
 
@@ -49,15 +49,15 @@ Announce: "Created 7 tasks. Starting execution..."
 4. NEVER skip to next task until current is completed
 5. At end, `TaskList` to confirm all completed
 
-## TDD Mapping for Subagents
+## Agent Configuration Process
 
-| TDD Phase | Subagent Creation | What You Do |
-|-----------|-------------------|-------------|
-| **RED** | Test without agent | Perform task in main context, note issues |
-| **Verify RED** | Document problems | Note context pollution, scope creep |
-| **GREEN** | Write agent | Create focused agent addressing problems |
-| **Verify GREEN** | Test invocation | Verify agent runs with correct tools/prompt |
-| **REFACTOR** | Optimize | Reduce tools, sharpen system prompt |
+| Phase | Focus | What You Do |
+|-------|-------|-------------|
+| **Requirements** | Understanding | Identify what specialized task needs isolation |
+| **Analysis** | Problem definition | Document why main agent isn't sufficient |
+| **Design** | Configuration | Plan agent tools, model, and system prompt |
+| **Implementation** | Creation | Write agent file with proper configuration |
+| **Optimization** | Refinement | Fine-tune tools and prompts for efficiency |
 
 ## Task 1: Analyze Requirements
 
@@ -107,21 +107,21 @@ Request for specialized analysis agent with isolated context.
 
 **Verification:** Can describe the agent's single responsibility in one sentence.
 
-## Task 2: RED - Test Without Subagent
+## Task 2: Document Problem Context
 
-**Goal:** Perform the task in main context. Note issues that arise.
+**Goal:** Clearly understand why the main agent is insufficient for this task.
 
-**Process:**
-1. Perform the intended task in main conversation
-2. Observe context pollution or scope creep
-3. Note where specialized focus would help
-4. Document specific problems
+**Analysis points:**
+1. What specific challenges arise when using the main agent?
+2. How would task isolation improve the outcome?
+3. What context pollution or focus issues occur?
+4. What specialized expertise would help?
 
-**Verification:** Documented at least 1 issue (context pollution, focus loss, inconsistency) from running task in main context.
+**Verification:** Documented specific problems that justify creating a specialized subagent.
 
-## Task 3: GREEN - Write Agent File
+## Task 3: Design Agent Configuration
 
-**Goal:** Create agent file addressing the problems you documented.
+**Goal:** Plan the agent configuration to address the documented problems.
 
 ### Agent Location
 
@@ -308,13 +308,13 @@ digraph subagent_creation {
     analyze [label="Task 1: Analyze\nrequirements", shape=box];
     need_agent [label="Needs\nisolation?", shape=diamond];
     no_agent [label="Use main\ncontext", shape=box];
-    baseline [label="Task 2: RED\nTest without agent", shape=box, style=filled, fillcolor="#ffcccc"];
-    write [label="Task 3: GREEN\nWrite agent file", shape=box, style=filled, fillcolor="#ccffcc"];
+    baseline [label="Task 2: Document\nproblem context", shape=box];
+    write [label="Task 3: Design\nagent configuration", shape=box];
     validate [label="Task 4: Validate\nstructure", shape=box];
     invoke [label="Task 5: Test\ninvocation", shape=box];
     invoke_pass [label="Invocation\nworks?", shape=diamond];
     verify [label="Task 6: Verify\nbehavior", shape=box];
-    review [label="Task 7: REFACTOR\nQuality review", shape=box, style=filled, fillcolor="#ccccff"];
+    review [label="Task 7: REFACTOR\nQuality review", shape=box];
     review_pass [label="Review\npassed?", shape=diamond];
     done [label="Agent complete", shape=doublecircle];
 

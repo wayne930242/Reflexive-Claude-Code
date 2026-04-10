@@ -1,6 +1,6 @@
 # Reflexive Claude Code
 
-Claude Code 插件市集，提供 TDD 為基礎的技能驅動 Agentic Context Engineering 工作流程。
+Claude Code 插件市集，提供技能驅動的 Agentic Context Engineering 工作流程。
 
 ## Immutable Laws
 
@@ -48,8 +48,8 @@ plugins/
 
 ### Add New Skill
 1. 在 `plugins/rcc/skills/` 建立目錄 + `SKILL.md`
-2. 遵循 TDD 模板：Task Initialization → Tasks → Red Flags → Flowchart
+2. 遵循結構化模板：Task Initialization → Tasks → Red Flags → Flowchart
 3. 同步更新兩份 README
 
 ### Skill Design
-遵循 Laws 4-7，使用 TDD 模板（RED → GREEN → REFACTOR）
+遵循 Laws 4-7，使用結構化工作流程

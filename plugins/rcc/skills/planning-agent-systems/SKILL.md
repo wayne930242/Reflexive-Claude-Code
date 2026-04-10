@@ -153,7 +153,7 @@ digraph plan_agent {
 
     start [label="Plan agent\nsystem", shape=doublecircle];
     read [label="Task 1: Read\ninputs", shape=box];
-    flowchart [label="Task 2: Design\narchitecture flowchart", shape=box, style=filled, fillcolor="#ffffcc"];
+    flowchart [label="Task 2: Design\narchitecture flowchart", shape=box];
     plan [label="Task 3: Plan\ncomponents", shape=box];
     produce [label="Task 4: Produce\ncomponent plan", shape=box];
     confirm [label="Task 5: User\nconfirmation", shape=box];

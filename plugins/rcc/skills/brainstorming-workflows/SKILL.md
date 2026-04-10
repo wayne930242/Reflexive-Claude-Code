@@ -178,7 +178,7 @@ digraph brainstorm_workflows {
     confirm_fixes [label="User selects\nfindings to fix", shape=box];
     role [label="Task 2: Role\nselection", shape=box];
     explore [label="Task 3: Workflow\nexploration", shape=box];
-    simplify [label="Task 4: Simplest\nviable approach", shape=box, style=filled, fillcolor="#ffffcc"];
+    simplify [label="Task 4: Simplest\nviable approach", shape=box];
     summary [label="Task 5: Produce\nworkflow summary", shape=box];
     handoff [label="Invoke\nplanning-agent-systems", shape=box];
     done [label="Brainstorm complete", shape=doublecircle];

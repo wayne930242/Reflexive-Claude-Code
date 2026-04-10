@@ -174,11 +174,11 @@ digraph review_agent {
     start [label="Review agent\nsystem", shape=doublecircle];
     inventory [label="Task 1: Collect\ncomponent inventory", shape=box];
     review [label="Task 2: Run\nreviewers", shape=box];
-    claudemd [label="claudemd-\nreviewer", shape=box, style=filled, fillcolor="#e8e8ff"];
-    rules [label="rule-\nreviewer", shape=box, style=filled, fillcolor="#e8e8ff"];
-    hooks [label="hook-\nreviewer", shape=box, style=filled, fillcolor="#e8e8ff"];
-    skills [label="skill-\nreviewer", shape=box, style=filled, fillcolor="#e8e8ff"];
-    agents [label="subagent-\nreviewer", shape=box, style=filled, fillcolor="#e8e8ff"];
+    claudemd [label="claudemd-\nreviewer", shape=box];
+    rules [label="rule-\nreviewer", shape=box];
+    hooks [label="hook-\nreviewer", shape=box, ];
+    skills [label="skill-\nreviewer", shape=box, ];
+    agents [label="subagent-\nreviewer", shape=box, ];
     report [label="Task 3: Present\nreview report", shape=box];
     confirm [label="Task 4: User\nconfirmation", shape=box];
     approved [label="Proceed?", shape=diamond];

@@ -213,7 +213,7 @@ digraph refactor_agent {
     verify [label="Task 4: Final\nverification", shape=box];
     clean [label="Zero\ncritical?", shape=diamond];
     report [label="Task 5: Produce\nreport", shape=box];
-    archive [label="Task 6: Archive\npipeline documents", shape=box, style=filled, fillcolor="#ffffcc"];
+    archive [label="Task 6: Archive\npipeline documents", shape=box];
     done [label="Refactoring complete", shape=doublecircle];
 
     start -> analyze;

@@ -33,11 +33,12 @@ TaskCreate for EACH task below:
 
 **Tasks:**
 1. Analyze requirements
-2. RED - Test without rule
-3. GREEN - Write rule file
-4. Validate structure
-5. REFACTOR - Quality review
-6. Test activation
+2. Identify convention gaps
+3. Design rule structure  
+4. Write rule file
+5. Validate structure
+6. Review and optimize
+7. Test activation
 
 Announce: "Created 6 tasks. Starting execution..."
 
@@ -48,15 +49,15 @@ Announce: "Created 6 tasks. Starting execution..."
 4. NEVER skip to next task until current is completed
 5. At end, `TaskList` to confirm all completed
 
-## TDD Mapping for Rules
+## Configuration Creation Process
 
-| TDD Phase | Rule Creation | What You Do |
-|-----------|---------------|-------------|
-| **RED** | Test without rule | Work on matching files, note inconsistencies |
-| **Verify RED** | Document gaps | Note where conventions were forgotten |
-| **GREEN** | Write rule | Create `.claude/rules/` file addressing gaps |
-| **Verify GREEN** | Test injection | Verify rule activates on matching files |
-| **REFACTOR** | Optimize scope | Tighten `paths:` globs, reduce line count |
+| Phase | Focus | What You Do |
+|-------|-------|-------------|
+| **Analysis** | Understanding | Identify what convention needs enforcement |
+| **Scope Definition** | Targeting | Determine which files need this convention |
+| **Design** | Planning | Structure rule content and path patterns |
+| **Implementation** | Creation | Write clear, specific configuration rules |
+| **Optimization** | Refinement | Streamline scope and improve clarity |
 
 ## Task 1: Analyze Requirements
 
@@ -294,11 +295,11 @@ digraph rule_creation {
     start [label="Need rule", shape=doublecircle];
     analyze [label="Task 1: Analyze\nrequirements", shape=box];
     is_broad [label="Applies to\nall work?", shape=diamond];
-    use_claudemd [label="Put in\nCLAUDE.md", shape=box, style=filled, fillcolor="#ffcccc"];
-    baseline [label="Task 2: RED\nTest without rule", shape=box, style=filled, fillcolor="#ffcccc"];
-    write [label="Task 3: GREEN\nWrite rule", shape=box, style=filled, fillcolor="#ccffcc"];
+    use_claudemd [label="Put in\nCLAUDE.md", shape=box];
+    baseline [label="Task 2: RED\nTest without rule", shape=box];
+    write [label="Task 3: GREEN\nWrite rule", shape=box];
     validate [label="Task 4: Validate\nstructure", shape=box];
-    review [label="Task 5: REFACTOR\nQuality review", shape=box, style=filled, fillcolor="#ccccff"];
+    review [label="Task 5: REFACTOR\nQuality review", shape=box];
     review_pass [label="Review\npassed?", shape=diamond];
     test [label="Task 6: Test\nactivation", shape=box];
     done [label="Rule complete", shape=doublecircle];
