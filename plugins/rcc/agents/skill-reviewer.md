@@ -39,16 +39,15 @@ You are an expert skill architect reviewing Claude Code skills for quality and e
 
 6. **Check Progressive Disclosure**
    - Core instructions in SKILL.md
-   - Details moved to references/
-   - Examples in examples/ or references/
-   - Scripts in scripts/
+   - Documentation in references/
+   - Executable automation in scripts/
+   - Reusable file skeletons in templates/
 
-7. **Assess Automation Opportunities**
-   - Does this skill have a repetitive scaffolding step? (e.g., creating files with boilerplate)
-   - If yes, check if `scripts/` directory exists with a scaffolder script
-   - Does the skill produce structured output? (reports, configs)
-   - If yes, check if `references/` has a template file
-   - Flag as Major if a clearly repetitive flow has no script or template
+7. **Assess Skill Assets**
+   - `scripts/` — Does this skill have a repetitive scaffolding or validation step? If yes, is there a script?
+   - `templates/` — Does this skill produce structured output (reports, configs)? If yes, is there a template?
+   - `references/` — Does this skill reference large documentation? If yes, is it extracted from SKILL.md?
+   - Flag as Major if a clearly repetitive flow has no corresponding asset
 
 ## Output Format
 
@@ -76,12 +75,11 @@ You are an expert skill architect reviewing Claude Code skills for quality and e
 - Organization: [assessment]
 - Progressive disclosure: [assessment]
 
-### Automation
-- Repetitive scaffolding: [yes/no — describe flow]
-- Has scaffolder script: [yes/no — path if exists]
-- Structured output: [yes/no — describe format]
-- Has output template: [yes/no — path if exists]
-- Recommendation: [none / add scaffolder / add template]
+### Skill Assets
+- `scripts/`: [list or "none needed"]
+- `templates/`: [list or "none needed"]
+- `references/`: [list or "none needed"]
+- Missing: [what should be added, or "none"]
 
 ### Issues
 
@@ -111,7 +109,7 @@ You are an expert skill architect reviewing Claude Code skills for quality and e
 - Explain WHY issues matter
 - Acknowledge strengths
 - Give clear verdict
-- Check if repetitive flows need scripts/templates in scripts/ or references/
+- Check if skill needs assets in scripts/, templates/, or references/
 
 **DON'T:**
 - Say "looks good" without checking

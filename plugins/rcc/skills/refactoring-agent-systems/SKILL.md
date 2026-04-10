@@ -92,7 +92,7 @@ Announce: "Created 5 tasks. Starting execution..."
 | Weak skill trigger | Improve description | Main conversation edits |
 | Missing isolation | Add `context: fork` to agent | Main conversation edits |
 | CLAUDE.md too long | Move content to rules/skills | Main conversation edits |
-| Skill lacks scaffolder/template | Add scripts/ or references/ asset | Main conversation creates script |
+| Skill missing asset | Add scripts/, templates/, or references/ | Create directly — no user confirmation needed |
 
 **CRITICAL:** All edits happen in main conversation. Never delegate refactoring writes to subagents.
 

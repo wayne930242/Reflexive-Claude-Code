@@ -32,18 +32,31 @@ For each component type, evaluate:
 - Agents MUST be read-only (no `.claude/` writes)
 - All `.claude/` writes happen via main conversation, never subagents
 
-## Script and Template Planning
+## Skill Asset Planning
 
-For each planned skill, evaluate whether it needs automation support:
+Each skill can bundle three types of supporting assets. Plan these alongside the skill, not as an afterthought.
 
-| Signal | Asset to Plan | Example |
-|--------|--------------|---------|
-| Skill creates files with boilerplate | `scripts/` scaffolder | `add_hook.py` in writing-hooks |
-| Skill produces structured reports | `references/` template | `report-template.md` in analyzing |
-| Skill validates file format | `scripts/` validator | `validate_skill.py` in writing-skills |
-| Skill has a complex multi-file setup | `scripts/` initializer | `init_claude_md.py` in writing-claude-md |
+```
+my-skill/
+├── SKILL.md           # Instructions (required)
+├── references/        # On-demand documentation, examples
+├── scripts/           # Executable scaffolders, validators
+└── templates/         # Reusable file templates for output
+```
 
-**Decision:** If a skill will be invoked repeatedly and involves file creation or structured output, plan a script or template alongside it. Do not defer — scaffolders are part of the skill, not an afterthought.
+| Signal | Asset Type | Directory | Example |
+|--------|-----------|-----------|---------|
+| Skill creates files with boilerplate | Scaffolder script | `scripts/` | `add_hook.py` in writing-hooks |
+| Skill produces structured reports or configs | Output template | `templates/` | Report format, config skeleton |
+| Skill validates file format or structure | Validator script | `scripts/` | `validate_skill.py` in writing-skills |
+| Skill has complex multi-file setup | Initializer script | `scripts/` | `init_claude_md.py` in writing-claude-md |
+| Skill references large documentation | Reference docs | `references/` | Checklists, pattern catalogs, examples |
+
+**`references/`** = documentation Claude reads on demand (loaded via markdown links).
+**`scripts/`** = executable code Claude runs (scaffolders, validators, initializers).
+**`templates/`** = file skeletons Claude copies and fills in (report formats, config files, boilerplate).
+
+**Decision:** If a skill will be invoked repeatedly and involves file creation or structured output, plan the corresponding asset. Scripts automate; templates standardize; references inform.
 
 ## Available Writing Skills
 
