@@ -186,11 +186,22 @@ Specific, imperative, scoped.
 Vague, unscoped, passive.
 </Bad>
 
+**Content validation checks:**
+
+| Check | Fail condition | Action |
+|-------|---------------|--------|
+| Line count | > 50 lines | Must simplify or split |
+| Procedural content | Contains numbered steps, multi-line code blocks | Extract to skill, rule keeps principle only |
+| paths missing | Content targets specific file types but no `paths:` | Must add |
+| Load budget | Adding this rule pushes session-start total > 300 lines | Warn, suggest path-scoped |
+
 **Verification:**
-- [ ] Has frontmatter with `paths:` (or intentionally global)
+- [ ] Has frontmatter with `paths:` (or intentionally global with justification)
 - [ ] < 50 lines
 - [ ] Imperative language ("MUST", "NEVER")
-- [ ] Not duplicating existing rules
+- [ ] No procedural content (steps, code blocks as process)
+- [ ] Not duplicating existing rules or CLAUDE.md
+- [ ] Session-start total (CLAUDE.md + global rules) still under 300 lines
 
 ## Task 4: Validate Structure
 
@@ -258,6 +269,9 @@ These thoughts mean you're rationalizing. STOP and reconsider:
 - "Skip baseline, I know what's needed"
 - "Add how-to instructions here"
 - "One big rule is better than multiple small ones"
+- "This rule applies to everything" (really? try adding paths)
+- "I need to explain the steps" (that is a skill, not a rule)
+- "Let me add a code example" (a rule is a directive, not a tutorial)
 
 **All of these mean: You're about to create a weak rule. Follow the process.**
 
