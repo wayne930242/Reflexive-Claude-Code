@@ -98,11 +98,12 @@ Each `writing-*` skill follows TDD with a reviewer gate:
 
 ## Full Skill List
 
-### rcc (v9.3.2)
+### rcc (v9.4.0)
 
 | Skill | Purpose |
 |-------|---------|
 | `migrating-agent-systems` | Maturity-graded routing with rules refactoring proposal |
+| `migrating-plugins` | Plugin maturity detection, routes to create or validate+refactor |
 | `analyzing-agent-systems` | 11-category weakness detection with Rules Health Summary |
 | `brainstorming-workflows` | Complexity ladder + Anthropic pattern mapping |
 | `planning-agent-systems` | Architecture-first planning with dependency ordering |

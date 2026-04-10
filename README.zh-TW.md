@@ -98,11 +98,12 @@ migrate → analyze → brainstorm → plan → apply → review → refactor
 
 ## 完整 Skill 列表
 
-### rcc (v9.3.2)
+### rcc (v9.4.0)
 
 | Skill | 用途 |
 |-------|------|
 | `migrating-agent-systems` | 成熟度分級路由 + rules 重構建議 |
+| `migrating-plugins` | 偵測插件成熟度，路由至建立或驗證+重構 |
 | `analyzing-agent-systems` | 11 類弱點偵測 + Rules Health Summary |
 | `brainstorming-workflows` | 複雜度階梯 + Anthropic 模式對應 |
 | `planning-agent-systems` | 架構優先規劃 + 相依排序 |
