@@ -1,6 +1,6 @@
 ---
 name: writing-subagents
-description: Use when creating specialized Claude Code subagents in .claude/agents/. Use when user says "create agent", "add reviewer", "specialized agent", "isolated context task".
+description: "Use when creating specialized Claude Code subagents in .claude/agents/. Use when user says 'create agent', 'add reviewer', 'specialized agent', 'isolated context task'."
 ---
 
 # Writing Subagents
@@ -75,6 +75,26 @@ Announce: "Created 7 tasks. Starting execution..."
 - Task is repetitive and well-defined
 - Task benefits from specialized system prompt
 
+**Examples:**
+
+<example>
+Context: User needs code review automation
+user: "create a code reviewer agent"
+assistant: "I'll use the writing-subagents skill to create a specialized code review agent."
+<commentary>
+Clear request for agent creation triggers the skill.
+</commentary>
+</example>
+
+<example>
+Context: User wants isolated analysis task  
+user: "add a security analyzer agent"
+assistant: "I'll create a specialized security analysis subagent."
+<commentary>
+Request for specialized analysis agent with isolated context.
+</commentary>
+</example>
+
 **Built-in subagent types (consider BEFORE creating custom agents):**
 
 | Type | Model | Tools | Use Case |
@@ -138,7 +158,9 @@ See [references/agent-spec.md](references/agent-spec.md) for full configuration 
 
 **Key rules:**
 - `name`: lowercase with hyphens, matches filename
-- `description`: include "Use proactively when..." for auto-invoke
+- `description`: include 2-4 concrete examples in `<example>` blocks showing triggering conditions
+- `model`: use `inherit` unless specific model capabilities needed
+- `color`: unique color per agent (blue, green, red, purple, yellow)
 - `tools`: minimal set (principle of least privilege). Subagents CANNOT request permissions at runtime.
 - Plugin agents do NOT support `hooks`, `mcpServers`, or `permissionMode`
 
@@ -153,11 +175,12 @@ See [references/agent-spec.md](references/agent-spec.md) for full configuration 
 
 | Use Case | Model | Rationale |
 |----------|-------|-----------|
-| Implementation, code generation | `sonnet` | Best balance of capability and speed for writing code |
-| Planning, architecture design | `opus` | Needs deep reasoning for design decisions |
-| Read-only analysis, review | `sonnet` | Fast, cost-effective, sufficient for static analysis |
-| Simple lookup, exploration | `haiku` | Fastest, cheapest, good for read-only search tasks |
-| Default | `sonnet` | Recommended default for most use cases |
+| **Default (recommended)** | `inherit` | Uses parent conversation model - Claude Code official best practice |
+| Planning, architecture design | `opus` | Maximum capability for complex reasoning and design decisions |
+| Standard implementation, review | `sonnet` | Balanced performance for code generation and analysis |
+| Simple lookup, exploration | `haiku` | Fastest, cheapest for formulaic and simple tasks |
+
+**Best Practice:** Use `inherit` unless agent requires specific model capabilities.
 
 ### Isolation Guide
 

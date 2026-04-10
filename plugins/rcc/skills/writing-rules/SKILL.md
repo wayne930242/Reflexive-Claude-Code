@@ -1,6 +1,6 @@
 ---
 name: writing-rules
-description: Use when creating rule files in .claude/rules/, adding project conventions, or scoping guidelines to specific paths. Use when user says "add rule", "create convention", "scope guideline". NOT for broad project instructions (use CLAUDE.md).
+description: "Use when adding project conventions or scoping guidelines. For this plugin: use CLAUDE.md for all conventions. Use when user says 'add convention', 'scope guideline'. NOT for current workflow (rules mechanism not implemented)."
 ---
 
 # Writing Rules
@@ -11,7 +11,7 @@ description: Use when creating rule files in .claude/rules/, adding project conv
 
 Rules auto-inject into context when files match their `paths:` glob. Keep them concise—every line costs tokens.
 
-**Core principle:** Rules = path-scoped conventions, auto-injected when matching files are read. CLAUDE.md = broad project instructions loaded every session. Use rules when different paths need different conventions.
+**Core principle:** Rules = path-scoped conventions with auto-injection. CLAUDE.md = broad project instructions. For this plugin project: use CLAUDE.md for all guidelines—rules mechanism not currently implemented.
 
 **Violating the letter of the rules is violating the spirit of the rules.**
 
