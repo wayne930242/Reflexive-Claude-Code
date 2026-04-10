@@ -9,7 +9,7 @@ description: Use when analyzing an existing agent system for weaknesses. Use whe
 
 **Analyzing agent systems IS systematic weakness detection across all agent components.**
 
-Scan every component (CLAUDE.md, rules, hooks, skills, agents), check against 10 weakness categories, produce a severity-rated report.
+Scan every component (CLAUDE.md, rules, hooks, skills, agents), check against 11 weakness categories, produce a severity-rated report.
 
 **Core principle:** You cannot fix what you haven't measured. Analyze before changing anything.
 
@@ -80,9 +80,9 @@ Compare `~/.claude/rules/` against `.claude/rules/`:
 
 ## Task 2: Run Weakness Analysis
 
-**Goal:** Check every component against the 10-category weakness checklist.
+**Goal:** Check every component against the 11-category weakness checklist.
 
-**CRITICAL:** Read [references/weakness-checklist.md](references/weakness-checklist.md) for the full checklist.
+**CRITICAL:** Read [references/weakness-checklist.md](references/weakness-checklist.md) for the full 11-category checklist.
 
 **For each weakness found, record:**
 - Category (1-10)
@@ -111,6 +111,22 @@ Compare `~/.claude/rules/` against `.claude/rules/`:
 **Goal:** Write structured report to `docs/agent-system/{timestamp}-analysis.md`.
 
 **CRITICAL:** Read [references/report-template.md](references/report-template.md) for the full report format.
+
+**Rules Health Summary (include in report):**
+
+```
+## Rules Health Summary
+| Metric                        | Value | Status |
+|-------------------------------|-------|--------|
+| CLAUDE.md lines               |       |        |
+| Global rules count / lines    |       |        |
+| Session-start total lines     |       |        |
+| Path-scoped rules             |       |        |
+| Rules with procedural content |       |        |
+| Dead glob patterns            |       |        |
+```
+
+Thresholds: CLAUDE.md > 200 lines = WARNING. Session-start total > 300 = WARNING. Any dead glob = WARNING.
 
 **Verification:** Report written with all findings categorized by severity.
 
@@ -142,7 +158,7 @@ These thoughts mean you're rationalizing. STOP and reconsider:
 | "Only major issues matter" | INFO issues compound. Document everything. |
 | "Skip the report" | Reports enable before/after comparison. Essential for refactoring. |
 | "Cross-checks take too long" | Cross-component issues are the hardest to find later. Check now. |
-| "One pass is enough" | Different categories reveal different issues. Check all 10. |
+| "One pass is enough" | Different categories reveal different issues. Check all 11. |
 
 ## Flowchart: Agent System Analysis
 
@@ -172,5 +188,5 @@ digraph analyze_agent {
 
 ## References
 
-- [references/weakness-checklist.md](references/weakness-checklist.md) — Full 10-category weakness checklist
+- [references/weakness-checklist.md](references/weakness-checklist.md) — Full 11-category weakness checklist
 - [references/report-template.md](references/report-template.md) — Analysis report document format
