@@ -185,9 +185,9 @@ digraph reflecting {
     analyze [label="Task 1: Analyze\nconversation", shape=box];
     extract [label="Task 2: Extract\nknowledge", shape=box];
     report [label="Task 3: Produce\nreflection report", shape=box];
-    review [label="Task 4: Review\nreport quality", shape=box, style=filled, fillcolor="#e8e8ff"];
-    quality_ok [label="Quality\nok?", shape=diamond];
-    route [label="Task 5: Route\nto planning", shape=box];
+    review [label="Task 4: Review\nreport quality", shape=box];
+    quality_ok [label="Complete?", shape=diamond];
+    route [label="Task 5: Route\nto planning", shape=box, style=filled, fillcolor="#ccffcc"];
     done [label="Handoff complete", shape=doublecircle];
 
     start -> analyze;

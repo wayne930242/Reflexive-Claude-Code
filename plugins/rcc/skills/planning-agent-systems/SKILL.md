@@ -54,7 +54,7 @@ Announce: "Created 5 tasks. Starting execution..."
 
 **Read:**
 - `docs/agent-system/*-analysis.md` (most recent, if exists)
-- `docs/agent-system/*-workflows.md` (most recent)
+- `docs/agent-system/*-workflows.md` (most recent, if exists)
 - `docs/agent-system/*-reflection.md` (most recent, if exists)
 
 **Extract:**
