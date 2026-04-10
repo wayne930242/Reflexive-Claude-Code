@@ -38,8 +38,9 @@ TaskCreate for EACH task below:
 3. Execute refactoring
 4. Final verification
 5. Produce refactoring report
+6. Archive pipeline documents
 
-Announce: "Created 5 tasks. Starting execution..."
+Announce: "Created 6 tasks. Starting execution..."
 
 **Execution rules:**
 1. `TaskUpdate status="in_progress"` BEFORE starting each task
@@ -153,6 +154,28 @@ Announce: "Created 5 tasks. Starting execution..."
 
 **Verification:** Report accurately reflects all changes.
 
+## Task 6: Archive Pipeline Documents
+
+**Goal:** Move all pipeline documents from the current run to the archive.
+
+**Steps:**
+1. Create archive directory: `docs/agent-system/archive/{YYYY-MM-DD}/`
+2. Move ALL `*.md` files from `docs/agent-system/` to the archive directory (excluding the `archive/` directory itself)
+3. Commit the archive move
+
+```bash
+mkdir -p docs/agent-system/archive/{YYYY-MM-DD}
+mv docs/agent-system/*.md docs/agent-system/archive/{YYYY-MM-DD}/
+git add docs/agent-system/
+git commit -m "chore: archive pipeline documents from {YYYY-MM-DD}"
+```
+
+**Replace `{YYYY-MM-DD}` with today's actual date.**
+
+**If no documents exist in `docs/agent-system/`:** Skip this task (nothing to archive).
+
+**Verification:** `docs/agent-system/` contains only the `archive/` directory. All pipeline documents are in the dated archive subdirectory.
+
 ## Red Flags - STOP
 
 These thoughts mean you're rationalizing. STOP and reconsider:
@@ -162,6 +185,7 @@ These thoughts mean you're rationalizing. STOP and reconsider:
 - "Use a subagent to make the edits"
 - "Skip final verification, I just fixed it"
 - "The report is busywork"
+- "Skip archiving, the docs aren't hurting anything"
 
 **All of these mean: You're about to leave mess behind. Follow the process.**
 
@@ -174,6 +198,7 @@ These thoughts mean you're rationalizing. STOP and reconsider:
 | "Subagent edits" | Subagents can't write to `.claude/`. Use main conversation. |
 | "Skip verification" | Refactoring can break things. Verify. |
 | "Skip report" | Report documents decisions for future maintainers. |
+| "Skip archiving" | Accumulated documents confuse future pipeline runs. Archive. |
 
 ## Flowchart: Agent System Refactoring
 
@@ -188,6 +213,7 @@ digraph refactor_agent {
     verify [label="Task 4: Final\nverification", shape=box];
     clean [label="Zero\ncritical?", shape=diamond];
     report [label="Task 5: Produce\nreport", shape=box];
+    archive [label="Task 6: Archive\npipeline documents", shape=box, style=filled, fillcolor="#ffffcc"];
     done [label="Refactoring complete", shape=doublecircle];
 
     start -> analyze;
@@ -197,6 +223,7 @@ digraph refactor_agent {
     verify -> clean;
     clean -> report [label="yes"];
     clean -> refactor [label="no\nfix more"];
-    report -> done;
+    report -> archive;
+    archive -> done;
 }
 ```
