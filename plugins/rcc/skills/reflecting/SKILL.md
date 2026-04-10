@@ -7,19 +7,19 @@ description: Use when completing significant work to extract learnings. Use when
 
 ## Overview
 
-**Reflecting IS converting experience into reusable knowledge.**
+**Reflecting IS converting experience into a structured report for the planning pipeline.**
 
-Analyze what worked, what failed, and encode learnings into the appropriate component (law, skill, rule, or documentation).
+Analyze the conversation, extract learnings, and produce a reflection report. Route the report to planning-agent-systems — do not classify or create components directly.
 
-**Core principle:** Experience without reflection is wasted. Capture it before context is lost.
+**Core principle:** Capture before context is lost. Classify just enough for planning to act on.
 
 **Violating the letter of the rules is violating the spirit of the rules.**
 
 ## Routing
 
-**Pattern:** Tree
-**Handoff:** auto-invoke (per classification)
-**Next:** `writing-claude-md` | `writing-skills` | `writing-rules`
+**Pattern:** Chain
+**Handoff:** auto-invoke
+**Next:** `planning-agent-systems`
 
 ## Task Initialization (MANDATORY)
 
@@ -33,14 +33,12 @@ TaskCreate for EACH task below:
 
 **Tasks:**
 1. Analyze conversation
-2. Identify learnings
-3. Classify each learning
-4. Integrate into components
-5. Review integrated components
-6. Verify integration
-7. Generate summary
+2. Extract knowledge
+3. Produce reflection report
+4. Review report quality
+5. Route to planning
 
-Announce: "Created 7 tasks. Starting execution..."
+Announce: "Created 5 tasks. Starting execution..."
 
 **Execution rules:**
 1. `TaskUpdate status="in_progress"` BEFORE starting each task
@@ -54,28 +52,34 @@ Announce: "Created 7 tasks. Starting execution..."
 **Goal:** Review the conversation to identify significant events.
 
 **Look for:**
-- **Successes:** Patterns that led to good outcomes
-- **Failures:** Errors, multiple attempts, dead ends
-- **Discoveries:** New insights about the project/domain
-- **Repetitions:** Actions performed multiple times
+- **Corrections** — user corrected the agent's approach or output
+- **Errors** — agent made a mistake, multiple attempts needed
+- **Discoveries** — new insights about the project, domain, or tooling
+- **Repetitions** — same action performed multiple times (automation candidate)
 
 **Document each event:**
 ```
 Event: [What happened]
 Context: [When/where it occurred]
-Outcome: [Success/failure/discovery]
+Outcome: [Result]
+Type: correction / error / discovery / repetition
 ```
 
-**Verification:** Listed at least 3 significant events.
+**Verification:** Listed at least 3 significant events. If fewer than 3 occurred, document why.
 
-## Task 2: Identify Learnings
+## Task 2: Extract Knowledge
 
-**Goal:** Extract actionable learnings from events.
+**Goal:** Derive actionable learnings from each event.
 
 **For each event, ask:**
 - What would have prevented this failure?
 - What made this succeed that could be repeated?
 - What did we learn that applies beyond this task?
+
+**Simplicity principle:** Prefer the simplest component type that works.
+- A one-line convention → `rule`, not a `skill`
+- A repeated multi-step process → `skill`, not a `doc`
+- An immutable project constraint → `law`, not a `rule`
 
 **Learning format:**
 ```yaml
@@ -83,157 +87,58 @@ Learning:
   context: [When this applies]
   insight: [What was learned]
   evidence: [Specific event that taught this]
+  suggested_component: rule / law / skill / hook / doc
+  rationale: [Why this component type fits]
 ```
 
-**Verification:** Each event has at least one learning.
+**Verification:** Each event has at least one learning with a suggested component and rationale.
 
-## Task 3: Classify Each Learning
+## Task 3: Produce Reflection Report
 
-**Goal:** Determine where each learning belongs.
+**Goal:** Write a structured report for the planning pipeline.
 
-### Classification Decision Tree
+1. Read `references/report-template.md` for format and completeness checklist
+2. Determine timestamp: `YYYY-MM-DD` format
+3. Write report to `docs/agent-system/{timestamp}-reflection.md`
 
-```
-Is it true across ALL projects?
-├─ Yes → USER ROOT (~/.claude/)
-│   ├─ Universal behavior → ~/.claude/CLAUDE.md
-│   └─ Convention/pattern → ~/.claude/rules/*.md
-└─ No → PROJECT LEVEL (.claude/)
-    ├─ Is it IMMUTABLE (must enforce every response)?
-    │   ├─ Yes → LAW in .claude/CLAUDE.md
-    │   └─ No → Is it a CAPABILITY (how to do)?
-    │       ├─ Yes → SKILL
-    │       │   └─ Is it SHARED across multiple skills?
-    │       │       ├─ Yes → Also extract to RULE
-    │       │       └─ No → Keep in Skill only
-    │       └─ No → Is it a CONVENTION (what to do)?
-    │           ├─ Yes → RULE in .claude/rules/
-    │           └─ No → DOCUMENTATION only
-```
+The report must follow the template exactly, including:
+- Session context
+- Events table (Event / Context / Outcome / Type)
+- Learnings table (Learning / Evidence / Suggested Component / Rationale)
+- Component recommendations with path hints and content summaries
+- Weaknesses addressed (if applicable)
 
-### Scope Signals
+**Verification:** Report file exists at the expected path with no placeholder text.
 
-| Signal | Scope |
-|--------|-------|
-| "This applies regardless of language or framework" | User root |
-| "This is about how I work, not what I'm building" | User root |
-| "This mistake could happen in any project" | User root |
-| "This is specific to this codebase's architecture" | Project |
-| "This convention only makes sense here" | Project |
+## Task 4: Review Report Quality
 
-### Classification Guide
+**Goal:** Verify the report is complete before routing.
 
-| Type | Characteristics | Example |
-|------|-----------------|---------|
-| **User-root law** | Universal, every project | "Show reasoning for decisions" |
-| **User-root rule** | Cross-project convention | "Go edits must combine imports" |
-| **Project law** | Immutable, this project only | "Always display laws" |
-| **Skill** | How to do something, reusable | "How to write tests" |
-| **Rule** | Convention, path-scoped | "API responses use { data, error }" |
-| **Documentation** | Reference, not actionable | "Architecture overview" |
+Use the completeness checklist from `references/report-template.md`:
 
-**Verification:** Each learning has a classification.
+- [ ] Every event has at least one learning
+- [ ] Every learning has a suggested component with rationale
+- [ ] Every component recommendation has type, path hint, content summary, and traces-to
+- [ ] No placeholder text (TBD, TODO, etc.)
+- [ ] Session context accurately describes the work done
+- [ ] At least 3 events documented (or explanation of why fewer)
 
-## Task 4: Integrate Into Components
+**If missing learnings** → return to Task 2, extract more, then re-run Task 3.
+**If format issues** → return to Task 3, fix the report.
 
-**Goal:** Add learnings to the appropriate components.
+**Verification:** All checklist items pass.
 
-### For User-Root Learnings
+## Task 5: Route to Planning
 
-1. Read current `~/.claude/CLAUDE.md` and relevant `~/.claude/rules/*.md`
-2. Check: does an existing rule already cover this? → update, don't duplicate
-3. If new rule needed → edit `~/.claude/rules/` directly (user-root has no writing-* skill chain)
-4. Keep rules concise. One learning = one line.
+**Goal:** Hand off the reflection report to planning-agent-systems.
 
-### For Project-Level Laws
+1. Announce: "Reflection complete. Routing report to planning-agent-systems."
+2. State the report path
+3. Invoke `planning-agent-systems` with the report path as input
 
-**Invoke `writing-claude-md` skill** or edit CLAUDE.md directly.
+**Do not** classify components yourself. **Do not** create components directly. Planning handles classification and execution.
 
-### For Skills
-
-**Invoke `writing-skills` skill** to create/update skill.
-
-### For Rules
-
-**Invoke `writing-rules` skill** to create rule file.
-
-### For Documentation
-
-Add to appropriate `references/` or `docs/` location.
-
-**CRITICAL:** Invoke the appropriate skill for project-level components—don't create them directly.
-
-**Verification:** All learnings integrated into components.
-
-## Task 5: Review Integrated Components
-
-**Goal:** Run reviewer agents on all newly created/modified components.
-
-**For each component created in Task 4, invoke its reviewer:**
-
-| Component Type | Reviewer Agent |
-|----------------|----------------|
-| CLAUDE.md (law) | `claudemd-reviewer` |
-| Skill | `skill-reviewer` |
-| Rule | `rule-reviewer` |
-| Hook | `hook-reviewer` |
-| Subagent | `subagent-reviewer` |
-
-```
-Agent tool:
-- subagent_type: "rcc:[reviewer-name]"
-- prompt: "Review [component type] at [path]"
-```
-
-**If reviewer returns "Needs Fix" or "Fail":** Fix the issues before proceeding.
-
-**Verification:** All new/modified components pass their reviewer.
-
-## Task 6: Verify Integration
-
-**Goal:** Confirm learnings are correctly integrated.
-
-**Check:**
-- [ ] New instructions added to CLAUDE.md (if broadly applicable)
-- [ ] New skills pass validation
-- [ ] New rules have correct `paths:` scope
-- [ ] Documentation is in correct location
-
-**Test:**
-- Laws: Verify they display in responses
-- Skills: Verify they activate on triggers
-- Rules: Verify they inject on matching files
-
-**Verification:** All integrated components work correctly.
-
-## Task 7: Generate Summary
-
-**Goal:** Document what was captured.
-
-### Summary Format
-
-```markdown
-## Reflection Summary
-
-### Session Context
-[What work was done]
-
-### Learnings Captured
-
-| Learning | Classification | Location |
-|----------|----------------|----------|
-| [insight] | law/skill/rule/doc | [path] |
-
-### Components Modified
-- Laws: [new/updated laws]
-- Skills: [new/updated skills]
-- Rules: [new/updated rules]
-
-### Recommendations
-- [Future improvements]
-```
-
-**Verification:** Summary accurately reflects all changes.
+**Verification:** planning-agent-systems invoked with correct report path.
 
 ## When to Reflect
 
@@ -244,9 +149,9 @@ Agent tool:
 - Discovering something unexpected
 - End of long working session
 
-**Don't wait for "later"—context fades quickly.**
+**Don't wait for "later" — context fades quickly.**
 
-## Red Flags - STOP
+## Red Flags — STOP
 
 These thoughts mean you're rationalizing. STOP and reconsider:
 
@@ -254,9 +159,10 @@ These thoughts mean you're rationalizing. STOP and reconsider:
 - "I'll remember this"
 - "Too small to document"
 - "Reflection is overhead"
-- "Skip classification, just document"
+- "Skip the report, just create components directly"
+- "I know where this learning belongs, skip planning"
 
-**All of these mean: You're about to lose valuable learnings. Follow the process.**
+**All of these mean: You're about to short-circuit the pipeline. Follow the process.**
 
 ## Common Rationalizations
 
@@ -266,9 +172,10 @@ These thoughts mean you're rationalizing. STOP and reconsider:
 | "I'll remember" | You won't. Context fades. Capture now. |
 | "Too small" | Small learnings compound. Capture them. |
 | "Overhead" | 10 minutes now saves hours later. |
-| "Skip classification" | Wrong location = unfindable. Classify properly. |
+| "Create directly" | Bypasses conflict checks, simplicity gates, and reviews. |
+| "I know where it goes" | Planning has component-planning criteria you don't carry inline. |
 
-## Flowchart: Reflection Process
+## Flowchart
 
 ```dot
 digraph reflecting {
@@ -276,34 +183,26 @@ digraph reflecting {
 
     start [label="Reflect on work", shape=doublecircle];
     analyze [label="Task 1: Analyze\nconversation", shape=box];
-    identify [label="Task 2: Identify\nlearnings", shape=box];
-    classify [label="Task 3: Classify\neach learning", shape=box];
-    integrate [label="Task 4: Integrate into\ncomponents", shape=box];
-    review [label="Task 5: Review\ncomponents", shape=box, style=filled, fillcolor="#e8e8ff"];
-    review_pass [label="All\npassed?", shape=diamond];
-    verify [label="Task 6: Verify\nintegration", shape=box];
-    works [label="All\nworking?", shape=diamond];
-    summary [label="Task 7: Generate\nsummary", shape=box];
-    done [label="Reflection complete", shape=doublecircle];
+    extract [label="Task 2: Extract\nknowledge", shape=box];
+    report [label="Task 3: Produce\nreflection report", shape=box];
+    review [label="Task 4: Review\nreport quality", shape=box, style=filled, fillcolor="#e8e8ff"];
+    quality_ok [label="Quality\nok?", shape=diamond];
+    route [label="Task 5: Route\nto planning", shape=box];
+    done [label="Handoff complete", shape=doublecircle];
 
     start -> analyze;
-    analyze -> identify;
-    identify -> classify;
-    classify -> integrate;
-    integrate -> review;
-    review -> review_pass;
-    review_pass -> verify [label="yes"];
-    review_pass -> integrate [label="no\nfix"];
-    verify -> works;
-    works -> summary [label="yes"];
-    works -> integrate [label="no\nfix"];
-    summary -> done;
+    analyze -> extract;
+    extract -> report;
+    report -> review;
+    review -> quality_ok;
+    quality_ok -> route [label="yes"];
+    quality_ok -> extract [label="missing\nlearnings"];
+    quality_ok -> report [label="format\nissues"];
+    route -> done;
 }
 ```
 
 ## References
 
-- Use `writing-claude-md` for laws
-- Use `writing-skills` for capabilities
-- Use `writing-rules` for conventions
-- Use `agent-architect` for classification help
+- `references/report-template.md` — report format and completeness checklist
+- `planning-agent-systems` — classification and component creation
