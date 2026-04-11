@@ -14,12 +14,28 @@ For each component type, evaluate:
 
 ## Decision Criteria
 
+### 功能性標準
 - Does this component trace to a workflow need? → Create
 - Does this fix an analysis weakness? → Create/Modify
 - Does it already exist and work? → Keep
 - Does it conflict with another component? → Modify/Delete
 - Is it speculative? → **Don't create (YAGNI)**
 - Is it core or enhancement? → Tag accordingly for phased rollout
+
+### 安全性標準
+- **Security Layer Requirements**: Each component MUST specify applicable security layers (1-8)
+- **Guardrails Preference**: Use warnings over blockers unless CRITICAL severity
+- **30-Second Performance Constraint**: All security checks MUST complete within 30 seconds
+- **Progressive Enablement**: Start with basic security (layers 1-2), enhance gradually
+
+### 安全層級對應
+| Component | Required Security Layers | Rationale |
+|-----------|------------------------|-----------|
+| CLAUDE.md | None (documentation) | No executable code |
+| Rules | Layer 1 (code patterns) | Validates code quality |
+| Hooks | Layers 1-3 (execution context) | Runs during development |
+| Skills | Layers 1-4 (tool access) | Can modify files and execute commands |
+| Agents | Layers 1-2 (read-only) | Limited to analysis tasks |
 
 ## Size Constraints
 
