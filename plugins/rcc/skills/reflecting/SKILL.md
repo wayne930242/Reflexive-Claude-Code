@@ -1,6 +1,6 @@
 ---
 name: reflecting
-description: Use when completing significant work to extract learnings. Use when user says "reflect", "what did we learn", "capture learnings". Use after resolving complex problems or discovering patterns.
+description: Use when completing significant work to extract learnings. Use when user corrects your approach or when you discover important patterns during agent interactions. Use when agent learns something new that should be captured for future reference. Use when user says "reflect", "what did we learn", "capture learnings". Use after resolving complex problems or discovering patterns.
 ---
 
 # Reflecting
@@ -139,6 +139,19 @@ Use the completeness checklist from `references/report-template.md`:
 **Do not** classify components yourself. **Do not** create components directly. Planning handles classification and execution.
 
 **Verification:** planning-agent-systems invoked with correct report path.
+
+## Proactive Triggers
+
+**When to self-trigger reflection:**
+- User corrects your approach or methodology
+- Agent discovers unexpected patterns or insights
+- Failed assumptions are revealed during work
+- New knowledge emerges that contradicts previous understanding
+- User provides feedback that changes your mental model
+- Workflow gaps or improvement opportunities are identified
+
+**Integration with Memory System:**
+Reflection reports automatically feed into Claude Code's built-in memory system at `/home/weihung/.claude/projects/-home-weihung-Reflexive-Claude-Code/memory/`. No additional memory management needed.
 
 ## When to Reflect
 
