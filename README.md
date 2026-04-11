@@ -153,13 +153,6 @@ The planner decides which assets each skill needs; the reviewer checks they exis
 | `refactoring-plugins` | Health-check plugins against official best practices |
 | `validating-plugins` | Batch scan all plugin files for errors |
 
-### rcc-dev (v2.0.1)
-
-| Skill | Purpose |
-|-------|---------|
-| `writing-plugins` | Create complete plugin packages |
-| `creating-plugins` | Scaffold plugin structure |
-
 ## Project Structure
 
 ```
@@ -167,11 +160,10 @@ Reflexive-Claude-Code/
 ├── .claude-plugin/
 │   └── marketplace.json
 ├── plugins/
-│   ├── rcc/
-│   │   ├── skills/          # 20 skills
-│   │   ├── agents/          # 5 reviewer subagents
-│   │   └── hooks/           # Frontmatter validation hook
-│   └── rcc-dev/
+│   └── rcc/
+│       ├── skills/          # 21 skills
+│       ├── agents/          # 5 reviewer subagents
+│       └── hooks/           # Frontmatter validation hook
 └── README.md
 ```
 

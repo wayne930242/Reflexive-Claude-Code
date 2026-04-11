@@ -153,13 +153,6 @@ migrate-plugin → validate → refactor
 | `refactoring-plugins` | 依官方最佳實踐檢查插件健康度 |
 | `validating-plugins` | 批次掃描所有插件檔案錯誤 |
 
-### rcc-dev (v2.0.1)
-
-| Skill | 用途 |
-|-------|------|
-| `writing-plugins` | 建立完整插件套件 |
-| `creating-plugins` | 建立插件骨架 |
-
 ## 專案結構
 
 ```
@@ -167,11 +160,10 @@ Reflexive-Claude-Code/
 ├── .claude-plugin/
 │   └── marketplace.json
 ├── plugins/
-│   ├── rcc/
-│   │   ├── skills/          # 20 個 skills
-│   │   ├── agents/          # 5 個 reviewer subagents
-│   │   └── hooks/           # Frontmatter 驗證 hook
-│   └── rcc-dev/
+│   └── rcc/
+│       ├── skills/          # 21 個 skills
+│       ├── agents/          # 5 個 reviewer subagents
+│       └── hooks/           # Frontmatter 驗證 hook
 └── README.md
 ```
 

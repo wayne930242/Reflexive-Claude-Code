@@ -32,13 +32,12 @@ Claude Code 插件市集，提供技能驅動的 Agentic Context Engineering 工
 └── marketplace.json        # 市集定義（版本在此）
 
 plugins/
-├── rcc/                    # 核心 ACE 插件
-│   ├── .claude-plugin/
-│   │   └── plugin.json     # 插件 manifest
-│   ├── skills/             # 所有技能
-│   ├── agents/             # 審查員子代理
-│   └── commands/           # 命令別名
-└── rcc-dev/                # 開發輔助插件
+└── rcc/                    # 核心 ACE 插件
+    ├── .claude-plugin/
+    │   └── plugin.json     # 插件 manifest
+    ├── skills/             # 所有技能
+    ├── agents/             # 審查員子代理
+    └── commands/           # 命令別名
 ```
 
 ## Quick Reference
