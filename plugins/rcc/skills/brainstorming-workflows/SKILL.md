@@ -1,17 +1,18 @@
 ---
 name: brainstorming-workflows
-description: Use when exploring user workflows to design an agent system. Use when user says "explore workflows", "brainstorm workflows", "what workflows should I automate". Use when called by analyzing-agent-systems or migrating-agent-systems.
+description: Explores user workflows through targeted questions about pipeline modes, pain points, and routine tasks to inform agent system design. Use when exploring workflows after analysis. Use when user says "explore workflows", "brainstorm workflows", "what should I automate". Use when called by analyzing-agent-systems.
 ---
 
 # Brainstorming Workflows
 
 ## Overview
 
-**Brainstorming workflows IS understanding the human before designing the system.**
+**Brainstorming workflows IS targeted exploration of how users actually work, what frustrates them, and what can be automated.**
 
-Use role templates to quickly identify the user's context, then explore their specific workflows one question at a time. Don't assume the user is a developer — they may use the agent system for project management, content creation, data analysis, or other work.
+The analysis report tells you what the system looks like; brainstorming tells you what the user needs.
+These are different data sources — never skip one because the other exists.
 
-**Core principle:** The agent system must serve the user's actual workflows, not an imagined ideal.
+**Core principle:** Ask about failures before wishes.
 
 **Violating the letter of the rules is violating the spirit of the rules.**
 
@@ -33,13 +34,14 @@ TaskCreate for EACH task below:
 ```
 
 **Tasks:**
-1. Import analysis findings (if available)
-2. Role selection
-3. Workflow exploration
-4. Identify simplest viable approach
-5. Produce workflow summary
+1. Import analysis findings
+2. Pipeline mode exploration
+3. Pain point discovery
+4. Routine task identification
+5. Component type judgment
+6. Produce workflow summary
 
-Announce: "Created 5 tasks. Starting execution..."
+Announce: "Created 6 tasks. Starting execution..."
 
 **Execution rules:**
 1. `TaskUpdate status="in_progress"` BEFORE starting each task
@@ -48,123 +50,116 @@ Announce: "Created 5 tasks. Starting execution..."
 4. NEVER skip to next task until current is completed
 5. At end, `TaskList` to confirm all completed
 
-## Task 1: Import Analysis Findings (if available)
+## Task 1: Import Analysis Findings
 
-**Goal:** If an analysis report exists, bring its findings into the conversation.
+**Goal:** Load analysis report and let user select which findings to address.
 
 **If analysis report path was provided:**
 1. Read the analysis report
-2. Summarize critical and warning findings
-3. Ask user: "分析發現以下弱點，是否要在這次一併修補？"
-4. Present findings as a checklist for user to select
-5. Record selected items → these become requirements in the workflow summary
+2. Present restructuring recommendations grouped by priority
+3. Ask: "分析報告建議了以下改進，哪些你想在這次處理？"
+4. Present as checklist for user to select
+5. Selected items become requirements in workflow summary
 
-**If no analysis report:** Skip to Task 2.
+**If no analysis report:** Note that no analysis was done, proceed to Task 2.
 
-**This allows skipping questions already answered by analysis.** For example:
-- Analysis found "no linting hook" → skip asking about code quality tools
-- Analysis found "CLAUDE.md > 200 lines" → skip asking about constitution preferences
+**Skip questions in later tasks that the analysis already answered.**
 
 **Verification:** User has confirmed which findings to address (or no analysis exists).
 
-## Task 2: Role Selection
+## Task 2: Pipeline Mode Exploration
 
-**Goal:** Identify the user's primary role to guide exploration.
+**Goal:** Determine how workflows connect and what state management they need.
 
-**Present the role table:**
-
-| Role | Typical Workflows |
-|------|-------------------|
-| **A) Software Developer** | coding, testing, code review, CI/CD, deployment |
-| **B) Project Manager** | task tracking, reporting, scheduling, communication |
-| **C) Content Creator** | writing, translation, publishing, social media |
-| **D) Data Analyst** | data processing, visualization, reporting, automation |
-| **E) Operations / DevOps** | monitoring, deployment, incident response, IaC |
-| **F) Custom** | describe your role |
-
-**Ask:** "你的角色最接近哪一個？選擇字母即可。"
-
-**Verification:** User has selected a role.
-
-## Task 3: Workflow Exploration
-
-**Goal:** Explore the user's specific workflows one question at a time.
-
-**CRITICAL:** Read [references/role-templates.md](references/role-templates.md) for role-specific deep-dive questions.
+**CRITICAL:** Read [references/exploration-questions.md](references/exploration-questions.md) for the question bank (Pipeline section).
 
 **Rules:**
-- **One question at a time** — never ask multiple questions in one message
-- **Skip questions answered by analysis** — don't re-ask what we already know
-- **Multiple choice when possible** — easier for user to answer
-- **Adapt to answers** — if user reveals something unexpected, explore it
-- **5-8 questions maximum** — don't exhaust the user
-- **Ask about failures** — "What have you tried before? What didn't work?" reveals more than "What do you want?"
-- **Ask for a walkthrough** — "Walk me through the last time you did X, step by step" beats generic "What tools do you use?"
+- Ask **ONE question at a time** about workflow entry points, step counts, work scope
+- Classify each workflow as **owner-pipe** or **chain-pipe**
+- Determine if script-managed state is needed (based on step count + work scope)
+- Skip questions answered by the analysis report
 
-**After workflow exploration, classify into two layers:**
+**Verification:** Each identified workflow has mode + state management decision.
 
-**Layer 1 — Anthropic workflow patterns** (how workflows execute):
-Read [references/anthropic-patterns.md](references/anthropic-patterns.md) for the six patterns and their signal phrases from user answers.
+## Task 3: Pain Point Discovery
 
-**Layer 2 — Skill routing patterns** (how skills connect):
-Read [references/routing-patterns.md](references/routing-patterns.md) for Tree/Chain/Node/Skill Steps classification.
+**Goal:** Find where the current agent system fails or is missing.
 
-**Verification:** Have enough information to map workflows to BOTH Anthropic patterns and skill routing patterns.
+**CRITICAL:** Read [references/exploration-questions.md](references/exploration-questions.md) for the question bank (Pain Point section).
 
-## Task 4: Identify Simplest Viable Approach
+**Rules:**
+- Ask about past failures, missing automation, repeated corrections
+- For each pain point, note the likely component type (rule / hook / skill / CLAUDE.md)
+- Ask **ONE question at a time**
 
-**Goal:** Before producing the summary, challenge every workflow for simplicity.
+**Verification:** Pain points documented with root cause and component type.
 
-**Core question:** "What is the simplest approach that works for each workflow?"
+## Task 4: Routine Task Identification
 
-Anthropic's guidance: "Success in the LLM space isn't about building the most sophisticated system. It's about building the right level of complexity for your needs."
+**Goal:** Find repetitive small tasks that could be automated.
 
-**For each workflow, ask:**
-1. Can this be solved with a single CLAUDE.md instruction instead of a skill?
-2. Can this be a rule instead of a hook?
-3. Can this be a simple prompt chain instead of a multi-agent orchestration?
-4. Does this need a custom skill, or does an existing skill/plugin already handle it?
+**CRITICAL:** Read [references/exploration-questions.md](references/exploration-questions.md) for the question bank (Routine Task section).
 
-Read [references/anthropic-patterns.md](references/anthropic-patterns.md) for the complexity ladder (Levels 1-6). Prefer the lowest level that works.
+**Rules:**
+- Ask about daily repetitive work, search patterns, format/check tasks
+- For each task, note automation approach and component type
+- Ask **ONE question at a time**
 
-**Present the assessment to the user:** Show each workflow with its proposed complexity level and ask if they agree. Users often accept over-engineering without questioning — push back gently.
+**Verification:** Routine tasks documented with automation approach.
 
-**Verification:** Every workflow has an assigned complexity level, and the user has confirmed the approach.
+## Task 5: Component Type Judgment
 
-## Task 5: Produce Workflow Summary
+**Goal:** Map every discovered need to the right component type.
+
+For each pain point, routine task, and analysis finding:
+- Behavioral constraint → **rule**
+- Automated check → **hook** (PostToolUse or PreToolUse)
+- Multi-step workflow → **skill**
+- Independent execution → **agent** (subagent)
+- Simple instruction → **CLAUDE.md** addition
+
+**Present the mapping to user for confirmation.**
+
+Challenge any over-engineering: "Can this be a rule instead of a skill?"
+
+Read [references/anthropic-patterns.md](references/anthropic-patterns.md) for the complexity ladder — prefer lowest level that works.
+
+**Verification:** Every need mapped to component type, user confirmed.
+
+## Task 6: Produce Workflow Summary
 
 **Goal:** Write structured summary to `docs/agent-system/{timestamp}-workflows.md`.
 
 **CRITICAL:** Read [references/summary-template.md](references/summary-template.md) for the full summary format.
 
+**Include:** pipeline mode mapping, pain points, routine tasks, component recommendations.
+
 **Handoff:** "工作流摘要完成。要繼續規劃 agent system 元件嗎？"
 - If yes → invoke `planning-agent-systems` skill, pass workflow summary path
 
-**Verification:** Summary written with all workflows mapped to components.
+**Verification:** Summary written with all sections filled.
 
 ## Red Flags - STOP
 
 These thoughts mean you're rationalizing. STOP and reconsider:
 
-- "Obviously a developer"
-- "I know the workflows"
+- "I already know from the analysis"
+- "Skip the questions"
 - "Multiple questions saves time"
-- "Skip analysis"
-- "Summary is overhead"
-- "This needs a skill"
+- "This obviously needs a skill"
 - "Skip past failures"
+- "The user knows what they want"
 
 ## Common Rationalizations
 
 | Thought | Reality |
 |---------|---------|
-| "Obviously a developer" | PMs, analysts, creators all use agent systems. Ask. |
-| "I know the workflows" | You know common workflows. Theirs may differ. |
+| "I already know from the analysis" | Analysis finds system weaknesses. Users reveal workflow needs. Different data. |
+| "Skip the questions" | Questions surface needs that code scanning can never find. |
 | "Multiple questions saves time" | Multiple questions overwhelm. One at a time. |
-| "Skip analysis" | Analysis findings prevent redundant questions. Use them. |
-| "Summary is overhead" | Summary is the contract for planning. Essential. |
-| "This needs a skill" | Most workflows need less than you think. Check the complexity ladder. |
+| "This obviously needs a skill" | Most workflows need less than you think. Check the complexity ladder. |
 | "Skip past failures" | Past failures are the highest-value context. Always ask. |
+| "The user knows what they want" | Users describe solutions, not problems. Dig for the actual need. |
 
 ## Flowchart: Workflow Brainstorming
 
@@ -173,24 +168,26 @@ digraph brainstorm_workflows {
     rankdir=TB;
 
     start [label="Brainstorm\nworkflows", shape=doublecircle];
-    analysis [label="Task 1: Import\nanalysis findings", shape=box];
+    import [label="Task 1: Import\nanalysis findings", shape=box];
     has_analysis [label="Analysis\nexists?", shape=diamond];
-    confirm_fixes [label="User selects\nfindings to fix", shape=box];
-    role [label="Task 2: Role\nselection", shape=box];
-    explore [label="Task 3: Workflow\nexploration", shape=box];
-    simplify [label="Task 4: Simplest\nviable approach", shape=box];
-    summary [label="Task 5: Produce\nworkflow summary", shape=box];
+    select [label="User selects\nfindings to address", shape=box];
+    pipeline [label="Task 2: Pipeline\nmode exploration", shape=box];
+    pain [label="Task 3: Pain point\ndiscovery", shape=box];
+    routine [label="Task 4: Routine task\nidentification", shape=box];
+    component [label="Task 5: Component\ntype judgment", shape=box];
+    summary [label="Task 6: Produce\nworkflow summary", shape=box];
     handoff [label="Invoke\nplanning-agent-systems", shape=box];
     done [label="Brainstorm complete", shape=doublecircle];
 
-    start -> analysis;
-    analysis -> has_analysis;
-    has_analysis -> confirm_fixes [label="yes"];
-    has_analysis -> role [label="no"];
-    confirm_fixes -> role;
-    role -> explore;
-    explore -> simplify;
-    simplify -> summary;
+    start -> import;
+    import -> has_analysis;
+    has_analysis -> select [label="yes"];
+    has_analysis -> pipeline [label="no"];
+    select -> pipeline;
+    pipeline -> pain;
+    pain -> routine;
+    routine -> component;
+    component -> summary;
     summary -> handoff [label="continue"];
     summary -> done [label="stop here"];
     handoff -> done;
@@ -199,6 +196,7 @@ digraph brainstorm_workflows {
 
 ## References
 
-- [references/role-templates.md](references/role-templates.md) — Role-specific deep-dive questions and component mappings
+- [references/exploration-questions.md](references/exploration-questions.md) — Targeted exploration question bank
 - [references/anthropic-patterns.md](references/anthropic-patterns.md) — Six Anthropic workflow patterns and complexity ladder
+- [references/routing-patterns.md](references/routing-patterns.md) — Pipeline mode classification (owner-pipe, chain-pipe)
 - [references/summary-template.md](references/summary-template.md) — Workflow summary document format
