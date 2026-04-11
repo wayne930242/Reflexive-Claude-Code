@@ -25,8 +25,12 @@ For each component type, evaluate:
 ### 安全性標準
 - **Security Layer Requirements**: Each component MUST specify applicable security layers (1-8)
 - **Guardrails Preference**: Use warnings over blockers unless CRITICAL severity
-- **30-Second Performance Constraint**: All security checks MUST complete within 30 seconds
+- **30-Second Performance Constraint**: All security checks MUST complete within 30 seconds (MUST)
+- **Parallel Execution Capabilities**: Components SHOULD support concurrent processing (SHOULD)
+- **Graceful Degradation**: Components MUST handle timeouts gracefully without blocking development (MUST)
+- **Confidence Scoring**: Security assessments MUST meet ≥75% confidence threshold for actionable results
 - **Progressive Enablement**: Start with basic security (layers 1-2), enhance gradually
+- **Guardrail Strategy**: Prefer warnings with skip options over hard blockers except for CRITICAL security issues
 
 ### 安全層級對應
 | Component | Required Security Layers | Rationale |

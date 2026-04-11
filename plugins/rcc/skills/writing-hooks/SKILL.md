@@ -114,14 +114,17 @@ Announce: "Created 7 tasks. Starting execution..."
 
 ### Hook Template
 
-See [references/static-checks.md](references/static-checks.md) for complete hook templates. Key pattern: read JSON from stdin, filter by extension, run check, exit 2 to block.
+See [references/static-checks.md](references/static-checks.md) for complete hook templates. For performance-optimized security hooks, see [references/performance-optimization.md](references/performance-optimization.md). Key pattern: read JSON from stdin, filter by extension, run check, exit 2 to block.
 
 ### Critical Requirements
 
 - **Fast** - Under 5 seconds, hooks run synchronously
-- **Filter files** - Only check relevant extensions
+- **Performance constraints** - Total execution < 30s, parallel processing support
+- **Graceful degradation** - Handle timeouts without blocking development
+- **Filter files** - Only check relevant extensions  
 - **Limit output** - First 5-10 errors, not all
 - **Use Python** - Cross-platform, wrapped shell commands
+- **Progressive checks** - Fast/standard/thorough modes based on context
 
 **Verification:**
 - [ ] Script is executable (`chmod +x`)
@@ -283,4 +286,6 @@ digraph hook_creation {
 
 - [references/static-checks.md](references/static-checks.md) - Complete hook examples
 - [references/events.md](references/events.md) - Hook events reference
+- [references/performance-optimization.md](references/performance-optimization.md) - Performance-optimized security hooks with parallel execution
+- [references/ai-security-checks.md](references/ai-security-checks.md) - AI-powered security validation patterns
 - Scaffold script: `${CLAUDE_SKILL_DIR}/scripts/add_hook.py` — scaffolds a new hook file and registers it in settings.json
