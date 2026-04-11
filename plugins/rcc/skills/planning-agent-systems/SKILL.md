@@ -80,14 +80,28 @@ Announce: "Created 5 tasks. Starting execution..."
 
 **Step 3 — Build the dependency graph** from the flowchart, assigning phases by dependency depth.
 
-**Step 4 — Identify the simplest viable subset:**
+**Step 4 — Check learning integration** before architecture decisions:
+
+**CRITICAL:** 載入相關失敗模式警告以避免已知問題：
+
+```bash
+echo '{"component":"agent-system","context":"planning","type":"architecture"}' | \
+python plugins/rcc/skills/learning-from-failures/scripts/memory-manager.py get-warnings
+```
+
+**Apply warnings to architecture decisions:**
+- 檢視每個警告的模式匹配度
+- 調整架構設計以避免已知失敗模式
+- 記錄如何應對每個相關警告
+
+**Step 5 — Identify the simplest viable subset:**
 
 Ask: "What is the minimum set of components that delivers value?"
 - Mark each component as **core** (must-have for any workflow to work) or **enhancement** (improves but not required)
 - Phase 1 should contain ONLY core components
 - Present the phased rollout to user for early feedback
 
-**Verification:** Architecture flowchart produced showing all workflows, patterns identified, dependency graph built, phases assigned.
+**Verification:** Architecture flowchart produced showing all workflows, patterns identified, dependency graph built, phases assigned, learning warnings addressed.
 
 ## Task 3: Plan Components
 
