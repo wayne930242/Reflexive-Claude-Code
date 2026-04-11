@@ -1,0 +1,20 @@
+{
+  "id": "bf0bb9af",
+  "name": "代理間錯誤處理缺失",
+  "category": "workflow",
+  "context_criteria": {},
+  "problem_description": "需要填入具體問題描述",
+  "detection_methods": [
+    "需要填入檢測方法"
+  ],
+  "prevention_steps": [
+    "需要填入預防步驟"
+  ],
+  "examples": [
+    "274e1243"
+  ],
+  "severity": "medium",
+  "created": "2026-04-12T01:10:41.372663",
+  "last_triggered": "2026-04-12T01:10:41.372663",
+  "trigger_count": 0
+}

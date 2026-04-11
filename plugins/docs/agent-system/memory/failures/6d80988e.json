@@ -1,0 +1,14 @@
+{
+  "id": "6d80988e",
+  "type": "type-mismatch",
+  "component": "validation",
+  "description": "Zod schema 與 TypeScript 介面不匹配",
+  "context": {
+    "language": "typescript",
+    "framework": "zod",
+    "error_type": "runtime_validation"
+  },
+  "timestamp": "2026-04-12T01:11:21.047009",
+  "severity": "medium",
+  "resolved": false
+}

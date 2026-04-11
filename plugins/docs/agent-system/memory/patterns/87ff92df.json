@@ -1,0 +1,24 @@
+{
+  "id": "87ff92df",
+  "name": "Zod-TypeScript 型別不匹配",
+  "category": "code",
+  "context_criteria": {
+    "language": "typescript",
+    "framework": "zod",
+    "error_type": "runtime_validation"
+  },
+  "problem_description": "需要填入具體問題描述",
+  "detection_methods": [
+    "需要填入檢測方法"
+  ],
+  "prevention_steps": [
+    "需要填入預防步驟"
+  ],
+  "examples": [
+    "6d80988e"
+  ],
+  "severity": "medium",
+  "created": "2026-04-12T01:11:23.986801",
+  "last_triggered": "2026-04-12T01:11:23.986801",
+  "trigger_count": 0
+}

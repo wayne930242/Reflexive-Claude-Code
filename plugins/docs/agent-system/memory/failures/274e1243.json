@@ -1,0 +1,10 @@
+{
+  "id": "274e1243",
+  "type": "integration-missing",
+  "component": "agent-system",
+  "description": "代理間通信缺乏錯誤處理",
+  "context": {},
+  "timestamp": "2026-04-12T01:10:38.829383",
+  "severity": "medium",
+  "resolved": false
+}

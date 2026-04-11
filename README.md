@@ -14,6 +14,7 @@ Reflexive Claude Code gives Claude Code a complete toolkit for managing its own 
 - **Analyze existing systems** — 11-category weakness checklist covering routing, context management, security, rules health, and cross-tool migration
 - **Validate on every edit** — PostToolUse hook checks frontmatter, broken links, orphaned files, and invalid variables in real time
 - **Enforce quality gates** — 5 specialized reviewer agents (skill, CLAUDE.md, rule, hook, subagent) run after every creation or modification
+- **Advanced security architecture** — AI-specific security patterns, eight-layer defense system, 30-second performance constraints, and intelligent reflection-driven learning
 
 ## Installation
 
@@ -127,7 +128,7 @@ The planner decides which assets each skill needs; the reviewer checks they exis
 
 ## Full Skill List
 
-### rcc (v9.11.0)
+### rcc (v10.0.0)
 
 | Skill | Purpose |
 |-------|---------|
