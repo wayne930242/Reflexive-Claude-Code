@@ -47,6 +47,11 @@ For each category, check every item. Mark severity:
 - [ ] Workflow exceeds 8 reasoning steps without checkpoint
 - [ ] Re-running a skill produces side effects (not idempotent)
 - [ ] Task list doesn't enforce sequential completion
+- [ ] Pipeline has no state file or directory for recoverability (chain breaks lose all progress)
+- [ ] Chain-pipe steps don't write intermediate artifacts to disk (no resumption point)
+- [ ] Pipeline mode mismatch — e.g., 5-step chain using owner-pipe pattern, or 2-step owner using chain-pipe
+- [ ] Chain-pipe with >= 3 steps lacks script-managed state (manual state tracking is error-prone at scale)
+- [ ] Owner-pipe lacks clear progress tracking mechanism (owner can't report which sub-steps completed)
 
 ## 4. Redundancy / Conflicts
 
