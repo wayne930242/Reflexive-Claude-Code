@@ -4,13 +4,13 @@
 
 For each component type, evaluate:
 
-| Component | Input Sources | Decision |
-|-----------|--------------|----------|
-| CLAUDE.md | Workflow conventions + analysis constitution findings | Create / Modify / Keep |
-| Rules | Workflow conventions + analysis path-match findings | Which rules, with paths: globs |
-| Hooks | Workflow quality checks + analysis security findings | Which hooks, which events |
-| Skills | Workflow repeated tasks | Which skills |
-| Agents | Workflow isolated analysis needs | Which agents (read-only only) |
+| Component | Input Sources | AI Security Considerations | Decision |
+|-----------|--------------|---------------------------|----------|
+| CLAUDE.md | Workflow conventions + analysis constitution findings | AI 生成程式碼規範 | Create / Modify / Keep |
+| Rules | Workflow conventions + analysis path-match findings | 程式碼模式約束規則 | Which rules, with paths: globs |
+| Hooks | Workflow quality checks + analysis security findings | AI 程式碼掃描、漏洞檢測 | Which hooks, which events |
+| Skills | Workflow repeated tasks | 生成程式碼品質關卡 | Which skills |
+| Agents | Workflow isolated analysis needs | 獨立安全審查代理 | Which agents (read-only only) |
 
 ## Decision Criteria
 
