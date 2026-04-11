@@ -5,95 +5,59 @@
 
 ## 1. Pipeline Mode Exploration
 
-**目標：** 判斷工作流是 chain-pipe 還是 owner-pipe，以及工作範圍。
+**目標：** 判斷工作流的連接方式與狀態管理需求。
 
-### 問題
+| Question | What It Reveals | Typical Component |
+|----------|-----------------|-------------------|
+| 「這個工作流平常怎麼啟動的？固定入口還是看情況？」 | 流程啟動模式 | owner-pipe（固定入口）vs chain-pipe（變動入口） |
+| 「中間如果斷掉，你會怎麼接回來？從頭重跑還是接著做？」 | 狀態持久化需求 | 無狀態 pipe vs state persistence |
+| 「每一步大概動多少檔案？跨幾個模組？」 | 工作範圍大小 | 簡單 skill（小範圍）vs script-managed state（大範圍） |
+| 「這些步驟一定要按順序嗎？還是有些可以平行？」 | pipeline 拓撲結構 | 順序 pipeline vs 平行分派 |
+| 「誰負責決定下一步做什麼？」 | 控制權歸屬 | owner-pipe（人決定）vs chain-pipe（自動接力） |
+| 「這個流程有幾個步驟？每步是誰負責的？」 | 步驟數與責任分配 | 步驟多 → chain-pipe；步驟少 → owner-pipe |
 
-依序嘗試，根據回答跳過已釐清的問題：
-
-1. 「這個工作流平常怎麼啟動的？固定入口還是看情況？」
-   - 固定入口 → owner-pipe
-   - 看情況 → chain-pipe
-2. 「中間如果斷掉，你會怎麼接回來？從頭重跑還是接著做？」
-   - 從頭重跑 → 無狀態，簡單 pipe
-   - 接著做 → 需要 state persistence
-3. 「每一步大概動多少檔案？改的範圍多大？」
-   - 大範圍 → 需要 script-managed state
-   - 小範圍 → 簡單 skill 即可
-4. 「這個流程有幾個步驟？每步是誰負責的？」
-   - 步驟數 + 負責人模式
-5. 「有沒有哪些步驟的順序其實可以換？」
-   - 可換序 → 鬆耦合，chain-pipe
-   - 不可換 → 緊耦合，owner-pipe
-
-### 判讀規則
-
-| 回答特徵 | 指向元件類型 |
-|----------|-------------|
-| 固定入口 + 2-3 步 | owner-pipe |
-| 變動入口 + 3+ 步 | chain-pipe |
-| 每步大範圍改動 | 需要 script-managed state |
-| 步驟可重排 | 鬆耦合，chain-pipe |
+**選問策略：** 先問啟動模式，再根據回答決定是否需要問狀態和範圍。
+如果前兩題已能判斷 pipeline mode，跳過其餘。
 
 ## 2. Pain Point Discovery
 
-**目標：** 找出目前 agent 系統失效或缺失的地方。
+**目標：** 找出目前 agent 系統失效或讓用戶不滿的地方。
 
-### 問題
+| Question | What It Reveals | Typical Component |
+|----------|-----------------|-------------------|
+| 「上次 agent 讓你覺得不好用是什麼時候？發生了什麼？」 | 缺失的能力或斷鏈 | 缺失的 skill 或 rule |
+| 「有沒有什麼情況你覺得應該自動處理但現在沒有？」 | 自動化缺口 | 缺失的 hook 或 skill |
+| 「哪些錯誤你已經被提醒過兩次以上？」 | 重複違規 | rule 或 hook enforcement |
+| 「有沒有 Claude 回答的方式讓你覺得不對？」 | 行為偏差 | rule 或 CLAUDE.md adjustment |
+| 「什麼時候你會覺得 Claude 太囉嗦或太簡短？」 | 溝通風格問題 | communication rule |
+| 「有沒有什麼指令你每次都要重複說？」 | 指令遺忘 | CLAUDE.md 或 rule file |
+| 「agent 有沒有做過讓你要花時間修正的事？」 | 行為失控 | guardrail（rule 或 hook） |
 
-優先問失敗經驗，再問期望：
+**選問策略：** 先問失敗經驗（前兩題），再根據回答決定是否深入溝通風格或行為問題。
+如果用戶沒有負面經驗，快速帶過。
 
-1. 「上次 agent 讓你覺得不好用是什麼時候？發生了什麼？」
-   - 揭示缺失的 skill 或斷鏈
-2. 「有沒有什麼情況你覺得應該自動處理但現在沒有？」
-   - 揭示缺失的 hook 或 rule
-3. 「哪些錯誤你已經被提醒過兩次以上？」
-   - 需要 rule 或 hook 來預防
-4. 「有沒有什麼指令你每次都要重複說？」
-   - 應該寫成 CLAUDE.md 中的 rule
-5. 「agent 有沒有做過讓你要花時間修正的事？」
-   - 需要 guardrail（rule 或 hook）
+## 3. Routine Task & Small Work Identification
 
-### 判讀規則
+**目標：** 找出可自動化的重複性任務。
 
-| 回答特徵 | 指向元件類型 |
-|----------|-------------|
-| 重複糾正同一行為 | rule |
-| 缺少自動化 | hook |
-| 複雜多步驟失敗 | skill |
-| 行為錯誤 | rule 或 CLAUDE.md 更新 |
+| Question | What It Reveals | Typical Component |
+|----------|-----------------|-------------------|
+| 「有沒有你每天都在做、但覺得很無聊的事？」 | 自動化候選 | agent 或 skill |
+| 「搜尋程式碼的時候，有沒有固定的模式或常找的東西？」 | 固定搜尋模式 | 帶特定搜尋 pattern 的 agent |
+| 「有沒有什麼格式化或檢查工作可以自動化？」 | 格式/品質檢查 | PostToolUse hook |
+| 「每次開新 PR 或新 branch 的時候，有固定的步驟嗎？」 | 流程儀式 | skill 或 hook |
+| 「有沒有常用的指令組合你希望一鍵完成？」 | 指令組合 | command alias 或 skill |
+| 「有沒有定期要做的報告或摘要？」 | 週期性任務 | scheduled agent 或 skill |
+| 「有沒有什麼工作你覺得 agent 做比你快？」 | delegation 候選 | agent 或 skill |
 
-## 3. Small Task / Routine Work Identification
-
-**目標：** 找出可由 agent 處理的重複性小任務。
-
-### 問題
-
-1. 「有沒有你每天都在做、但覺得很無聊的事？」
-   - 自動化候選
-2. 「搜尋程式碼的時候，有沒有固定的模式或常找的東西？」
-   - 帶特定搜尋模式的 agent
-3. 「有沒有什麼格式化、檢查、或清理工作可以自動化？」
-   - hook 候選
-4. 「有沒有定期要做的報告或摘要？」
-   - agent 或 skill 候選
-5. 「有沒有什麼工作你覺得 agent 做比你快？」
-   - delegation 候選
-
-### 判讀規則
-
-| 回答特徵 | 指向元件類型 |
-|----------|-------------|
-| 格式/lint 檢查 | PostToolUse hook |
-| 固定搜尋模式 | 帶特定 tool config 的 agent |
-| 週期性任務 | scheduled agent 或 skill |
-| 簡單規則 | CLAUDE.md 或 rule file |
+**選問策略：** 先問無聊的事，再根據角色補問特定類型。
+開發者多問搜尋和格式化；PM 多問報告和流程。
 
 ## General Guidelines
 
 - 每次只問一題
 - 跳過分析報告中已回答的問題
 - 根據回答調整後續問題，不要機械地照表問
-- 總共最多 5-8 題
+- 總共最多 5-8 題（三個領域合計）
 - 盡量用選擇題
 - 先問失敗經驗，再問願望
