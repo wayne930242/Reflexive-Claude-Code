@@ -6,35 +6,40 @@ Write the summary to `docs/agent-system/{timestamp}-workflows.md` using this for
 # Workflow Summary
 
 **Date:** YYYY-MM-DD HH:MM
-**Role:** [selected role]
 
-## Core Workflows
-1. [Workflow description]
-2. [Workflow description]
+## Analysis Report Reference
 
-## Tasks to Automate
-- [Task] → suggested component type (hook/skill/rule)
+- Report path: [path to analysis report if available]
+- Key findings addressed: [list of findings selected by user]
 
-## Weaknesses to Fix (from analysis)
-- [Finding] → planned fix
+## Pipeline Mode Mapping
 
-## Conventions to Enforce
-- [Convention] → suggested component type (rule/hook)
+| Workflow | Mode | Steps | Entry Point | State Management | Script Needed | Rationale |
+|----------|------|-------|-------------|------------------|---------------|-----------|
 
-## Workflow Pattern Mapping
-| Workflow | Anthropic Pattern | Skill Routing | Complexity Level | Rationale |
-|----------|------------------|---------------|-----------------|-----------|
-| [workflow] | Prompt Chaining / Routing / etc. | Tree/Chain/Node/Skill Steps | 1-6 | [why this level] |
+## Pain Points
 
-## Past Failures & Constraints
-- [What the user tried before and why it didn't work]
-- [Constraints that limit design choices]
+| Pain Point | Root Cause | Suggested Fix | Component Type | Priority |
+|------------|------------|---------------|----------------|----------|
+
+## Routine Tasks
+
+| Task | Frequency | Current Process | Automation Approach | Component Type |
+|------|-----------|-----------------|---------------------|----------------|
 
 ## Component Recommendations
-| Component | Action | Rationale |
-|-----------|--------|-----------|
-| CLAUDE.md | create/modify | [reason] |
-| Rule: [name] | create | [reason] |
-| Hook: [name] | create | [reason] |
-| Skill: [name] | create | [reason] |
+
+| Component | Type | Action | Traced To | Priority |
+|-----------|------|--------|-----------|----------|
+| [name] | rule/hook/skill/agent | create/modify | [pain point or routine task ref] | HIGH/MEDIUM/LOW |
+
+## Workflow Pattern Mapping
+
+| Workflow | Anthropic Pattern | Skill Routing | Complexity Level | Rationale |
+|----------|------------------|---------------|-----------------|-----------|
+
+## Past Failures & Constraints
+
+- [What the user tried before and why it didn't work]
+- [Constraints that limit design choices]
 ```
