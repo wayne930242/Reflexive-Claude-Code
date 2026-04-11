@@ -8,6 +8,19 @@ Write the report to `docs/agent-system/{timestamp}-analysis.md` using this forma
 **Date:** YYYY-MM-DD HH:MM
 **Project:** [project name]
 
+## Project Overview
+
+| Aspect | Finding |
+|--------|---------|
+| Language(s) | |
+| Framework(s) | |
+| Project type | |
+| CI/CD | |
+| Testing | |
+| Linting | |
+| Team scale | |
+| Notable | |
+
 ## Component Inventory
 
 | # | Type | Path | Lines | Status |
@@ -15,6 +28,8 @@ Write the report to `docs/agent-system/{timestamp}-analysis.md` using this forma
 | 1 | CLAUDE.md | ./CLAUDE.md | N | OK/NEEDS_FIX/MISSING |
 
 ## Weakness Findings
+
+> Includes pipeline chain-break, state persistence, and mode mismatch checks
 
 ### CRITICAL (must fix)
 
@@ -30,6 +45,44 @@ Write the report to `docs/agent-system/{timestamp}-analysis.md` using this forma
 
 | # | Category | Component | Finding | Suggested Fix |
 |---|----------|-----------|---------|---------------|
+
+## Restructuring Recommendations
+
+### Merge Recommendations
+
+| # | ID | Components | Rationale | Priority |
+|---|----|------------|-----------|----------|
+| 1 | MERGE-1 | | | HIGH/MEDIUM/LOW |
+
+### Extract Recommendations
+
+| # | ID | Source | Extract To | Rationale | Priority |
+|---|----|--------|------------|-----------|----------|
+| 1 | EXTRACT-1 | | | | HIGH/MEDIUM/LOW |
+
+**Migration table:**
+
+| ID | Before | After | Migration Steps |
+|----|--------|-------|-----------------|
+
+### Pipeline Recommendations
+
+| # | ID | Mode | Topology (DOT) | State Persistence | Priority |
+|---|----|------|-----------------|-------------------|----------|
+| 1 | PIPELINE-1 | | | | HIGH/MEDIUM/LOW |
+
+**Components per pipeline:**
+
+| Pipeline ID | Component | Role | Order |
+|-------------|-----------|------|-------|
+
+### Restructuring Summary
+
+| Type | Count | HIGH | MEDIUM | LOW |
+|------|-------|------|--------|-----|
+| Merge | | | | |
+| Extract | | | | |
+| Pipeline | | | | |
 
 ## Rules Health Summary
 
@@ -50,4 +103,7 @@ Status values: `ok`, `>200` (CLAUDE.md lines), `>300` (session total), count for
 - Critical issues: N
 - Warnings: N
 - Info: N
+- Merge recommendations: N
+- Extract recommendations: N
+- Pipeline recommendations: N
 ```
