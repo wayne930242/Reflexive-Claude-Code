@@ -127,14 +127,14 @@ The planner decides which assets each skill needs; the reviewer checks they exis
 
 ## Full Skill List
 
-### rcc (v9.10.0)
+### rcc (v9.11.0)
 
 | Skill | Purpose |
 |-------|---------|
 | `migrating-agent-systems` | Maturity-graded routing with rules refactoring proposal |
 | `migrating-plugins` | Plugin maturity detection (None/Pre-plugin/Minimal/Complete), script-to-plugin conversion |
-| `analyzing-agent-systems` | 11-category weakness detection with Rules Health Summary |
-| `brainstorming-workflows` | Complexity ladder + Anthropic pattern mapping |
+| `analyzing-agent-systems` | Project scanning + 11-category weakness detection + actionable restructuring recommendations |
+| `brainstorming-workflows` | Targeted exploration of pipeline modes, pain points, and routine tasks |
 | `planning-agent-systems` | Architecture-first planning with dependency ordering |
 | `applying-agent-systems` | Execute component plan via writing-* chain |
 | `reviewing-agent-systems` | Run all 5 reviewer agents |

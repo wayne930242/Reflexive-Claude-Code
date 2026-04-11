@@ -127,14 +127,14 @@ migrate-plugin → validate → refactor
 
 ## 完整 Skill 列表
 
-### rcc (v9.10.0)
+### rcc (v9.11.0)
 
 | Skill | 用途 |
 |-------|------|
 | `migrating-agent-systems` | 成熟度分級路由 + rules 重構建議 |
 | `migrating-plugins` | 偵測插件成熟度（None/Pre-plugin/Minimal/Complete），腳本轉插件 |
-| `analyzing-agent-systems` | 11 類弱點偵測 + Rules Health Summary |
-| `brainstorming-workflows` | 複雜度階梯 + Anthropic 模式對應 |
+| `analyzing-agent-systems` | 專案掃描 + 11 類弱點偵測 + 可執行的重構建議 |
+| `brainstorming-workflows` | 針對性探索 pipeline 模式、痛點、例行任務 |
 | `planning-agent-systems` | 架構優先規劃 + 相依排序 |
 | `applying-agent-systems` | 透過 writing-* 鏈執行元件計畫 |
 | `reviewing-agent-systems` | 執行全部 5 個 reviewer agent |
