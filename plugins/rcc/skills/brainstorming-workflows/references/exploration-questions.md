@@ -53,6 +53,22 @@
 **選問策略：** 先問無聊的事，再根據角色補問特定類型。
 開發者多問搜尋和格式化；PM 多問報告和流程。
 
+## 4. Human-in-the-Loop Discovery
+
+**目標：** 找出工作流中人類必須介入的關鍵節點，確保 agent system 設計包含適當的確認閘門與護欄。
+
+| Question | What It Reveals | Typical Component |
+|----------|-----------------|-------------------|
+| 「哪些步驟做完之後你一定要親眼看過才放心？」 | 需要 review checkpoint 的節點 | skill 的 `user-confirmation` handoff |
+| 「有沒有什麼操作做錯了很難復原？」 | 破壞性操作，需要確認閘門 | hook（PreToolUse blocking）或 skill confirmation gate |
+| 「什麼情況下你希望 agent 停下來問你？」 | 使用者的信任邊界 | guardrail rule 或 hook |
+| 「有沒有涉及外部人的步驟？像是發信、推程式碼、部署？」 | 外部可見性邊界 | skill 的 confirmation gate |
+| 「你覺得 agent 可以完全自動做哪些事？哪些絕對不行？」 | 自主權範圍 | 自動化 vs confirmation 分界線 |
+| 「有沒有需要多人確認的流程？」 | 多人審核需求 | chain 中間的 user-confirmation handoff |
+
+**選問策略：** 先問「做錯了很難復原」，再根據回答決定是否需要深入外部可見性和多人確認。
+如果工作流純粹是本地開發（無部署、無外部溝通），可縮短為 2-3 題。
+
 ## General Guidelines
 
 - 每次只問一題

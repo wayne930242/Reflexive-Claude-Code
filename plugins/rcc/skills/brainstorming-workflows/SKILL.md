@@ -1,6 +1,6 @@
 ---
 name: brainstorming-workflows
-description: Explores user workflows through targeted questions about pipeline modes, pain points, and routine tasks to inform agent system design. Use when exploring workflows after analysis. Use when user says "explore workflows", "brainstorm workflows", "what should I automate". Use when called by analyzing-agent-systems.
+description: Explores user workflows through targeted questions about pipeline modes, pain points, routine tasks, and human intervention points to inform agent system design. Use when exploring workflows after analysis. Use when user says "explore workflows", "brainstorm workflows", "what should I automate". Use when called by analyzing-agent-systems.
 ---
 
 # Brainstorming Workflows
@@ -38,10 +38,11 @@ TaskCreate for EACH task below:
 2. Pipeline mode exploration
 3. Pain point discovery
 4. Routine task identification
-5. Component type judgment
-6. Produce workflow summary
+5. Human intervention point discovery
+6. Component type judgment
+7. Produce workflow summary
 
-Announce: "Created 6 tasks. Starting execution..."
+Announce: "Created 7 tasks. Starting execution..."
 
 **Execution rules:**
 1. `TaskUpdate status="in_progress"` BEFORE starting each task
@@ -107,11 +108,25 @@ Announce: "Created 6 tasks. Starting execution..."
 
 **Verification:** Routine tasks documented with automation approach.
 
-## Task 5: Component Type Judgment
+## Task 5: Human Intervention Point Discovery
+
+**Goal:** Find where humans must review, approve, or intervene in the workflows.
+
+**CRITICAL:** Read [references/exploration-questions.md](references/exploration-questions.md) for the question bank (Human-in-the-Loop section).
+
+**Rules:**
+- Ask about irreversible operations, external visibility, trust boundaries
+- For each intervention point, note the type: **review checkpoint** / **confirmation gate** / **guardrail trigger**
+- These findings directly affect Task 6 — intervention points determine which components need `user-confirmation` handoff vs auto-invoke
+- Ask **ONE question at a time**
+
+**Verification:** Intervention points documented with type and affected workflow step.
+
+## Task 6: Component Type Judgment
 
 **Goal:** Map every discovered need to the right component type.
 
-For each pain point, routine task, and analysis finding:
+For each pain point, routine task, intervention point, and analysis finding:
 - Behavioral constraint → **rule**
 - Automated check → **hook** (PostToolUse or PreToolUse)
 - Multi-step workflow → **skill**
@@ -126,13 +141,13 @@ Read [references/anthropic-patterns.md](references/anthropic-patterns.md) for th
 
 **Verification:** Every need mapped to component type, user confirmed.
 
-## Task 6: Produce Workflow Summary
+## Task 7: Produce Workflow Summary
 
 **Goal:** Write structured summary to `docs/agent-system/{timestamp}-workflows.md`.
 
 **CRITICAL:** Read [references/summary-template.md](references/summary-template.md) for the full summary format.
 
-**Include:** pipeline mode mapping, pain points, routine tasks, component recommendations.
+**Include:** pipeline mode mapping, pain points, routine tasks, human intervention points, component recommendations.
 
 **Handoff:** "工作流摘要完成。要繼續規劃 agent system 元件嗎？"
 - If yes → invoke `planning-agent-systems` skill, pass workflow summary path

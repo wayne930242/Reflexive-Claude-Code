@@ -19,7 +19,7 @@ Don't just create files—research current docs, confirm with the user, then bui
 
 **Pattern:** Chain
 **Handoff:** user-confirmation
-**Next:** `migrating-agent-systems` (if user wants agent system)
+**Next:** `migrating-agent-systems`（agent system 唯一入口）
 **Chain:** bootstrap
 
 ## Task Initialization (MANDATORY)
@@ -142,19 +142,18 @@ Announce: "Created 6 tasks. Starting execution..."
 **Goal:** Ask the user if they want a Claude Code agent system for this project.
 
 **Present options:**
-- **Full agent system** — CLAUDE.md, rules, skills, hooks, agents (recommended for team projects)
-- **Minimal setup** — CLAUDE.md only (sufficient for simple projects or solo work)
+- **Set up agent system** — invoke `migrating-agent-systems`（唯一入口，由該 skill 決定範圍與流程）
 - **Skip** — no agent system
 
-**If Full:**
+**If set up:**
 - Invoke `migrating-agent-systems` skill
 - It will detect maturity = None and route to the full pipeline (brainstorm → plan → apply → review)
-
-**If Minimal:**
-- Invoke `writing-claude-md` skill to create a basic CLAUDE.md
+- Agent system 的範圍（full vs minimal）由 `migrating-agent-systems` 內部與使用者討論決定
 
 **If Skip:**
 - End
+
+**CRITICAL:** 不得繞過 `migrating-agent-systems` 直接呼叫 `writing-claude-md` 或其他 component skill。`migrating-agent-systems` 是 agent system 設定的唯一入口。
 
 **Verification:** User's choice is executed or skipped.
 
@@ -198,8 +197,7 @@ digraph init_project {
     valid [label="Builds and\nruns?", shape=diamond];
     offer [label="Task 6: Offer\nagent system", shape=box];
     choice [label="User\nchoice?", shape=diamond];
-    migrate [label="Invoke\nmigrating-agent-systems", shape=box];
-    claudemd [label="Invoke\nwriting-claude-md", shape=box];
+    migrate [label="Invoke\nmigrating-agent-systems\n(唯一入口)", shape=box];
     done [label="Project ready", shape=doublecircle];
 
     start -> gather;
@@ -213,11 +211,9 @@ digraph init_project {
     valid -> offer [label="yes"];
     valid -> bootstrap [label="no\nfix"];
     offer -> choice;
-    choice -> migrate [label="full"];
-    choice -> claudemd [label="minimal"];
+    choice -> migrate [label="set up"];
     choice -> done [label="skip"];
     migrate -> done;
-    claudemd -> done;
 }
 ```
 
@@ -225,5 +221,4 @@ digraph init_project {
 
 | Step | Skill | Purpose |
 |------|-------|---------|
-| full | `migrating-agent-systems` | Detects None maturity → brainstorm → plan → apply → review |
-| minimal | `writing-claude-md` | Create basic CLAUDE.md only |
+| agent system | `migrating-agent-systems` | 唯一入口。Detects None maturity → brainstorm → plan → apply → review |
