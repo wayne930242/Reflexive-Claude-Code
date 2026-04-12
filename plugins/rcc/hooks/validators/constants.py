@@ -23,10 +23,29 @@ HOOKS_ONLY_VARS = {"${CLAUDE_PLUGIN_ROOT}", "${CLAUDE_PLUGIN_DATA}"}
 
 # Hook configuration validation
 HOOK_EVENTS = {
-    "PreToolUse", "PostToolUse", "Stop", "SubagentStop", "SessionStart",
-    "SessionEnd", "UserPromptSubmit", "PreCompact", "Notification"
+    # Session lifecycle
+    "SessionStart", "SessionEnd",
+    # Per-turn
+    "UserPromptSubmit", "Stop", "StopFailure",
+    # Tool execution
+    "PreToolUse", "PostToolUse", "PostToolUseFailure",
+    "PermissionRequest", "PermissionDenied",
+    # Subagent
+    "SubagentStart", "SubagentStop", "TeammateIdle",
+    # Task
+    "TaskCreated", "TaskCompleted",
+    # Context
+    "ConfigChange", "CwdChanged", "FileChanged", "InstructionsLoaded",
+    # Compact
+    "PreCompact", "PostCompact",
+    # MCP
+    "Elicitation", "ElicitationResult",
+    # Notification
+    "Notification",
+    # Worktree
+    "WorktreeCreate", "WorktreeRemove",
 }
-HOOK_TYPES = {"prompt", "command"}
+HOOK_TYPES = {"command", "http", "prompt", "agent"}
 
 # Plugin hooks.json allowed top-level fields
 PLUGIN_HOOKS_ALLOWED_FIELDS = {"description", "hooks"}
