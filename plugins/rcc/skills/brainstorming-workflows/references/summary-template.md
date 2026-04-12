@@ -38,6 +38,12 @@ Write the summary to `docs/agent-system/{timestamp}-workflows.md` using this for
 | Workflow | Anthropic Pattern | Skill Routing | Complexity Level | Rationale |
 |----------|------------------|---------------|-----------------|-----------|
 
+## Human Intervention Points
+
+| Workflow Step | Intervention Type | Trigger Condition | Component Impact |
+|---------------|-------------------|-------------------|------------------|
+| [step name] | review-checkpoint / confirmation-gate / guardrail-trigger | [when this fires] | [skill handoff / hook / rule affected] |
+
 ## Past Failures & Constraints
 
 - [What the user tried before and why it didn't work]

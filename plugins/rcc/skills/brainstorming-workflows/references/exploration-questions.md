@@ -1,79 +1,79 @@
 # Targeted Exploration Questions
 
-探索用戶工作流的問題庫，按三個探索領域組織。
-每次問一題，根據回答調整後續問題，總共 5-8 題。
+Question bank for exploring user workflows, organized by four exploration areas.
+Ask one question at a time. Adapt follow-ups based on answers. Total 5-8 questions across all areas.
 
 ## 1. Pipeline Mode Exploration
 
-**目標：** 判斷工作流的連接方式與狀態管理需求。
+**Goal:** Determine how workflows connect and what state management they need.
 
 | Question | What It Reveals | Typical Component |
 |----------|-----------------|-------------------|
-| 「這個工作流平常怎麼啟動的？固定入口還是看情況？」 | 流程啟動模式 | owner-pipe（固定入口）vs chain-pipe（變動入口） |
-| 「中間如果斷掉，你會怎麼接回來？從頭重跑還是接著做？」 | 狀態持久化需求 | 無狀態 pipe vs state persistence |
-| 「每一步大概動多少檔案？跨幾個模組？」 | 工作範圍大小 | 簡單 skill（小範圍）vs script-managed state（大範圍） |
-| 「這些步驟一定要按順序嗎？還是有些可以平行？」 | pipeline 拓撲結構 | 順序 pipeline vs 平行分派 |
-| 「誰負責決定下一步做什麼？」 | 控制權歸屬 | owner-pipe（人決定）vs chain-pipe（自動接力） |
-| 「這個流程有幾個步驟？每步是誰負責的？」 | 步驟數與責任分配 | 步驟多 → chain-pipe；步驟少 → owner-pipe |
+| "How does this workflow usually start? Fixed entry point or situational?" | Startup mode | owner-pipe (fixed entry) vs chain-pipe (variable entry) |
+| "If it breaks midway, how do you resume? Restart from scratch or pick up where you left off?" | State persistence needs | stateless pipe vs state persistence |
+| "How many files does each step touch? Across how many modules?" | Work scope | simple skill (small scope) vs script-managed state (large scope) |
+| "Do these steps have to run in order, or can some run in parallel?" | Pipeline topology | sequential pipeline vs parallel dispatch |
+| "Who decides what to do next?" | Control ownership | owner-pipe (human decides) vs chain-pipe (auto-handoff) |
+| "How many steps in this workflow? Who is responsible for each?" | Step count and responsibility | many steps → chain-pipe; few steps → owner-pipe |
 
-**選問策略：** 先問啟動模式，再根據回答決定是否需要問狀態和範圍。
-如果前兩題已能判斷 pipeline mode，跳過其餘。
+**Selection strategy:** Ask startup mode first, then decide whether to ask about state and scope based on the answer.
+If the first two questions are enough to determine pipeline mode, skip the rest.
 
 ## 2. Pain Point Discovery
 
-**目標：** 找出目前 agent 系統失效或讓用戶不滿的地方。
+**Goal:** Find where the current agent system fails or frustrates the user.
 
 | Question | What It Reveals | Typical Component |
 |----------|-----------------|-------------------|
-| 「上次 agent 讓你覺得不好用是什麼時候？發生了什麼？」 | 缺失的能力或斷鏈 | 缺失的 skill 或 rule |
-| 「有沒有什麼情況你覺得應該自動處理但現在沒有？」 | 自動化缺口 | 缺失的 hook 或 skill |
-| 「哪些錯誤你已經被提醒過兩次以上？」 | 重複違規 | rule 或 hook enforcement |
-| 「有沒有 Claude 回答的方式讓你覺得不對？」 | 行為偏差 | rule 或 CLAUDE.md adjustment |
-| 「什麼時候你會覺得 Claude 太囉嗦或太簡短？」 | 溝通風格問題 | communication rule |
-| 「有沒有什麼指令你每次都要重複說？」 | 指令遺忘 | CLAUDE.md 或 rule file |
-| 「agent 有沒有做過讓你要花時間修正的事？」 | 行為失控 | guardrail（rule 或 hook） |
+| "When was the last time the agent felt unhelpful? What happened?" | Missing capability or broken chain | missing skill or rule |
+| "Is there anything you think should be handled automatically but isn't?" | Automation gap | missing hook or skill |
+| "Which mistakes have you been warned about more than twice?" | Repeated violations | rule or hook enforcement |
+| "Has Claude ever responded in a way that felt wrong?" | Behavioral drift | rule or CLAUDE.md adjustment |
+| "When does Claude feel too verbose or too terse?" | Communication style issues | communication rule |
+| "Are there instructions you have to repeat every time?" | Instruction amnesia | CLAUDE.md or rule file |
+| "Has the agent ever done something that took you time to fix?" | Out-of-control behavior | guardrail (rule or hook) |
 
-**選問策略：** 先問失敗經驗（前兩題），再根據回答決定是否深入溝通風格或行為問題。
-如果用戶沒有負面經驗，快速帶過。
+**Selection strategy:** Ask about past failures first (first two questions), then decide whether to dig into communication style or behavioral issues.
+If the user has no negative experiences, move on quickly.
 
 ## 3. Routine Task & Small Work Identification
 
-**目標：** 找出可自動化的重複性任務。
+**Goal:** Find repetitive tasks that could be automated.
 
 | Question | What It Reveals | Typical Component |
 |----------|-----------------|-------------------|
-| 「有沒有你每天都在做、但覺得很無聊的事？」 | 自動化候選 | agent 或 skill |
-| 「搜尋程式碼的時候，有沒有固定的模式或常找的東西？」 | 固定搜尋模式 | 帶特定搜尋 pattern 的 agent |
-| 「有沒有什麼格式化或檢查工作可以自動化？」 | 格式/品質檢查 | PostToolUse hook |
-| 「每次開新 PR 或新 branch 的時候，有固定的步驟嗎？」 | 流程儀式 | skill 或 hook |
-| 「有沒有常用的指令組合你希望一鍵完成？」 | 指令組合 | command alias 或 skill |
-| 「有沒有定期要做的報告或摘要？」 | 週期性任務 | scheduled agent 或 skill |
-| 「有沒有什麼工作你覺得 agent 做比你快？」 | delegation 候選 | agent 或 skill |
+| "Is there anything you do every day that feels tedious?" | Automation candidate | agent or skill |
+| "When searching code, do you have fixed patterns or things you frequently look for?" | Fixed search patterns | agent with specific search patterns |
+| "Are there formatting or validation tasks that could be automated?" | Format/quality checks | PostToolUse hook |
+| "Do you have a fixed set of steps when opening a new PR or branch?" | Process rituals | skill or hook |
+| "Are there command combinations you wish could be done in one step?" | Command composition | command alias or skill |
+| "Do you have regular reports or summaries to produce?" | Periodic tasks | scheduled agent or skill |
+| "Is there work you think the agent can do faster than you?" | Delegation candidate | agent or skill |
 
-**選問策略：** 先問無聊的事，再根據角色補問特定類型。
-開發者多問搜尋和格式化；PM 多問報告和流程。
+**Selection strategy:** Ask about tedious tasks first, then supplement based on role.
+For developers, ask more about search and formatting. For PMs, ask more about reports and processes.
 
 ## 4. Human-in-the-Loop Discovery
 
-**目標：** 找出工作流中人類必須介入的關鍵節點，確保 agent system 設計包含適當的確認閘門與護欄。
+**Goal:** Find critical points in workflows where humans must review, approve, or intervene. Ensures agent system design includes appropriate confirmation gates and guardrails.
 
 | Question | What It Reveals | Typical Component |
 |----------|-----------------|-------------------|
-| 「哪些步驟做完之後你一定要親眼看過才放心？」 | 需要 review checkpoint 的節點 | skill 的 `user-confirmation` handoff |
-| 「有沒有什麼操作做錯了很難復原？」 | 破壞性操作，需要確認閘門 | hook（PreToolUse blocking）或 skill confirmation gate |
-| 「什麼情況下你希望 agent 停下來問你？」 | 使用者的信任邊界 | guardrail rule 或 hook |
-| 「有沒有涉及外部人的步驟？像是發信、推程式碼、部署？」 | 外部可見性邊界 | skill 的 confirmation gate |
-| 「你覺得 agent 可以完全自動做哪些事？哪些絕對不行？」 | 自主權範圍 | 自動化 vs confirmation 分界線 |
-| 「有沒有需要多人確認的流程？」 | 多人審核需求 | chain 中間的 user-confirmation handoff |
+| "Which steps do you absolutely need to review before moving on?" | Nodes requiring review checkpoints | skill with `user-confirmation` handoff |
+| "Are there any operations that are hard to undo if done wrong?" | Destructive operations needing confirmation gates | hook (PreToolUse blocking) or skill confirmation gate |
+| "In what situations do you want the agent to stop and ask you?" | User's trust boundary | guardrail rule or hook |
+| "Are there steps that involve external people? Like sending emails, pushing code, deploying?" | External visibility boundary | skill confirmation gate |
+| "What can the agent fully automate vs. what should it never do alone?" | Autonomy scope | automation vs confirmation boundary |
+| "Are there processes that require multiple people to confirm?" | Multi-person approval needs | chain with user-confirmation handoff |
 
-**選問策略：** 先問「做錯了很難復原」，再根據回答決定是否需要深入外部可見性和多人確認。
-如果工作流純粹是本地開發（無部署、無外部溝通），可縮短為 2-3 題。
+**Selection strategy:** Ask "hard to undo if done wrong" first, then decide whether to dig into external visibility and multi-person approval.
+If the workflow is purely local development (no deploys, no external communication), shorten to 2-3 questions.
 
 ## General Guidelines
 
-- 每次只問一題
-- 跳過分析報告中已回答的問題
-- 根據回答調整後續問題，不要機械地照表問
-- 總共最多 5-8 題（三個領域合計）
-- 盡量用選擇題
-- 先問失敗經驗，再問願望
+- Ask one question at a time
+- Skip questions already answered by the analysis report
+- Adapt follow-up questions based on answers — don't ask mechanically from the table
+- Maximum 5-8 questions total (across all four areas)
+- Prefer multiple-choice framing where possible
+- Ask about failures before wishes

@@ -58,7 +58,7 @@ Announce: "Created 7 tasks. Starting execution..."
 **If analysis report path was provided:**
 1. Read the analysis report
 2. Present restructuring recommendations grouped by priority
-3. Ask: "分析報告建議了以下改進，哪些你想在這次處理？"
+3. Ask: "The analysis report suggests these improvements. Which ones do you want to address this time?"
 4. Present as checklist for user to select
 5. Selected items become requirements in workflow summary
 
@@ -149,7 +149,7 @@ Read [references/anthropic-patterns.md](references/anthropic-patterns.md) for th
 
 **Include:** pipeline mode mapping, pain points, routine tasks, human intervention points, component recommendations.
 
-**Handoff:** "工作流摘要完成。要繼續規劃 agent system 元件嗎？"
+**Handoff:** "Workflow summary complete. Continue to plan agent system components?"
 - If yes → invoke `planning-agent-systems` skill, pass workflow summary path
 
 **Verification:** Summary written with all sections filled.
@@ -189,8 +189,9 @@ digraph brainstorm_workflows {
     pipeline [label="Task 2: Pipeline\nmode exploration", shape=box];
     pain [label="Task 3: Pain point\ndiscovery", shape=box];
     routine [label="Task 4: Routine task\nidentification", shape=box];
-    component [label="Task 5: Component\ntype judgment", shape=box];
-    summary [label="Task 6: Produce\nworkflow summary", shape=box];
+    hitl [label="Task 5: Human\nintervention points", shape=box];
+    component [label="Task 6: Component\ntype judgment", shape=box];
+    summary [label="Task 7: Produce\nworkflow summary", shape=box];
     handoff [label="Invoke\nplanning-agent-systems", shape=box];
     done [label="Brainstorm complete", shape=doublecircle];
 
@@ -201,7 +202,8 @@ digraph brainstorm_workflows {
     select -> pipeline;
     pipeline -> pain;
     pain -> routine;
-    routine -> component;
+    routine -> hitl;
+    hitl -> component;
     component -> summary;
     summary -> handoff [label="continue"];
     summary -> done [label="stop here"];
