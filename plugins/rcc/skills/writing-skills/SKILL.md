@@ -107,6 +107,8 @@ skill-name/
 └── references/        # Optional: detailed docs
 ```
 
+**If the skill includes scripts:** Read [cross-platform-scripts.md](../../references/cross-platform-scripts.md) for mandatory cross-platform rules (paths, shell commands, line endings).
+
 ### Naming Convention
 
 **Gerund form** (verb + -ing): `writing-skills`, `processing-pdfs`

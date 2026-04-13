@@ -113,6 +113,8 @@ Skills can also inject live data using shell commands (execute as preprocessing 
 - Multi-line: `` ```! `` code block
 - PowerShell: set `shell: powershell` in frontmatter AND user must set `CLAUDE_CODE_USE_POWERSHELL_TOOL=1`. Ask the user which shell they use if the plugin needs cross-platform support.
 
+**If the plugin includes scripts or hooks:** Read [cross-platform-scripts.md](../../references/cross-platform-scripts.md) for mandatory cross-platform rules (paths, shell commands, line endings).
+
 **Verification:** Directory structure created with all required paths.
 
 ## Task 3: Generate Plugin Manifest
