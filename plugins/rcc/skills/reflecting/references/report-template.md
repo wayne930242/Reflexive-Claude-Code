@@ -14,9 +14,9 @@ Write the report to `docs/agent-system/{timestamp}-reflection.md` using this for
 
 ## Events
 
-| # | Event | Context | Outcome | Type |
-|---|-------|---------|---------|------|
-| 1 | [What happened] | [When/where it occurred] | [Result] | correction / error / discovery / repetition |
+| # | Event | Context | Outcome | Type | Router |
+|---|-------|---------|---------|------|--------|
+| 1 | [What happened] | [When/where it occurred] | [Result] | correction / error / discovery / repetition | [skill/rule/law/none] |
 
 **Type definitions:**
 - **correction** — user corrected the agent's approach or output
@@ -26,9 +26,9 @@ Write the report to `docs/agent-system/{timestamp}-reflection.md` using this for
 
 ## Learnings
 
-| # | Learning | Evidence | Suggested Component | Rationale |
-|---|----------|----------|---------------------|-----------|
-| 1 | [Actionable insight] | Event #N | rule / law / skill / hook / doc | [Why this component type fits] |
+| # | Learning | Evidence | Router | Fix Target | Suggested Component | Rationale |
+|---|----------|----------|--------|------------|---------------------|-----------|
+| 1 | [Actionable insight] | Event #N | [component that routed behavior] | [where fix lands] | rule / law / skill / hook / doc | [Why, informed by router] |
 
 **Suggested Component guidelines:**
 - **law** — immutable, must enforce every response, project-specific

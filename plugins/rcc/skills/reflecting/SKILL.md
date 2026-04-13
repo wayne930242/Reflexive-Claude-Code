@@ -57,15 +57,28 @@ Announce: "Created 5 tasks. Starting execution..."
 - **Discoveries** — new insights about the project, domain, or tooling
 - **Repetitions** — same action performed multiple times (automation candidate)
 
+**Trace the skill router for each event:**
+For corrections and errors, identify which component routed the agent to that behavior:
+- Which skill was active? (check skill invocations in conversation)
+- Which rule or CLAUDE.md law triggered the approach?
+- Was there no router (agent used general knowledge)?
+
+This determines where fixes land:
+- Router is a skill → fix goes in that skill
+- Router is a rule → fix goes in that rule
+- Router is CLAUDE.md → fix goes in CLAUDE.md
+- No router → new rule or skill needed
+
 **Document each event:**
 ```
 Event: [What happened]
 Context: [When/where it occurred]
 Outcome: [Result]
 Type: correction / error / discovery / repetition
+Router: [skill/rule/law/none that caused this behavior]
 ```
 
-**Verification:** Listed at least 3 significant events. If fewer than 3 occurred, document why.
+**Verification:** Listed at least 3 significant events. If fewer than 3 occurred, document why. Each event has a router identified (or explicitly "none").
 
 ## Task 2: Extract Knowledge
 
@@ -87,11 +100,13 @@ Learning:
   context: [When this applies]
   insight: [What was learned]
   evidence: [Specific event that taught this]
+  router: [Which component routed the behavior, from event trace]
+  fix_target: [Same component as router, or new component if router=none]
   suggested_component: rule / law / skill / hook / doc
-  rationale: [Why this component type fits]
+  rationale: [Why this component type fits, informed by router analysis]
 ```
 
-**Verification:** Each event has at least one learning with a suggested component and rationale.
+**Verification:** Each event has at least one learning with router, fix_target, suggested component, and rationale.
 
 ## Task 3: Produce Reflection Report
 
