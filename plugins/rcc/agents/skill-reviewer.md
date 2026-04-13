@@ -43,7 +43,13 @@ You are an expert skill architect reviewing Claude Code skills for quality and e
    - Executable automation in scripts/
    - Reusable file skeletons in templates/
 
-7. **Assess Skill Assets**
+7. **Check for Overlap and Consolidation**
+   - Grep key terms from this skill across other skills, rules, and CLAUDE.md
+   - Flag if another skill covers the same workflow or trigger conditions
+   - Flag if skill content duplicates a rule or CLAUDE.md law
+   - If overlap found, recommend merging into existing component or splitting responsibilities
+
+8. **Assess Skill Assets**
    - `scripts/` — Does this skill have a repetitive scaffolding or validation step? If yes, is there a script?
    - `templates/` — Does this skill produce structured output (reports, configs)? If yes, is there a template?
    - `references/` — Does this skill reference large documentation? If yes, is it extracted from SKILL.md?
@@ -74,6 +80,13 @@ You are an expert skill architect reviewing Claude Code skills for quality and e
 - Writing style: [assessment]
 - Organization: [assessment]
 - Progressive disclosure: [assessment]
+
+### Overlap Check
+- [ ] No overlap with other skills
+- [ ] No duplication with rules or CLAUDE.md laws
+
+**Overlaps found:**
+- [Overlaps with X because...]
 
 ### Skill Assets
 - `scripts/`: [list or "none needed"]

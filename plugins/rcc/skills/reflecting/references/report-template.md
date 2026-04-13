@@ -39,7 +39,7 @@ Write the report to `docs/agent-system/{timestamp}-reflection.md` using this for
 
 ## Component Recommendations
 
-For each suggested component, provide enough detail for planning-agent-systems to work with:
+For each learning, provide a recommendation. Task 5 (consolidation review) will prune and merge before routing.
 
 ### Recommendation N: [Component Name]
 
@@ -62,7 +62,7 @@ Map learnings to the 10-category weakness checklist from analyzing-agent-systems
 Use this checklist to verify the report before routing to planning:
 
 - [ ] Every event has at least one learning
-- [ ] Every learning has a suggested component with rationale
+- [ ] Every learning has router, fix_target, suggested component, and rationale
 - [ ] Every component recommendation has type, path hint, content summary, and traces-to
 - [ ] No placeholder text (TBD, TODO, etc.)
 - [ ] Session context accurately describes the work done

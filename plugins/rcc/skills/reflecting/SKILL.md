@@ -36,9 +36,10 @@ TaskCreate for EACH task below:
 2. Extract knowledge
 3. Produce reflection report
 4. Review report quality
-5. Route to planning
+5. Consolidation review
+6. Route to planning
 
-Announce: "Created 5 tasks. Starting execution..."
+Announce: "Created 6 tasks. Starting execution..."
 
 **Execution rules:**
 1. `TaskUpdate status="in_progress"` BEFORE starting each task
@@ -59,9 +60,19 @@ Announce: "Created 5 tasks. Starting execution..."
 
 **Trace the skill router for each event:**
 For corrections and errors, identify which component routed the agent to that behavior:
-- Which skill was active? (check skill invocations in conversation)
-- Which rule or CLAUDE.md law triggered the approach?
-- Was there no router (agent used general knowledge)?
+1. Which skill was active? (check skill invocations in conversation)
+2. Which rule or CLAUDE.md law triggered the approach?
+3. Was there no router (agent used general knowledge)?
+
+**Locate the router's actual file path** — use Glob to find it:
+- Skill → `Glob "**/skills/{name}/SKILL.md"` (covers `plugins/**/skills/` and `.claude/skills/`)
+- Rule → `Glob "**/.claude/rules/{name}.md"`
+- Agent/Subagent → `Glob "**/agents/{name}.md"` (covers `plugins/**/agents/` and `.claude/agents/`)
+- CLAUDE.md → project root `CLAUDE.md`
+
+If Glob returns multiple matches, record all paths — the conversation context usually disambiguates which one was active.
+
+Record the resolved path. This path is used in Task 2 dedup gate.
 
 This determines where fixes land:
 - Router is a skill → fix goes in that skill
@@ -76,6 +87,7 @@ Context: [When/where it occurred]
 Outcome: [Result]
 Type: correction / error / discovery / repetition
 Router: [skill/rule/law/none that caused this behavior]
+Router path: [resolved file path, or "none"]
 ```
 
 **Verification:** Listed at least 3 significant events. If fewer than 3 occurred, document why. Each event has a router identified (or explicitly "none").
@@ -132,7 +144,7 @@ The report must follow the template exactly, including:
 Use the completeness checklist from `references/report-template.md`:
 
 - [ ] Every event has at least one learning
-- [ ] Every learning has a suggested component with rationale
+- [ ] Every learning has router, fix_target, suggested component, and rationale
 - [ ] Every component recommendation has type, path hint, content summary, and traces-to
 - [ ] No placeholder text (TBD, TODO, etc.)
 - [ ] Session context accurately describes the work done
@@ -143,7 +155,36 @@ Use the completeness checklist from `references/report-template.md`:
 
 **Verification:** All checklist items pass.
 
-## Task 5: Route to Planning
+## Task 5: Consolidation Review
+
+**Goal:** Ensure recommendations consolidate into existing components rather than bloating the system.
+
+**Only review components with diff** — invoke reviewer agents on each recommendation's fix_target (using router path from Task 1).
+
+**For each recommendation, invoke the corresponding reviewer agent:**
+
+| fix_target type | Reviewer agent |
+|-----------------|----------------|
+| skill | `skill-reviewer` (has overlap check) |
+| rule | `rule-reviewer` (has duplication check) |
+| CLAUDE.md | `claudemd-reviewer` (has duplication check) |
+| agent/subagent | `subagent-reviewer` (has overlap check) |
+| hook | `hook-reviewer` |
+| none (new component) | Invoke the reviewer matching `suggested_component` type |
+
+**Pass the fix_target path to the reviewer.** The reviewer will check for overlap with existing components.
+
+**Based on reviewer output, adjust recommendations:**
+- Reviewer finds full overlap → remove recommendation, note why
+- Reviewer finds partial overlap → change to "modify existing", describe only the gap
+- Multiple recommendations to same fix_target → merge before invoking reviewer once
+- Reviewer passes → keep recommendation as-is
+
+**Edit the report:** Directly modify the report file from Task 3, adjusting the recommendations section.
+
+**Verification:** Every recommendation has been reviewed by the appropriate agent. No redundant recommendations remain.
+
+## Task 6: Route to Planning
 
 **Goal:** Hand off the reflection report to planning-agent-systems.
 
@@ -189,6 +230,7 @@ These thoughts mean you're rationalizing. STOP and reconsider:
 - "Reflection is overhead"
 - "Skip the report, just create components directly"
 - "I know where this learning belongs, skip planning"
+- "Each learning needs its own recommendation"
 
 **All of these mean: You're about to short-circuit the pipeline. Follow the process.**
 
@@ -202,6 +244,7 @@ These thoughts mean you're rationalizing. STOP and reconsider:
 | "Overhead" | 10 minutes now saves hours later. |
 | "Create directly" | Bypasses conflict checks, simplicity gates, and reviews. |
 | "I know where it goes" | Planning has component-planning criteria you don't carry inline. |
+| "Each learning = one recommendation" | Multiple learnings often belong in the same component. Consolidate. |
 
 ## Flowchart
 
@@ -215,7 +258,8 @@ digraph reflecting {
     report [label="Task 3: Produce\nreflection report", shape=box];
     review [label="Task 4: Review\nreport quality", shape=box];
     quality_ok [label="Complete?", shape=diamond];
-    route [label="Task 5: Route\nto planning", shape=box];
+    consolidate [label="Task 5: Consolidation\nreview", shape=box];
+    route [label="Task 6: Route\nto planning", shape=box];
     done [label="Handoff complete", shape=doublecircle];
 
     start -> analyze;
@@ -223,9 +267,10 @@ digraph reflecting {
     extract -> report;
     report -> review;
     review -> quality_ok;
-    quality_ok -> route [label="yes"];
+    quality_ok -> consolidate [label="yes"];
     quality_ok -> extract [label="missing\nlearnings"];
     quality_ok -> report [label="format\nissues"];
+    consolidate -> route;
     route -> done;
 }
 ```
