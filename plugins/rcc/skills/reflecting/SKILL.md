@@ -1,6 +1,7 @@
 ---
 name: reflecting
 description: Use when completing significant work to extract learnings. Use when user corrects your approach or when you discover important patterns during agent interactions. Use when agent learns something new that should be captured for future reference. Use when user says "reflect", "what did we learn", "capture learnings". Use after resolving complex problems or discovering patterns.
+argument-hint: "[pain-point]"
 ---
 
 # Reflecting
@@ -48,9 +49,21 @@ Announce: "Created 6 tasks. Starting execution..."
 4. NEVER skip to next task until current is completed
 5. At end, `TaskList` to confirm all completed
 
+## Pain Point Focus
+
+If the user provides a pain point via `$ARGUMENTS` (e.g., `/reflect hooks keep breaking on Windows`), treat it as a **priority lens** for the entire reflection:
+
+1. The pain point gets its own event entry in Task 1 — even if the conversation doesn't explicitly show it failing
+2. In Task 2, extract at least one learning specifically addressing the pain point
+3. The pain point does NOT replace normal analysis — still scan the full conversation for other events
+
+This ensures user-reported friction gets captured even when it's not visible in the conversation trace.
+
 ## Task 1: Analyze Conversation
 
 **Goal:** Review the conversation to identify significant events.
+
+**If pain point provided:** Create an event entry for it first, using the user's description as context. Then proceed with normal analysis.
 
 **Look for:**
 - **Corrections** — user corrected the agent's approach or output

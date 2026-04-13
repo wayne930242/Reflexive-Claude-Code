@@ -125,12 +125,45 @@ See [references/static-checks.md](references/static-checks.md) for complete hook
 - **Limit output** - First 5-10 errors, not all
 - **Use Python** - Cross-platform, wrapped shell commands
 - **Progressive checks** - Fast/standard/thorough modes based on context
+- **Cross-platform** - Must work on macOS, Linux, AND Windows
+
+### Windows Compatibility (MANDATORY)
+
+Hooks must work for Windows users. Follow these rules:
+
+**Paths:**
+- Use `pathlib.Path` for ALL path operations — never string concatenation with `/`
+- Never hardcode `/` or `\` as separators
+- Use `Path(file_path).resolve()` to normalize paths
+- Shebangs (`#!/usr/bin/env python3`) are ignored on Windows — harmless, keep them
+
+**Shell commands in hooks:**
+- Wrap external commands with `shutil.which()` to locate binaries
+- Use `subprocess.run()` with list args, not shell strings: `subprocess.run(["npx", "eslint", str(path)])` not `subprocess.run(f"npx eslint {path}", shell=True)`
+- If `shell=True` is unavoidable, detect platform: `subprocess.run(cmd, shell=True)` uses `cmd.exe` on Windows, not bash
+
+**settings.json command paths:**
+- Use `"python3"` or `"python"` — Windows may only have `python`
+- Safe pattern: `"command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/check.py\" || python \"$CLAUDE_PROJECT_DIR/.claude/hooks/check.py\""`
+- `$CLAUDE_PROJECT_DIR` works on all platforms (Claude Code resolves it)
+
+**Line endings:**
+- Use `open(path, 'r', newline='')` when reading files to handle `\r\n`
+- Or `.read().replace('\r\n', '\n')` to normalize
+
+**Common pitfalls:**
+- `chmod +x` does nothing on Windows — Python scripts don't need it there
+- `os.sep` in regex patterns — escape properly or use `pathlib`
+- Temp file paths — use `tempfile.mkstemp()` not hardcoded `/tmp/`
 
 **Verification:**
-- [ ] Script is executable (`chmod +x`)
+- [ ] Script is executable (`chmod +x`) — skip on Windows
 - [ ] Returns exit code 0 for valid files
 - [ ] Returns exit code 2 for violations
 - [ ] Runs under 5 seconds
+- [ ] Uses `pathlib.Path` for all path operations
+- [ ] No `shell=True` with string commands (use list args)
+- [ ] No hardcoded `/tmp/` or path separators
 
 ## Task 4: Configure settings.json
 
