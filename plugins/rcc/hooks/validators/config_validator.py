@@ -93,11 +93,7 @@ def validate_matcher(matcher: str, matcher_context: str, event_name: str = "") -
     """Validate hook matcher pattern."""
     warnings: list[str] = []
 
-    if not matcher:
-        warnings.append(f"{matcher_context}: matcher cannot be empty")
-        return warnings
-
-    if matcher == "*":
+    if not matcher or matcher == "*":
         return []
 
     # Basic regex validation
