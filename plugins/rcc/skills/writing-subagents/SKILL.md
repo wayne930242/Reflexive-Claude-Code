@@ -173,14 +173,25 @@ See [references/agent-spec.md](references/agent-spec.md) for full configuration 
 
 ### Model Selection Guide
 
-| Use Case | Model | Rationale |
-|----------|-------|-----------|
-| **Default (recommended)** | `inherit` | Uses parent conversation model - Claude Code official best practice |
-| Planning, architecture design | `opus` | Maximum capability for complex reasoning and design decisions |
-| Standard implementation, review | `sonnet` | Balanced performance for code generation and analysis |
-| Simple lookup, exploration | `haiku` | Fastest, cheapest for formulaic and simple tasks |
+Three-layer architecture based on task type:
 
-**Best Practice:** Use `inherit` unless agent requires specific model capabilities.
+| Layer | Model | Role | Tool Constraint |
+|-------|-------|------|-----------------|
+| Orchestration (simple dispatch) | `haiku` | Explicit task list, direct assignment, no ambiguity | **Must have tools** (TaskCreate, Agent) — no tools = cannot orchestrate |
+| Orchestration (complex decomposition) | `sonnet` | Ambiguous requirements, multi-level decisions, dynamic routing | Must have tools |
+| Implementation | `sonnet` | Write, edit, analyze, implement | Full tools |
+| Quality gate / Advisor | `opus` | Architectural reasoning, overlap detection, pass/fail judgment | Read-only only (`Read, Grep, Glob`) |
+
+**Opus constraints (all required):**
+1. Output must be structured and mechanically executable by downstream Sonnet (`{pass, issues[{file, line_range, action, reason}]}`)
+2. Must have a revision loop (fail → Sonnet fixes → re-review). Without this, Opus review = expensive logger.
+3. Judge only — no rewrites, no spec changes, no open-ended suggestions
+
+**Haiku constraints:**
+- As orchestrator: must have tools (TaskCreate, Agent dispatch)
+- Zero-tool Haiku only works when content is pre-injected for pure reasoning — not suitable for document review (requires judgment)
+
+**Use `inherit` when:** the agent does not need specific model capabilities; let the parent decide.
 
 ### Isolation Guide
 
@@ -262,14 +273,13 @@ Agent tool:
 - prompt: "Review subagent at [path/to/agent.md]"
 ```
 
-**Outcomes:**
-- **Pass** → Subagent complete
-- **Needs Fix** → Fix issues, re-run reviewer, repeat until Pass
-- **Fail** → Major problems, return to Task 3
+**Interpret YAML output:**
+- `pass: true` → Subagent complete
+- `pass: false` → Fix all issues listed, re-run reviewer, repeat until `pass: true`
 
 **This is the REFACTOR phase:** Close loopholes identified by reviewer.
 
-**Verification:** subagent-reviewer returns "Pass" rating.
+**Verification:** subagent-reviewer returns YAML with `pass: true`.
 
 ## Trigger Patterns
 
@@ -284,7 +294,7 @@ These thoughts mean you're rationalizing. STOP and reconsider:
 - "One agent can handle multiple responsibilities"
 - "Main context is fine, don't need isolation"
 - "Skip testing, the prompt is simple"
-- "Use opus for everything"
+- "Use opus for everything / use haiku for everything"
 
 **All of these mean: You're about to create a weak agent. Follow the process.**
 
@@ -296,7 +306,7 @@ These thoughts mean you're rationalizing. STOP and reconsider:
 | "Multi-purpose agent" | Jack of all trades = master of none. One job. |
 | "Main context works" | Context pollution is invisible until it's a problem. |
 | "Simple prompt" | Simple ≠ correct. Test the behavior. |
-| "Opus is better" | Opus costs 15x haiku. Use appropriate model. |
+| "Use opus for everything / use haiku for everything" | Each layer has a role. Start with Sonnet as implementer. Add Haiku orchestration only when dispatch complexity justifies it. Add Opus quality gate only with a revision loop. |
 
 ## Flowchart: Subagent Creation
 

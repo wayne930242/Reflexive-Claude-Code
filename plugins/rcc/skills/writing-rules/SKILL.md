@@ -40,7 +40,7 @@ TaskCreate for EACH task below:
 6. Review and optimize
 7. Test activation
 
-Announce: "Created 6 tasks. Starting execution..."
+Announce: "Created 7 tasks. Starting execution..."
 
 **Execution rules:**
 1. `TaskUpdate status="in_progress"` BEFORE starting each task
@@ -228,12 +228,11 @@ Agent tool:
 - prompt: "Review rule at [path]"
 ```
 
-**Outcomes:**
-- **Pass** → Proceed to Task 6
-- **Needs Fix** → Fix issues, re-run reviewer, repeat until Pass
-- **Fail** → Major problems, return to Task 3
+**Interpret YAML output:**
+- `pass: true` → Proceed to Task 6
+- `pass: false` → Fix all issues listed, re-run reviewer, repeat until `pass: true`
 
-**Verification:** rule-reviewer returns "Pass" rating.
+**Verification:** rule-reviewer returns YAML with `pass: true`.
 
 ## Task 6: Test Activation
 

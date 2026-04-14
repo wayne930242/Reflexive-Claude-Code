@@ -207,14 +207,13 @@ Agent tool:
 - prompt: "Review skill at [path/to/skill]"
 ```
 
-**Outcomes:**
-- **Pass** → Proceed to Task 7
-- **Needs Fix** → Fix issues, re-run reviewer, repeat until Pass
-- **Fail** → Major problems, return to Task 3
+**Interpret YAML output:**
+- `pass: true` → Proceed to Task 7
+- `pass: false` → Fix all issues listed, re-run reviewer, repeat until `pass: true`
 
 **This is the improvement phase:** Address issues and refine quality based on reviewer feedback.
 
-**Verification:** skill-reviewer returns "Pass" rating.
+**Verification:** skill-reviewer returns YAML with `pass: true`.
 
 ## Task 7: Test with Real Usage
 

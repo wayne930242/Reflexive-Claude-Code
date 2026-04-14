@@ -51,70 +51,39 @@ CLAUDE.md is context, not enforced configuration. It should contain only what Cl
 
 ## Output Format
 
-```markdown
-## CLAUDE.md Review: [project-name]
+Return YAML only. No prose outside the YAML block.
 
-### Rating: Pass / Needs Fix / Fail
-
-### Length Assessment
-- Lines: [N] (target: < 200, optimal: ~60)
-- Token efficiency: [Good / Needs trimming / Bloated]
-
-### Instruction Quality
-
-| # | Instruction Summary | Specific | Verifiable | Non-Obvious | Issue |
-|---|---------------------|----------|------------|-------------|-------|
-| 1 | [summary] | yes/no | yes/no | yes/no | [issue or "OK"] |
-
-### Separation of Concerns
-- [ ] No path-scoped conventions (use rules instead)
-- [ ] No multi-step workflows (use skills instead)
-- [ ] No linter-enforceable rules (use hooks instead)
-- [ ] No standard conventions Claude already knows
-
-**Misplaced content found:**
-- [Line N]: "[instruction]" → should be in [rules/skills/hooks] because [reason]
-
-### Project Accuracy
-- [ ] Referenced paths exist
-- [ ] Commands are valid
-
-**Issues found:**
-- [Path/command] → [issue]
-
-### Anti-Patterns Found
-- [Pattern]: [example from file]
-
-### Issues
-
-#### Critical (must fix)
-- [Line N]: [Issue] - [Fix]
-
-#### Major (should fix)
-- [Line N]: [Issue] - [Fix]
-
-#### Minor (nice to have)
-- [Line N]: [Suggestion]
-
-### Positive Aspects
-- [What's done well]
-
-### Priority Fixes
-1. [Highest priority]
-2. [Second priority]
+```yaml
+pass: true
+issues:
+  - line: 42
+    rule: no-vague-instructions  # enum: no-vague-instructions | no-path-scoped-content | no-multi-step-workflow | no-linter-enforceable | exceeds-200-lines | duplicate-with-rules | stale-reference | missing-verifiable-language
+    finding: Specific explanation of what rule is violated and why
 ```
+
+`issues` empty = pass.
+
+## Checklist (binary — flag failures as issues)
+
+- [ ] Line count < 200
+- [ ] No vague instructions ("write clean code", "be helpful")
+- [ ] No path-scoped conventions (belongs in `.claude/rules/` with `paths:`)
+- [ ] No multi-step workflows (belongs in skills)
+- [ ] No linter-enforceable rules (belongs in hooks)
+- [ ] No standard language conventions Claude already knows
+- [ ] No content duplicated in `.claude/rules/`
+- [ ] Each instruction uses specific verifiable language (MUST/NEVER/IF…THEN)
+- [ ] Referenced paths exist (verify with Glob/Bash)
+- [ ] Referenced commands are valid (verify with Bash)
 
 ## Critical Rules
 
 **DO:**
-- Verify paths actually exist (use ls/glob)
-- Test that documented commands work (use bash)
-- Flag vague instructions — specificity is the #1 quality signal
-- Flag content that belongs in rules, skills, or hooks
-- Check total line count against 200-line target
+- Verify paths and commands before flagging stale-reference
+- Flag only items that violate the checklist above
+- Give line number for every issue
 
 **DON'T:**
-- Accept vague instructions ("be helpful", "write clean code")
-- Ignore length — bloated CLAUDE.md degrades all Claude behavior
-- Skip verifying referenced files/commands exist
-- Require any specific format or template — content quality matters, not structure
+- Give open-ended style suggestions
+- Rewrite or reword instructions
+- Flag issues not covered by the checklist

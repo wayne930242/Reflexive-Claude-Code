@@ -120,7 +120,13 @@ Announce: "Created 7 tasks. Starting execution..."
 - These findings directly affect Task 6 — intervention points determine which components need `user-confirmation` handoff vs auto-invoke
 - Ask **ONE question at a time**
 
-**Verification:** Intervention points documented with type and affected workflow step.
+**Required question — quality gate loop:**
+
+Ask: "When a reviewer reports issues, do you want fixes applied automatically before re-reviewing (auto loop), or do you want to confirm each fix before continuing (manual loop)?"
+
+Record the answer — this determines whether review skills use `auto-invoke` or `user-confirmation` handoff to the next fixing step.
+
+**Verification:** Intervention points documented with type and affected workflow step. Quality gate loop preference recorded.
 
 ## Task 6: Component Type Judgment
 

@@ -221,14 +221,13 @@ Agent tool:
 - prompt: "Review hook at [path/to/hook] with settings at [path/to/.claude/settings.json]"
 ```
 
-**Outcomes:**
-- **Pass** → Hook complete
-- **Needs Fix** → Fix issues, re-run reviewer, repeat until Pass
-- **Fail** → Major problems, return to Task 3
+**Interpret YAML output:**
+- `pass: true` → Hook complete
+- `pass: false` → Fix all issues listed, re-run reviewer, repeat until `pass: true`
 
 **This is the REFACTOR phase:** Close loopholes identified by reviewer.
 
-**Verification:** hook-reviewer returns "Pass" rating.
+**Verification:** hook-reviewer returns YAML with `pass: true`.
 
 ## Common Hook Patterns
 

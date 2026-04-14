@@ -9,22 +9,22 @@ description: Use when failures occur in agent systems, workflows, or validations
 
 **Learning from failures IS converting failure patterns into institutional knowledge.**
 
-當代理系統、工作流程或驗證失敗時，此技能將失敗案例轉換為可重用的預防知識。透過系統化記錄失敗模式、提取共同特徵、建立預防措施，避免相同問題重複發生。
+When agent systems, workflows, or validations fail, this skill converts failure cases into reusable preventive knowledge. Systematically record failure patterns, extract common characteristics, establish preventive measures, and avoid the same problems from recurring.
 
-**Core principle:** 每次失敗都是學習機會。將失敗模式轉化為預防性警告，建立機構記憶。
+**Core principle:** Every failure is a learning opportunity. Convert failure patterns into preventive warnings and build institutional memory.
 
-**Feedback loop:** 失敗案例 → 模式提取 → 預防措施 → 警告系統 → 預防執行
+**Feedback loop:** Failure case → pattern extraction → prevention measures → warning system → preventive execution
 
 ## Routing
 
 **Pattern:** Utility
-**Trigger:** 驗證失敗、工作流程中斷、代理系統問題
-**Mode:** 被動觸發、問題分析
+**Trigger:** Validation failures, workflow interruptions, agent system issues
+**Mode:** Passive trigger, problem analysis
 **Chain:** standalone
 
 ## Task Initialization (MANDATORY)
 
-在開始任何行動之前，使用 TaskCreate 建立任務清單：
+Before ANY action, create task list using TaskCreate:
 
 ```
 TaskCreate for EACH task below:
@@ -39,93 +39,118 @@ TaskCreate for EACH task below:
 4. Store institutional memory
 5. Integrate learning warnings
 
-宣告："建立 5 個任務。開始執行..."
+Announce: "Created 5 tasks. Starting execution..."
 
-**執行規則：**
-1. 在開始每個任務前 `TaskUpdate status="in_progress"`
-2. 僅在驗證通過後 `TaskUpdate status="completed"`
-3. 如果任務失敗 → 保持 in_progress，診斷，重試
-4. 在當前任務完成前，絕不跳到下一個任務
-5. 結束時，`TaskList` 確認全部完成
+**Execution rules:**
+1. `TaskUpdate status="in_progress"` BEFORE starting each task
+2. `TaskUpdate status="completed"` ONLY after verification passes
+3. If task fails → stay in_progress, diagnose, retry
+4. NEVER skip to next task until current is completed
+5. At end, `TaskList` to confirm all completed
 
 ## Task 1: Analyze Failure Context
 
-**Goal:** 分析失敗情境，識別關鍵因素。
+**Goal:** Analyze the failure context and identify key factors.
 
-**分析維度：**
-- **失敗類型：** 代碼反模式、工作流程間隙、安全盲點、整合缺失
-- **觸發條件：** 何時、何地、如何觸發
-- **影響範圍：** 受影響的元件、工作流程、使用者
-- **根因分析：** 技術因素、流程因素、知識盲點
+**Session type check (FIRST):**
 
-**資料蒐集：**
-- 錯誤訊息和堆疊追蹤
-- 相關代碼和配置
-- 工作流程上下文
-- 相似歷史案例
+| Session type | What to capture |
+|--------------|-----------------|
+| **Debug session** | TWO learning targets: (1) the bug itself — root cause, reproduction condition, prevention rule; (2) any model reasoning errors made during debugging |
+| **Workflow failure** | The workflow gap or validation failure as a pattern |
+| **Agent system issue** | Component misconfiguration, chain break, or bad architecture decision |
 
-**驗證：** 清楚了解失敗的完整情境和根本原因。
+**If this is a debug session, capture the bug separately BEFORE analyzing model errors:**
+- What is the bug? (exact behavior, not just symptoms)
+- What condition triggers it?
+- Why did it occur? (root cause, not just the fix)
+- What prevention rule would have caught it early?
+
+**Analysis dimensions:**
+- **Failure type:** Code bug, code anti-pattern, workflow gap, security blind spot, integration missing, model reasoning error
+- **Trigger condition:** When, where, how it was triggered
+- **Impact scope:** Affected components, workflows, users
+- **Root cause analysis:** Technical factors, process factors, knowledge gaps
+
+**Data collection:**
+- Error messages and stack traces
+- Relevant code and configuration
+- Workflow context
+- Similar historical cases
+
+**Verification:** Clear understanding of the complete failure context and root cause. Debug sessions have identified and separately documented the bug itself and model errors.
 
 ## Task 2: Extract Failure Patterns
 
-**Goal:** 從失敗案例中提取可重用的模式特徵。
+**Goal:** Extract reusable pattern characteristics from failure cases.
 
-**CRITICAL:** 讀取 [references/memory-patterns.md](references/memory-patterns.md) 了解模式分類和提取策略。
+**CRITICAL:** Read [references/memory-patterns.md](references/memory-patterns.md) for pattern classification and extraction strategies.
 
-**模式提取流程：**
-1. **情境匹配：** 識別觸發條件和環境特徵
-2. **問題識別：** 具體失敗模式和機制
-3. **檢測規則：** 如何提早發現此類問題
-4. **預防措施：** 如何避免重複發生
-
-**使用 memory-manager.py 提取模式：**
-```bash
-python plugins/rcc/skills/learning-from-failures/scripts/memory-manager.py extract-pattern \
-  --failure-type "代碼反模式" \
-  --context "TypeScript 介面定義" \
-  --problem "型別不匹配導致執行時錯誤"
+**For debug sessions — extract the bug as a separate pattern entry:**
+```
+Pattern type: code-bug
+Context: [language/framework/component where bug lives]
+Trigger: [exact condition that causes the bug]
+Root cause: [why it happened]
+Prevention rule: [what check would catch it before it reaches production]
 ```
 
-**驗證：** 模式已結構化記錄，具備檢測和預防要素。
+This is distinct from model reasoning errors. A bug pattern prevents the same bug from being introduced again; a model error pattern prevents the same debugging mistake.
+
+**Pattern extraction process:**
+1. **Context matching:** Identify trigger conditions and environment characteristics
+2. **Problem identification:** Specific failure pattern and mechanism
+3. **Detection rules:** How to catch this type of problem early
+4. **Prevention measures:** How to prevent recurrence
+
+**Use memory-manager.py to extract patterns:**
+```bash
+python plugins/rcc/skills/learning-from-failures/scripts/memory-manager.py extract-pattern \
+  --failure-type "code-anti-pattern" \
+  --context "TypeScript interface definition" \
+  --problem "type mismatch causes runtime error"
+```
+
+**Verification:** Pattern is structurally documented with detection and prevention elements.
 
 ## Task 3: Generate Prevention Measures
 
-**Goal:** 為識別的模式建立具體預防措施。
+**Goal:** Create concrete prevention measures for identified patterns.
 
-**預防措施類型：**
-- **程式碼檢查：** 靜態分析規則、型別檢查
-- **工作流程守衛：** 流程檢查點、驗證步驟
-- **整合測試：** 自動化測試案例
-- **文件規範：** 最佳實務指南
+**Prevention measure types:**
+- **Code checks:** Static analysis rules, type checking
+- **Workflow guards:** Process checkpoints, validation steps
+- **Integration tests:** Automated test cases
+- **Documentation standards:** Best practice guidelines
 
-**警告產生：**
-- 針對特定元件的警告訊息
-- 相關情境的檢查清單
-- 預防行動的具體步驟
+**Warning generation:**
+- Warning messages targeting specific components
+- Checklists for relevant contexts
+- Concrete steps for preventive actions
 
-**驗證：** 預防措施具體可執行，警告訊息清楚明確。
+**Verification:** Prevention measures are specific and actionable; warning messages are clear.
 
 ## Task 4: Store Institutional Memory
 
-**Goal:** 將學習結果儲存到記憶系統。
+**Goal:** Store learning results in the memory system.
 
-**記憶結構：**
+**Memory structure:**
 ```
 docs/agent-system/memory/
-├── patterns/           # 學習模式庫
-├── failures/          # 失敗案例記錄  
-└── preventions/       # 預防措施清單
+├── patterns/           # Learned pattern library
+├── failures/           # Failure case records
+└── preventions/        # Prevention measure list
 ```
 
-**使用 memory-manager.py 記錄：**
+**Use memory-manager.py to record:**
 ```bash
 python plugins/rcc/skills/learning-from-failures/scripts/memory-manager.py record-failure \
   --type "integration-missing" \
   --component "agent-system" \
-  --description "代理間通信缺乏錯誤處理"
+  --description "agent communication lacks error handling"
 ```
 
-**記憶格式遵循：**
+**Memory format:**
 ```markdown
 ## Pattern: [Pattern Name]
 
@@ -136,74 +161,74 @@ python plugins/rcc/skills/learning-from-failures/scripts/memory-manager.py recor
 **Examples:** [real cases that triggered this learning]
 ```
 
-**驗證：** 記憶檔案已建立，結構完整，可供檢索。
+**Verification:** Memory file created, structure complete, retrievable.
 
 ## Task 5: Integrate Learning Warnings
 
-**Goal:** 將學習結果整合到相關技能和工作流程。
+**Goal:** Integrate learning results into relevant skills and workflows.
 
-**整合點：**
-- **planning-agent-systems:** 架構決策前載入警告
-- **writing-* skills:** 應用預防措施
-- **hook scripts:** 檢查已知失敗模式
+**Integration points:**
+- **planning-agent-systems:** Load warnings before architecture decisions
+- **writing-* skills:** Apply prevention measures
+- **hook scripts:** Check for known failure patterns
 
-**警告檢索指令：**
+**Warning retrieval command:**
 ```bash
 echo '{"component":"agent-system","context":"planning","type":"all"}' | \
 python plugins/rcc/skills/learning-from-failures/scripts/memory-manager.py get-warnings
 ```
 
-**更新相關技能：** 在 planning-agent-systems Task 2 中增加學習整合檢查。
+**Update relevant skills:** Add learning integration check in planning-agent-systems Task 2.
 
-**驗證：** 警告系統已整合，可在相關工作流程中觸發。
+**Verification:** Warning system integrated and triggerable in relevant workflows.
 
 ## Red Flags - STOP
 
-這些想法表示你在合理化。立即停止並重新考慮：
+These thoughts mean you're rationalizing. STOP and reconsider:
 
-- "跳過失敗分析"
-- "直接套用通用解法"  
-- "忽略根本原因"
-- "不記錄學習過程"
-- "簡化預防措施"
-- "跳過整合步驟"
-- "假設不會再發生"
+- "Skip failure analysis"
+- "Apply a generic solution directly"
+- "Ignore the root cause"
+- "Don't record the learning"
+- "Simplify the prevention measures"
+- "Skip the integration step"
+- "Assume it won't happen again"
 
 ## Common Rationalizations
 
-| 想法 | 現實 |
-|------|------|
-| "跳過失敗分析" | 未分析的失敗會重複發生 |
-| "直接套用通用解法" | 通用解法忽略特定情境 |
-| "忽略根本原因" | 症狀治療無法預防復發 |
-| "不記錄學習過程" | 知識流失，團隊無法受益 |
-| "簡化預防措施" | 簡化的措施無法有效預防 |
-| "跳過整合步驟" | 學習無法應用到實際工作流程 |
-| "假設不會再發生" | 失敗模式會在類似情境下重現 |
+| Thought | Reality |
+|---------|---------|
+| "Skip failure analysis" | Unanalyzed failures recur |
+| "Apply generic solution" | Generic solutions ignore specific context |
+| "Ignore root cause" | Treating symptoms cannot prevent recurrence |
+| "Don't record learning" | Knowledge lost; team cannot benefit |
+| "Simplify prevention" | Simplified measures fail to prevent effectively |
+| "Skip integration" | Learning cannot be applied to actual workflows |
+| "Won't happen again" | Failure patterns recur in similar contexts |
 
 ## Flowchart: Learning from Failures
 
 ```dot
 digraph learning_from_failures {
     rankdir=TB;
-    
-    start [label="失敗發生", shape=doublecircle];
-    analyze [label="Task 1: 分析\n失敗情境", shape=box];
-    extract [label="Task 2: 提取\n失敗模式", shape=box];
-    prevent [label="Task 3: 產生\n預防措施", shape=box];
-    store [label="Task 4: 儲存\n機構記憶", shape=box];
-    integrate [label="Task 5: 整合\n學習警告", shape=box];
-    done [label="學習完成\n預防系統建立", shape=doublecircle];
-    
+
+    start [label="Failure occurs", shape=doublecircle];
+    analyze [label="Task 1: Analyze\nfailure context", shape=box];
+    extract [label="Task 2: Extract\nfailure patterns", shape=box];
+    prevent [label="Task 3: Generate\nprevention measures", shape=box];
+    store [label="Task 4: Store\ninstitutional memory", shape=box];
+    integrate [label="Task 5: Integrate\nlearning warnings", shape=box];
+    done [label="Learning complete\nprevention system built", shape=doublecircle];
+
     start -> analyze;
     analyze -> extract;
-    extract -> prevent; 
+    extract -> prevent;
     prevent -> store;
     store -> integrate;
     integrate -> done;
-    
+
     // Feedback loop
-    done -> start [label="新失敗發生\n持續學習", style=dashed];
+    done -> start [label="new failure\ncontinuous learning", style=dashed];
 }
 ```
 

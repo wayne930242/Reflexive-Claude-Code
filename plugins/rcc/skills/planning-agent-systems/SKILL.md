@@ -82,7 +82,7 @@ Announce: "Created 5 tasks. Starting execution..."
 
 **Step 4 — Check learning integration** before architecture decisions:
 
-**CRITICAL:** 載入相關失敗模式警告以避免已知問題：
+**CRITICAL:** Load relevant failure pattern warnings to avoid known issues:
 
 ```bash
 echo '{"component":"agent-system","context":"planning","type":"architecture"}' | \
@@ -90,9 +90,9 @@ python plugins/rcc/skills/learning-from-failures/scripts/memory-manager.py get-w
 ```
 
 **Apply warnings to architecture decisions:**
-- 檢視每個警告的模式匹配度
-- 調整架構設計以避免已知失敗模式
-- 記錄如何應對每個相關警告
+- Review each warning's pattern match against the current design
+- Adjust architecture to avoid known failure modes
+- Document how each relevant warning is addressed
 
 **Step 5 — Identify the simplest viable subset:**
 
@@ -111,7 +111,28 @@ Ask: "What is the minimum set of components that delivers value?"
 
 **Use the dependency graph from Task 2** to determine execution order. Do NOT use a fixed order — let dependencies drive sequencing. Components in the same phase with no mutual dependencies can be built in parallel.
 
-**Verification:** Each planned component has a traced rationale and assigned writing-* skill. No conflicts identified.
+**Agent layer ordering — follow this sequence when planning agents:**
+
+1. **Sonnet implementer first** — establish the core implementation agent before anything else. This is the foundation all other layers depend on.
+
+   **Implementer capability analysis (MANDATORY before moving on):**
+   Based on what the implementer will do (from the planned workflows), identify what project-specific knowledge it needs that Claude Code does NOT already know:
+
+   | Question | If yes, plan this component |
+   |----------|-----------------------------|
+   | Are there non-standard conventions specific to this project/framework? | CLAUDE.md update or scoped rule |
+   | Do file types need different conventions (e.g., API vs. domain model)? | Path-scoped rule per file type |
+   | Should any quality constraint be enforced deterministically (not advisory)? | Hook with exit code 2 |
+   | Are there project-specific gotchas Claude would get wrong without being told? | CLAUDE.md or rule |
+
+   **Exclude:** Standard language conventions, general best practices, anything a linter already enforces, anything Claude knows from training. Only plan components that add project-specific signal.
+
+2. **Orchestrator second** — add only if dispatch complexity justifies a dedicated coordinator. If there is only one implementer doing a single job, a separate orchestrator adds overhead without value.
+   - Use **Haiku** when dispatch is simple: explicit task list, direct assignment, no ambiguity.
+   - Use **Sonnet** when decomposition requires reasoning: ambiguous requirements, multi-level decisions, dynamic routing.
+3. **Opus quality gate / advisor third** — add only if (a) a revision loop exists and (b) the output will be mechanically executable by downstream Sonnet. Without both conditions, skip Opus.
+
+**Verification:** Each planned component has a traced rationale and assigned writing-* skill. Agent layers follow the ordering above. Implementer capability analysis completed — each planned CLAUDE.md/rule/hook traces to a specific project-specific need. No conflicts identified.
 
 ## Task 4: Produce Component Plan
 
@@ -129,7 +150,7 @@ Ask: "What is the minimum set of components that delivers value?"
 
 **Anti-pattern:** Listing component names without explaining what they do is NOT presenting.
 
-**Ask:** "這個計畫看起來可以嗎？要開始建立元件嗎？"
+**Ask:** "Does this plan look good? Ready to start building components?"
 
 **Handoff:** After user confirms → invoke `applying-agent-systems` skill, pass plan path
 
