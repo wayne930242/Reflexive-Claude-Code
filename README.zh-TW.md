@@ -128,7 +128,7 @@ migrate-plugin → validate → refactor
 
 ## 完整 Skill 列表
 
-### rcc (v10.9.1)
+### rcc (v10.9.2)
 
 | Skill | 用途 |
 |-------|------|

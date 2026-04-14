@@ -141,7 +141,7 @@ See [references/agent-spec.md](references/agent-spec.md) for full configuration 
 **Key rules:**
 - `name`: lowercase with hyphens, matches filename
 - `description`: include 2-4 concrete examples in `<example>` blocks showing triggering conditions
-- `model`: use `inherit` unless specific model capabilities needed
+- `model`: MUST be specified explicitly; `inherit` is an anti-pattern in plugin agents (only project/user-level agents in `.claude/agents/` may omit)
 - `color`: unique color per agent (blue, green, red, purple, yellow)
 - `tools`: minimal set (principle of least privilege). Subagents CANNOT request permissions at runtime.
 - Plugin agents do NOT support `hooks`, `mcpServers`, or `permissionMode`
@@ -158,6 +158,7 @@ See [references/agent-spec.md](references/agent-spec.md) for the three-layer mod
 **Verification:**
 - [ ] Name is lowercase with hyphens
 - [ ] Description has clear trigger
+- [ ] `model` explicitly specified (`inherit` = anti-pattern in plugin agents)
 - [ ] Tools are minimal (principle of least privilege)
 - [ ] System prompt is focused
 

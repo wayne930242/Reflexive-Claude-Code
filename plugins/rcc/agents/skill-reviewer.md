@@ -78,6 +78,7 @@ issues:
 - [ ] `description` exists, 50–500 characters
 - [ ] `description` starts with "Use when..."
 - [ ] `description` does NOT describe the workflow (workflow description causes Claude to skip reading)
+- [ ] If `context: fork`: `model` field explicitly specified; `inherit` or missing model = flag as issue (`inherit` is an anti-pattern in plugin skills)
 
 **Size:**
 - [ ] SKILL.md line count < 300 (exceeding this degrades activation quality)

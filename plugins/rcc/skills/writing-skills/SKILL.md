@@ -194,6 +194,7 @@ python3 "${CLAUDE_SKILL_DIR}/scripts/validate_skill.py" <path/to/skill>
 - [ ] Description starts with "Use when..."
 - [ ] Body < 300 lines
 - [ ] All reference links work
+- [ ] If `context: fork`: `model` explicitly specified (`inherit` = anti-pattern in plugin skills)
 
 **Verification:** Validation passes with no errors.
 

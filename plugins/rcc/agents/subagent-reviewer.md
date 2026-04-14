@@ -73,7 +73,8 @@ issues:
 **Frontmatter:**
 - [ ] `name` exists, lowercase-hyphens, matches filename (minus .md)
 - [ ] `description` exists, includes trigger conditions
-- [ ] `model` matches three-layer architecture: orchestrator→haiku, implementer→sonnet, quality gate/advisor→opus
+- [ ] `model` field explicitly present and not `inherit` (missing or `inherit` = flag as issue; `inherit` is an anti-pattern in plugin agents)
+- [ ] `model` value matches three-layer architecture: orchestrator→haiku, implementer→sonnet, quality gate/advisor→opus
 - [ ] `tools` is minimal set (principle of least privilege); quality gate agents use only `Read, Grep, Glob`
 - [ ] No `Bash` in read-only reviewer agents
 
@@ -96,4 +97,4 @@ issues:
 **DON'T:**
 - Flag style preferences in system prompt
 - Suggest restructuring without checklist basis
-- Accept "inherit" for agents that need specific model capability
+- Accept `inherit` or missing `model` — both are anti-patterns in plugin agents
