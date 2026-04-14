@@ -256,12 +256,6 @@ These thoughts mean you're rationalizing. STOP and reconsider:
 | "Red Flags are negative" | Red Flags prevent rationalization. Essential for discipline skills. |
 | "TaskCreate is overhead" | TaskCreate prevents skipping steps. The overhead IS the value. |
 
-## Persuasion Principles
-
-Use authoritative language ("MUST", "NEVER") instead of soft phrasing ("consider", "try to").
-
-See [references/persuasion-principles.md](references/persuasion-principles.md) for details.
-
 ## Flowchart: Skill Creation
 
 ```dot

@@ -75,25 +75,7 @@ Announce: "Created 7 tasks. Starting execution..."
 - Task is repetitive and well-defined
 - Task benefits from specialized system prompt
 
-**Examples:**
-
-<example>
-Context: User needs code review automation
-user: "create a code reviewer agent"
-assistant: "I'll use the writing-subagents skill to create a specialized code review agent."
-<commentary>
-Clear request for agent creation triggers the skill.
-</commentary>
-</example>
-
-<example>
-Context: User wants isolated analysis task  
-user: "add a security analyzer agent"
-assistant: "I'll create a specialized security analysis subagent."
-<commentary>
-Request for specialized analysis agent with isolated context.
-</commentary>
-</example>
+See [references/examples.md](references/examples.md) for subagent templates and trigger examples.
 
 **Built-in subagent types (consider BEFORE creating custom agents):**
 
@@ -171,43 +153,7 @@ See [references/agent-spec.md](references/agent-spec.md) for full configuration 
 | Explorer | `Read, Glob, Grep, Bash` |
 | Writer | `Read, Edit, Write` |
 
-### Model Selection Guide
-
-Three-layer architecture based on task type:
-
-| Layer | Model | Role | Tool Constraint |
-|-------|-------|------|-----------------|
-| Orchestration (simple dispatch) | `haiku` | Explicit task list, direct assignment, no ambiguity | **Must have tools** (TaskCreate, Agent) — no tools = cannot orchestrate |
-| Orchestration (complex decomposition) | `sonnet` | Ambiguous requirements, multi-level decisions, dynamic routing | Must have tools |
-| Implementation | `sonnet` | Write, edit, analyze, implement | Full tools |
-| Quality gate / Advisor | `opus` | Architectural reasoning, overlap detection, pass/fail judgment | Read-only only (`Read, Grep, Glob`) |
-
-**Opus constraints (all required):**
-1. Output must be structured and mechanically executable by downstream Sonnet (`{pass, issues[{file, line_range, action, reason}]}`)
-2. Must have a revision loop (fail → Sonnet fixes → re-review). Without this, Opus review = expensive logger.
-3. Judge only — no rewrites, no spec changes, no open-ended suggestions
-
-**Haiku constraints:**
-- As orchestrator: must have tools (TaskCreate, Agent dispatch)
-- Zero-tool Haiku only works when content is pre-injected for pure reasoning — not suitable for document review (requires judgment)
-
-**Use `inherit` when:** the agent does not need specific model capabilities; let the parent decide.
-
-### Isolation Guide
-
-| Use Case | Isolation | Rationale |
-|----------|-----------|-----------|
-| Read-only reviewer | (none) | No file changes, no conflict risk |
-| Code generation that may conflict | `worktree` | Isolated git worktree prevents conflicts with main workspace |
-| Parallel writing agents | `worktree` | Each gets its own copy of the repo |
-
-### Effort Guide
-
-| Use Case | Effort | Rationale |
-|----------|--------|-----------|
-| Static analysis, review | `medium` | Sufficient for pattern matching and checklist evaluation |
-| Complex architecture decisions | `high` | Needs deeper reasoning |
-| Simple formatting, lookup | `low` | Minimal reasoning needed |
+See [references/agent-spec.md](references/agent-spec.md) for the three-layer model selection guide, isolation guide, effort guide, and Opus/Haiku constraints.
 
 **Verification:**
 - [ ] Name is lowercase with hyphens

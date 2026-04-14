@@ -151,15 +151,7 @@ Does it apply BROADLY to all project work?
 - Tools declared upfront — subagents CANNOT request at runtime
 - NOT for: guidance (skills), conventions (rules)
 
-**Agent model selection — three-layer architecture:**
-
-| Layer | Model | Role | Tool Constraint |
-|-------|-------|------|-----------------|
-| Orchestration | `haiku` | Dispatch, task decomposition, routing | **Must have tools** (TaskCreate, Agent) |
-| Implementation | `sonnet` | Write, analyze, modify | Full tools |
-| Quality gate / Advisor | `opus` | Architectural reasoning, pass/fail judgment, design advice | Read-only (`Read, Grep, Glob`) |
-
-Opus only has engineering value when its output is mechanically executable by downstream Sonnet AND a revision loop exists. No loop → Opus = expensive logger.
+See [references/model-selection.md](references/model-selection.md) for agent three-layer model selection guide.
 
 ### Hooks (.claude/hooks/)
 - Deterministic enforcement; exit code 2 = block; keep < 5 seconds

@@ -55,10 +55,38 @@ No argument-hint -> user types `/my-skill` with no args -> forked agent has zero
 - Use `disallowedTools` as an alternative: inherit all EXCEPT listed tools
 - Test tool access — verify the agent can do everything it needs
 
-## Model Selection
+## Model Selection — Three-Layer Architecture
 
-| Model | Use Case | Cost |
-|-------|----------|------|
-| `haiku` | Fast exploration, simple validation | $ |
-| `sonnet` | Balanced (default) | $$ |
-| `opus` | Complex reasoning, architecture | $$$ |
+| Layer | Model | Role | Tool Constraint |
+|-------|-------|------|-----------------|
+| Orchestration (simple dispatch) | `haiku` | Explicit task list, direct assignment, no ambiguity | **Must have tools** (TaskCreate, Agent) — no tools = cannot orchestrate |
+| Orchestration (complex decomposition) | `sonnet` | Ambiguous requirements, multi-level decisions, dynamic routing | Must have tools |
+| Implementation | `sonnet` | Write, edit, analyze, implement | Full tools |
+| Quality gate / Advisor | `opus` | Architectural reasoning, overlap detection, pass/fail judgment | Read-only only (`Read, Grep, Glob`) |
+
+**Opus constraints (all required):**
+1. Output must be structured and mechanically executable by downstream Sonnet (`{pass, issues[{file, line_range, action, reason}]}`)
+2. Must have a revision loop (fail → Sonnet fixes → re-review). Without this, Opus review = expensive logger.
+3. Judge only — no rewrites, no spec changes, no open-ended suggestions
+
+**Haiku constraints:**
+- As orchestrator: must have tools (TaskCreate, Agent dispatch)
+- Zero-tool Haiku only works when content is pre-injected for pure reasoning — not suitable for document review (requires judgment)
+
+**Use `inherit` when:** the agent does not need specific model capabilities; let the parent decide.
+
+## Isolation Guide
+
+| Use Case | Isolation | Rationale |
+|----------|-----------|-----------|
+| Read-only reviewer | (none) | No file changes, no conflict risk |
+| Code generation that may conflict | `worktree` | Isolated git worktree prevents conflicts with main workspace |
+| Parallel writing agents | `worktree` | Each gets its own copy of the repo |
+
+## Effort Guide
+
+| Use Case | Effort | Rationale |
+|----------|--------|-----------|
+| Static analysis, review | `medium` | Sufficient for pattern matching and checklist evaluation |
+| Complex architecture decisions | `high` | Needs deeper reasoning |
+| Simple formatting, lookup | `low` | Minimal reasoning needed |

@@ -1,6 +1,6 @@
 ---
 name: writing-rules
-description: "Use when adding project conventions or scoping guidelines. For this plugin: use CLAUDE.md for all conventions. Use when user says 'add convention', 'scope guideline'. NOT for current workflow (rules mechanism not implemented)."
+description: "Use when adding project conventions or scoping guidelines. Use when user says 'add convention', 'scope guideline', 'add rule', 'create rule'."
 ---
 
 # Writing Rules
@@ -156,36 +156,7 @@ Rules are Markdown content injected into context (same as CLAUDE.md):
 - **No procedures** - How-to belongs in skills
 - **Specific globs** - Narrow scope = fewer injections
 
-<Good>
-```yaml
----
-paths:
-  - "src/api/**/*.ts"
----
-
-# API Conventions
-
-- MUST validate all input with zod
-- MUST return { data, error } shape
-- NEVER expose internal errors to client
-```
-Specific, imperative, scoped.
-</Good>
-
-<Bad>
-```yaml
----
-# No paths = global!
----
-
-# Guidelines
-
-- Try to validate input
-- Consider using consistent response shapes
-- It's good practice to handle errors
-```
-Vague, unscoped, passive.
-</Bad>
+See [references/examples.md](references/examples.md) for good/bad rule examples by domain.
 
 **Content validation checks:**
 
@@ -247,17 +218,6 @@ Agent tool:
 **Verification:**
 - Rule activates when working on matching files
 - Agent follows the conventions in the rule
-
-## Glob Pattern Reference
-
-| Pattern | Matches |
-|---------|---------|
-| `**/*.ts` | All TypeScript files |
-| `src/api/**` | All under src/api/ |
-| `*.md` | Markdown in root only |
-| `{src,lib}/**/*.ts` | Multiple directories |
-| `**/*.{ts,tsx}` | Multiple extensions |
-| `!**/node_modules/**` | Exclude pattern |
 
 ## Red Flags - STOP
 

@@ -1,6 +1,6 @@
 ---
 name: refactoring-agent-systems
-description: Use when reviewing and cleaning up an agent system after creation or modification. Use when user says "review agent system", "cleanup agent system", "refactor agent setup". Use when called by applying-agent-systems.
+description: Use when cleaning up or refactoring an agent system after creation or modification. Use when user says "cleanup agent system", "refactor agent setup", "clean up skills", "consolidate agents". Use when called by applying-agent-systems.
 ---
 
 # Refactoring Agent Systems
