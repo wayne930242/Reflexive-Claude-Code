@@ -68,6 +68,7 @@ Announce: "Created 7 tasks. Starting execution..."
 - Which files should be checked?
 - What tool/command performs the check?
 - What event triggers the hook?
+- What is the project's primary language? (check `package.json`, `go.mod`, `Cargo.toml`, `pyproject.toml`, `*.csproj`, etc.)
 
 **Event Selection:**
 
@@ -123,7 +124,7 @@ See [references/static-checks.md](references/static-checks.md) for complete hook
 - **Graceful degradation** - Handle timeouts without blocking development
 - **Filter files** - Only check relevant extensions  
 - **Limit output** - First 5-10 errors, not all
-- **Use Python** - Cross-platform, wrapped shell commands
+- **Language** - Use project's primary language if detectable (Node.js script for JS/TS projects, Go for Go projects, etc.); default to Python when unclear or mixed
 - **Progressive checks** - Fast/standard/thorough modes based on context
 - **Cross-platform** - Must work on macOS, Linux, AND Windows
 

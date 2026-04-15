@@ -107,7 +107,7 @@ skill-name/
 └── references/        # Optional: detailed docs
 ```
 
-**If the skill includes scripts:** Read [cross-platform-scripts.md](../../references/cross-platform-scripts.md) for mandatory cross-platform rules (paths, shell commands, line endings).
+**If the skill includes scripts:** Use project's primary language if detectable (check `package.json`, `go.mod`, `Cargo.toml`, `pyproject.toml`, etc.); default to Python when unclear. Read [cross-platform-scripts.md](../../references/cross-platform-scripts.md) for mandatory cross-platform rules (paths, shell commands, line endings).
 
 ### Naming Convention
 
