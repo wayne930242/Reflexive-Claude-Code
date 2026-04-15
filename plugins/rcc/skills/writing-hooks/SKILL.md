@@ -32,6 +32,7 @@ TaskCreate for EACH task below:
 ```
 
 **Tasks:**
+0. Fetch latest official hook spec
 1. Analyze requirements
 2. RED - Test without hook
 3. GREEN - Write hook script
@@ -40,7 +41,7 @@ TaskCreate for EACH task below:
 6. Test blocking
 7. REFACTOR - Quality review
 
-Announce: "Created 7 tasks. Starting execution..."
+Announce: "Created 8 tasks (0–7). Starting execution..."
 
 **Execution rules:**
 1. `TaskUpdate status="in_progress"` BEFORE starting each task
@@ -58,6 +59,21 @@ Announce: "Created 7 tasks. Starting execution..."
 | **GREEN** | Write hook | Create script that catches those issues |
 | **Verify GREEN** | Test blocking | Verify exit code 2 blocks violating code |
 | **REFACTOR** | Optimize speed | Reduce hook runtime, filter file types |
+
+## Task 0: Fetch Latest Official Spec
+
+**Goal:** Pull the current Anthropic hook spec before designing — never trust cached memory.
+
+**Action:**
+```
+Skill tool: fetching-claude-docs
+  component: hook
+  question: "hook events (PreToolUse, PostToolUse, etc.), matcher syntax,
+             exit code contract, settings.json schema, additionalContext field,
+             security considerations"
+```
+
+**Verification:** Received YAML with `source: https://code.claude.com/docs/en/hooks.md` and non-empty `spec_excerpt`. Use as authoritative reference; if any rule in this SKILL conflicts with the fetched spec, the fetched spec wins.
 
 ## Task 1: Analyze Requirements
 
@@ -124,7 +140,7 @@ See [references/static-checks.md](references/static-checks.md) for complete hook
 - **Graceful degradation** - Handle timeouts without blocking development
 - **Filter files** - Only check relevant extensions  
 - **Limit output** - First 5-10 errors, not all
-- **Language** - Use project's primary language if detectable (Node.js script for JS/TS projects, Go for Go projects, etc.); default to Python when unclear or mixed
+- **Use Python** - Cross-platform, wrapped shell commands. In settings.json command, prefer `uv` → fallback `python3` → fallback `python` (see [cross-platform-scripts.md](../../references/cross-platform-scripts.md))
 - **Progressive checks** - Fast/standard/thorough modes based on context
 - **Cross-platform** - Must work on macOS, Linux, AND Windows
 
@@ -140,6 +156,7 @@ See [references/static-checks.md](references/static-checks.md) for complete hook
 - [ ] Uses `pathlib.Path` for all path operations
 - [ ] No `shell=True` with string commands (use list args)
 - [ ] No hardcoded `/tmp/` or path separators
+- [ ] settings.json command uses three-runner fallback template (`uv` → `python3 --version` → `python`); `python3` probed by `--version` to avoid Windows Microsoft Store stub
 
 ## Task 4: Configure settings.json
 

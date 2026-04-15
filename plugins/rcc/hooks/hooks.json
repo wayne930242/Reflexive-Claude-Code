@@ -7,7 +7,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "command -v python3 >/dev/null 2>&1 && python3 \"${CLAUDE_PLUGIN_ROOT}/hooks/validate_frontmatter.py\" || echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PostToolUse\",\"additionalContext\":\"⚠ python3 not found — install Python 3.11+ to enable frontmatter validation hook\"},\"systemMessage\":\"⚠ python3 not found — install Python 3.11+ to enable frontmatter validation hook\"}'",
+            "command": "{ command -v uv >/dev/null 2>&1 && uv run \"${CLAUDE_PLUGIN_ROOT}/hooks/validate_frontmatter.py\"; } || { python3 --version >/dev/null 2>&1 && python3 \"${CLAUDE_PLUGIN_ROOT}/hooks/validate_frontmatter.py\"; } || { command -v python >/dev/null 2>&1 && python \"${CLAUDE_PLUGIN_ROOT}/hooks/validate_frontmatter.py\"; } || echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PostToolUse\",\"additionalContext\":\"⚠ no Python runner (uv/python3/python) found — install uv or Python 3.11+ to enable frontmatter validation hook\"},\"systemMessage\":\"⚠ no Python runner (uv/python3/python) found — install uv or Python 3.11+\"}'",
             "timeout": 15
           }
         ]

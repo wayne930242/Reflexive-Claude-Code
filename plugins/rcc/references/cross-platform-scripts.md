@@ -24,9 +24,32 @@ Applies to hook scripts, skill-bundled scripts, and plugin bin/ executables.
 
 ## Command Paths in settings.json
 
-- Use `"python3"` or `"python"` — Windows may only have `python`
-- Safe pattern: `"command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/check.py\" || python \"$CLAUDE_PROJECT_DIR/.claude/hooks/check.py\""`
-- `$CLAUDE_PROJECT_DIR` works on all platforms (Claude Code resolves it)
+**Shell assumption: bash-first.** Targets Git Bash on Windows, WSL, macOS, Linux. POSIX syntax (`command -v`, `>/dev/null`, `&&`, `||`) is allowed. cmd.exe is NOT a target.
+
+### Three-runner fallback (standard template)
+
+```bash
+{ command -v uv >/dev/null 2>&1 && uv run "<SCRIPT>"; } \
+  || { python3 --version >/dev/null 2>&1 && python3 "<SCRIPT>"; } \
+  || { command -v python >/dev/null 2>&1 && python "<SCRIPT>"; } \
+  || echo '<json fallback warning>'
+```
+
+Priority: **uv → python3 → python → warning**. Reasons:
+- `uv` is fastest, handles inline deps (PEP 723), avoids env pollution
+- `python3` second for POSIX-clean systems
+- `python` third for Windows where `python3` is often missing
+
+**Why braces `{ ... }` are mandatory:** Bash chains `A && B || C && D` are left-associative with **equal precedence**, so a successful `A && B` does NOT short-circuit the trailing `&& D` — it evaluates as `(((A && B) || C) && D)`. Without grouping, even when `uv run` succeeds, bash still drops into `python3` and `python` branches afterward. Grouping each runner with `{ ...; }` makes each branch an atomic exit-code unit so `||` short-circuits correctly.
+
+### Windows `python3` Microsoft Store stub trap
+
+On Windows, `command -v python3` may match a Microsoft Store *redirect stub* — the binary exists but executing it pops up an installer prompt and fails. **Always probe with `python3 --version` (actual execution), not `command -v python3`.** This is why the standard template above uses `--version` for python3 specifically.
+
+### Path resolution
+
+- `${CLAUDE_PROJECT_DIR}` and `${CLAUDE_PLUGIN_ROOT}` work on all platforms — Claude Code resolves them before shell expansion.
+- Quote script paths: `"${CLAUDE_PLUGIN_ROOT}/hooks/x.py"` (handles spaces in user home).
 
 ## Line Endings
 
