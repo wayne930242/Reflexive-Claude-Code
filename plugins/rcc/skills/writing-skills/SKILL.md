@@ -32,6 +32,7 @@ TaskCreate for EACH task below:
 ```
 
 **Tasks:**
+0. Fetch latest official skill spec
 1. Analyze requirements
 2. Design skill structure  
 3. Implement SKILL.md
@@ -40,7 +41,7 @@ TaskCreate for EACH task below:
 6. Review and improve
 7. Test with real usage
 
-Announce: "Created 7 tasks. Starting execution..."
+Announce: "Created 8 tasks (0–7). Starting execution..."
 
 **Execution rules:**
 1. `TaskUpdate status="in_progress"` BEFORE starting each task
@@ -58,6 +59,21 @@ Announce: "Created 7 tasks. Starting execution..."
 | **Implementation** | Creation | Write skill following design and best practices |
 | **Validation** | Testing | Verify skill works correctly in real scenarios |
 | **Improvement** | Refinement | Iterate based on feedback and usage patterns |
+
+## Task 0: Fetch Latest Official Spec
+
+**Goal:** Pull the current Anthropic skill spec before designing — never trust cached memory.
+
+**Action:**
+```
+Skill tool: fetching-claude-docs
+  component: skill
+  question: "frontmatter fields (name, description), description trigger
+             format, SKILL.md structure, references/ progressive disclosure,
+             skill activation"
+```
+
+**Verification:** Received YAML with `source: https://code.claude.com/docs/en/skills.md` and non-empty `spec_excerpt`. Use as authoritative reference; if any rule in this SKILL conflicts with the fetched spec, the fetched spec wins.
 
 ## Task 1: Analyze Requirements
 

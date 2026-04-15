@@ -71,9 +71,11 @@ Announce: "Created 6 tasks. Starting execution..."
 
 **Step 1:** Run `claude plugin validate <plugin-path>` (official CLI).
 
-**Step 2:** Run extended health check (or `python3` fallback):
+**Step 2:** Run extended health check (bash-first, three-runner fallback with brace grouping):
 ```bash
-uv run "${CLAUDE_SKILL_DIR}/scripts/validate_plugin.py" <plugin-path>
+{ command -v uv >/dev/null 2>&1 && uv run "${CLAUDE_SKILL_DIR}/scripts/validate_plugin.py" <plugin-path>; } \
+  || { python3 --version >/dev/null 2>&1 && python3 "${CLAUDE_SKILL_DIR}/scripts/validate_plugin.py" <plugin-path>; } \
+  || python "${CLAUDE_SKILL_DIR}/scripts/validate_plugin.py" <plugin-path>
 ```
 The script integrates CLI validation and adds checks for manifest, structure, skills quality, commands, agents, path safety, and version sync.
 
@@ -136,7 +138,7 @@ The script integrates CLI validation and adds checks for manifest, structure, sk
 **Goal:** Re-run health check to confirm all issues resolved.
 
 **Process:**
-1. Re-run `uv run "${CLAUDE_SKILL_DIR}/scripts/validate_plugin.py" <plugin-path>` on the refactored plugin
+1. Re-run the Step 2 fallback chain (`uv run` → `python3` → `python`) on the refactored plugin
 2. Verify zero CRITICAL errors
 3. Verify all WARNING items from Task 3 are resolved
 4. Check no new issues introduced

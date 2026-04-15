@@ -1,7 +1,7 @@
 {
   "name": "rcc",
   "description": "Core ACE workflow with structured skills, task enforcement, and quality reviewers",
-  "version": "10.9.3",
+  "version": "10.10.1",
   "author": {
     "name": "Wei Hung",
     "email": "wayne930242@gmail.com"

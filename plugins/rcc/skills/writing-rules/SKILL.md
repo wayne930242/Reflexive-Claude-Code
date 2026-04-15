@@ -32,6 +32,7 @@ TaskCreate for EACH task below:
 ```
 
 **Tasks:**
+0. Fetch latest official rule/skill spec
 1. Analyze requirements
 2. Identify convention gaps
 3. Design rule structure  
@@ -40,7 +41,7 @@ TaskCreate for EACH task below:
 6. Review and optimize
 7. Test activation
 
-Announce: "Created 7 tasks. Starting execution..."
+Announce: "Created 8 tasks (0–7). Starting execution..."
 
 **Execution rules:**
 1. `TaskUpdate status="in_progress"` BEFORE starting each task
@@ -58,6 +59,20 @@ Announce: "Created 7 tasks. Starting execution..."
 | **Design** | Planning | Structure rule content and path patterns |
 | **Implementation** | Creation | Write clear, specific configuration rules |
 | **Optimization** | Refinement | Streamline scope and improve clarity |
+
+## Task 0: Fetch Latest Official Spec
+
+**Goal:** Pull the current Anthropic spec for path-scoped rules / skill frontmatter before designing — never trust cached memory.
+
+**Action:**
+```
+Skill tool: fetching-claude-docs
+  component: rule
+  question: "rule frontmatter (paths, description), auto-injection by glob,
+             rule vs CLAUDE.md vs skill placement, token cost considerations"
+```
+
+**Verification:** Received YAML with non-empty `spec_excerpt`. Use as authoritative reference; if any rule in this SKILL conflicts with the fetched spec, the fetched spec wins.
 
 ## Task 1: Analyze Requirements
 

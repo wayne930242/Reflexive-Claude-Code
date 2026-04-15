@@ -32,6 +32,7 @@ TaskCreate for EACH task below:
 ```
 
 **Tasks:**
+0. Fetch latest official subagent spec
 1. Analyze requirements
 2. Document problem context
 3. Design agent configuration
@@ -40,7 +41,7 @@ TaskCreate for EACH task below:
 6. Test invocation
 7. Review and optimize
 
-Announce: "Created 7 tasks. Starting execution..."
+Announce: "Created 8 tasks (0–7). Starting execution..."
 
 **Execution rules:**
 1. `TaskUpdate status="in_progress"` BEFORE starting each task
@@ -58,6 +59,20 @@ Announce: "Created 7 tasks. Starting execution..."
 | **Design** | Configuration | Plan agent tools, model, and system prompt |
 | **Implementation** | Creation | Write agent file with proper configuration |
 | **Optimization** | Refinement | Fine-tune tools and prompts for efficiency |
+
+## Task 0: Fetch Latest Official Spec
+
+**Goal:** Pull the current Anthropic subagent spec before designing — never trust cached memory.
+
+**Action:**
+```
+Skill tool: fetching-claude-docs
+  component: subagent
+  question: "frontmatter fields, tool inheritance, model selection,
+             description trigger format (PROACTIVELY, examples), context isolation"
+```
+
+**Verification:** Received YAML with `source: https://code.claude.com/docs/en/sub-agents.md` and non-empty `spec_excerpt`. Use this as the **authoritative reference** for Tasks 1–7; if any rule in this SKILL conflicts with the fetched spec, the fetched spec wins (and flag the conflict for refactoring).
 
 ## Task 1: Analyze Requirements
 

@@ -44,7 +44,9 @@ Announce: "Created 3 tasks. Starting execution..."
 **Goal:** Execute `validate_all.py` and capture the report path.
 
 ```bash
-uv run "${CLAUDE_SKILL_DIR}/../../hooks/validate_all.py" 2>/dev/null || python3 "${CLAUDE_SKILL_DIR}/../../hooks/validate_all.py"
+{ command -v uv >/dev/null 2>&1 && uv run "${CLAUDE_SKILL_DIR}/../../hooks/validate_all.py"; } \
+  || { python3 --version >/dev/null 2>&1 && python3 "${CLAUDE_SKILL_DIR}/../../hooks/validate_all.py"; } \
+  || python "${CLAUDE_SKILL_DIR}/../../hooks/validate_all.py"
 ```
 
 Parse stdout for:
