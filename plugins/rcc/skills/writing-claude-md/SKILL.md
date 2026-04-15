@@ -32,6 +32,7 @@ TaskCreate for EACH task below:
 ```
 
 **Tasks:**
+0. Fetch latest official memory/CLAUDE.md spec
 1. Analyze current state
 2. Identify documentation gaps
 3. Design instruction structure
@@ -41,7 +42,7 @@ TaskCreate for EACH task below:
 7. Review and optimize
 8. Test with new session
 
-Announce: "Created 7 tasks. Starting execution..."
+Announce: "Created 9 tasks (0–8). Starting execution..."
 
 **Execution rules:**
 1. `TaskUpdate status="in_progress"` BEFORE starting each task
@@ -59,6 +60,20 @@ Announce: "Created 7 tasks. Starting execution..."
 | **Design** | Structure planning | Organize instructions logically and prioritize content |
 | **Implementation** | Writing | Create clear, specific, and actionable instructions |
 | **Refinement** | Optimization | Remove redundancy, improve clarity and specificity |
+
+## Task 0: Fetch Latest Official Spec
+
+**Goal:** Pull the current Anthropic CLAUDE.md / memory spec before designing — never trust cached memory.
+
+**Action:**
+```
+Skill tool: fetching-claude-docs
+  component: memory
+  question: "CLAUDE.md location precedence (project/user/local), import syntax,
+             auto-loading behavior, token cost, recommended structure"
+```
+
+**Verification:** Received YAML with `source: https://code.claude.com/docs/en/memory.md` and non-empty `spec_excerpt`. Use as authoritative reference; if any rule in this SKILL conflicts with the fetched spec, the fetched spec wins.
 
 ## Task 1: Analyze Current State
 
