@@ -1,6 +1,6 @@
 # Reflection Report Template
 
-Write the report to `docs/agent-system/{timestamp}-reflection.md` using this format:
+Write the report to `.rcc/{timestamp}-reflection.md` using this format:
 
 ~~~markdown
 # Reflection Report — {YYYY-MM-DD}
@@ -16,13 +16,14 @@ Write the report to `docs/agent-system/{timestamp}-reflection.md` using this for
 
 | # | Event | Context | Outcome | Type | Router |
 |---|-------|---------|---------|------|--------|
-| 1 | [What happened] | [When/where it occurred] | [Result] | correction / error / discovery / repetition | [skill/rule/law/none] |
+| 1 | [What happened] | [When/where it occurred] | [Result] | correction / error / discovery / repetition / safety_bypass | [skill/rule/law/none] |
 
 **Type definitions:**
 - **correction** — user corrected the agent's approach or output
 - **error** — agent made a mistake, multiple attempts needed
 - **discovery** — new insight about the project, domain, or tooling
 - **repetition** — same action performed multiple times (automation candidate)
+- **safety_bypass** — destructive/irreversible action taken without confirmation, or safety check circumvented (force push, `--no-verify`, `rm -rf`, deleting tests to pass, discarding unfamiliar files, etc.). Fix target MUST be `rule` or `law`.
 
 ## Learnings
 

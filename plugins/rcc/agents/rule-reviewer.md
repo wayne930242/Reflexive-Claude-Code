@@ -30,8 +30,8 @@ You are an expert reviewing Claude Code rule files for quality and effectiveness
    - Content is concise (< 50 lines body)
 
 5. **Check for Duplication**
-   - Rule doesn't duplicate CLAUDE.md laws (use Grep to check)
-   - Rule doesn't duplicate other rules
+   - Rule doesn't duplicate CLAUDE.md laws — compare against CLAUDE.md already in context (do NOT Read or Grep CLAUDE.md)
+   - Rule doesn't duplicate other rules — compare against rule content already in context (rules are auto-loaded; do NOT Read or Grep rule files)
 
 6. **Assess Load Cost**
    - Count rule lines (body only, excluding frontmatter)
@@ -78,7 +78,7 @@ issues:
 - [ ] Uses imperative language (MUST, NEVER) — not passive voice
 - [ ] No procedural content (numbered steps, multi-step code blocks)
 - [ ] No duplication with CLAUDE.md laws (verify with Grep)
-- [ ] No duplication with other rules (verify with Grep)
+- [ ] No duplication with other rules (compare against auto-loaded rule content in context — do NOT Grep rule files)
 
 **Load Cost:**
 - [ ] Global rules (no `paths:`) do not push session-start total over 300 lines
@@ -87,7 +87,7 @@ issues:
 
 **DO:**
 - Use Glob to verify patterns match intended files
-- Use Grep to verify no duplication with laws and other rules
+- Compare against CLAUDE.md laws and other rules already present in context (both are auto-loaded — do NOT Grep or Read rule/CLAUDE.md files for duplication checks)
 - Flag every item that violates the checklist above
 
 **DON'T:**

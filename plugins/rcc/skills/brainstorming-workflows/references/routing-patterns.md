@@ -154,7 +154,7 @@ digraph node_example {
 - `!cat references/file.md` — 強制在特定步驟載入（僅當必須在該步驟使用時）
 
 **暫存文件慣例：**
-- 路徑：`docs/agent-system/{YYYYMMDD-HHMM}-{artifact-type}.md`
+- 路徑：`.rcc/{YYYYMMDD-HHMM}-{artifact-type}.md`
 - 類型：`analysis`, `workflows`, `plan`, `review-report`, `refactoring-report`
 - 目的：跨 skill 傳遞 context、保留歷史紀錄
 

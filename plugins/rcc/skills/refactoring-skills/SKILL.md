@@ -129,7 +129,7 @@ Compare with community implementations. Better patterns exist?
 2. Remove entire skill directory
 3. Remove from any manifest references
 
-**CRITICAL:** One action at a time. Verify after each.
+**Important:** One action at a time. Verify after each.
 
 **Verification:** All classified actions executed.
 

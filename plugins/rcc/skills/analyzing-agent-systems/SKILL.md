@@ -53,7 +53,7 @@ Announce: "Created 6 tasks. Starting execution..."
 
 **Goal:** Understand the project before analyzing its agent system.
 
-**CRITICAL:** Read [references/project-scanning.md](references/project-scanning.md) for the full scanning guide.
+**Important:** Read [references/project-scanning.md](references/project-scanning.md) for the full scanning guide.
 
 **Scan areas:**
 - Language and framework detection (package.json, Cargo.toml, go.mod, pyproject.toml, etc.)
@@ -106,7 +106,7 @@ Compare `~/.claude/rules/` against `.claude/rules/`:
 
 **Goal:** Check every component against the 11-category weakness checklist.
 
-**CRITICAL:** Read [references/weakness-checklist.md](references/weakness-checklist.md) for the full 11-category checklist.
+**Important:** Read [references/weakness-checklist.md](references/weakness-checklist.md) for the full 11-category checklist.
 
 **For each weakness found, record:**
 - Category (1-11)
@@ -142,7 +142,7 @@ Compare `~/.claude/rules/` against `.claude/rules/`:
 
 **Goal:** Transform weakness findings and project overview into actionable recommendations.
 
-**CRITICAL:** Read [references/restructuring-guide.md](references/restructuring-guide.md) for the full recommendation guide.
+**Important:** Read [references/restructuring-guide.md](references/restructuring-guide.md) for the full recommendation guide.
 
 **Generate recommendations by type:**
 
@@ -174,9 +174,9 @@ Do NOT generate recommendations that lack a traced reason.
 
 ## Task 5: Produce Analysis Report
 
-**Goal:** Write structured report to `docs/agent-system/{timestamp}-analysis.md`.
+**Goal:** Write structured report to `.rcc/{timestamp}-analysis.md`.
 
-**CRITICAL:** Read [references/report-template.md](references/report-template.md) for the full 6-section report format.
+**Important:** Read [references/report-template.md](references/report-template.md) for the full 6-section report format.
 
 **Report sections:**
 1. **Project Overview** — language, framework, project type, team signals

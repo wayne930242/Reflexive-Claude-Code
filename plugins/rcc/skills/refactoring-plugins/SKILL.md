@@ -38,8 +38,9 @@ TaskCreate for EACH task below:
 4. Present refactoring plan
 5. Execute refactoring
 6. Verify fixes
+7. Offer release automation (if missing)
 
-Announce: "Created 6 tasks. Starting execution..."
+Announce: "Created 7 tasks. Starting execution..."
 
 **Execution rules:**
 1. `TaskUpdate status="in_progress"` BEFORE starting each task
@@ -87,7 +88,7 @@ The script integrates CLI validation and adds checks for manifest, structure, sk
 
 **Goal:** Deep analysis beyond the automated script.
 
-**CRITICAL:** Read [references/plugin-health-checklist.md](references/plugin-health-checklist.md) for the full checklist.
+**Important:** Read [references/plugin-health-checklist.md](references/plugin-health-checklist.md) for the full checklist.
 
 **The script catches structural issues. Manual analysis catches:**
 - Skill trigger overlaps
@@ -127,9 +128,9 @@ The script integrates CLI validation and adds checks for manifest, structure, sk
 
 **Goal:** Fix all confirmed issues.
 
-**CRITICAL:** Read [references/plugin-structure-rules.md](references/plugin-structure-rules.md) for official rules and execution order.
+**Important:** Read [references/plugin-structure-rules.md](references/plugin-structure-rules.md) for official rules and execution order.
 
-**CRITICAL:** All edits in main conversation. Never delegate writes to subagents.
+**Important:** All edits in main conversation. Never delegate writes to subagents.
 
 **Verification:** Each fix applied and individually verified.
 
@@ -148,6 +149,28 @@ The script integrates CLI validation and adds checks for manifest, structure, sk
 **Produce final report** with changes made (component, change, rationale) and before/after health check metrics.
 
 **Verification:** Health check passes with zero errors.
+
+## Task 7: Offer Release Automation (If Missing)
+
+**Goal:** If plugin has no release automation, ask the user whether to add it.
+
+**Detection:** Check for all three:
+- `release-please-config.json` (or equivalent `.releaserc*`, `package.json` `release` key)
+- `.release-please-manifest.json` (or semantic-release manifest)
+- `.github/workflows/release-please.yml` (or any release workflow)
+
+**Skip this task if** any release automation is already configured. State "release automation already present — skipping" and move on.
+
+**If none configured, ask:**
+> 偵測到未設定版號自動化。plugin 有 3+ 處版號欄位（plugin.json、marketplace.json、README），手動維護容易 drift。要建立 release-please 嗎？
+> - **是** — 依 `creating-plugins` Task 6 流程建立 3 個 config 檔 + README markers
+> - **否** — 記下為 technical debt，結束
+
+**If yes:** Read [creating-plugins/references/plugin-templates.md](../creating-plugins/references/plugin-templates.md) for the `release-please-config.json`, `.release-please-manifest.json`, and workflow templates. Generate, add README markers, tell user to enable Actions write permissions.
+
+**If no:** Document the decision in the final report under "Deferred".
+
+**Verification:** Either automation exists (pre-existing or newly added), or user explicitly declined and decision recorded.
 
 ## Red Flags - STOP
 
@@ -184,6 +207,7 @@ digraph refactor_plugin {
     execute [label="Task 5: Execute\nrefactoring", shape=box];
     verify [label="Task 6: Verify\nfixes", shape=box];
     pass [label="Zero\nerrors?", shape=diamond];
+    release [label="Task 7: Offer release\nautomation", shape=box];
     done [label="Refactoring\ncomplete", shape=doublecircle];
 
     start -> identify;
@@ -195,8 +219,9 @@ digraph refactor_plugin {
     confirm -> done [label="no"];
     execute -> verify;
     verify -> pass;
-    pass -> done [label="yes"];
+    pass -> release [label="yes"];
     pass -> execute [label="no\nfix more"];
+    release -> done;
 }
 ```
 

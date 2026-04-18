@@ -70,6 +70,17 @@ This ensures user-reported friction gets captured even when it's not visible in 
 - **Errors** — agent made a mistake, multiple attempts needed
 - **Discoveries** — new insights about the project, domain, or tooling
 - **Repetitions** — same action performed multiple times (automation candidate)
+- **Safety bypasses** — destructive or irreversible actions taken without confirmation, or safety checks circumvented
+
+**Safety bypass patterns to detect** (scan commands run, edits made, user interjections):
+- `git push --force`, `git reset --hard`, `git checkout --`, `git clean -f`, `git branch -D` without explicit user confirmation
+- `--no-verify`, `--no-gpg-sign`, bypassing pre-commit or validation hooks
+- `rm -rf`, dropping tables, overwriting uncommitted changes
+- Deleting or editing tests to make them pass (instead of fixing implementation)
+- Discarding unfamiliar files/branches that may be user in-progress work
+- `rsync --delete` or deploys without verifying exclusions
+- User interjection phrases: "stop", "don't delete", "wait", "why did you", "rollback", "undo"
+- Agent reasoning that treats destructive op as shortcut around obstacle
 
 **Trace the skill router for each event:**
 For corrections and errors, identify which component routed the agent to that behavior:
@@ -98,7 +109,7 @@ This determines where fixes land:
 Event: [What happened]
 Context: [When/where it occurred]
 Outcome: [Result]
-Type: correction / error / discovery / repetition
+Type: correction / error / discovery / repetition / safety_bypass
 Router: [skill/rule/law/none that caused this behavior]
 Router path: [resolved file path, or "none"]
 ```
@@ -118,6 +129,8 @@ Router path: [resolved file path, or "none"]
 - A one-line convention → `rule`, not a `skill`
 - A repeated multi-step process → `skill`, not a `doc`
 - An immutable project constraint → `law`, not a `rule`
+
+**Safety bypass overrides simplicity:** If event type is `safety_bypass`, fix_target MUST be `rule` or `law` — never `skill` alone. Rationale: skills are opt-in routers, but safety constraints need always-on enforcement. Law for absolute prohibitions (force push main), rule for path/context-scoped enforcement (no `--no-verify` in this repo). Every safety_bypass learning also requires one explicit preventive instruction naming the exact command/flag to block.
 
 **Learning format:**
 ```yaml
@@ -139,7 +152,7 @@ Learning:
 
 1. Read `references/report-template.md` for format and completeness checklist
 2. Determine timestamp: `YYYY-MM-DD` format
-3. Write report to `docs/agent-system/{timestamp}-reflection.md`
+3. Write report to `.rcc/{timestamp}-reflection.md`
 
 The report must follow the template exactly, including:
 - Session context
@@ -244,6 +257,9 @@ These thoughts mean you're rationalizing. STOP and reconsider:
 - "Skip the report, just create components directly"
 - "I know where this learning belongs, skip planning"
 - "Each learning needs its own recommendation"
+- "That destructive op was fine because it worked"
+- "User didn't complain, so no safety issue"
+- "The bypass saved time, don't flag it"
 
 **All of these mean: You're about to short-circuit the pipeline. Follow the process.**
 
@@ -258,6 +274,9 @@ These thoughts mean you're rationalizing. STOP and reconsider:
 | "Create directly" | Bypasses conflict checks, simplicity gates, and reviews. |
 | "I know where it goes" | Planning has component-planning criteria you don't carry inline. |
 | "Each learning = one recommendation" | Multiple learnings often belong in the same component. Consolidate. |
+| "Destructive op worked, no harm" | Outcome luck ≠ safe process. Capture the bypass pattern. |
+| "User didn't push back" | Silence ≠ consent. If action was irreversible without confirmation, flag it. |
+| "Bypass saved time" | Shortcuts compound. Unreported bypasses teach the agent to bypass again. |
 
 ## Flowchart
 
@@ -292,3 +311,4 @@ digraph reflecting {
 
 - `references/report-template.md` — report format and completeness checklist
 - `planning-agent-systems` — classification and component creation
+- `.rcc/config.yml` `decisions_log` — append new decisions here (see `migrating-agent-systems/references/config-schema.md`)

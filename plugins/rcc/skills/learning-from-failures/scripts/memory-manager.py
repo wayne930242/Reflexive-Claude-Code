@@ -63,10 +63,10 @@ class MemoryManager:
 
     def __init__(self, base_path: Optional[str] = None):
         if base_path is None:
-            # 預設使用專案根目錄下的 docs/agent-system/memory
+            # 預設使用專案根目錄下的 .rcc/memory
             script_dir = Path(__file__).parent.absolute()
             project_root = script_dir.parent.parent.parent.parent
-            base_path = project_root / "docs" / "agent-system" / "memory"
+            base_path = project_root / ".rcc" / "memory"
 
         self.base_path = Path(base_path)
         self.patterns_dir = self.base_path / "patterns"
@@ -397,7 +397,7 @@ def main():
     parser.add_argument(
         '--base-path',
         type=str,
-        help="Base path for memory storage (default: docs/agent-system/memory)"
+        help="Base path for memory storage (default: .rcc/memory)"
     )
 
     subparsers = parser.add_subparsers(dest='command', help='Available commands')

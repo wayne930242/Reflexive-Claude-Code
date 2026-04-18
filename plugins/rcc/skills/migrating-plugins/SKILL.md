@@ -138,7 +138,12 @@ Announce: "Created 4 tasks. Starting execution..."
 
 **Run `claude plugin validate`** if `.claude-plugin/` exists.
 
-**Verification:** Clear maturity classification with asset inventory.
+**Detect release automation** (record for routing):
+- `release-please-config.json` / `.release-please-manifest.json` / `.github/workflows/release-please.yml`
+- OR any other release tool: `semantic-release` config (`.releaserc*`, `package.json` `release` key), `python-semantic-release` in `pyproject.toml`
+- Record as `release_automation: present | absent | partial` (partial = config file exists but workflow missing, or vice versa)
+
+**Verification:** Clear maturity classification with asset inventory. Release automation state recorded.
 
 ## Task 3: Propose Conversion (Pre-plugin Only)
 
@@ -161,6 +166,9 @@ Source: [project path]
 | 3 | .claude/agents/checker.md | agent | agents/checker.md | Copy, verify frontmatter |
 | 4 | scripts/lint.py | validator | hooks/lint.py + hooks.json | Wrap as PostToolUse hook |
 | 5 | README.md | docs | README.md | Adapt for plugin installation |
+
+Release automation: [present | absent | partial]
+- If absent/partial: `creating-plugins` Task 6 will offer release-please setup during conversion
 ```
 
 **Present to user for confirmation.**
@@ -178,20 +186,22 @@ Source: [project path]
 
 **Goal:** Invoke the correct skill with the target path.
 
-**CRITICAL:** Always pass the target path to downstream skills.
+**Important:** Always pass the target path to downstream skills.
 
 **If None:**
-- Invoke `creating-plugins`
+- Invoke `creating-plugins` (its Task 6 handles release automation offer)
 
 **If Pre-plugin (after Task 3 confirmation):**
-- Invoke `creating-plugins` with the conversion proposal as context
+- Invoke `creating-plugins` with the conversion proposal as context (including recorded `release_automation` state)
 - The proposal tells `creating-plugins` which files to move/convert instead of scaffolding from scratch
+- `creating-plugins` Task 6 will offer release-please based on the recorded state
 
 **If Minimal or Complete:**
 - Invoke `validating-plugins` with plugin root path
-- After validation, invoke `refactoring-plugins` with report and plugin root path
+- After validation, invoke `refactoring-plugins` with report, plugin root path, and recorded `release_automation` state
+- `refactoring-plugins` Task 7 handles the release automation offer (skips if already present)
 
-**Verification:** Correct skill invoked with target path and context.
+**Verification:** Correct skill invoked with target path, context, and release automation state.
 
 ## Red Flags - STOP
 

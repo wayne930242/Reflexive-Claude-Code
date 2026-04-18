@@ -1,6 +1,6 @@
 # Workflow Summary Template
 
-Write the summary to `docs/agent-system/{timestamp}-workflows.md` using this format:
+Write the summary to `.rcc/{timestamp}-workflows.md` using this format:
 
 ```markdown
 # Workflow Summary

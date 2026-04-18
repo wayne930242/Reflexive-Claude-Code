@@ -37,9 +37,10 @@ TaskCreate for EACH task below:
 3. Generate plugin manifest
 4. Create initial skill
 5. Write README
-6. Test installation
+6. Set up release automation
+7. Test installation
 
-Announce: "Created 6 tasks. Starting execution..."
+Announce: "Created 7 tasks. Starting execution..."
 
 **Execution rules:**
 1. `TaskUpdate status="in_progress"` BEFORE starting each task
@@ -121,7 +122,7 @@ Skills can also inject live data using shell commands (execute as preprocessing 
 
 **Goal:** Create the plugin.json manifest file.
 
-**CRITICAL:** Read [references/plugin-templates.md](references/plugin-templates.md) for manifest format, required fields, and marketplace structure.
+**Important:** Read [references/plugin-templates.md](references/plugin-templates.md) for manifest format, required fields, and marketplace structure.
 
 **Verification:** plugin.json is valid JSON with required fields.
 
@@ -129,7 +130,7 @@ Skills can also inject live data using shell commands (execute as preprocessing 
 
 **Goal:** Create the first skill using the writing-skills workflow.
 
-**CRITICAL: Invoke the `writing-skills` skill.**
+**Important:** Invoke the `writing-skills` skill.
 
 Do not write SKILL.md directly. The writing-skills skill ensures:
 - Proper frontmatter format
@@ -142,11 +143,32 @@ Do not write SKILL.md directly. The writing-skills skill ensures:
 
 **Goal:** Document the plugin for users.
 
-**CRITICAL:** Read [references/plugin-templates.md](references/plugin-templates.md) for README template.
+**Important:** Read [references/plugin-templates.md](references/plugin-templates.md) for README template.
 
 **Verification:** README has installation instructions and skill list.
 
-## Task 6: Test Installation
+## Task 6: Offer Release Automation
+
+**Goal:** Ask the user whether to set up release-please so version bumps happen via Conventional Commits, not manual edits.
+
+**Why ask:** Plugin has 3+ version fields (plugin.json, marketplace.json × 2, README headers). Manual sync drifts. Automation removes the error class entirely — but it assumes GitHub + Conventional Commits, which not every project uses.
+
+**Ask the user:**
+> 這個 plugin 有 3+ 處版號欄位（plugin.json、marketplace.json、README）。要建立 release-please 自動版號管理嗎？
+> - **是** — 建立 `release-please-config.json`、manifest、GitHub Actions workflow；未來用 `feat:` / `fix:` commits 自動 bump
+> - **否** — 跳過，README 新增 Contributing 區塊記錄手動 bump 步驟
+
+**If yes:**
+1. Read [references/plugin-templates.md](references/plugin-templates.md) for `release-please-config.json`, `.release-please-manifest.json`, `.github/workflows/release-please.yml` templates. Generate all three
+2. Add `<!-- x-release-please-version -->` marker next to every version string in README(s)
+3. Tell user: enable repo Settings → Actions → Workflow permissions = "Read and write"
+4. State Conventional Commits rules: `fix:` → patch, `feat:` → minor, `feat!:` / `BREAKING CHANGE:` → major
+
+**If no:** Add a "Version Management" section to README listing every file containing a version field, marked as manual-sync.
+
+**Verification:** User decision recorded. If yes — 3 config files exist + README markers added. If no — manual-sync locations documented.
+
+## Task 7: Test Installation
 
 **Goal:** Verify the plugin installs and works correctly.
 
@@ -161,6 +183,8 @@ Install locally (`claude plugin add <path>`), verify skills are discoverable and
 - "Skip testing"
 - "One big skill"
 - "Version later"
+- "I'll bump versions manually, it's just a few files"
+- "Skip release automation, plugin is too small"
 
 ## Common Rationalizations
 
@@ -171,6 +195,8 @@ Install locally (`claude plugin add <path>`), verify skills are discoverable and
 | "Skip testing" | Broken installs frustrate users. Test it. |
 | "One big skill" | Multiple focused skills > one bloated skill. |
 | "Version later" | Version from day 1. Semantic versioning matters. |
+| "Manual bumps are fine" | 3+ version fields drift silently. Automation costs one config file. |
+| "Plugin too small for CI" | Release-please runs free on public GitHub. No size threshold justifies manual bumps. |
 
 ## Flowchart: Plugin Creation
 
@@ -184,7 +210,8 @@ digraph plugin_creation {
     manifest [label="Task 3: Generate\nmanifest", shape=box];
     skill [label="Task 4: Create\ninitial skill", shape=box];
     readme [label="Task 5: Write\nREADME", shape=box];
-    test [label="Task 6: Test\ninstallation", shape=box];
+    release [label="Task 6: Offer release\nautomation", shape=box];
+    test [label="Task 7: Test\ninstallation", shape=box];
     test_pass [label="Install\nworks?", shape=diamond];
     done [label="Plugin complete", shape=doublecircle];
 
@@ -193,7 +220,8 @@ digraph plugin_creation {
     structure -> manifest;
     manifest -> skill;
     skill -> readme;
-    readme -> test;
+    readme -> release;
+    release -> test;
     test -> test_pass;
     test_pass -> done [label="yes"];
     test_pass -> manifest [label="no"];

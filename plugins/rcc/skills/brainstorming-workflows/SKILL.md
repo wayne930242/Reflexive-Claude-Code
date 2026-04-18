@@ -72,7 +72,7 @@ Announce: "Created 7 tasks. Starting execution..."
 
 **Goal:** Determine how workflows connect and what state management they need.
 
-**CRITICAL:** Read [references/exploration-questions.md](references/exploration-questions.md) for the question bank (Pipeline section).
+**Important:** Read [references/exploration-questions.md](references/exploration-questions.md) for the question bank (Pipeline section).
 
 **Rules:**
 - Ask **ONE question at a time** about workflow entry points, step counts, work scope
@@ -86,7 +86,7 @@ Announce: "Created 7 tasks. Starting execution..."
 
 **Goal:** Find where the current agent system fails or is missing.
 
-**CRITICAL:** Read [references/exploration-questions.md](references/exploration-questions.md) for the question bank (Pain Point section).
+**Important:** Read [references/exploration-questions.md](references/exploration-questions.md) for the question bank (Pain Point section).
 
 **Rules:**
 - Ask about past failures, missing automation, repeated corrections
@@ -99,7 +99,7 @@ Announce: "Created 7 tasks. Starting execution..."
 
 **Goal:** Find repetitive small tasks that could be automated.
 
-**CRITICAL:** Read [references/exploration-questions.md](references/exploration-questions.md) for the question bank (Routine Task section).
+**Important:** Read [references/exploration-questions.md](references/exploration-questions.md) for the question bank (Routine Task section).
 
 **Rules:**
 - Ask about daily repetitive work, search patterns, format/check tasks
@@ -112,7 +112,7 @@ Announce: "Created 7 tasks. Starting execution..."
 
 **Goal:** Find where humans must review, approve, or intervene in the workflows.
 
-**CRITICAL:** Read [references/exploration-questions.md](references/exploration-questions.md) for the question bank (Human-in-the-Loop section).
+**Important:** Read [references/exploration-questions.md](references/exploration-questions.md) for the question bank (Human-in-the-Loop section).
 
 **Rules:**
 - Ask about irreversible operations, external visibility, trust boundaries
@@ -149,9 +149,9 @@ Read [references/anthropic-patterns.md](references/anthropic-patterns.md) for th
 
 ## Task 7: Produce Workflow Summary
 
-**Goal:** Write structured summary to `docs/agent-system/{timestamp}-workflows.md`.
+**Goal:** Write structured summary to `.rcc/{timestamp}-workflows.md`.
 
-**CRITICAL:** Read [references/summary-template.md](references/summary-template.md) for the full summary format.
+**Important:** Read [references/summary-template.md](references/summary-template.md) for the full summary format.
 
 **Include:** pipeline mode mapping, pain points, routine tasks, human intervention points, component recommendations.
 

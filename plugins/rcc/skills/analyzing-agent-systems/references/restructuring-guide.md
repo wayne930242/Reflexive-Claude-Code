@@ -147,7 +147,7 @@ digraph pipeline {
 ​```
 
 **State persistence:**
-- Path: `docs/agent-system/` or project-specific
+- Path: `.rcc/` or project-specific
 - Format: markdown / JSON
 - Script management: yes / no / TBD
 

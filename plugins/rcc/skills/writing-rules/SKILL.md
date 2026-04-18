@@ -82,7 +82,7 @@ Skill tool: fetching-claude-docs
 - What convention needs enforcement?
 - Which files should this apply to?
 - Does this belong in CLAUDE.md (broad, always loaded) or rules (path-scoped)?
-- Does this rule already exist?
+- Does this rule already exist? (check against auto-loaded rule content in context — do NOT Read or Grep rule files)
 
 **Decision tree:**
 
@@ -165,7 +165,7 @@ Rules are Markdown content injected into context (same as CLAUDE.md):
 
 ### Writing Rules
 
-**CRITICAL constraints:**
+**Key constraints:**
 - **< 50 lines** - Auto-injected = expensive tokens
 - **Imperative form** - "MUST use", not "try to use"
 - **No procedures** - How-to belongs in skills
@@ -187,7 +187,7 @@ See [references/examples.md](references/examples.md) for good/bad rule examples 
 - [ ] < 50 lines
 - [ ] Imperative language ("MUST", "NEVER")
 - [ ] No procedural content (steps, code blocks as process)
-- [ ] Not duplicating existing rules or CLAUDE.md
+- [ ] Not duplicating existing rules or CLAUDE.md (both auto-loaded into context — do NOT Read or Grep rule files)
 - [ ] Session-start total (CLAUDE.md + global rules) still under 300 lines
 
 ## Task 4: Validate Structure
@@ -295,4 +295,4 @@ digraph rule_creation {
 ## References
 
 - [references/paths-patterns.md](references/paths-patterns.md) - Advanced glob patterns
-- [references/examples.md](references/examples.md) - Rule examples by domain
+- [references/examples.md](references/examples.md) - Rule examples by domain (includes **Safety Bypass Prevention** baseline templates for git / deploy / destructive ops)

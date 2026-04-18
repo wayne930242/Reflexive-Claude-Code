@@ -1,6 +1,6 @@
 # Analysis Report Template
 
-Write the report to `docs/agent-system/{timestamp}-analysis.md` using this format:
+Write the report to `.rcc/{timestamp}-analysis.md` using this format:
 
 ```markdown
 # Agent System Analysis Report

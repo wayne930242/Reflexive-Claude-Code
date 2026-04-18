@@ -66,6 +66,8 @@ For each category, check every item. Mark severity:
 - [ ] `marketplace.json` metadata.version matches plugin versions
 - [ ] README version badges/headers match actual version
 - [ ] No version drift between localized READMEs
+- [ ] Version bumps managed by release automation (release-please or equivalent) — manual edits to version fields are an anti-pattern; the checklist only verifies consistency, not who bumped
+- [ ] If release-please is configured: all version locations listed in `release-please-config.json` `extra-files`; README headers carry `<!-- x-release-please-version -->` marker
 
 ## 7. Hook Safety (if applicable)
 

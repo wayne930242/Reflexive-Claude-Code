@@ -7,10 +7,12 @@ Claude Code 插件市集，提供技能驅動的 Agentic Context Engineering 工
 <law>
 **Law 1: Communication** - 使用繁體中文，簡潔回覆，不加不必要的解釋
 
-**Law 2: Version Sync** - 版本號必須同步更新：
+**Law 2: Version Sync** - 版本號由 release-please 依 Conventional Commits 自動同步至：
 - `.claude-plugin/marketplace.json` (metadata.version + plugins[0].version)
 - `plugins/rcc/.claude-plugin/plugin.json`
-- `README.md` + `README.zh-TW.md` (rcc version in header)
+- `README.md` + `README.zh-TW.md` (含 `<!-- x-release-please-version -->` marker 的 rcc 標頭)
+
+手動修改版號屬反模式。commit 使用 `feat:` / `fix:` / `feat!:` 驅動 bump。
 
 **Law 3: Documentation Sync** - README.md 與 README.zh-TW.md 必須保持同步
 
@@ -29,7 +31,14 @@ Claude Code 插件市集，提供技能驅動的 Agentic Context Engineering 工
 
 ```
 .claude-plugin/
-└── marketplace.json        # 市集定義（版本在此）
+└── marketplace.json        # 市集定義（版本由 release-please 管）
+
+.rcc/                        # 本專案 RCC 產出
+├── config.yml               # 遷移狀態 + 決策 log
+├── {timestamp}-*.md         # analysis / plan / reflection
+├── memory/                  # learning-from-failures
+├── validation/              # hook 驗證報告
+└── archive/
 
 plugins/
 └── rcc/                    # 核心 ACE 插件
@@ -39,6 +48,8 @@ plugins/
     ├── agents/             # 審查員子代理
     └── commands/           # 命令別名
 ```
+
+Skill 產出寫入 `.rcc/`（不再用 `docs/agent-system/`）。`config.yml` 記錄不會自動回收的決策（release automation、settings_scope、model 指派）。
 
 ## Quick Reference
 

@@ -50,7 +50,7 @@ Announce: "Created N tasks. Starting execution..."
 
 **Goal:** Load the component plan and prepare execution order.
 
-**Read:** `docs/agent-system/*-plan.md` (most recent)
+**Read:** `.rcc/*-plan.md` (most recent)
 
 **Create a TaskCreate for each component** in the plan's execution order:
 - "[applying] Create CLAUDE.md"
@@ -78,7 +78,7 @@ Announce: "Created N tasks. Starting execution..."
 4. Mark task complete
 5. Move to next component
 
-**CRITICAL CONSTRAINTS:**
+**Important constraints:**
 
 - **All writes happen in main conversation.** NEVER delegate writing-* skill invocations to subagents. Subagents cannot reliably write to `.claude/` directories.
 - **One component at a time.** Don't batch. Each writing-* skill has its own creation process.

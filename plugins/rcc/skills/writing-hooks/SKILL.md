@@ -146,7 +146,7 @@ See [references/static-checks.md](references/static-checks.md) for complete hook
 
 ### Windows Compatibility (MANDATORY)
 
-**CRITICAL:** Read [cross-platform-scripts.md](../../references/cross-platform-scripts.md) for full cross-platform rules covering paths, shell commands, line endings, and common pitfalls.
+**Important:** Read [cross-platform-scripts.md](../../references/cross-platform-scripts.md) for full cross-platform rules covering paths, shell commands, line endings, and common pitfalls.
 
 **Verification:**
 - [ ] Script is executable (`chmod +x`) — skip on Windows
@@ -162,7 +162,7 @@ See [references/static-checks.md](references/static-checks.md) for complete hook
 
 **Goal:** Register hook in `.claude/settings.json`.
 
-**CRITICAL:** Use `.claude/settings.json`, NOT `settings.local.json`. Settings are team-shared.
+**Important:** Use `.claude/settings.json`, NOT `settings.local.json`. Settings are team-shared.
 
 ### Configuration Format
 

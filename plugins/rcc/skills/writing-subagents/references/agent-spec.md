@@ -31,7 +31,7 @@
 
 ### Context Isolation
 
-**CRITICAL: Context isolation = context amnesia.** When using `context: fork` or custom agents:
+**Important: Context isolation = context amnesia.** When using `context: fork` or custom agents:
 - Forked context does NOT inherit the main conversation
 - Only receives: skill body (or agent system prompt) + `$ARGUMENTS` (or agent prompt)
 - **Design `argument-hint` to demand sufficient context**
@@ -47,7 +47,7 @@ No argument-hint -> user types `/my-skill` with no args -> forked agent has zero
 
 ## Tool Permissions
 
-**CRITICAL: Subagents CANNOT request permissions at runtime.** Unlike the main conversation where Claude can ask the user for tool approval, subagents only have access to tools declared upfront in their `tools` field.
+**Important: Subagents cannot request permissions at runtime.** Unlike the main conversation where Claude can ask the user for tool approval, subagents only have access to tools declared upfront in their `tools` field.
 
 **Rules:**
 - `tools` field = the COMPLETE set of available tools. No additions at runtime.

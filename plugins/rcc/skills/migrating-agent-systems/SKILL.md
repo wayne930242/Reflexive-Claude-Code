@@ -34,10 +34,11 @@ TaskCreate for EACH task below:
 
 **Tasks:**
 1. Detect and assess existing agent system
-2. Rules refactoring proposal
-3. Route to appropriate skill chain
+2. Read or create `.rcc/config.yml`
+3. Rules refactoring proposal
+4. Route to appropriate skill chain
 
-Announce: "Created 3 tasks. Starting execution..."
+Announce: "Created 4 tasks. Starting execution..."
 
 **Execution rules:**
 1. `TaskUpdate status="in_progress"` BEFORE starting each task
@@ -81,7 +82,79 @@ Announce: "Created 3 tasks. Starting execution..."
 
 **Verification:** Clear maturity classification with evidence (which components found, which missing).
 
-## Task 2: Rules Refactoring Proposal
+## Task 2: Read or Create `.rcc/config.yml`
+
+**Goal:** Ensure the project has a `.rcc/config.yml` recording migration state and key decisions. Idempotent — on re-runs, this prevents redoing work. Also migrate legacy folders if present.
+
+**Read [references/config-schema.md](references/config-schema.md)** for the full schema and field semantics.
+
+**Process:**
+
+### 2a — Legacy folder migration (run BEFORE creating config)
+
+RCC v11 moved artifact output from `docs/agent-system/` + `docs/validation-reports/` into `.rcc/`. If legacy folders exist, migrate them first.
+
+**Detect legacy folders:**
+```bash
+test -d docs/agent-system && echo "legacy-agent-system"
+test -d docs/validation-reports && echo "legacy-validation"
+```
+
+**If either exists:**
+
+1. List contents to the user:
+   > 偵測到舊版路徑。RCC v11 起產出改寫到 `.rcc/`。建議遷移：
+   > - `docs/agent-system/` → `.rcc/` （找到 N 份檔案）
+   > - `docs/validation-reports/` → `.rcc/validation/` （找到 M 份檔案）
+   >
+   > 要執行遷移嗎？（預設：是）
+
+2. **If confirmed:**
+   - `mkdir -p .rcc/validation`
+   - For each file in `docs/agent-system/`:
+     - Tracked (`git ls-files <file>` returns path) → `git mv <file> .rcc/<basename>`
+     - Untracked → `mv <file> .rcc/<basename>`
+   - For each file in `docs/validation-reports/`:
+     - Same tracked/untracked split → target `.rcc/validation/<basename>`
+   - If `docs/agent-system/archive/` exists, move wholesale: `git mv docs/agent-system/archive .rcc/archive` (or `mv` for untracked)
+   - `rmdir docs/agent-system docs/validation-reports` after emptying
+   - If `docs/` is now empty, `rmdir docs/` too
+
+3. **If declined:** record in `decisions_log` that legacy folders were kept, and note this skill will not re-offer migration unless forced.
+
+4. **Report to user:** summary of files moved with tracked/untracked counts.
+
+### 2b — Handle `.rcc/config.yml`
+
+1. **Check `.rcc/config.yml` exists.**
+
+2. **If exists:** Load it. Report to user:
+   > 偵測到 `.rcc/config.yml`：上次遷移 `{migration.last_at}`，使用 rcc `{migration.last_rcc_version}`。本次 rcc 版本為 `{current}`。
+   >
+   > - release automation: `{release_automation.decision}` / `{release_automation.tool}`
+   > - safety settings: `{settings_scope.safety_bypass}`
+   - If `last_rcc_version < current`: offer re-migration to pull newer patterns
+   - If `migration.completed: true` and versions match: ask if user wants to re-run anyway or proceed to specific task
+
+3. **If missing:** Create `.rcc/` directory (if not already by 2a) and write a new `config.yml`. Ask the user (one round of questions):
+
+   ```
+   要記錄以下決策到 .rcc/config.yml 嗎？
+   1. Release automation（版號自動化）：release-please / semantic-release / 跳過
+   2. 安全規則 (safety_bypass) 要放在：
+      - `.claude/settings.json`（團隊共享，checked in）[預設]
+      - `.claude/settings.local.json`（個人，gitignored）
+      - `~/.claude/settings.json`（使用者全域）
+   3. 主調度員模型：claude-opus-4-7 @ xhigh [預設，依 4.7 最佳實踐]
+   ```
+
+4. **Write config.yml** with user answers + detected state from Task 1. Populate `decisions_log` with each confirmed answer. If 2a migrated folders, add a log entry recording that.
+
+5. **Also ensure** `.gitignore` does not exclude `.rcc/` (config.yml must be tracked).
+
+**Verification:** Legacy folders migrated or decline recorded. `.rcc/config.yml` exists, all key fields populated, user has confirmed or declined each decision.
+
+## Task 3: Rules Refactoring Proposal
 
 **Goal:** Analyze CLAUDE.md and rules content, propose splitting into appropriate locations.
 
@@ -113,7 +186,7 @@ Announce: "Created 3 tasks. Starting execution..."
 
 **Verification:** User has confirmed or skipped the proposal.
 
-## Task 3: Route to Appropriate Skill Chain
+## Task 4: Route to Appropriate Skill Chain
 
 **Goal:** Invoke the correct starting skill based on maturity level.
 
@@ -171,25 +244,27 @@ digraph migrate_agent {
 
     start [label="Setup/migrate\nagent system", shape=doublecircle];
     detect [label="Task 1: Detect\nand assess", shape=box];
+    config [label="Task 2: Read/create\n.rcc/config.yml", shape=box];
     maturity [label="Maturity\nlevel?", shape=diamond];
     import_cfg [label="Import other\nAI configs", shape=box];
-    refactor [label="Task 2: Rules\nrefactoring proposal", shape=box];
+    refactor [label="Task 3: Rules\nrefactoring proposal", shape=box];
     confirm [label="User\nconfirms?", shape=diamond];
     execute [label="Execute split\n(writing-rules/skills)"];
-    brainstorm [label="Task 3: Route to\nskill chain", shape=box];
+    route [label="Task 4: Route to\nskill chain", shape=box];
     done [label="Routed", shape=doublecircle];
 
     start -> detect;
-    detect -> maturity;
-    maturity -> brainstorm [label="none"];
+    detect -> config;
+    config -> maturity;
+    maturity -> route [label="none"];
     maturity -> import_cfg [label="seed"];
     maturity -> refactor [label="partial /\nestablished"];
-    import_cfg -> brainstorm;
+    import_cfg -> route;
     refactor -> confirm;
     confirm -> execute [label="yes"];
-    confirm -> brainstorm [label="skip"];
-    execute -> brainstorm;
-    brainstorm -> done;
+    confirm -> route [label="skip"];
+    execute -> route;
+    route -> done;
 }
 ```
 
@@ -202,3 +277,7 @@ digraph migrate_agent {
 | 2 | `planning-agent-systems` | Architecture flowchart + dependency-driven component planning |
 | 3 | `applying-agent-systems` | Invoke writing-* skills per phase |
 | 4 | `refactoring-agent-systems` | Review + cleanup |
+
+## References
+
+- [references/config-schema.md](references/config-schema.md) — `.rcc/config.yml` schema, field semantics, and read/write table per skill

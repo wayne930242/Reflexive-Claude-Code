@@ -84,7 +84,7 @@ Announce: "Created 5 tasks. Starting execution..."
 
 **Goal:** Extract reusable pattern characteristics from failure cases.
 
-**CRITICAL:** Read [references/memory-patterns.md](references/memory-patterns.md) for pattern classification and extraction strategies.
+**Important:** Read [references/memory-patterns.md](references/memory-patterns.md) for pattern classification and extraction strategies.
 
 **For debug sessions — extract the bug as a separate pattern entry:**
 ```
@@ -136,7 +136,7 @@ python plugins/rcc/skills/learning-from-failures/scripts/memory-manager.py extra
 
 **Memory structure:**
 ```
-docs/agent-system/memory/
+.rcc/memory/
 ├── patterns/           # Learned pattern library
 ├── failures/           # Failure case records
 └── preventions/        # Prevention measure list

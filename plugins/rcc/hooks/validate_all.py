@@ -64,7 +64,7 @@ def validate_all(cwd: Path) -> dict[str, list[str]]:
 def write_report(results: dict[str, list[str]], cwd: Path, output: Path | None = None) -> Path:
     timestamp = datetime.now().strftime("%Y-%m-%d-%H%M%S")
     if output is None:
-        output = cwd / "docs" / "validation-reports" / f"{timestamp}-validation.md"
+        output = cwd / ".rcc" / "validation" / f"{timestamp}-validation.md"
     output.parent.mkdir(parents=True, exist_ok=True)
 
     lines: list[str] = [

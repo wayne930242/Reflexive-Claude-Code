@@ -156,10 +156,11 @@ See [references/agent-spec.md](references/agent-spec.md) for full configuration 
 **Key rules:**
 - `name`: lowercase with hyphens, matches filename
 - `description`: include 2-4 concrete examples in `<example>` blocks showing triggering conditions
-- `model`: MUST be specified explicitly; `inherit` is an anti-pattern in plugin agents (only project/user-level agents in `.claude/agents/` may omit)
+- `model`: specified explicitly; `inherit` is an anti-pattern in plugin agents (only project/user-level agents in `.claude/agents/` may omit)
 - `color`: unique color per agent (blue, green, red, purple, yellow)
-- `tools`: minimal set (principle of least privilege). Subagents CANNOT request permissions at runtime.
-- Plugin agents do NOT support `hooks`, `mcpServers`, or `permissionMode`
+- `tools`: minimal set (principle of least privilege). Subagents cannot request permissions at runtime.
+- Plugin agents do not support `hooks`, `mcpServers`, or `permissionMode`
+- System prompt should encourage parallel tool calls for independent operations (e.g. "When reading N files, fire N Read calls in a single response")
 
 | Agent Type | Recommended Tools |
 |------------|-------------------|

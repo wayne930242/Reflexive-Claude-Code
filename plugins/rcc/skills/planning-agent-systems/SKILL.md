@@ -53,9 +53,9 @@ Announce: "Created 5 tasks. Starting execution..."
 **Goal:** Load analysis report (if available) and workflow summary.
 
 **Read:**
-- `docs/agent-system/*-analysis.md` (most recent, if exists)
-- `docs/agent-system/*-workflows.md` (most recent, if exists)
-- `docs/agent-system/*-reflection.md` (most recent, if exists)
+- `.rcc/*-analysis.md` (most recent, if exists)
+- `.rcc/*-workflows.md` (most recent, if exists)
+- `.rcc/*-reflection.md` (most recent, if exists)
 
 **Extract:**
 - Weaknesses marked for fixing
@@ -72,7 +72,7 @@ Announce: "Created 5 tasks. Starting execution..."
 
 **Why this comes first:** Component lists hide dependency gaps and workflow disconnects. A flowchart forces you to see the whole picture — entry points, decision branches, data flow, and handoff points — before committing to any component.
 
-**CRITICAL:** Read [references/anthropic-patterns.md](references/anthropic-patterns.md) for the six Anthropic workflow patterns, DOT flowchart conventions, and dependency graph template.
+**Important:** Read [references/anthropic-patterns.md](references/anthropic-patterns.md) for the six Anthropic workflow patterns, DOT flowchart conventions, and dependency graph template.
 
 **Step 1 — Classify workflows into Anthropic patterns** using the reference table.
 
@@ -82,7 +82,7 @@ Announce: "Created 5 tasks. Starting execution..."
 
 **Step 4 — Check learning integration** before architecture decisions:
 
-**CRITICAL:** Load relevant failure pattern warnings to avoid known issues:
+**Important:** Load relevant failure pattern warnings to avoid known issues:
 
 ```bash
 echo '{"component":"agent-system","context":"planning","type":"architecture"}' | \
@@ -107,7 +107,7 @@ Ask: "What is the minimum set of components that delivers value?"
 
 **Goal:** Decide action for each component type.
 
-**CRITICAL:** Read [references/component-planning.md](references/component-planning.md) for the evaluation table, decision criteria, size constraints, and writing skill assignments.
+**Important:** Read [references/component-planning.md](references/component-planning.md) for the evaluation table, decision criteria, size constraints, and writing skill assignments.
 
 **Use the dependency graph from Task 2** to determine execution order. Do NOT use a fixed order — let dependencies drive sequencing. Components in the same phase with no mutual dependencies can be built in parallel.
 
@@ -132,13 +132,23 @@ Ask: "What is the minimum set of components that delivers value?"
    - Use **Sonnet** when decomposition requires reasoning: ambiguous requirements, multi-level decisions, dynamic routing.
 3. **Opus quality gate / advisor third** — add only if (a) a revision loop exists and (b) the output will be mechanically executable by downstream Sonnet. Without both conditions, skip Opus.
 
-**Verification:** Each planned component has a traced rationale and assigned writing-* skill. Agent layers follow the ordering above. Implementer capability analysis completed — each planned CLAUDE.md/rule/hook traces to a specific project-specific need. No conflicts identified.
+**Safety baseline (MANDATORY check):** Every plan must include or explicitly waive the safety bypass prevention rules. These are baseline defaults, not project-specific additions:
+
+| Rule | Scope | Source |
+|------|-------|--------|
+| `git-safety.md` | Global | [writing-rules/references/examples.md](../writing-rules/references/examples.md) |
+| `deploy-safety.md` | Global (if project deploys) | same |
+| `destructive-ops.md` | Global | same |
+
+Pair with `reflecting` skill's `safety_bypass` event detection for prevent-detect-learn loop. If the user already has equivalent global rules in `~/.claude/rules/`, note them in the plan as "inherited — no project-level duplicate needed". If the user waives safety rules, record the justification explicitly.
+
+**Verification:** Each planned component has a traced rationale and assigned writing-* skill. Agent layers follow the ordering above. Implementer capability analysis completed. Safety baseline resolved (planned, inherited, or explicitly waived). No conflicts identified.
 
 ## Task 4: Produce Component Plan
 
-**Goal:** Write structured plan to `docs/agent-system/{timestamp}-plan.md`.
+**Goal:** Write structured plan to `.rcc/{timestamp}-plan.md`.
 
-**CRITICAL:** Read [references/plan-template.md](references/plan-template.md) for the full plan format including architecture flowchart, pattern mapping, dependency graph, and component sections.
+**Important:** Read [references/plan-template.md](references/plan-template.md) for the full plan format including architecture flowchart, pattern mapping, dependency graph, and component sections.
 
 **Verification:** Plan written with complete execution order and traceability.
 

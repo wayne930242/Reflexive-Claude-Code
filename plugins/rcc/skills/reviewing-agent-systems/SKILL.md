@@ -92,7 +92,7 @@ Agent tool:
 - Major issues
 - Minor issues
 
-**CRITICAL:** Run ALL reviewers. Do NOT skip components because "they were just created by a writing-* skill". Writing-* skills have their own internal review, but system-level review catches cross-component issues.
+**Important:** Run all reviewers. Do not skip components because "they were just created by a writing-* skill". Writing-* skills have their own internal review, but system-level review catches cross-component issues.
 
 **Verification:** Every component has a reviewer result.
 
@@ -129,7 +129,7 @@ Agent tool:
 
 **Anti-pattern:** "5 components reviewed, 2 need fixes" without listing what the fixes are is NOT presenting. Show every finding.
 
-**Write report to:** `docs/agent-system/{timestamp}-review-report.md`
+**Write report to:** `.rcc/{timestamp}-review-report.md`
 
 **Verification:** Report written with all findings from all reviewers.
 

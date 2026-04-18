@@ -1,0 +1,80 @@
+# Reflexive Claude Code — project configuration
+#
+# Auto-managed by:
+#   - migrating-agent-systems       (migration state)
+#   - refactoring-plugins Task 7    (release automation decision)
+#   - reflecting                    (append to decisions_log)
+# Manual edits are fine; they persist across skill runs.
+#
+# Schema docs: plugins/rcc/skills/migrating-agent-systems/references/config-schema.md
+
+config_version: 1
+
+# ----------------------------------------------------------------------
+# RCC migration state
+# ----------------------------------------------------------------------
+migration:
+  completed: true
+  initial_at: "2026-03-24"           # first RCC migration ever run
+  last_at: "2026-04-18"              # most recent migration/refactor
+  last_rcc_version: "10.11.0"        # rcc plugin version at last migration
+
+# ----------------------------------------------------------------------
+# Release automation
+# ----------------------------------------------------------------------
+release_automation:
+  decision: enabled                   # enabled | declined | deferred
+  tool: release-please                # release-please | semantic-release | none
+  configured_at: "2026-04-18"
+  notes: "release-please chosen for native multi-file JSON bump support"
+
+# ----------------------------------------------------------------------
+# Settings file scope — where different kinds of decisions live
+# ----------------------------------------------------------------------
+settings_scope:
+  safety_bypass: .claude/settings.json              # team-shared, checked in
+  permissions: .claude/settings.json                # team baseline
+  hooks: .claude/settings.json                      # team-enforced
+  personal_overrides: .claude/settings.local.json   # gitignored, per-dev
+  user_global: ~/.claude/settings.json              # user-wide (all projects)
+
+# ----------------------------------------------------------------------
+# Primary model assignments (Opus 4.7 best practices)
+# ----------------------------------------------------------------------
+models:
+  orchestrator:
+    model: claude-opus-4-7
+    effort: xhigh
+  implementer:
+    model: sonnet
+    effort: high
+  reviewer:
+    model: sonnet
+    effort: medium
+
+# ----------------------------------------------------------------------
+# Artifact directories (relative to repo root)
+# ----------------------------------------------------------------------
+artifacts:
+  root: .rcc/
+  memory: .rcc/memory/
+  validation: .rcc/validation/
+  archive: .rcc/archive/
+  # timestamped outputs live flat in .rcc/{YYYYMMDD-HHMM}-{kind}.md
+
+# ----------------------------------------------------------------------
+# Decisions log — append-only; reflecting writes here
+# ----------------------------------------------------------------------
+decisions_log:
+  - date: "2026-04-18"
+    topic: release automation
+    decision: Adopt release-please
+    rationale: "Plugin has 3+ version fields; manual sync drifts."
+  - date: "2026-04-18"
+    topic: safety bypass settings location
+    decision: "Store in .claude/settings.json (team-shared)"
+    rationale: "Safety rules apply to all contributors uniformly."
+  - date: "2026-04-18"
+    topic: primary orchestrator
+    decision: "Opus 4.7 at xhigh effort"
+    rationale: "Per Anthropic 4.7 best practices for long-horizon agentic work."

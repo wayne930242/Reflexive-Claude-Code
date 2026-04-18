@@ -20,7 +20,7 @@ Fix issues in this order to avoid cascading problems:
 3. **Skill fixes** — frontmatter, naming, line count, triggers
 4. **Command fixes** — frontmatter, skill references
 5. **Agent fixes** — isolation, tool lists, descriptions
-6. **Version sync** — align plugin.json, marketplace.json, READMEs
+6. **Version sync** — align plugin.json, marketplace.json, READMEs (via release automation; manual bumps are an anti-pattern)
 7. **Path fixes** — replace absolute paths with variables
 
 ## Environment Variables

@@ -144,7 +144,7 @@ Compare with community implementations.
 
 **Goal:** Make targeted edits to the skill.
 
-**CRITICAL:** Make focused edits, not full rewrites.
+**Important:** Make focused edits, not full rewrites.
 
 **Order of changes:**
 1. Fix frontmatter (description)

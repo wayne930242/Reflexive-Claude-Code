@@ -119,16 +119,18 @@ The planner decides which assets each skill needs; the reviewer checks they exis
 
 ### Model Recommendations
 
-| Use Case | Model |
-|----------|-------|
-| Implementation, code generation | `sonnet` |
-| Planning, architecture design | `opus` |
-| Read-only analysis, review | `sonnet` |
-| Simple lookup, exploration | `haiku` |
+**Primary orchestrator: `claude-opus-4-7`** — per Anthropic's [Opus 4.7 prompting best practices](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices), Opus 4.7 is the recommended main model for long-horizon agentic work, subagent orchestration, and coding. Start at `xhigh` effort for coding/agentic use cases; minimum `high` for intelligence-sensitive work. Set `max_tokens` ≥ 64k at `xhigh`/`max` so the model has room to think and act.
+
+| Use Case | Model | Effort |
+|----------|-------|--------|
+| Main orchestrator, long-horizon agentic, planning | `claude-opus-4-7` | `xhigh` / `high` |
+| Implementation, code generation | `sonnet` | `high` |
+| Read-only analysis, review | `sonnet` | `medium` |
+| Simple lookup, exploration | `haiku` | `low` |
 
 ## Full Skill List
 
-### rcc (v10.10.1)
+### rcc (v10.11.0) <!-- x-release-please-version -->
 
 | Skill | Purpose |
 |-------|---------|
@@ -160,13 +162,33 @@ The planner decides which assets each skill needs; the reviewer checks they exis
 Reflexive-Claude-Code/
 ├── .claude-plugin/
 │   └── marketplace.json
+├── .rcc/                     # Per-project RCC artifacts (tracked)
+│   ├── config.yml            # Migration state + decisions log
+│   ├── {timestamp}-*.md      # analysis / plan / reflection / review outputs
+│   ├── memory/               # learning-from-failures knowledge
+│   ├── validation/           # validate_all.py reports
+│   └── archive/              # refactor-sweep snapshots
 ├── plugins/
 │   └── rcc/
-│       ├── skills/          # 21 skills
-│       ├── agents/          # 5 reviewer subagents
-│       └── hooks/           # Frontmatter validation hook
+│       ├── skills/           # 21 skills
+│       ├── agents/           # 5 reviewer subagents
+│       └── hooks/            # Frontmatter validation hook
+├── release-please-config.json
+├── .release-please-manifest.json
 └── README.md
 ```
+
+### `.rcc/config.yml`
+
+Every RCC-enabled project carries `.rcc/config.yml` recording:
+
+- Migration state (when last migrated, which rcc version)
+- Release automation decision (release-please / semantic-release / declined)
+- Settings scope (where safety bypass / permission rules live: `.claude/settings.json` vs `.claude/settings.local.json` vs `~/.claude/settings.json`)
+- Primary model assignments (orchestrator / implementer / reviewer)
+- Append-only `decisions_log`
+
+Managed by `migrating-agent-systems` (creation) and `reflecting` (log append). See [config schema](plugins/rcc/skills/migrating-agent-systems/references/config-schema.md).
 
 ## Credits
 

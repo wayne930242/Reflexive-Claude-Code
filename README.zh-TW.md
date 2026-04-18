@@ -119,16 +119,18 @@ migrate-plugin → validate → refactor
 
 ### 模型建議
 
-| 使用場景 | 模型 |
-|---------|------|
-| 實作、程式碼產生 | `sonnet` |
-| 規劃、架構設計 | `opus` |
-| 唯讀分析、審查 | `sonnet` |
-| 簡單查詢、探索 | `haiku` |
+**主調度員：`claude-opus-4-7`** — 依 Anthropic [Opus 4.7 prompting best practices](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices)，Opus 4.7 是長程 agentic 任務、subagent 編排、coding 的建議主模型。coding/agentic 從 `xhigh` effort 起跳，智力敏感任務至少 `high`。`xhigh`/`max` 下 `max_tokens` ≥ 64k，讓模型有空間思考與執行。
+
+| 使用場景 | 模型 | Effort |
+|---------|------|--------|
+| 主調度員、長程 agentic、規劃 | `claude-opus-4-7` | `xhigh` / `high` |
+| 實作、程式碼產生 | `sonnet` | `high` |
+| 唯讀分析、審查 | `sonnet` | `medium` |
+| 簡單查詢、探索 | `haiku` | `low` |
 
 ## 完整 Skill 列表
 
-### rcc (v10.10.1)
+### rcc (v10.11.0) <!-- x-release-please-version -->
 
 | Skill | 用途 |
 |-------|------|
@@ -160,13 +162,33 @@ migrate-plugin → validate → refactor
 Reflexive-Claude-Code/
 ├── .claude-plugin/
 │   └── marketplace.json
+├── .rcc/                     # 每專案 RCC 產出（納入 git）
+│   ├── config.yml            # 遷移狀態 + 決策記錄
+│   ├── {timestamp}-*.md      # analysis / plan / reflection / review 產出
+│   ├── memory/               # learning-from-failures 知識庫
+│   ├── validation/           # validate_all.py 報告
+│   └── archive/              # 重構時的歷史快照
 ├── plugins/
 │   └── rcc/
-│       ├── skills/          # 21 個 skills
-│       ├── agents/          # 5 個 reviewer subagents
-│       └── hooks/           # Frontmatter 驗證 hook
+│       ├── skills/           # 21 個 skills
+│       ├── agents/           # 5 個 reviewer subagents
+│       └── hooks/            # Frontmatter 驗證 hook
+├── release-please-config.json
+├── .release-please-manifest.json
 └── README.md
 ```
+
+### `.rcc/config.yml`
+
+每個啟用 RCC 的專案都帶一份 `.rcc/config.yml`，記錄：
+
+- 遷移狀態（上次遷移時間、當時 rcc 版本）
+- Release automation 決策（release-please / semantic-release / 拒絕）
+- 設定檔範圍（safety bypass / permission 規則放 `.claude/settings.json` vs `.claude/settings.local.json` vs `~/.claude/settings.json`）
+- 主要模型指派（orchestrator / implementer / reviewer）
+- Append-only `decisions_log`
+
+由 `migrating-agent-systems`（建立）與 `reflecting`（追加）維護。詳見 [config schema](plugins/rcc/skills/migrating-agent-systems/references/config-schema.md)。
 
 ## 致謝
 

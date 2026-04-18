@@ -71,7 +71,7 @@ issues:
 - [ ] No multi-step workflows (belongs in skills)
 - [ ] No linter-enforceable rules (belongs in hooks)
 - [ ] No standard language conventions Claude already knows
-- [ ] No content duplicated in `.claude/rules/`
+- [ ] No content duplicated in `.claude/rules/` (rules are auto-loaded into context — do NOT Read or Grep rule files; compare against auto-loaded rule content already in context)
 - [ ] Each instruction uses specific verifiable language (MUST/NEVER/IF…THEN)
 - [ ] Referenced paths exist (verify with Glob/Bash)
 - [ ] Referenced commands are valid (verify with Bash)

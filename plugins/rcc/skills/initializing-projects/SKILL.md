@@ -77,7 +77,7 @@ Announce: "Created 6 tasks. Starting execution..."
 - Recommended project structure
 - Current best practices
 
-**CRITICAL:** Don't assume versions or flags from training data. Official docs change frequently.
+**Important:** Don't assume versions or flags from training data. Official docs change frequently.
 
 **Verification:** Have official init command and current version numbers from live sources.
 
@@ -105,7 +105,7 @@ Announce: "Created 6 tasks. Starting execution..."
 [Core packages to add, with purpose]
 ```
 
-**CRITICAL:** Present FULL detail. The user must see exact versions, flags, and dependency list to catch mistakes.
+**Important:** Present FULL detail. The user must see exact versions, flags, and dependency list to catch mistakes.
 
 **Ask:** "這個 blueprint 正確嗎？要開始執行嗎？"
 
@@ -153,7 +153,7 @@ Announce: "Created 6 tasks. Starting execution..."
 **If Skip:**
 - End
 
-**CRITICAL:** 不得繞過 `migrating-agent-systems` 直接呼叫 `writing-claude-md` 或其他 component skill。`migrating-agent-systems` 是 agent system 設定的唯一入口。
+**Important:** 不得繞過 `migrating-agent-systems` 直接呼叫 `writing-claude-md` 或其他 component skill。`migrating-agent-systems` 是 agent system 設定的唯一入口。
 
 **Verification:** User's choice is executed or skipped.
 

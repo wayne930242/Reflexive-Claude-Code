@@ -179,3 +179,63 @@ paths: src/auth/**/*.ts, src/middleware/auth*.ts
 - PRs require review
 - Squash merge preferred
 ```
+
+---
+
+## Safety Bypass Prevention (Recommended Defaults)
+
+These are baseline safety rules every agent system should have. They prevent destructive/irreversible actions from happening without explicit user confirmation. Pair with `reflecting` skill's `safety_bypass` detection for full loop (prevent → detect → learn).
+
+### Git Safety (Global)
+
+```yaml
+# .claude/rules/git-safety.md
+---
+# Global — always active
+---
+
+# Git Safety
+
+- `git push --force` / `--force-with-lease` to any remote branch: require explicit user confirmation. State exact command and target; wait for approval.
+- Never `git push --force` to main/master under any circumstance.
+- Never use `--no-verify`, `--no-gpg-sign`, `-c commit.gpgsign=false` unless user explicitly requests.
+- Never `git reset --hard`, `git checkout .`, `git restore .`, `git clean -f`, `git branch -D` without user confirmation.
+- Before staging untracked files, verify `.gitignore` excludes local tooling dirs. Stage specific files by name; never `git add .` or `git add -A`.
+- Investigate unfamiliar files/branches before deleting — they may be user in-progress work.
+```
+
+### Deployment Safety (Global)
+
+```yaml
+# .claude/rules/deploy-safety.md
+---
+# Global
+---
+
+# Deploy Safety
+
+- Never `rsync --delete` without verifying exclusion of runtime files (.env, state files, tokens).
+- Run project test suite before any deploy. No untested deploys.
+- Ansible: always `--check` (dry-run) on production targets first.
+- Verify target directory exists and is non-empty before destructive sync.
+```
+
+### Destructive Command Confirmation (Global)
+
+```yaml
+# .claude/rules/destructive-ops.md
+---
+# Global
+---
+
+# Destructive Operations
+
+- `rm -rf`, `DROP TABLE`, dropping databases, overwriting uncommitted changes: require explicit confirmation naming exact target.
+- Do not delete or edit tests to make them pass. Fix implementation instead. If tests are wrong, surface the discrepancy.
+- Do not use destructive actions as shortcuts around obstacles. Investigate root cause first.
+- Hooks/validators failing is a signal — do not bypass with `--no-verify`. Fix the underlying issue.
+```
+
+**When to scope these rules:** Most safety rules should be **global** (always active). Path-scoping defeats the purpose — destructive commands need catching regardless of which file the agent is editing. Scope only if a specific subsystem has different risk profile (e.g. migration scripts with reversibility requirements).
+
+**Law vs rule:** If a safety constraint is absolute and project-specific (e.g. "never force push to this monorepo's main"), consider promoting to a CLAUDE.md Law for self-reinforcement.

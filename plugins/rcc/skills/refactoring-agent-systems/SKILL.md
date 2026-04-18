@@ -95,7 +95,7 @@ Announce: "Created 6 tasks. Starting execution..."
 | CLAUDE.md too long | Move content to rules/skills | Main conversation edits |
 | Skill missing asset | Add scripts/, templates/, or references/ | Create directly — no user confirmation needed |
 
-**CRITICAL:** All edits happen in main conversation. Never delegate refactoring writes to subagents.
+**Important:** All edits happen in main conversation. Never delegate refactoring writes to subagents.
 
 **For each refactoring action:**
 1. Identify the specific change
@@ -124,7 +124,7 @@ Announce: "Created 6 tasks. Starting execution..."
 
 **Goal:** Document what was changed and why.
 
-**Write to:** `docs/agent-system/{timestamp}-refactoring-report.md`
+**Write to:** `.rcc/{timestamp}-refactoring-report.md`
 
 **Report format:**
 
@@ -159,22 +159,22 @@ Announce: "Created 6 tasks. Starting execution..."
 **Goal:** Move all pipeline documents from the current run to the archive.
 
 **Steps:**
-1. Create archive directory: `docs/agent-system/archive/{YYYY-MM-DD}/`
-2. Move ALL `*.md` files from `docs/agent-system/` to the archive directory (excluding the `archive/` directory itself)
+1. Create archive directory: `.rcc/archive/{YYYY-MM-DD}/`
+2. Move ALL `*.md` files from `.rcc/` to the archive directory (excluding the `archive/` directory itself)
 3. Commit the archive move
 
 ```bash
-mkdir -p docs/agent-system/archive/{YYYY-MM-DD}
-mv docs/agent-system/*.md docs/agent-system/archive/{YYYY-MM-DD}/
-git add docs/agent-system/
+mkdir -p .rcc/archive/{YYYY-MM-DD}
+mv .rcc/*.md .rcc/archive/{YYYY-MM-DD}/
+git add .rcc/
 git commit -m "chore: archive pipeline documents from {YYYY-MM-DD}"
 ```
 
 **Replace `{YYYY-MM-DD}` with today's actual date.**
 
-**If no documents exist in `docs/agent-system/`:** Skip this task (nothing to archive).
+**If no documents exist in `.rcc/`:** Skip this task (nothing to archive).
 
-**Verification:** `docs/agent-system/` contains only the `archive/` directory. All pipeline documents are in the dated archive subdirectory.
+**Verification:** `.rcc/` contains only the `archive/` directory. All pipeline documents are in the dated archive subdirectory.
 
 ## Red Flags - STOP
 

@@ -173,7 +173,7 @@ Use `MUST`/`NEVER`/`IMPORTANT` sparingly — if everything is critical, nothing 
 **Checklist:**
 - [ ] < 200 lines total
 - [ ] Every instruction is specific and verifiable
-- [ ] No content duplicated in `.claude/rules/`
+- [ ] No content duplicated in `.claude/rules/` (rules are auto-loaded into context — do NOT Read or Grep rule files; compare against auto-loaded rule content already in context)
 - [ ] No multi-step workflows (belongs in skills)
 - [ ] No linter-enforceable rules (use hooks instead)
 - [ ] Referenced paths actually exist

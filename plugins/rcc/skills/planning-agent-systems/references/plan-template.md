@@ -1,6 +1,6 @@
 # Component Plan Template
 
-Write the plan to `docs/agent-system/{timestamp}-plan.md` using this format:
+Write the plan to `.rcc/{timestamp}-plan.md` using this format:
 
 ```markdown
 # Agent System Component Plan

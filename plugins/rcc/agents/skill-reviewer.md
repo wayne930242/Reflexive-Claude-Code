@@ -44,7 +44,8 @@ You are an expert skill architect reviewing Claude Code skills for quality and e
    - Reusable file skeletons in templates/
 
 7. **Check for Overlap and Consolidation**
-   - Grep key terms from this skill across other skills, rules, and CLAUDE.md
+   - Grep key terms from this skill across other skills and CLAUDE.md
+   - Do NOT Grep or Read rule files — rules are auto-loaded into context; compare against what is already present in context
    - Flag if another skill covers the same workflow or trigger conditions
    - Flag if skill content duplicates a rule or CLAUDE.md law
    - If overlap found, recommend merging into existing component or splitting responsibilities
