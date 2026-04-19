@@ -60,7 +60,7 @@ def check_plugin_validate(plugin_dir: Path) -> list[str]:
             ["claude", "plugin", "validate", str(plugin_dir)],
             capture_output=True, text=True, timeout=30
         )
-        output = (result.stdout + result.stderr).strip()
+        output = ((result.stdout or "") + (result.stderr or "")).strip()
         if result.returncode != 0 and output:
             return [f"plugin validate: {line}" for line in output.splitlines() if line.strip()]
     except FileNotFoundError:
