@@ -1,5 +1,21 @@
 # Changelog
 
+## [11.1.0](https://github.com/wayne930242/Reflexive-Claude-Code/compare/v11.0.0...v11.1.0) (2026-04-20)
+
+
+### Features
+
+* **aref:** register aref in marketplace ([b33b073](https://github.com/wayne930242/Reflexive-Claude-Code/commit/b33b07391039709b661ae7010eb1111bc50eb31a))
+
+
+### Bug Fixes
+
+* correct plugin install commands in aref + creating-plugins docs ([43e4e4f](https://github.com/wayne930242/Reflexive-Claude-Code/commit/43e4e4f7eaf011a713b53a3d4c1e6c90ee0d42fb))
+* **rcc:** escape literal triple-backtick-bang in creating-plugins SKILL ([4d77086](https://github.com/wayne930242/Reflexive-Claude-Code/commit/4d770866e998e4a3b230a7d33e59e7bcfbf7522b))
+* **release:** drop cross-package paths from aref release-please config ([575d76b](https://github.com/wayne930242/Reflexive-Claude-Code/commit/575d76b09e5857503eda76c06d653a77d78cb94f))
+* **release:** exclude plugins/aref from rcc package path filter ([1e162bc](https://github.com/wayne930242/Reflexive-Claude-Code/commit/1e162bc119819b22b65d6a18432ae7160c6e16d7))
+* **release:** remove aref release-please markers from READMEs ([c783bff](https://github.com/wayne930242/Reflexive-Claude-Code/commit/c783bffe8a2c8677ba5a0eee7ee1989da0d8cc8a))
+
 ## [11.0.0](https://github.com/wayne930242/Reflexive-Claude-Code/compare/v10.11.0...v11.0.0) (2026-04-18)
 
 
