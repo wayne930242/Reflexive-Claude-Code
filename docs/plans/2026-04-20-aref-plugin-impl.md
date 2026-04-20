@@ -142,7 +142,8 @@ Version: 0.1.0
 ## Installation
 
 ```bash
-claude plugin add wayne930242/Reflexive-Claude-Code
+claude plugin marketplace add wayne930242/Reflexive-Claude-Code
+claude plugin install aref@rcc
 ```
 
 ## Usage
@@ -2906,7 +2907,7 @@ Manual E2E checklist. Each fixture is an intentionally broken project; running `
 
 ## Prerequisites
 
-- Claude Code with aref plugin installed locally (`claude plugin add ./plugins/aref`)
+- Claude Code with aref plugin installed locally (`claude plugin marketplace add /path/to/Reflexive-Claude-Code && claude plugin install aref@rcc`)
 - All required toolchains installed for the language under test (see language reference)
 
 ## Procedure per Fixture
@@ -3223,10 +3224,11 @@ git commit -m "docs(aref): reference aref in project CLAUDE.md"
 - [ ] **Step 1: Install plugin locally**
 
 ```bash
-claude plugin add ./plugins/aref
+claude plugin marketplace add /Users/weihung/projects/reflexive-claude-code
+claude plugin install aref@rcc
 ```
 
-Expected: install confirmation, no errors.
+Expected: marketplace add confirmation, install confirmation, no errors. The marketplace name is `rcc` (defined in `.claude-plugin/marketplace.json`), so the plugin selector is `aref@rcc`.
 
 - [ ] **Step 2: List installed plugins**
 
@@ -3256,7 +3258,8 @@ Type `/aref` — command should appear in autocomplete or execute and invoke ana
 - [ ] **Step 5: Clean up**
 
 ```bash
-claude plugin remove aref
+claude plugin uninstall aref
+claude plugin marketplace remove rcc   # only if you do not want the marketplace registered
 ```
 
 - [ ] **Step 6: Record verification in commit message**
@@ -3276,7 +3279,8 @@ git commit --allow-empty -m "test(aref): verify local plugin install and skill d
 - [ ] **Step 1: Reinstall plugin**
 
 ```bash
-claude plugin add ./plugins/aref
+claude plugin marketplace add /Users/weihung/projects/reflexive-claude-code   # skip if already added
+claude plugin install aref@rcc
 ```
 
 - [ ] **Step 2: Run on TypeScript fixture**
@@ -3315,7 +3319,7 @@ Expected: lists `cyclic-a` ↔ `cyclic-b`.
 ```bash
 cd -  # back to repo root
 rm -rf plugins/aref/fixtures/typescript/.rcc plugins/aref/fixtures/typescript/node_modules
-claude plugin remove aref
+claude plugin uninstall aref
 ```
 
 - [ ] **Step 6: Record smoke-test milestone**

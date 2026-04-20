@@ -9,8 +9,11 @@ Version: 0.1.0
 ## Installation
 
 ```bash
-claude plugin add wayne930242/Reflexive-Claude-Code
+claude plugin marketplace add wayne930242/Reflexive-Claude-Code
+claude plugin install aref@rcc
 ```
+
+The marketplace name is `rcc` (defined in `.claude-plugin/marketplace.json`); `aref@rcc` selects this plugin from that marketplace.
 
 ## Usage
 

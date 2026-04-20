@@ -6,7 +6,11 @@ This is the self-test for aref development.
 
 ## Prerequisites
 
-- Claude Code with aref plugin installed locally (`claude plugin add ./plugins/aref`)
+- Claude Code with aref plugin installed locally:
+  ```bash
+  claude plugin marketplace add /path/to/Reflexive-Claude-Code   # local repo path
+  claude plugin install aref@rcc
+  ```
 - All required toolchains installed for the language under test (see language reference)
 
 ## Procedure per Fixture

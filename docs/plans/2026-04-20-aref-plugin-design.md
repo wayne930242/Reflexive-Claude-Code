@@ -328,7 +328,7 @@ Plugin 不釘工具版本。README 記最低相容版號（e.g. `dependency-crui
 
 ### Plugin install 測
 
-- 本地 `claude plugin add ./plugins/aref`，驗 6 skill 可 discover、`/aref` 命令存在、4 個 fixture 各自 analyzing 成功產出 map。
+- 本地 `claude plugin marketplace add <repo-path>` + `claude plugin install aref@rcc`，驗 6 skill 可 discover、`/aref` 命令存在、4 個 fixture 各自 analyzing 成功產出 map。
 
 ### Release automation 驗
 
@@ -356,5 +356,5 @@ V1 release 前必須達成：
 2. 4 個語言 fixture 各能跑完 `/aref` 全 pipeline，產出完整 artifact 集。
 3. 所有 checkpoint 機制經手測觸發過（繼續 / 回頭 / 中止 / rollback 各一次）。
 4. Release automation 能 bump aref 版號不影響 rcc 版號。
-5. Plugin install 測通過（遠端 `claude plugin add` 從 marketplace）。
+5. Plugin install 測通過（遠端 `claude plugin marketplace add` + `claude plugin install aref@rcc` 從 marketplace）。
 6. README（中英版）含安裝、使用範例、工具相容版號表。

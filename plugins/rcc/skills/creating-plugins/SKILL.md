@@ -168,7 +168,12 @@ Do not write SKILL.md directly. The writing-skills skill ensures:
 
 **Goal:** Verify the plugin installs and works correctly.
 
-Install locally (`claude plugin add <path>`), verify skills are discoverable and load correctly, then clean up (`claude plugin remove <name>`).
+Install locally:
+```
+claude plugin marketplace add <repo-path-or-url>
+claude plugin install <plugin-name>@<marketplace-name>
+```
+Verify skills are discoverable and load correctly. Clean up: `claude plugin uninstall <plugin-name>` (or `remove`). Note: there is no `claude plugin add` command; the install flow is two-step (marketplace then plugin).
 
 **Verification:** Plugin installs without errors, skills are discoverable and load correctly.
 

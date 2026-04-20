@@ -141,7 +141,8 @@ One-line description.
 ## Installation
 
 \`\`\`bash
-claude plugin add <path-or-url>
+claude plugin marketplace add <path-or-url>
+claude plugin install <plugin-name>@<marketplace-name>
 \`\`\`
 
 ## Skills
