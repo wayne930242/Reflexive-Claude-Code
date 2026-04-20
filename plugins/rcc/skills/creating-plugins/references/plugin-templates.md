@@ -98,6 +98,39 @@ Tag each README line that holds a version with an HTML comment:
 
 The `generic` updater rewrites the version on lines carrying this marker.
 
+## Shell Injection Syntax (in SKILL.md)
+
+Skills can inject live shell output as preprocessing. The harness scans SKILL.md, executes the shell command, and substitutes stdout before Claude sees the file.
+
+**Inline form** — single backticks prefixed with `!`:
+
+```
+!`git status`
+```
+
+CWD is the user's project directory.
+
+**Plugin-internal file form** — same inline syntax, useful for bundled context files:
+
+```
+!`cat "${CLAUDE_SKILL_DIR}/references/context.md"`
+```
+
+**Multi-line block form** — fenced code block with `!` immediately after the opening backticks:
+
+````
+```!
+git log --oneline -5
+git status --short
+```
+````
+
+The runner executes the entire block as one shell script.
+
+**WARNING:** Do NOT use the literal multi-line form anywhere in a SKILL.md (even inside example code blocks). The preprocessor scans the raw file and will try to execute it. To document the syntax, use a four-backtick wrapper as shown above, or describe it in prose.
+
+**PowerShell:** set `shell: powershell` in skill frontmatter AND require user env `CLAUDE_CODE_USE_POWERSHELL_TOOL=1`. Ask which shell the user runs if cross-platform support matters.
+
 ## README Template
 
 ```markdown

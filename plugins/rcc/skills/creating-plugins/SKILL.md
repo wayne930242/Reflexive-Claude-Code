@@ -108,11 +108,7 @@ Announce: "Created 7 tasks. Starting execution..."
 | `${CLAUDE_PLUGIN_ROOT}` | Plugin install directory (changes on update — do not write here) |
 | `${CLAUDE_PLUGIN_DATA}` | Persistent data directory that survives updates (`~/.claude/plugins/data/{id}/`) |
 
-Skills can also inject live data using shell commands (execute as preprocessing before Claude sees content):
-- Inline: `` !`git status` `` — workspace operations (CWD = user's project)
-- Plugin-internal files: `` !`cat "${CLAUDE_SKILL_DIR}/references/context.md"` ``
-- Multi-line: `` ```! `` code block
-- PowerShell: set `shell: powershell` in frontmatter AND user must set `CLAUDE_CODE_USE_POWERSHELL_TOOL=1`. Ask the user which shell they use if the plugin needs cross-platform support.
+Skills can also inject live data using shell commands (execute as preprocessing before Claude sees content). See [references/plugin-templates.md](references/plugin-templates.md) for exact shell-injection syntax (inline form, plugin-internal file form, multi-line fenced form, and PowerShell setup).
 
 **If the plugin includes scripts or hooks:** Read [cross-platform-scripts.md](../../references/cross-platform-scripts.md) for mandatory cross-platform rules (paths, shell commands, line endings).
 
