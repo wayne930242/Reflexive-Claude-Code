@@ -2019,7 +2019,7 @@ git commit -m "feat(aref): add finalizing-refactors skill"
 ---
 name: refactor-phase-reviewer
 description: Reviews a single refactor phase diff before commit. Called by applying-refactors at each phase checkpoint. Enforces 400 LOC cap, phase-type discipline, and that the diff matches the plan.
-tools: Read, Grep, Glob, Bash
+tools: ["Read", "Grep", "Glob", "Bash"]
 model: sonnet
 ---
 
