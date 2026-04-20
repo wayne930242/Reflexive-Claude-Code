@@ -8,11 +8,18 @@ Claude Code 插件市集，提供技能驅動的 Agentic Context Engineering 工
 **Law 1: Communication** - 使用繁體中文，簡潔回覆，不加不必要的解釋
 
 **Law 2: Version Sync** - 版本號由 release-please 依 Conventional Commits 自動同步至：
+
+rcc package：
 - `.claude-plugin/marketplace.json` (metadata.version + plugins[0].version)
 - `plugins/rcc/.claude-plugin/plugin.json`
-- `README.md` + `README.zh-TW.md` (含 `<!-- x-release-please-version -->` marker 的 rcc 標頭)
+- `README.md` + `README.zh-TW.md` 的 rcc 標頭（`<!-- x-release-please-version -->` marker）
 
-手動修改版號屬反模式。commit 使用 `feat:` / `fix:` / `feat!:` 驅動 bump。
+aref package（獨立版號）：
+- `.claude-plugin/marketplace.json` (plugins[1].version)
+- `plugins/aref/.claude-plugin/plugin.json`
+- `README.md` + `README.zh-TW.md` 的 aref 標頭（`<!-- x-release-please-version package-name="aref" -->` marker）
+
+手動修改版號屬反模式。commit 使用 `feat:` / `fix:` / `feat!:` 驅動 bump。aref-scoped commits（`feat(aref):`、`fix(aref):` 等）只 bump aref，不影響 rcc。
 
 **Law 3: Documentation Sync** - README.md 與 README.zh-TW.md 必須保持同步
 
