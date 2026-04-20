@@ -8,6 +8,7 @@
       "include-component-in-tag": false,
       "bump-minor-pre-major": true,
       "bump-patch-for-minor-pre-major": false,
+      "exclude-paths": ["plugins/aref"],
       "extra-files": [
         {
           "type": "json",
