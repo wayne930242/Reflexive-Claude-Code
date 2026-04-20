@@ -4,12 +4,12 @@ Used when no supported manifest is detected. Provides minimum viable analysis.
 
 ## Tools
 
-| Tool | Purpose | Install |
-|------|---------|---------|
-| jscpd | Duplication | `npm i -g jscpd` |
-| semgrep | Semantic patterns (auto config includes many langs) | `pip install semgrep` |
-| `find` + `wc -l` | Line counts | POSIX |
-| `tree` | Directory shape | `brew install tree` or `apt install tree` |
+| Tool | Purpose | Install | Invocation |
+|------|---------|---------|------------|
+| jscpd | Duplication | `npm i -g jscpd` | `jscpd --reporters json -o <out-dir> .` |
+| semgrep | Semantic patterns (auto config includes many langs) | `pip install semgrep` | `semgrep --config auto --json .` |
+| `find` + `wc -l` | Line counts | POSIX | `find . -type f -print \| xargs wc -l \| sort -rn \| head -50` |
+| `tree` | Directory shape | `brew install tree` or `apt install tree` | `tree -L 3 -I 'node_modules\|venv\|.git'` |
 
 ## Procedure
 

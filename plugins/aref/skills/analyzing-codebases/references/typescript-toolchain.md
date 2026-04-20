@@ -7,7 +7,7 @@
 | dependency-cruiser | Dep graph + cycles | `npm i -D dependency-cruiser` | `npx depcruise --output-type json src` |
 | madge | Alt dep graph | `npm i -D madge` | `npx madge --json src` |
 | jscpd | Duplication | `npm i -D jscpd` | `npx jscpd --reporters json -o .rcc/aref-raw src` |
-| eslint-plugin-sonarjs | Cognitive complexity | `npm i -D eslint-plugin-sonarjs` | via eslint with `sonarjs/cognitive-complexity` rule |
+| eslint-plugin-sonarjs | Cognitive complexity | `npm i -D eslint-plugin-sonarjs` | `npx eslint --rule 'sonarjs/cognitive-complexity: error' --format json src` (requires the plugin loaded in `eslint.config.js` / `.eslintrc`) |
 | semgrep | Semantic patterns | `pip install semgrep` | `semgrep --config auto --json src` |
 | tsc | Type errors | ships with TypeScript | `npx tsc --noEmit` |
 

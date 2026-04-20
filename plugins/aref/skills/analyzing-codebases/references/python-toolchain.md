@@ -4,9 +4,9 @@
 
 | Tool | Purpose | Install | Invocation |
 |------|---------|---------|------------|
-| pydeps | Dep graph | `pip install pydeps` | `pydeps --show-deps --no-output src` |
+| pydeps | Dep graph | `pip install pydeps` | `pydeps <package_name> --show-deps --no-output` (use the importable module name from `pyproject.toml` `[project].name`, **not** a directory path like `src/`) |
 | radon | Cyclomatic + maintainability | `pip install radon` | `radon cc src -j` / `radon mi src -j` |
-| lizard | Cognitive complexity | `pip install lizard` | `lizard src -X` |
+| lizard | Complexity (cyclomatic + token count) | `pip install lizard` | `lizard src --csv > <output>.csv` (no JSON mode; `-X` produces XML, `--csv` is the parseable option) |
 | jscpd | Duplication | `npm i -g jscpd` | `jscpd --reporters json src` |
 | semgrep | Semantic patterns | `pip install semgrep` | `semgrep --config auto --json src` |
 | ruff | Linter | `pip install ruff` | `ruff check src --output-format json` |
@@ -22,7 +22,10 @@
 
 ## Output Locations
 
-`.rcc/aref-raw/{ts}-py-<tool>.json`.
+`.rcc/aref-raw/{ts}-py-<tool>.<ext>` per tool's native format:
+- `radon`, `ruff`, `mypy`, `jscpd`, `semgrep` → `.json`
+- `lizard` → `.csv`
+- `pydeps` → `.txt`
 
 ## Notes
 

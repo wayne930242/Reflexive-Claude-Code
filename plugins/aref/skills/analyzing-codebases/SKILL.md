@@ -65,7 +65,7 @@ Missing tools → print install command from the reference; ask user to install-
 
 ## Task 4: Run toolchain
 
-Execute the tools per reference instructions. Save raw outputs to `.rcc/aref-raw/{ts}-{lang}-{tool}.txt`. `{ts}` = `YYYYMMDD-HHMMSS`, fixed for the run.
+Execute the tools per reference instructions. Save raw outputs to `.rcc/aref-raw/{ts}-{lang}-{tool}.<ext>` where `<ext>` matches each tool's native output format (see Output Locations in each reference doc — `.json`, `.csv`, `.txt`, `.dot` etc.). `{ts}` = `YYYYMMDD-HHMMSS`, fixed for the run.
 
 ## Task 5: Compute hotspots
 
