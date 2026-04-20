@@ -41,13 +41,22 @@ Claude Code 插件市集，提供技能驅動的 Agentic Context Engineering 工
 └── archive/
 
 plugins/
-└── rcc/                    # 核心 ACE 插件
-    ├── .claude-plugin/
-    │   └── plugin.json     # 插件 manifest
-    ├── skills/             # 所有技能
-    ├── agents/             # 審查員子代理
-    └── commands/           # 命令別名
+├── rcc/                    # 核心 ACE 插件
+│   ├── .claude-plugin/
+│   │   └── plugin.json     # 插件 manifest
+│   ├── skills/             # 所有技能
+│   ├── agents/             # 審查員子代理
+│   └── commands/           # 命令別名
+└── aref/                   # 對既有專案做 agent-friendly 重構
+    ├── .claude-plugin/plugin.json
+    ├── skills/             # 6-skill pipeline
+    ├── agents/refactor-phase-reviewer.md
+    ├── commands/aref.md
+    ├── fixtures/           # 自測用 4 語言迷你專案
+    └── tests/run-fixtures.md
 ```
+
+`aref` 是與 `rcc` 並存的獨立 plugin，專注於對既有 codebase 進行 agent-friendly 重構。版號獨立管理。
 
 Skill 產出寫入 `.rcc/`（不再用 `docs/agent-system/`）。`config.yml` 記錄不會自動回收的決策（release automation、settings_scope、model 指派）。
 
