@@ -44,21 +44,8 @@
       "extra-files": [
         {
           "type": "json",
-          "path": "../../.claude-plugin/marketplace.json",
-          "jsonpath": "$.plugins[1].version"
-        },
-        {
-          "type": "json",
           "path": ".claude-plugin/plugin.json",
           "jsonpath": "$.version"
-        },
-        {
-          "type": "generic",
-          "path": "../../README.md"
-        },
-        {
-          "type": "generic",
-          "path": "../../README.zh-TW.md"
         }
       ]
     }
