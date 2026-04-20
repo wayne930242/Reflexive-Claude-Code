@@ -1,0 +1,15 @@
+{
+  "name": "aref-fixture-typescript",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Intentionally broken TS project for aref self-testing",
+  "type": "module",
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0",
+    "vitest": "^1.6.0"
+  }
+}
