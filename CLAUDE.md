@@ -16,10 +16,10 @@ rcc package：
 
 aref package（獨立版號）：
 - `plugins/aref/.claude-plugin/plugin.json`（release-please 自動）
-- `.claude-plugin/marketplace.json` (plugins[1].version)（**目前手動同步** — release-please 不允許 `..` 跨 package 路徑，待後續加 post-release sync workflow）
-- `README.md` + `README.zh-TW.md` 的 aref 標頭（`<!-- x-release-please-version package-name="aref" -->` marker）（**目前手動同步**，理由同上）
+- `.claude-plugin/marketplace.json` (plugins[1].version)（**目前手動同步** — release-please 不允許 `..` 跨 package 路徑）
+- `README.md` + `README.zh-TW.md` 的 aref 標頭（**目前手動同步** — release-please `generic` updater 不支援 `package-name` scope，markers 已移除避免 rcc release 誤覆寫）
 
-手動修改版號屬反模式（除上述 aref 跨 package 例外，待自動化）。commit 使用 `feat:` / `fix:` / `feat!:` 驅動 bump。aref-scoped commits（`feat(aref):`、`fix(aref):` 等）只 bump aref，不影響 rcc。
+手動修改版號屬反模式（除上述 aref 跨 package 例外，待 post-release sync workflow 自動化）。commit 使用 `feat:` / `fix:` / `feat!:` 驅動 bump。aref-scoped commits（`feat(aref):`、`fix(aref):` 等）只 bump aref，不影響 rcc。
 
 **Law 3: Documentation Sync** - README.md 與 README.zh-TW.md 必須保持同步
 

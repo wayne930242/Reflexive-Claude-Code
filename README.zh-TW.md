@@ -156,7 +156,9 @@ migrate-plugin → validate → refactor
 | `refactoring-plugins` | 依官方最佳實踐檢查插件健康度 |
 | `validating-plugins` | 批次掃描所有插件檔案錯誤 |
 
-### aref (v0.2.0) <!-- x-release-please-version package-name="aref" -->
+### aref (v0.2.0)
+<!-- aref 版號由 plugins/aref/.claude-plugin/plugin.json 手動同步 — release-please 無法 scope generic marker per package -->
+
 
 Agent 導向重構 pipeline。偵測語言、分析熱點、提出分階段重構計畫、為熱點模組補 characterization 測試、在獨立分支上逐階段套用重構並每階段由 reviewer 子代理把關、依硬性結構規則與 mutation testing 驗證，最後為每個子專案產出 AGENTS.md 供後續 AI coding agent 使用。
 

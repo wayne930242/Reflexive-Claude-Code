@@ -156,7 +156,9 @@ The planner decides which assets each skill needs; the reviewer checks they exis
 | `refactoring-plugins` | Health-check plugins against official best practices |
 | `validating-plugins` | Batch scan all plugin files for errors |
 
-### aref (v0.2.0) <!-- x-release-please-version package-name="aref" -->
+### aref (v0.2.0)
+<!-- aref version is manually synced from plugins/aref/.claude-plugin/plugin.json — release-please cannot scope generic markers per package -->
+
 
 Agentic refactoring pipeline. Detects languages, analyzes hotspots, proposes phased refactor plans, scaffolds characterization tests, applies refactors on a dedicated branch with per-phase review, verifies against hard structural rules and mutation testing, then writes AGENTS.md per subproject for future AI coding agents.
 
