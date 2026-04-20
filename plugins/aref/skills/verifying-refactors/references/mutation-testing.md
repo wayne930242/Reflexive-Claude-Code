@@ -5,9 +5,11 @@ Scope: modules TOUCHED by the current refactor run only. Global mutation is out 
 ## Deriving Touched Modules
 
 ```
-git diff --name-only <branch_name>...$(git merge-base <branch_name> main) | \
+git diff --name-only $(git merge-base <branch_name> main)..<branch_name> | \
   xargs -I{} dirname {} | sort -u
 ```
+
+(`A..B` = commits/files in B not in A. The earlier `A...B` form was reversed and produced an empty set.)
 
 Each directory = one touched module. Run mutation tool per module.
 

@@ -69,6 +69,8 @@ Examples:
 
 - Last aref run: `<ts>`, branch `<branch>`
 - See `.rcc/archive/<ts>-aref-run/` for details
+
+<!-- aref:end -->
 ```
 
 ## Section Preservation

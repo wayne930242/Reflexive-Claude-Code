@@ -65,6 +65,7 @@ Run the phase's `verification.command`. Non-zero exit → stop; do not commit; d
 Invoke `refactor-phase-reviewer` agent with:
 - Phase N metadata from plan
 - Diff of unstaged changes (`git diff`)
+- `test_result`: stdout + exit code from the verification command (Check 4 of the reviewer requires this)
 
 Reviewer returns `APPROVED` or `CHANGES_REQUESTED`.
 

@@ -1,6 +1,6 @@
 ---
 name: verifying-refactors
-description: Validates hard structural rules (no cycles, file/fn line caps, cognitive/cyclomatic complexity) and runs mutation testing on touched modules. Use after applying-refactors completes all phases.
+description: Validates hard structural rules (no cycles, file/fn line caps, cognitive/cyclomatic complexity) and runs mutation testing on touched modules. Use when applying-refactors has completed all phases on the refactor branch.
 ---
 
 # Verifying Refactors
