@@ -1,7 +1,7 @@
 {
   "name": "aref",
   "description": "Agentic refactoring pipeline — restructures codebases toward AI-agent-friendly architecture with characterization tests and mutation verification",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": {
     "name": "Wei Hung",
     "email": "wayne930242@gmail.com"
