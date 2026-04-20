@@ -1,5 +1,6 @@
 {
   "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
+  "separate-pull-requests": true,
   "packages": {
     ".": {
       "release-type": "simple",
@@ -30,6 +31,34 @@
         {
           "type": "generic",
           "path": "README.zh-TW.md"
+        }
+      ]
+    },
+    "plugins/aref": {
+      "release-type": "simple",
+      "package-name": "aref",
+      "component": "aref",
+      "include-component-in-tag": true,
+      "bump-minor-pre-major": true,
+      "bump-patch-for-minor-pre-major": false,
+      "extra-files": [
+        {
+          "type": "json",
+          "path": "../../.claude-plugin/marketplace.json",
+          "jsonpath": "$.plugins[1].version"
+        },
+        {
+          "type": "json",
+          "path": ".claude-plugin/plugin.json",
+          "jsonpath": "$.version"
+        },
+        {
+          "type": "generic",
+          "path": "../../README.md"
+        },
+        {
+          "type": "generic",
+          "path": "../../README.zh-TW.md"
         }
       ]
     }
