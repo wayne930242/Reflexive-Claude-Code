@@ -14,6 +14,12 @@
       "source": "./plugins/rcc",
       "description": "Core ACE workflow with structured skills, task enforcement, and quality reviewers",
       "version": "11.0.0"
+    },
+    {
+      "name": "aref",
+      "source": "./plugins/aref",
+      "description": "Agentic refactoring pipeline — restructures codebases toward AI-agent-friendly architecture",
+      "version": "0.1.0"
     }
   ]
 }
