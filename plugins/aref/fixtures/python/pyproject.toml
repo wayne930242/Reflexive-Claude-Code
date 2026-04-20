@@ -1,0 +1,11 @@
+[project]
+name = "aref-fixture-python"
+version = "0.0.0"
+description = "Intentionally broken Python project for aref self-testing"
+requires-python = ">=3.10"
+
+[tool.ruff]
+line-length = 100
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
