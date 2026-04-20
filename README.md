@@ -20,8 +20,11 @@ Reflexive Claude Code gives Claude Code a complete toolkit for managing its own 
 
 ```bash
 /plugin marketplace add wayne930242/Reflexive-Claude-Code
-/plugin install rcc@rcc
+/plugin install rcc@rcc          # core ACE workflow
+/plugin install aref@rcc         # agentic refactoring pipeline (optional, independent)
 ```
+
+Both plugins live in the same marketplace. Install whichever you need; they coexist and are independently versioned.
 
 ## How It Works
 
