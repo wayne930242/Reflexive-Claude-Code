@@ -1,0 +1,19 @@
+{
+  "name": "aref",
+  "description": "Agentic refactoring pipeline — restructures codebases toward AI-agent-friendly architecture with characterization tests and mutation verification",
+  "version": "0.1.0",
+  "author": {
+    "name": "Wei Hung",
+    "email": "wayne930242@gmail.com"
+  },
+  "repository": "https://github.com/wayne930242/Reflexive-Claude-Code",
+  "license": "MIT",
+  "keywords": [
+    "claude-code",
+    "plugin",
+    "refactoring",
+    "ai-agent-friendly",
+    "characterization-tests",
+    "mutation-testing"
+  ]
+}
