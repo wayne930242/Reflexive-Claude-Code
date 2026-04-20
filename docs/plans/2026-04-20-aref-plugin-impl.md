@@ -371,7 +371,7 @@ Missing tools → print install command from the reference; ask user to install-
 
 ## Task 4: Run toolchain
 
-Execute the tools per reference instructions. Save raw outputs to `.rcc/aref-raw/{ts}-{lang}-{tool}.txt`. `{ts}` = `YYYYMMDD-HHMMSS`, fixed for the run.
+Execute the tools per reference instructions. Save raw outputs to `.rcc/aref-raw/{ts}-{lang}-{tool}.<ext>` where `<ext>` matches each tool's native output format (see Output Locations in each reference doc — `.json`, `.csv`, `.txt`, `.dot` etc.). `{ts}` = `YYYYMMDD-HHMMSS`, fixed for the run.
 
 ## Task 5: Compute hotspots
 
@@ -453,7 +453,7 @@ Required tools with install commands and invocation:
 | dependency-cruiser | Dep graph + cycles | `npm i -D dependency-cruiser` | `npx depcruise --output-type json src` |
 | madge | Alt dep graph | `npm i -D madge` | `npx madge --json src` |
 | jscpd | Duplication | `npm i -D jscpd` | `npx jscpd --reporters json -o .rcc/aref-raw src` |
-| eslint-plugin-sonarjs | Cognitive complexity | `npm i -D eslint-plugin-sonarjs` | via eslint with `sonarjs/cognitive-complexity` rule |
+| eslint-plugin-sonarjs | Cognitive complexity | `npm i -D eslint-plugin-sonarjs` | `npx eslint --rule 'sonarjs/cognitive-complexity: error' --format json src` (requires the plugin loaded in `eslint.config.js` / `.eslintrc`) |
 | semgrep | Semantic patterns | `pip install semgrep` | `semgrep --config auto --json src` |
 | tsc | Type errors | ships with TypeScript | `npx tsc --noEmit` |
 
@@ -466,7 +466,7 @@ Required tools with install commands and invocation:
 
 ## Output Locations
 
-All raw outputs go to `.rcc/aref-raw/{ts}-ts-<tool>.json`.
+All raw outputs go to `.rcc/aref-raw/{ts}-ts-<tool>.json` (all TS tools above produce JSON natively).
 
 ## Notes
 
@@ -484,9 +484,9 @@ All raw outputs go to `.rcc/aref-raw/{ts}-ts-<tool>.json`.
 
 | Tool | Purpose | Install | Invocation |
 |------|---------|---------|------------|
-| pydeps | Dep graph | `pip install pydeps` | `pydeps --show-deps --no-output src` |
+| pydeps | Dep graph | `pip install pydeps` | `pydeps <package_name> --show-deps --no-output` (use the importable module name from `pyproject.toml` `[project].name`, **not** a directory path like `src/`) |
 | radon | Cyclomatic + maintainability | `pip install radon` | `radon cc src -j` / `radon mi src -j` |
-| lizard | Cognitive complexity | `pip install lizard` | `lizard src -X` |
+| lizard | Complexity (cyclomatic + token count) | `pip install lizard` | `lizard src --csv > <output>.csv` (no JSON mode; `-X` produces XML, `--csv` is the parseable option) |
 | jscpd | Duplication | `npm i -g jscpd` | `jscpd --reporters json src` |
 | semgrep | Semantic patterns | `pip install semgrep` | `semgrep --config auto --json src` |
 | ruff | Linter | `pip install ruff` | `ruff check src --output-format json` |
@@ -502,7 +502,10 @@ All raw outputs go to `.rcc/aref-raw/{ts}-ts-<tool>.json`.
 
 ## Output Locations
 
-`.rcc/aref-raw/{ts}-py-<tool>.json`.
+`.rcc/aref-raw/{ts}-py-<tool>.<ext>` per tool's native format:
+- `radon`, `ruff`, `mypy`, `jscpd`, `semgrep` → `.json`
+- `lizard` → `.csv`
+- `pydeps` → `.txt`
 
 ## Notes
 
@@ -550,8 +553,8 @@ All raw outputs go to `.rcc/aref-raw/{ts}-ts-<tool>.json`.
 
 | Tool | Purpose | Install | Invocation |
 |------|---------|---------|------------|
-| go-callvis | Call graph | `go install github.com/ondrajz/go-callvis@latest` | `go-callvis -format json ./...` |
-| gocyclo | Cyclomatic | `go install github.com/fzipp/gocyclo/cmd/gocyclo@latest` | `gocyclo -json .` |
+| go-callvis | Call graph | `go install github.com/ofabry/go-callvis@latest` | `go-callvis -format dot ./... > <output>.dot` (no JSON; use `dot` and parse text or convert via graphviz) |
+| gocyclo | Cyclomatic | `go install github.com/fzipp/gocyclo/cmd/gocyclo@latest` | `gocyclo -over 0 .` (text output: `<complexity> <package> <function> <file:line:col>`) |
 | gocognit | Cognitive complexity | `go install github.com/uudashr/gocognit/cmd/gocognit@latest` | `gocognit -json .` |
 | staticcheck | Linter | `go install honnef.co/go/tools/cmd/staticcheck@latest` | `staticcheck -f json ./...` |
 | jscpd | Duplication | `npm i -g jscpd` | `jscpd --reporters json .` |
@@ -563,7 +566,10 @@ All raw outputs go to `.rcc/aref-raw/{ts}-ts-<tool>.json`.
 
 ## Output Locations
 
-`.rcc/aref-raw/{ts}-go-<tool>.json`.
+`.rcc/aref-raw/{ts}-go-<tool>.<ext>` per tool's native format:
+- `gocognit`, `staticcheck`, `semgrep`, `jscpd` → `.json`
+- `gocyclo` → `.txt`
+- `go-callvis` → `.dot`
 
 ## Notes
 
@@ -580,12 +586,12 @@ Used when no supported manifest is detected. Provides minimum viable analysis.
 
 ## Tools
 
-| Tool | Purpose | Install |
-|------|---------|---------|
-| jscpd | Duplication | `npm i -g jscpd` |
-| semgrep | Semantic patterns (auto config includes many langs) | `pip install semgrep` |
-| `find` + `wc -l` | Line counts | POSIX |
-| `tree` | Directory shape | `brew install tree` or `apt install tree` |
+| Tool | Purpose | Install | Invocation |
+|------|---------|---------|------------|
+| jscpd | Duplication | `npm i -g jscpd` | `jscpd --reporters json -o <out-dir> .` |
+| semgrep | Semantic patterns (auto config includes many langs) | `pip install semgrep` | `semgrep --config auto --json .` |
+| `find` + `wc -l` | Line counts | POSIX | `find . -type f -print \| xargs wc -l \| sort -rn \| head -50` |
+| `tree` | Directory shape | `brew install tree` or `apt install tree` | `tree -L 3 -I 'node_modules\|venv\|.git'` |
 
 ## Procedure
 
