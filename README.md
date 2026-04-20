@@ -156,6 +156,18 @@ The planner decides which assets each skill needs; the reviewer checks they exis
 | `refactoring-plugins` | Health-check plugins against official best practices |
 | `validating-plugins` | Batch scan all plugin files for errors |
 
+### aref (v0.1.0) <!-- x-release-please-version package-name="aref" -->
+
+Agentic refactoring pipeline. Detects languages, analyzes hotspots, proposes phased refactor plans, scaffolds characterization tests, applies refactors on a dedicated branch with per-phase review, verifies against hard structural rules and mutation testing, then writes AGENTS.md per subproject for future AI coding agents.
+
+**Entry command:** `/aref`
+
+**Pipeline:** analyzing-codebases → planning-refactors → scaffolding-characterization-tests → applying-refactors → verifying-refactors → finalizing-refactors
+
+**Supported languages:** TypeScript/JavaScript, Python, Rust, Go (deep). Other languages fall back to generic analysis.
+
+See [plugins/aref/README.md](./plugins/aref/README.md) for full details.
+
 ## Project Structure
 
 ```
