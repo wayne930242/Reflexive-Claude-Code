@@ -1,5 +1,12 @@
 # Changelog
 
+## [11.2.0](https://github.com/wayne930242/Reflexive-Claude-Code/compare/v11.1.0...v11.2.0) (2026-04-21)
+
+
+### Features
+
+* move plugin version bump docs into plugin CLAUDE.md ([d2b5758](https://github.com/wayne930242/Reflexive-Claude-Code/commit/d2b57586470dcf6d19de9c28d6a1b45119614847))
+
 ## [11.1.0](https://github.com/wayne930242/Reflexive-Claude-Code/compare/v11.0.0...v11.1.0) (2026-04-20)
 
 
