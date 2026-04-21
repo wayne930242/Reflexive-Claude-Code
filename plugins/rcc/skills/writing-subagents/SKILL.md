@@ -120,6 +120,13 @@ See [references/examples.md](references/examples.md) for subagent templates and 
 
 **Goal:** Plan the agent configuration to address the documented problems.
 
+**Before drafting the system prompt, walk through [prompt-design-principles.md](../../references/prompt-design-principles.md):**
+
+- 5-skeleton framework — the system prompt needs Role (agent's job, not persona), Scope (what this agent does and doesn't handle), Workflow (procedure for its task), Standards (output rules), Completion (what "done" means for this agent's output).
+- Failure-mode reverse engineering — anticipate what this agent could get wrong and write rules against those specific failures.
+- Conditional dispatch — if the agent handles multiple task variants, write per-variant behavior, not absolute rules.
+- Creative-constraint balance — decide what axes the agent can vary on (e.g., review phrasing) vs. must stay fixed (e.g., output YAML structure).
+
 ### Agent Location
 
 ```
@@ -312,4 +319,5 @@ digraph subagent_creation {
 
 - [references/examples.md](references/examples.md) - Subagent templates
 - [references/tools.md](references/tools.md) - Available tools reference
+- [../../references/prompt-design-principles.md](../../references/prompt-design-principles.md) - 5-skeleton framework, failure-mode reverse engineering, conditional dispatch, creative-constraint balance, completion semantics
 - See also: `advising-architecture` skill for component classification guidance

@@ -111,6 +111,12 @@ Skill tool: fetching-claude-docs
 
 **Goal:** Create specific, verifiable instructions addressing the gaps you documented.
 
+**Before writing, walk through [prompt-design-principles.md](../../references/prompt-design-principles.md):**
+
+- 5-skeleton framework — CLAUDE.md typically needs **Role** (what Claude does in this project), **Scope** (what's in/out), and **Standards** (concrete rules). Workflow and Completion usually live in skills / rules, not CLAUDE.md.
+- Failure-mode reverse engineering — every `MUST` / `NEVER` line should trace to an observed or predicted failure (documented in Task 2 RED), not an aspirational wish.
+- Conditional dispatch — avoid absolute rules that don't hold across all task variants.
+
 ### What to Include vs Exclude
 
 | Include (Claude can't guess) | Exclude (Claude already knows) |
@@ -289,4 +295,5 @@ digraph claudemd_creation {
 ## References
 
 - [references/examples.md](references/examples.md) — Complete CLAUDE.md example and good/bad instructions
+- [../../references/prompt-design-principles.md](../../references/prompt-design-principles.md) — 5-skeleton framework, failure-mode reverse engineering, conditional dispatch, completion semantics
 - Scaffold script: `${CLAUDE_SKILL_DIR}/scripts/init_claude_md.py` — generates initial CLAUDE.md from project structure

@@ -37,7 +37,7 @@ TaskCreate for EACH task below:
 3. Generate plugin manifest
 4. Create initial skill
 5. Write README
-6. Set up release automation
+6. Document version bump locations in plugin CLAUDE.md
 7. Test installation
 
 Announce: "Created 7 tasks. Starting execution..."
@@ -143,26 +143,23 @@ Do not write SKILL.md directly. The writing-skills skill ensures:
 
 **Verification:** README has installation instructions and skill list.
 
-## Task 6: Offer Release Automation
+## Task 6: Document Version Bump Locations in Plugin CLAUDE.md
 
-**Goal:** Ask the user whether to set up release-please so version bumps happen via Conventional Commits, not manual edits.
+**Goal:** Plugin root `CLAUDE.md` lists every file containing this plugin's version string, so Claude can sync them correctly regardless of whether release automation is in place.
 
-**Why ask:** Plugin has 3+ version fields (plugin.json, marketplace.json × 2, README headers). Manual sync drifts. Automation removes the error class entirely — but it assumes GitHub + Conventional Commits, which not every project uses.
+**Why:** Plugin has 3+ version fields (plugin.json, marketplace.json entry, README headers). Release-automation scripts (release-please, semantic-release) fail in various ways — cross-package path limits, marker scope collisions, CI permission issues. CLAUDE.md is authoritative session guidance; when a commit bumps version, Claude reads it and syncs every location. Scripts remain optional — not required by this skill.
 
-**Ask the user:**
-> 這個 plugin 有 3+ 處版號欄位（plugin.json、marketplace.json、README）。要建立 release-please 自動版號管理嗎？
-> - **是** — 建立 `release-please-config.json`、manifest、GitHub Actions workflow；未來用 `feat:` / `fix:` commits 自動 bump
-> - **否** — 跳過，README 新增 Contributing 區塊記錄手動 bump 步驟
+**Action:**
+1. Enumerate every file containing this plugin's version string (typically `plugin.json`, marketplace entry, README headers in both languages)
+2. Create `<plugin-root>/CLAUDE.md` with a "Version Bump Locations" section listing:
+   - Each file path + field (e.g., `plugin.json → version`)
+   - Cross-package or manual-only locations flagged explicitly
+   - Conventional Commits → version mapping (`fix:` → patch, `feat:` → minor, `feat!:` / `BREAKING CHANGE:` → major)
+   - Commit scope convention (e.g., `feat(plugin-name):` for multi-plugin repos)
 
-**If yes:**
-1. Read [references/plugin-templates.md](references/plugin-templates.md) for `release-please-config.json`, `.release-please-manifest.json`, `.github/workflows/release-please.yml` templates. Generate all three
-2. Add `<!-- x-release-please-version -->` marker next to every version string in README(s)
-3. Tell user: enable repo Settings → Actions → Workflow permissions = "Read and write"
-4. State Conventional Commits rules: `fix:` → patch, `feat:` → minor, `feat!:` / `BREAKING CHANGE:` → major
+**Optional release automation:** If the user explicitly asks for release-please / semantic-release, see [references/plugin-templates.md](references/plugin-templates.md) for config templates. Do not prompt for it here — it is orthogonal to this task.
 
-**If no:** Add a "Version Management" section to README listing every file containing a version field, marked as manual-sync.
-
-**Verification:** User decision recorded. If yes — 3 config files exist + README markers added. If no — manual-sync locations documented.
+**Verification:** `<plugin-root>/CLAUDE.md` exists and lists every file containing a version string for this plugin.
 
 ## Task 7: Test Installation
 
@@ -184,8 +181,8 @@ Verify skills are discoverable and load correctly. Clean up: `claude plugin unin
 - "Skip testing"
 - "One big skill"
 - "Version later"
-- "I'll bump versions manually, it's just a few files"
-- "Skip release automation, plugin is too small"
+- "Skip plugin CLAUDE.md, version sync is obvious"
+- "Release automation will handle it, no need to document"
 
 ## Common Rationalizations
 
@@ -196,8 +193,8 @@ Verify skills are discoverable and load correctly. Clean up: `claude plugin unin
 | "Skip testing" | Broken installs frustrate users. Test it. |
 | "One big skill" | Multiple focused skills > one bloated skill. |
 | "Version later" | Version from day 1. Semantic versioning matters. |
-| "Manual bumps are fine" | 3+ version fields drift silently. Automation costs one config file. |
-| "Plugin too small for CI" | Release-please runs free on public GitHub. No size threshold justifies manual bumps. |
+| "Skip plugin CLAUDE.md" | 3+ version fields drift silently. CLAUDE.md is the fallback when automation breaks. |
+| "Automation will handle it" | Release-please etc. fail on cross-package paths, marker scopes, CI perms. Document so Claude can recover. |
 
 ## Flowchart: Plugin Creation
 
@@ -211,7 +208,7 @@ digraph plugin_creation {
     manifest [label="Task 3: Generate\nmanifest", shape=box];
     skill [label="Task 4: Create\ninitial skill", shape=box];
     readme [label="Task 5: Write\nREADME", shape=box];
-    release [label="Task 6: Offer release\nautomation", shape=box];
+    release [label="Task 6: Document version\nbump in plugin CLAUDE.md", shape=box];
     test [label="Task 7: Test\ninstallation", shape=box];
     test_pass [label="Install\nworks?", shape=diamond];
     done [label="Plugin complete", shape=doublecircle];

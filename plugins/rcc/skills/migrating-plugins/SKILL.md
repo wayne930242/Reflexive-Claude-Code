@@ -138,12 +138,11 @@ Announce: "Created 4 tasks. Starting execution..."
 
 **Run `claude plugin validate`** if `.claude-plugin/` exists.
 
-**Detect release automation** (record for routing):
-- `release-please-config.json` / `.release-please-manifest.json` / `.github/workflows/release-please.yml`
-- OR any other release tool: `semantic-release` config (`.releaserc*`, `package.json` `release` key), `python-semantic-release` in `pyproject.toml`
-- Record as `release_automation: present | absent | partial` (partial = config file exists but workflow missing, or vice versa)
+**Detect version bump documentation** (record for routing):
+- Plugin root `CLAUDE.md` exists AND contains a version-bump section listing every version-bearing file (plugin.json, marketplace entries, README headers)
+- Record as `version_bump_doc: present | absent | partial` (partial = CLAUDE.md exists but section missing or incomplete)
 
-**Verification:** Clear maturity classification with asset inventory. Release automation state recorded.
+**Verification:** Clear maturity classification with asset inventory. Version bump doc state recorded.
 
 ## Task 3: Propose Conversion (Pre-plugin Only)
 
@@ -167,8 +166,8 @@ Source: [project path]
 | 4 | scripts/lint.py | validator | hooks/lint.py + hooks.json | Wrap as PostToolUse hook |
 | 5 | README.md | docs | README.md | Adapt for plugin installation |
 
-Release automation: [present | absent | partial]
-- If absent/partial: `creating-plugins` Task 6 will offer release-please setup during conversion
+Version bump doc: [present | absent | partial]
+- If absent/partial: `creating-plugins` Task 6 will add the required section to plugin CLAUDE.md during conversion
 ```
 
 **Present to user for confirmation.**
@@ -189,19 +188,19 @@ Release automation: [present | absent | partial]
 **Important:** Always pass the target path to downstream skills.
 
 **If None:**
-- Invoke `creating-plugins` (its Task 6 handles release automation offer)
+- Invoke `creating-plugins` (its Task 6 ensures plugin CLAUDE.md documents version bump locations)
 
 **If Pre-plugin (after Task 3 confirmation):**
-- Invoke `creating-plugins` with the conversion proposal as context (including recorded `release_automation` state)
+- Invoke `creating-plugins` with the conversion proposal as context (including recorded `version_bump_doc` state)
 - The proposal tells `creating-plugins` which files to move/convert instead of scaffolding from scratch
-- `creating-plugins` Task 6 will offer release-please based on the recorded state
+- `creating-plugins` Task 6 will fill the plugin CLAUDE.md section based on the recorded state
 
 **If Minimal or Complete:**
 - Invoke `validating-plugins` with plugin root path
-- After validation, invoke `refactoring-plugins` with report, plugin root path, and recorded `release_automation` state
-- `refactoring-plugins` Task 7 handles the release automation offer (skips if already present)
+- After validation, invoke `refactoring-plugins` with report, plugin root path, and recorded `version_bump_doc` state
+- `refactoring-plugins` Task 7 verifies / fills the plugin CLAUDE.md version-bump section
 
-**Verification:** Correct skill invoked with target path, context, and release automation state.
+**Verification:** Correct skill invoked with target path, context, and version bump doc state.
 
 ## Red Flags - STOP
 

@@ -38,7 +38,7 @@ TaskCreate for EACH task below:
 4. Present refactoring plan
 5. Execute refactoring
 6. Verify fixes
-7. Offer release automation (if missing)
+7. Verify version bump documentation in plugin CLAUDE.md
 
 Announce: "Created 7 tasks. Starting execution..."
 
@@ -150,27 +150,20 @@ The script integrates CLI validation and adds checks for manifest, structure, sk
 
 **Verification:** Health check passes with zero errors.
 
-## Task 7: Offer Release Automation (If Missing)
+## Task 7: Verify Version Bump Documentation in Plugin CLAUDE.md
 
-**Goal:** If plugin has no release automation, ask the user whether to add it.
+**Goal:** Plugin root `CLAUDE.md` lists every file containing this plugin's version string.
 
-**Detection:** Check for all three:
-- `release-please-config.json` (or equivalent `.releaserc*`, `package.json` `release` key)
-- `.release-please-manifest.json` (or semantic-release manifest)
-- `.github/workflows/release-please.yml` (or any release workflow)
+**Detection:** Read `<plugin-root>/CLAUDE.md`. Check for a section (typically "Version Bump Locations") that enumerates:
+- Each file path + field holding this plugin's version (plugin.json, marketplace entry, README headers)
+- Cross-package or manual-only locations flagged explicitly
+- Conventional Commits → version mapping
 
-**Skip this task if** any release automation is already configured. State "release automation already present — skipping" and move on.
+**If absent or incomplete:** Add/update using the format defined in `creating-plugins` Task 6.
 
-**If none configured, ask:**
-> 偵測到未設定版號自動化。plugin 有 3+ 處版號欄位（plugin.json、marketplace.json、README），手動維護容易 drift。要建立 release-please 嗎？
-> - **是** — 依 `creating-plugins` Task 6 流程建立 3 個 config 檔 + README markers
-> - **否** — 記下為 technical debt，結束
+**Release automation is orthogonal:** Whether or not release-please / semantic-release is configured, the plugin CLAUDE.md is still required. Scripts fail; CLAUDE.md is the fallback Claude reads every session.
 
-**If yes:** Read [creating-plugins/references/plugin-templates.md](../creating-plugins/references/plugin-templates.md) for the `release-please-config.json`, `.release-please-manifest.json`, and workflow templates. Generate, add README markers, tell user to enable Actions write permissions.
-
-**If no:** Document the decision in the final report under "Deferred".
-
-**Verification:** Either automation exists (pre-existing or newly added), or user explicitly declined and decision recorded.
+**Verification:** `<plugin-root>/CLAUDE.md` documents every version-bearing file for this plugin.
 
 ## Red Flags - STOP
 
@@ -207,7 +200,7 @@ digraph refactor_plugin {
     execute [label="Task 5: Execute\nrefactoring", shape=box];
     verify [label="Task 6: Verify\nfixes", shape=box];
     pass [label="Zero\nerrors?", shape=diamond];
-    release [label="Task 7: Offer release\nautomation", shape=box];
+    release [label="Task 7: Verify version bump\ndoc in plugin CLAUDE.md", shape=box];
     done [label="Refactoring\ncomplete", shape=doublecircle];
 
     start -> identify;

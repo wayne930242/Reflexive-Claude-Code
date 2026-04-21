@@ -96,6 +96,14 @@ Analyze and answer ALL questions below:
 
 **Goal:** Plan the skill's organization, triggers, and content.
 
+**Before drafting, walk through [prompt-design-principles.md](../../references/prompt-design-principles.md):**
+
+- 5-skeleton framework — every skill needs Role, Scope, Workflow, Standards, Completion. Confirm each has concrete content planned.
+- Failure-mode reverse engineering — the Red Flags section should reflect specific failures you've observed or can predict, not generic warnings.
+- Conditional dispatch — list task variants the skill handles and per-variant behavior before writing absolute rules.
+- Creative-constraint balance — explicitly decide what can vary (form, solution options) vs. what must be fixed (process, verification, tool order).
+- Completion semantics — the final task must have a binary pass/fail check, not a narrative "done" signal.
+
 **Design considerations:**
 1. What specific capability does this skill provide?
 2. When should the skill be triggered? (specific phrases, symptoms)
@@ -314,3 +322,4 @@ digraph skill_creation {
 - [references/examples.md](references/examples.md) - Before/after examples
 - [references/persuasion-principles.md](references/persuasion-principles.md) - Authority language research
 - [references/testing-with-subagents.md](references/testing-with-subagents.md) - Baseline testing methodology
+- [../../references/prompt-design-principles.md](../../references/prompt-design-principles.md) - 5-skeleton framework, failure-mode reverse engineering, conditional dispatch, creative-constraint balance, completion semantics
