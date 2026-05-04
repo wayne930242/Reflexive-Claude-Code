@@ -51,16 +51,6 @@ Announce: "Created 9 tasks (0–8). Starting execution..."
 4. NEVER skip to next task until current is completed
 5. At end, `TaskList` to confirm all completed
 
-## Documentation Creation Process
-
-| Phase | Focus | What You Do |
-|-------|-------|-------------|
-| **Analysis** | Current state | Understand existing setup and identify gaps |
-| **Requirements** | Needs assessment | Document what Claude needs to know that isn't in code |
-| **Design** | Structure planning | Organize instructions logically and prioritize content |
-| **Implementation** | Writing | Create clear, specific, and actionable instructions |
-| **Refinement** | Optimization | Remove redundancy, improve clarity and specificity |
-
 ## Task 0: Fetch Latest Official Spec
 
 **Goal:** Pull the current Anthropic CLAUDE.md / memory spec before designing — never trust cached memory.
@@ -119,14 +109,25 @@ Skill tool: fetching-claude-docs
 
 ### What to Include vs Exclude
 
-| Include (Claude can't guess) | Exclude (Claude already knows) |
-|------------------------------|--------------------------------|
-| Non-obvious bash commands for build/test/deploy | Standard language conventions |
-| Code style rules that differ from defaults | Things a linter enforces |
+**Filter every line through this question first:** "Can Claude derive this from reading the code, package.json, or running `ls`?" If yes, exclude — it's noise that pushes real signal out of attention budget.
+
+The 2026 ETH Zürich study found that LLM-auto-generated CLAUDE.md files **reduced** task success by ~3% and increased cost ~20% precisely because they re-stated derivable content. The same study found that named tools/commands in CLAUDE.md are used ~160× more — confirming Claude reads it carefully, so every wasted line displaces a useful one.
+
+**Three-axis frame (WHAT / WHY / HOW):**
+
+- **WHAT** — non-obvious project identity Claude can't infer: monorepo layout, unusual subdirectory roles
+- **WHY** — rationale for surprising choices: historical constraints, legal/compliance drivers, prior incidents
+- **HOW** — non-default tooling and commands: `bun` not `npm`, `uv` not `pip`, custom build scripts, project-specific test filters
+
+| Include (Claude can't guess) | Exclude (Claude already knows or can derive) |
+|------------------------------|---------------------------------------------|
+| Non-default tooling (`bun` not `npm`, `uv` not `pip`) | Standard language conventions |
+| Build/test/deploy commands with project-specific flags | Things a linter or formatter enforces |
 | Repo conventions (branch naming, PR format) | General programming practices |
-| Architecture decisions and their rationale | What's obvious from reading code |
-| Development environment quirks (env vars, setup) | Detailed API docs (link instead) |
-| Common gotchas or non-obvious behavior | Frequently changing information |
+| Why a surprising architecture exists (incident, constraint) | Big architecture overviews / directory listings (Claude can `ls`) |
+| Environment quirks, gotchas, prior incidents | Detailed API docs (link instead) |
+| Hidden invariants not visible in code | Restating what package.json / pyproject.toml already says |
+| Anti-patterns previously caught in review | Aspirational "write clean code" / "follow best practices" |
 
 ### CLAUDE.md Structure
 
@@ -142,32 +143,66 @@ Use `MUST`/`NEVER`/`IMPORTANT` sparingly — if everything is critical, nothing 
 
 | If the instruction is... | Use... |
 |--------------------------|--------|
-| Scoped to specific file paths | `.claude/rules/` with `paths:` glob |
-| A reusable multi-step workflow | A skill in `.claude/skills/` |
-| Must be deterministically enforced | A hook in settings (exit code 2 = block) |
+| A focused convention scoped to a directory or file glob | `.claude/rules/<name>.md` with `paths:` scope tag (still loads every session — split for budget, not for filtering) |
+| A reusable multi-step workflow | A skill in `.claude/skills/` (loaded on-demand) |
+| **Must NEVER be bypassed** (force-push protection, secret-commit block, destructive ops) | **A hook** with `exit 2` — text in CLAUDE.md is ~70% compliance, not 100%. Hard rules live in hooks. |
 | Only relevant for certain tasks | A skill (loaded on-demand, saves tokens) |
+| Specific to a subdirectory of a monorepo | A nested `CLAUDE.md` inside that subdirectory — Claude Code merges parent + child when working in that path |
+
+### Conditional Dispatch (for instructions only relevant to specific tasks)
+
+When a section only applies to certain task types (testing, deploying, migrating), wrap it in a conditional block instead of always-on prose. Claude reads the condition and skips the body when it doesn't apply, freeing attention budget for the rest of the file.
+
+```markdown
+<important if="writing or modifying tests">
+- Use `createTestApp()` helper for integration tests
+- Mock the database with `dbMock` (NEVER hit real DB in unit tests)
+</important>
+
+<important if="deploying to production">
+- Run `bun build` locally first; CI does not auto-build
+- Tag the release before pushing to main
+</important>
+```
+
+Use this for: test setup, deploy steps, migration procedures, environment-specific gotchas. Do **not** wrap core identity (tech stack, build command, project layout) — those need to stay always-on.
+
+### Nested CLAUDE.md (monorepos and multi-package repos)
+
+Claude Code merges nested `CLAUDE.md` files: when working in `apps/api/handlers/foo.ts`, it loads root `CLAUDE.md` + `apps/CLAUDE.md` + `apps/api/CLAUDE.md` if they exist. Use this for monorepos:
+
+- Root `CLAUDE.md`: project identity, top-level layout, shared commands
+- `packages/<name>/CLAUDE.md`: package-specific tooling, test command, gotchas
+- `apps/<name>/CLAUDE.md`: app-specific build, deploy, runtime quirks
+
+Reference: OpenAI's Codex repo uses 88 nested CLAUDE.md files. For a 5+ package monorepo, a single 500-line root file is worse than five 80-line nested files.
+
+### Hard Rules — Must Live in Hooks
+
+CLAUDE.md text is advisory: empirical compliance is roughly 70%. For any rule where the 30% miss is unacceptable (force-pushing main, committing secrets, deleting prod data, bypassing pre-commit), encode it as a hook with `exit 2` so Claude is mechanically blocked, not asked nicely.
+
+CLAUDE.md may *describe* the rule for human readers, but the **enforcement** must be a hook. If you find yourself writing `MUST NEVER` about a destructive action without a backing hook, you're shipping a 30%-broken safety net.
 
 **Verification:**
 - [ ] < 200 lines (hard target; 60 lines optimal)
 - [ ] Every instruction is specific and verifiable
 - [ ] No content that belongs in rules, skills, or hooks
 - [ ] No vague/obvious guidance ("write clean code")
+- [ ] No content that restates README, package.json, or visible directory layout
+- [ ] No big architecture overviews / directory listings (Claude can `ls`)
 - [ ] Uses emphasis words (`MUST`, `NEVER`) sparingly but effectively
+- [ ] Every `MUST NEVER` about a destructive/irreversible action has a backing hook
+- [ ] Task-specific instructions wrapped in `<important if="...">` conditional blocks where appropriate
+- [ ] Monorepo: subdirectory-specific guidance moved to nested `CLAUDE.md` files, not crammed into root
 
 ## Task 4: Add Project Content
 
-**Goal:** Add project-specific information that helps agent work effectively.
-
-**Sections to consider:**
-1. **Code Style** — Only conventions that differ from defaults
-2. **Workflow** — Build, test, deploy commands and patterns
-3. **Architecture** — Key directories and their purpose
-4. **Gotchas** — Non-obvious behavior, environment quirks
+**Goal:** Add project-specific information that helps agent work effectively. Use the section structure from [references/examples.md](references/examples.md) as a starting point.
 
 **Token efficiency:**
 - CLAUDE.md loads every session — every line costs tokens
 - Move domain knowledge to skills (loaded on-demand)
-- Move path-scoped conventions to rules (loaded when relevant)
+- Split focused conventions into `.claude/rules/<name>.md` (still loads every session, but keeps CLAUDE.md scannable)
 - Link to detailed docs instead of inlining them
 
 **Verification:** Total < 200 lines. Every line earns its place.
@@ -237,6 +272,11 @@ These thoughts mean you're rationalizing. STOP and reconsider:
 - "Skip reviewer, it's obviously good"
 - "Add instructions for things a linter can check"
 - "Include standard language conventions"
+- "Restate the README so Claude has the context handy" (it doesn't help — see ETH 2026 study, ~3% drop in success rate)
+- "A big architecture overview helps Claude find files faster" (false — measured zero improvement on time-to-first-relevant-file)
+- "Writing 'NEVER force-push' here will stop it" (no — that's ~70% compliance; needs a hook)
+- "Cram every monorepo package's quirks into root CLAUDE.md" (use nested CLAUDE.md per package)
+- "Always-on prose for test setup is fine" (use `<important if="writing tests">` instead)
 
 **All of these mean: You're about to create a bloated, ineffective CLAUDE.md.**
 
@@ -251,49 +291,9 @@ These thoughts mean you're rationalizing. STOP and reconsider:
 | "Standard practices need documenting" | Claude already knows standard practices. Document the exceptions. |
 | "Linter rules belong here" | Linter rules belong in linters + hooks. Deterministic > advisory. |
 
-## Flowchart: CLAUDE.md Creation
-
-```dot
-digraph claudemd_creation {
-    rankdir=TB;
-
-    start [label="Need CLAUDE.md", shape=doublecircle];
-    analyze [label="Task 1: Analyze\ncurrent state", shape=box];
-    baseline [label="Task 2: RED\nTest without CLAUDE.md", shape=box];
-    verify_red [label="Gaps\ndocumented?", shape=diamond];
-    write [label="Task 3: GREEN\nWrite instructions", shape=box];
-    content [label="Task 4: Add\nproject content", shape=box];
-    validate [label="Task 5: Validate\nstructure", shape=box];
-    too_long [label="< 200\nlines?", shape=diamond];
-    extract [label="Extract to\nrules/skills", shape=box];
-    review [label="Task 6: REFACTOR\nQuality review", shape=box];
-    review_pass [label="Review\npassed?", shape=diamond];
-    test [label="Task 7: Test\nnew session", shape=box];
-    test_pass [label="Works?", shape=diamond];
-    done [label="CLAUDE.md complete", shape=doublecircle];
-
-    start -> analyze;
-    analyze -> baseline;
-    baseline -> verify_red;
-    verify_red -> write [label="yes"];
-    verify_red -> baseline [label="no\nmore tasks"];
-    write -> content;
-    content -> validate;
-    validate -> too_long;
-    too_long -> review [label="yes"];
-    too_long -> extract [label="no"];
-    extract -> validate;
-    review -> review_pass;
-    review_pass -> test [label="pass"];
-    review_pass -> write [label="fail\nfix issues"];
-    test -> test_pass;
-    test_pass -> done [label="yes"];
-    test_pass -> write [label="no\nimprove"];
-}
-```
-
 ## References
 
 - [references/examples.md](references/examples.md) — Complete CLAUDE.md example and good/bad instructions
+- [references/flowchart.md](references/flowchart.md) — Full creation flowchart (Tasks 1–7)
 - [../../references/prompt-design-principles.md](../../references/prompt-design-principles.md) — 5-skeleton framework, failure-mode reverse engineering, conditional dispatch, completion semantics
 - Scaffold script: `${CLAUDE_SKILL_DIR}/scripts/init_claude_md.py` — generates initial CLAUDE.md from project structure

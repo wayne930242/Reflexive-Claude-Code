@@ -16,3 +16,6 @@ Thumbs.db
 *.temp
 __pycache__/
 *.pyc
+
+# Plugin validator run artifacts
+**/.rcc/

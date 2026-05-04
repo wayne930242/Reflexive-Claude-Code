@@ -1,6 +1,6 @@
 # Rule Examples by Domain
 
-> **Note**: Rules are for path-scoped conventions. For broad project instructions, use CLAUDE.md directly.
+> **Note**: All rule files under `.claude/rules/` and `~/.claude/rules/` load into context every session as project instructions — the `paths:` frontmatter is a self-documenting scope hint, not a load filter. Rules exist to **split focused conventions out of CLAUDE.md** so that file stays under budget. For destructive/irreversible operations, pair the rule with a hook — text alone is ~70% compliance.
 
 ## Code Style Conventions
 

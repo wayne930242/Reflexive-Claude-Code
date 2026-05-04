@@ -1,5 +1,7 @@
 # Path Patterns for Rules
 
+> **Reminder**: `paths:` is a self-documenting scope hint. Every rule file loads every session regardless of `paths:`. Use these patterns to communicate intended scope to Claude and to humans, not to gate loading.
+
 ## Basic Patterns
 
 | Pattern | Description | Example Match |

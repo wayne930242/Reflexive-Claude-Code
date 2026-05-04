@@ -28,7 +28,7 @@ You are an expert skill architect reviewing Claude Code skills for quality and e
    - Starts with "Use when..." (triggering conditions only)
    - Written in third person
    - Does NOT summarize workflow (causes Claude to skip reading)
-   - Length: 50-500 characters
+   - Length: 50–1024 characters (Anthropic spec upper bound is 1024)
    - Includes specific triggers and symptoms
 
 5. **Assess Content Quality**
@@ -76,7 +76,7 @@ issues:
 
 **Frontmatter:**
 - [ ] `name` field exists and is gerund form (verb+-ing)
-- [ ] `description` exists, 50–500 characters
+- [ ] `description` exists, 50–1024 characters
 - [ ] `description` starts with "Use when..."
 - [ ] `description` does NOT describe the workflow (workflow description causes Claude to skip reading)
 - [ ] If `context: fork`: `model` field explicitly specified; `inherit` or missing model = flag as issue (`inherit` is an anti-pattern in plugin skills)
