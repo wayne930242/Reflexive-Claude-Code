@@ -256,6 +256,27 @@ Agent tool:
 - **Proactive:** Include "Use proactively when..." in description for auto-invoke
 - **Manual:** Omit proactive triggers for explicit-only invocation
 
+## Designing for Parallel Use (P-Thread / F-Thread)
+
+A single agent file may be invoked once, fanned-out, or voted on.
+Design choices change depending on which.
+
+| Pattern | Invocation | Design implication |
+|---------|------------|--------------------|
+| **Single** | One Agent call | Default. No special design needed. |
+| **P-Thread (fanout)** | N Agent calls in one message, different inputs | Output must be self-contained — no shared state, no "see other agent's result". |
+| **F-Thread (Best-of-N)** | N Agent calls in one message, **same input** | Output must be deterministic-shape (YAML / structured) so caller can diff or vote. Reviewer agents are prime F-Thread candidates. |
+| **B-Thread (orchestrator)** | This agent dispatches sub-agents itself | Grant the Agent tool. Document which sub-agents it may call. |
+
+**Rules when designing for fanout:**
+
+- Output schema must be **machine-mergeable** — fixed keys, not free prose.
+- Avoid side effects (writes, commits) — fanned agents collide on the same files.
+- Keep tool set narrow — `Read, Grep, Glob` is safe for N-parallel; `Write, Edit, Bash` is not.
+- If an agent runs in F-Thread, its system prompt should say "you are one of several reviewers; do not coordinate, just give your independent judgment."
+
+For dispatch mechanics (how the caller fans out and merges results), see the `dispatching-parallel-agents` skill.
+
 ## Red Flags - STOP
 
 These thoughts mean you're rationalizing. STOP and reconsider:
