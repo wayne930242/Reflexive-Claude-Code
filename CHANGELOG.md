@@ -1,5 +1,19 @@
 # Changelog
 
+## [12.0.0](https://github.com/wayne930242/Reflexive-Claude-Code/compare/v11.1.0...v12.0.0) (2026-06-26)
+
+
+### ⚠ BREAKING CHANGES
+
+* removes the learning-from-failures skill; reflecting changes from auto-pipeline to suggestion-based.
+
+### Features
+
+* add parallel-agent dispatch skill, P/F-Thread guidance, Stop-event hook template ([e0262de](https://github.com/wayne930242/Reflexive-Claude-Code/commit/e0262dedeec4f2f6e65e4260159c3267214163bd))
+* align CLAUDE.md/rules guidance with 2026 research findings ([83299d4](https://github.com/wayne930242/Reflexive-Claude-Code/commit/83299d4e1f38c2ac456f2f5ce36509844dd8cc46))
+* lighten reflection to suggestion-based and simplify skill architecture ([7c6ed73](https://github.com/wayne930242/Reflexive-Claude-Code/commit/7c6ed731a3065a7197e006315922e7fc737a5420))
+* move plugin version bump docs into plugin CLAUDE.md ([d2b5758](https://github.com/wayne930242/Reflexive-Claude-Code/commit/d2b57586470dcf6d19de9c28d6a1b45119614847))
+
 ## [11.1.0](https://github.com/wayne930242/Reflexive-Claude-Code/compare/v11.0.0...v11.1.0) (2026-04-20)
 
 
