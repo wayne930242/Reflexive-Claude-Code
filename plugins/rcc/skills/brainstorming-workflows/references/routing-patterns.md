@@ -40,7 +40,6 @@ digraph tree_example {
 **本插件範例：**
 - `migrating-agent-systems` — 偵測 existing/new → 路由到 analyzing 或 brainstorming
 - `refactoring-skills` — 分類 keep/refactor/merge/delete → 路由到對應動作
-- `reflecting` — 分類 law/skill/rule/doc → 路由到對應 writing-* skill
 
 ---
 
@@ -233,7 +232,7 @@ Main Chain:
 Standalone:
   advising-architecture (Node)
   improving-skills (Node)
-  reflecting (Tree)
+  reflecting (Suggest→Deepen)
   creating-plugins (Skill Steps)
   refactoring-plugins (Skill Steps)
 ```

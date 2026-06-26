@@ -227,46 +227,6 @@ These thoughts mean you're rationalizing. STOP and reconsider:
 | "Skip validation" | `claude plugin validate` catches structural issues you can't see by reading. |
 | "Use current directory" | Plugin root may be nested. Resolve from marketplace.json or plugin.json. |
 
-## Flowchart: Plugin Migration
-
-```dot
-digraph migrate_plugin {
-    rankdir=TB;
-
-    start [label="Setup/migrate\nplugin", shape=doublecircle];
-    discover [label="Task 1: Discover\ntarget", shape=box];
-    found [label="What\nexists?", shape=diamond];
-    ask_create [label="Ask: create\nfrom scratch?", shape=box];
-    assess [label="Task 2: Assess\nand classify", shape=box];
-    maturity [label="Maturity?", shape=diamond];
-    propose [label="Task 3: Propose\nconversion", shape=box];
-    confirm [label="User\nconfirms?", shape=diamond];
-    create [label="Invoke\ncreating-plugins\n(with proposal)", shape=box];
-    create_new [label="Invoke\ncreating-plugins", shape=box];
-    validate [label="Invoke\nvalidating-plugins", shape=box];
-    refactor [label="Invoke\nrefactoring-plugins", shape=box];
-    done [label="Routed", shape=doublecircle];
-
-    start -> discover;
-    discover -> found;
-    found -> assess [label="plugin(s)\nfound"];
-    found -> assess [label="scripts\nfound"];
-    found -> ask_create [label="nothing"];
-    ask_create -> create_new;
-    assess -> maturity;
-    maturity -> propose [label="pre-plugin"];
-    maturity -> create_new [label="none"];
-    maturity -> validate [label="minimal /\ncomplete"];
-    propose -> confirm;
-    confirm -> create [label="yes"];
-    confirm -> propose [label="no\nrevise"];
-    create -> done;
-    create_new -> done;
-    validate -> refactor;
-    refactor -> done;
-}
-```
-
 ## Skill Chain Reference
 
 | Step | Skill | Purpose |

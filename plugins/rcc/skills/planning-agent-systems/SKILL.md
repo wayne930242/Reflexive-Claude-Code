@@ -80,19 +80,13 @@ Announce: "Created 5 tasks. Starting execution..."
 
 **Step 3 — Build the dependency graph** from the flowchart, assigning phases by dependency depth.
 
-**Step 4 — Check learning integration** before architecture decisions:
+**Step 4 — Check prior learnings** before architecture decisions:
 
-**Important:** Load relevant failure pattern warnings to avoid known issues:
+Read past reflection reports (`.rcc/*-reflection.md`) and `.rcc/config.yml` `decisions_log` for known failure modes and prior decisions.
 
-```bash
-echo '{"component":"agent-system","context":"planning","type":"architecture"}' | \
-python plugins/rcc/skills/learning-from-failures/scripts/memory-manager.py get-warnings
-```
-
-**Apply warnings to architecture decisions:**
-- Review each warning's pattern match against the current design
-- Adjust architecture to avoid known failure modes
-- Document how each relevant warning is addressed
+- Match each prior learning against the current design
+- Adjust architecture to avoid repeating known failure modes
+- Document how each relevant learning is addressed
 
 **Step 5 — Identify the simplest viable subset:**
 
@@ -101,7 +95,7 @@ Ask: "What is the minimum set of components that delivers value?"
 - Phase 1 should contain ONLY core components
 - Present the phased rollout to user for early feedback
 
-**Verification:** Architecture flowchart produced showing all workflows, patterns identified, dependency graph built, phases assigned, learning warnings addressed.
+**Verification:** Architecture flowchart produced showing all workflows, patterns identified, dependency graph built, phases assigned, prior learnings addressed.
 
 ## Task 3: Plan Components
 
@@ -189,34 +183,6 @@ These thoughts mean you're rationalizing. STOP and reconsider:
 | "Skip reuse check" | Duplicating existing skills creates conflicts. |
 | "One big rule" | Multiple focused rules > one bloated rule. |
 | "Fixed order is fine" | Dependencies vary per project. Let the graph decide. |
-
-## Flowchart: Agent System Planning
-
-```dot
-digraph plan_agent {
-    rankdir=TB;
-
-    start [label="Plan agent\nsystem", shape=doublecircle];
-    read [label="Task 1: Read\ninputs", shape=box];
-    flowchart [label="Task 2: Design\narchitecture flowchart", shape=box];
-    plan [label="Task 3: Plan\ncomponents", shape=box];
-    produce [label="Task 4: Produce\ncomponent plan", shape=box];
-    confirm [label="Task 5: User\nconfirmation", shape=box];
-    approved [label="Approved?", shape=diamond];
-    handoff [label="Invoke\napplying-agent-systems", shape=box];
-    done [label="Planning complete", shape=doublecircle];
-
-    start -> read;
-    read -> flowchart;
-    flowchart -> plan;
-    plan -> produce;
-    produce -> confirm;
-    confirm -> approved;
-    approved -> handoff [label="yes"];
-    approved -> flowchart [label="no\nrevise"];
-    handoff -> done;
-}
-```
 
 ## References
 

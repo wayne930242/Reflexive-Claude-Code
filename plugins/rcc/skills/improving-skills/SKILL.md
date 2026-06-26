@@ -119,11 +119,9 @@ Compare with community implementations.
 **Check against standards:**
 - [ ] Description starts with "Use when..."
 - [ ] Description doesn't summarize workflow
-- [ ] Has Task Initialization section
+- [ ] Task Initialization present if multi-step
 - [ ] Has verification for each task
-- [ ] Has Red Flags section
-- [ ] Has Rationalizations table
-- [ ] Has flowchart
+- [ ] Red Flags / Rationalizations present if there's real risk
 - [ ] Body < 300 lines
 - [ ] Details in references
 
@@ -148,11 +146,10 @@ Compare with community implementations.
 
 **Order of changes:**
 1. Fix frontmatter (description)
-2. Add Task Initialization if missing
+2. Add Task Initialization if the flow is multi-step
 3. Add verification criteria
-4. Add Red Flags / Rationalizations
+4. Add Red Flags / Rationalizations if there's real risk
 5. Extract verbose content to references
-6. Add flowchart if missing
 
 **For each change:**
 - Make the edit
@@ -216,34 +213,6 @@ These thoughts mean you're rationalizing. STOP and reconsider:
 | "Fine as-is" | If you're here, something needs improvement. Find it. |
 | "Skip validation" | Small changes can break things. Validate. |
 | "No Red Flags" | Every discipline skill needs anti-rationalization. |
-
-## Flowchart: Skill Improvement
-
-```dot
-digraph improve_skill {
-    rankdir=TB;
-
-    start [label="Improve skill", shape=doublecircle];
-    analyze [label="Task 1: Analyze\ncurrent skill", shape=box];
-    context [label="Task 2: Gather\nproject context", shape=box];
-    research [label="Task 3: Research\nbest practices", shape=box];
-    identify [label="Task 4: Identify\nimprovements", shape=box];
-    apply [label="Task 5: Apply\nimprovements", shape=box];
-    validate [label="Task 6: Validate\nand review", shape=box];
-    pass [label="Review\npassed?", shape=diamond];
-    done [label="Skill improved", shape=doublecircle];
-
-    start -> analyze;
-    analyze -> context;
-    context -> research;
-    research -> identify;
-    identify -> apply;
-    apply -> validate;
-    validate -> pass;
-    pass -> done [label="yes"];
-    pass -> apply [label="no\nfix"];
-}
-```
 
 ## References
 

@@ -1,70 +1,29 @@
-# Reflection Report Template
+# Reflection List Template
 
-Write the report to `.rcc/{timestamp}-reflection.md` using this format:
+Write the picked learnings to `.rcc/{YYYY-MM-DD}-reflection.md` using this format.
+Only the candidates the user chose to deepen go here — Stage 1's menu is not part of the file.
 
 ~~~markdown
-# Reflection Report — {YYYY-MM-DD}
+# Reflection — {YYYY-MM-DD}
 
-**Date:** YYYY-MM-DD HH:MM
-**Session:** [Brief description of work done]
-
-## Session Context
-
-[1-3 sentences describing the work that was done in this session]
-
-## Events
-
-| # | Event | Context | Outcome | Type | Router |
-|---|-------|---------|---------|------|--------|
-| 1 | [What happened] | [When/where it occurred] | [Result] | correction / error / discovery / repetition / safety_bypass | [skill/rule/law/none] |
-
-**Type definitions:**
-- **correction** — user corrected the agent's approach or output
-- **error** — agent made a mistake, multiple attempts needed
-- **discovery** — new insight about the project, domain, or tooling
-- **repetition** — same action performed multiple times (automation candidate)
-- **safety_bypass** — destructive/irreversible action taken without confirmation, or safety check circumvented (force push, `--no-verify`, `rm -rf`, deleting tests to pass, discarding unfamiliar files, etc.). Fix target MUST be `rule` or `law`.
+**Session:** [one line on the work done]
 
 ## Learnings
 
-| # | Learning | Evidence | Router | Fix Target | Suggested Component | Rationale |
-|---|----------|----------|--------|------------|---------------------|-----------|
-| 1 | [Actionable insight] | Event #N | [component that routed behavior] | [where fix lands] | rule / law / skill / hook / doc | [Why, informed by router] |
+### [type] short title
 
-**Suggested Component guidelines:**
-- **law** — immutable, must enforce every response, project-specific
-- **rule** — convention, path-scoped, enforceable by file matching
-- **skill** — reusable capability, multi-step process
-- **hook** — automated quality check, runs on events
-- **doc** — reference material, not directly actionable
+- **Insight:** [what would prevent the failure / repeat the success, and where it applies]
+- **Evidence:** [the moment in the session that taught this]
+- **Router:** [skill/rule/law/CLAUDE.md that routed the behavior, or "none"]
+- **Suggested fix:** [rule / law / skill / hook / doc] at [path hint] — [one line on content]
 
-## Component Recommendations
-
-For each learning, provide a recommendation. Task 5 (consolidation review) will prune and merge before routing.
-
-### Recommendation N: [Component Name]
-
-- **Type:** rule / law / skill / hook / doc
-- **Path hint:** [where it would live, e.g., `.claude/rules/api-response-format.md`]
-- **Content summary:** [one-paragraph description of what it should contain]
-- **Traces to:** Learning #N [, Learning #M]
-
-## Weaknesses Addressed
-
-Map learnings to the 10-category weakness checklist from analyzing-agent-systems where applicable. If a learning does not map to any weakness category, omit it from this section.
-
-| Learning # | Weakness Category | How It Addresses |
-|------------|-------------------|------------------|
-| N | [category name] | [brief explanation] |
+(repeat per picked candidate)
 ~~~
 
-## Completeness Checklist (for Task 4 review)
+**safety_bypass entries:** suggested fix MUST be `rule` or `law`, and MUST name the exact command/flag to block.
 
-Use this checklist to verify the report before routing to planning:
+**Debug sessions:** record the bug (root cause + prevention rule) and any reasoning error as separate entries.
 
-- [ ] Every event has at least one learning
-- [ ] Every learning has router, fix_target, suggested component, and rationale
-- [ ] Every component recommendation has type, path hint, content summary, and traces-to
-- [ ] No placeholder text (TBD, TODO, etc.)
-- [ ] Session context accurately describes the work done
-- [ ] At least 3 events documented (if fewer than 3 significant events occurred, document why)
+Keep it short.
+No fixed minimum, no placeholder rows.
+If the user picked nothing, there is no file to write.

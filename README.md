@@ -150,7 +150,7 @@ The planner decides which assets each skill needs; the reviewer checks they exis
 | `writing-subagents` | Subagent config with model/isolation guide |
 | `writing-rules` | Rules with decision tree and content validation |
 | `writing-hooks` | Hooks for static analysis and quality gates |
-| `reflecting` | Extract learnings, route to skills or rules |
+| `reflecting` | Suggest candidate learnings, deepen the ones you pick |
 | `improving-skills` | Optimize a single skill |
 | `refactoring-skills` | Consolidate and deduplicate across skills |
 | `advising-architecture` | Classify knowledge type, validate approach |
@@ -182,7 +182,7 @@ Reflexive-Claude-Code/
 ├── .rcc/                     # Per-project RCC artifacts (tracked)
 │   ├── config.yml            # Migration state + decisions log
 │   ├── {timestamp}-*.md      # analysis / plan / reflection / review outputs
-│   ├── memory/               # learning-from-failures knowledge
+│   ├── memory/               # reflection learnings
 │   ├── validation/           # validate_all.py reports
 │   └── archive/              # refactor-sweep snapshots
 ├── plugins/

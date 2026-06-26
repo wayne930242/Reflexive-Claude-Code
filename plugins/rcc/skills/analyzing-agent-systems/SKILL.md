@@ -250,41 +250,6 @@ These thoughts mean you're rationalizing. STOP and reconsider:
 | "One pass is enough" | Different categories reveal different issues. Check all 11. |
 | "Recommendations are obvious" | Obvious to you isn't obvious to the user. Document with traceability. |
 
-## Flowchart: Agent System Analysis
-
-```dot
-digraph analyze_agent {
-    rankdir=TB;
-
-    start [label="Analyze agent\nsystem", shape=doublecircle];
-    project [label="Task 1: Scan\nproject structure", shape=box];
-    scan [label="Task 2: Scan\nagent components", shape=box];
-    weakness [label="Task 3: Run\nweakness analysis", shape=box];
-    recommend [label="Task 4: Produce\nrecommendations", shape=box];
-    report [label="Task 5: Produce\nanalysis report", shape=box];
-    present [label="Task 6: Present\nfindings", shape=box];
-    confirm [label="User\nconfirms?", shape=diamond];
-    choice [label="Next step?", shape=diamond];
-    planning [label="Invoke\nplanning-agent-systems", shape=box];
-    brainstorm [label="Invoke\nbrainstorming-workflows", shape=box];
-    done [label="Analysis complete", shape=doublecircle];
-
-    start -> project;
-    project -> scan;
-    scan -> weakness;
-    weakness -> recommend;
-    recommend -> report;
-    report -> present;
-    present -> confirm;
-    confirm -> choice [label="continue"];
-    confirm -> done [label="stop here"];
-    choice -> planning [label="recommendations\nclear"];
-    choice -> brainstorm [label="needs\nexploration"];
-    planning -> done;
-    brainstorm -> done;
-}
-```
-
 ## References
 
 - [references/project-scanning.md](references/project-scanning.md) — Project structure scanning guide

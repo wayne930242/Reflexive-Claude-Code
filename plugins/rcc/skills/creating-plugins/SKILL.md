@@ -196,36 +196,6 @@ Verify skills are discoverable and load correctly. Clean up: `claude plugin unin
 | "Skip plugin CLAUDE.md" | 3+ version fields drift silently. CLAUDE.md is the fallback when automation breaks. |
 | "Automation will handle it" | Release-please etc. fail on cross-package paths, marker scopes, CI perms. Document so Claude can recover. |
 
-## Flowchart: Plugin Creation
-
-```dot
-digraph plugin_creation {
-    rankdir=TB;
-
-    start [label="Create plugin", shape=doublecircle];
-    gather [label="Task 1: Gather\nrequirements", shape=box];
-    structure [label="Task 2: Create\ndirectory structure", shape=box];
-    manifest [label="Task 3: Generate\nmanifest", shape=box];
-    skill [label="Task 4: Create\ninitial skill", shape=box];
-    readme [label="Task 5: Write\nREADME", shape=box];
-    release [label="Task 6: Document version\nbump in plugin CLAUDE.md", shape=box];
-    test [label="Task 7: Test\ninstallation", shape=box];
-    test_pass [label="Install\nworks?", shape=diamond];
-    done [label="Plugin complete", shape=doublecircle];
-
-    start -> gather;
-    gather -> structure;
-    structure -> manifest;
-    manifest -> skill;
-    skill -> readme;
-    readme -> release;
-    release -> test;
-    test -> test_pass;
-    test_pass -> done [label="yes"];
-    test_pass -> manifest [label="no"];
-}
-```
-
 ## Publishing
 
 Once your plugin is ready:

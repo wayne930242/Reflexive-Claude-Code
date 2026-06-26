@@ -97,7 +97,7 @@ Does it apply BROADLY to all project work?
     ├─ HOW TO DO something (capability)?
     │   → SKILL in skills/
     │   Naming: gerund form (writing-*, creating-*)
-    │   Structure: Overview → Routing → Tasks → Red Flags → Flowchart
+    │   Structure: Overview → Routing → Tasks (+ Red Flags / Task Initialization as needed)
     │   Routing pattern:
     │     ├─ Contains decision points → Tree
     │     ├─ Part of multi-skill workflow → Chain
@@ -244,51 +244,3 @@ These thoughts mean you're rationalizing. STOP and reconsider:
 | "Global rule is simpler" | Global = always injected = token cost. Scope it. |
 | "Need a custom agent" | Built-in types or context: fork often suffice. |
 | "Conflict scan is overkill" | Duplicated knowledge = contradictions. Always scan. |
-
-## Flowchart: Architecture Assessment
-
-```dot
-digraph architecture_assessment {
-    rankdir=TB;
-
-    start [label="Need to create\ncomponent", shape=doublecircle];
-    understand [label="Task 1: Understand\nrequest", shape=box];
-    scan [label="Task 2: Scan\nfor conflicts", shape=box];
-    conflicts [label="Conflicts\nfound?", shape=diamond];
-    resolve [label="Resolve conflicts\n(merge/replace)", shape=box];
-    classify [label="Task 3: Classify\ncomponent type", shape=box];
-    is_broad [label="Broadly\napplicable?", shape=diamond];
-    claudemd [label="CLAUDE.md\ninstruction", shape=box];
-    is_capability [label="Capability?", shape=diamond];
-    skill [label="SKILL\nin skills/", shape=box];
-    is_scoped [label="File-scoped\nconvention?", shape=diamond];
-    rule [label="RULE\nin .claude/rules/", shape=box];
-    is_isolated [label="Needs\nisolation?", shape=diamond];
-    agent [label="AGENT\nor context: fork", shape=box];
-    hook [label="HOOK\nin .claude/hooks/", shape=box];
-    recommend [label="Task 4: Provide\nrecommendation", shape=box];
-    done [label="Assessment\ncomplete", shape=doublecircle];
-
-    start -> understand;
-    understand -> scan;
-    scan -> conflicts;
-    conflicts -> resolve [label="yes"];
-    conflicts -> classify [label="no"];
-    resolve -> classify;
-    classify -> is_broad;
-    is_broad -> claudemd [label="yes"];
-    is_broad -> is_capability [label="no"];
-    is_capability -> skill [label="yes"];
-    is_capability -> is_scoped [label="no"];
-    is_scoped -> rule [label="yes"];
-    is_scoped -> is_isolated [label="no"];
-    is_isolated -> agent [label="yes"];
-    is_isolated -> hook [label="no"];
-    claudemd -> recommend;
-    skill -> recommend;
-    rule -> recommend;
-    agent -> recommend;
-    hook -> recommend;
-    recommend -> done;
-}
-```

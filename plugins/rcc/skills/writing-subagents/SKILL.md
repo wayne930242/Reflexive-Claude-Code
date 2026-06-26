@@ -299,43 +299,6 @@ These thoughts mean you're rationalizing. STOP and reconsider:
 | "Simple prompt" | Simple ≠ correct. Test the behavior. |
 | "Use opus for everything / use haiku for everything" | Each layer has a role. Start with Sonnet as implementer. Add Haiku orchestration only when dispatch complexity justifies it. Add Opus quality gate only with a revision loop. |
 
-## Flowchart: Subagent Creation
-
-```dot
-digraph subagent_creation {
-    rankdir=TB;
-
-    start [label="Need subagent", shape=doublecircle];
-    analyze [label="Task 1: Analyze\nrequirements", shape=box];
-    need_agent [label="Needs\nisolation?", shape=diamond];
-    no_agent [label="Use main\ncontext", shape=box];
-    baseline [label="Task 2: Document\nproblem context", shape=box];
-    write [label="Task 3: Design\nagent configuration", shape=box];
-    validate [label="Task 4: Validate\nstructure", shape=box];
-    invoke [label="Task 5: Test\ninvocation", shape=box];
-    invoke_pass [label="Invocation\nworks?", shape=diamond];
-    verify [label="Task 6: Verify\nbehavior", shape=box];
-    review [label="Task 7: REFACTOR\nQuality review", shape=box];
-    review_pass [label="Review\npassed?", shape=diamond];
-    done [label="Agent complete", shape=doublecircle];
-
-    start -> analyze;
-    analyze -> need_agent;
-    need_agent -> no_agent [label="no"];
-    need_agent -> baseline [label="yes"];
-    baseline -> write;
-    write -> validate;
-    validate -> invoke;
-    invoke -> invoke_pass;
-    invoke_pass -> verify [label="yes"];
-    invoke_pass -> write [label="no"];
-    verify -> review;
-    review -> review_pass;
-    review_pass -> done [label="pass"];
-    review_pass -> write [label="fail\nfix issues"];
-}
-```
-
 ## References
 
 - [references/examples.md](references/examples.md) - Subagent templates

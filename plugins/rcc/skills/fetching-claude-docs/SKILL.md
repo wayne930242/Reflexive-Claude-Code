@@ -152,40 +152,6 @@ These thoughts mean you're rationalizing. STOP and reconsider:
 | "User won't notice" | Reviewer will. Or six months later when official spec changed. |
 | "Token cost too high" | Drift cost is higher: rework, breaking changes, false confidence. |
 
-## Flowchart: Doc Fetch Flow
-
-```dot
-digraph fetch_flow {
-    rankdir=TB;
-
-    start [label="Need official spec", shape=doublecircle];
-    identify [label="Task 1: Identify\ncomponent + question", shape=box];
-    has_input [label="Inputs\ncomplete?", shape=diamond];
-    ask [label="AskUserQuestion", shape=box];
-    resolve [label="Task 2: Resolve URL\nfrom mapping table", shape=box];
-    known [label="Component\nknown?", shape=diamond];
-    discover [label="Fetch llms.txt\nto discover", shape=box];
-    fetch [label="Task 3: WebFetch\nofficial spec", shape=box];
-    success [label="Fetch\nsuccess?", shape=diamond];
-    return [label="Task 4: Return\nstructured YAML", shape=box];
-    done [label="Caller resumes\nwith spec", shape=doublecircle];
-
-    start -> identify;
-    identify -> has_input;
-    has_input -> ask [label="no"];
-    ask -> resolve;
-    has_input -> resolve [label="yes"];
-    resolve -> known;
-    known -> discover [label="no"];
-    discover -> fetch;
-    known -> fetch [label="yes"];
-    fetch -> success;
-    success -> return [label="yes"];
-    success -> discover [label="no — URL stale"];
-    return -> done;
-}
-```
-
 ## References
 
 - Master index: https://code.claude.com/docs/llms.txt — **the only source of truth**

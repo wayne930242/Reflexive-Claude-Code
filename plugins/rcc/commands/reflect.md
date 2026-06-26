@@ -1,5 +1,5 @@
 ---
-description: "Analyze conversation to extract learnings and integrate into skill library or rules"
+description: "Scan the session, suggest candidate learnings, and deepen the ones you pick"
 argument-hint: "[pain-point]"
 ---
 

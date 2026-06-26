@@ -216,34 +216,6 @@ These thoughts mean you're rationalizing. STOP and reconsider:
 | "Skip validation" | Fixed skills can still be broken. Validate. |
 | "Skip report" | Report documents decisions for future you. |
 
-## Flowchart: Skill Refactoring
-
-```dot
-digraph refactor_skills {
-    rankdir=TB;
-
-    start [label="Refactor skills", shape=doublecircle];
-    discover [label="Task 1: Discover\nall skills", shape=box];
-    analyze [label="Task 2: Analyze\nand classify", shape=box];
-    execute [label="Task 3: Execute\nrefactoring plan", shape=box];
-    extract [label="Task 4: Extract\nshared conventions", shape=box];
-    validate [label="Task 5: Validate\nresults", shape=box];
-    valid [label="All\nvalid?", shape=diamond];
-    report [label="Task 6: Generate\nreport", shape=box];
-    done [label="Refactoring complete", shape=doublecircle];
-
-    start -> discover;
-    discover -> analyze;
-    analyze -> execute;
-    execute -> extract;
-    extract -> validate;
-    validate -> valid;
-    valid -> report [label="yes"];
-    valid -> execute [label="no\nfix"];
-    report -> done;
-}
-```
-
 ## Skill Chain Reference (Maintenance)
 
 | Step | Skill | Purpose |

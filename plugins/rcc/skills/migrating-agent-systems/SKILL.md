@@ -236,38 +236,6 @@ These thoughts mean you're rationalizing. STOP and reconsider:
 | "Ignore other AI configs" | `.cursorrules` and copilot instructions contain validated conventions worth importing. |
 | "Has CLAUDE.md = established" | Quality matters more than presence. A 3-line CLAUDE.md is seed-level at best. |
 
-## Flowchart: Agent System Migration
-
-```dot
-digraph migrate_agent {
-    rankdir=TB;
-
-    start [label="Setup/migrate\nagent system", shape=doublecircle];
-    detect [label="Task 1: Detect\nand assess", shape=box];
-    config [label="Task 2: Read/create\n.rcc/config.yml", shape=box];
-    maturity [label="Maturity\nlevel?", shape=diamond];
-    import_cfg [label="Import other\nAI configs", shape=box];
-    refactor [label="Task 3: Rules\nrefactoring proposal", shape=box];
-    confirm [label="User\nconfirms?", shape=diamond];
-    execute [label="Execute split\n(writing-rules/skills)"];
-    route [label="Task 4: Route to\nskill chain", shape=box];
-    done [label="Routed", shape=doublecircle];
-
-    start -> detect;
-    detect -> config;
-    config -> maturity;
-    maturity -> route [label="none"];
-    maturity -> import_cfg [label="seed"];
-    maturity -> refactor [label="partial /\nestablished"];
-    import_cfg -> route;
-    refactor -> confirm;
-    confirm -> execute [label="yes"];
-    confirm -> route [label="skip"];
-    execute -> route;
-    route -> done;
-}
-```
-
 ## Skill Chain Reference
 
 | Step | Skill | Purpose |

@@ -181,42 +181,6 @@ These thoughts mean you're rationalizing. STOP and reconsider:
 | "Write blueprint to file" | Project directory doesn't exist yet. Present inline. |
 | "Fresh = working" | Fresh projects can have config issues. Validate. |
 
-## Flowchart: Project Initialization
-
-```dot
-digraph init_project {
-    rankdir=TB;
-
-    start [label="New project", shape=doublecircle];
-    gather [label="Task 1: Gather\nrequirements", shape=box];
-    research [label="Task 2: Research\nbest practices", shape=box];
-    blueprint [label="Task 3: Blueprint\n+ user confirmation", shape=box];
-    confirmed [label="Approved?", shape=diamond];
-    bootstrap [label="Task 4: Bootstrap\nproject", shape=box];
-    validate [label="Task 5: Validate\nproject", shape=box];
-    valid [label="Builds and\nruns?", shape=diamond];
-    offer [label="Task 6: Offer\nagent system", shape=box];
-    choice [label="User\nchoice?", shape=diamond];
-    migrate [label="Invoke\nmigrating-agent-systems\n(唯一入口)", shape=box];
-    done [label="Project ready", shape=doublecircle];
-
-    start -> gather;
-    gather -> research;
-    research -> blueprint;
-    blueprint -> confirmed;
-    confirmed -> bootstrap [label="yes"];
-    confirmed -> blueprint [label="no\nrevise"];
-    bootstrap -> validate;
-    validate -> valid;
-    valid -> offer [label="yes"];
-    valid -> bootstrap [label="no\nfix"];
-    offer -> choice;
-    choice -> migrate [label="set up"];
-    choice -> done [label="skip"];
-    migrate -> done;
-}
-```
-
 ## Skill Chain Reference (Bootstrap)
 
 | Step | Skill | Purpose |

@@ -199,31 +199,3 @@ These thoughts mean you're rationalizing. STOP and reconsider:
 | "Skip verification" | Refactoring can break things. Verify. |
 | "Skip report" | Report documents decisions for future maintainers. |
 | "Skip archiving" | Accumulated documents confuse future pipeline runs. Archive. |
-
-## Flowchart: Agent System Refactoring
-
-```dot
-digraph refactor_agent {
-    rankdir=TB;
-
-    start [label="Refactor agent\nsystem", shape=doublecircle];
-    analyze [label="Task 1: Load\nreview findings", shape=box];
-    compare [label="Task 2: Prioritize\nissues", shape=box];
-    refactor [label="Task 3: Execute\nrefactoring", shape=box];
-    verify [label="Task 4: Final\nverification", shape=box];
-    clean [label="Zero\ncritical?", shape=diamond];
-    report [label="Task 5: Produce\nreport", shape=box];
-    archive [label="Task 6: Archive\npipeline documents", shape=box];
-    done [label="Refactoring complete", shape=doublecircle];
-
-    start -> analyze;
-    analyze -> compare;
-    compare -> refactor;
-    refactor -> verify;
-    verify -> clean;
-    clean -> report [label="yes"];
-    clean -> refactor [label="no\nfix more"];
-    report -> archive;
-    archive -> done;
-}
-```

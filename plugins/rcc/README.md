@@ -23,8 +23,7 @@ A complete toolkit for building, analyzing, and maintaining Claude Code agent sy
 | `writing-subagents` | "create agent", "add reviewer" | Subagent creation |
 | `writing-hooks` | "add hook", "enforce linting" | Hook creation |
 | `advising-architecture` | "classify component", "check component type" | Component type classification |
-| `reflecting` | "reflect", "what did we learn" | Session learning extraction |
-| `learning-from-failures` | After failures or debug sessions | Failure pattern archival |
+| `reflecting` | "reflect", "what did we learn" | Suggest candidate learnings, deepen the ones you pick |
 | `migrating-plugins` | "setup plugin", "migrate plugin" | Plugin setup and migration routing |
 | `validating-plugins` | "validate plugin", "audit skills" | Plugin structure validation |
 | `refactoring-plugins` | "refactor plugin", "plugin health check" | Plugin health check and fixes |
@@ -49,7 +48,7 @@ A complete toolkit for building, analyzing, and maintaining Claude Code agent sy
 - `/rcc:init-plugin` — Scaffold a new plugin package
 - `/rcc:migrate` — Migrate existing agent system
 - `/rcc:migrate-plugin` — Setup or migrate a plugin
-- `/rcc:reflect` — Analyze session and extract learnings
+- `/rcc:reflect` — Suggest candidate learnings, deepen the ones you pick
 
 ## Installation
 

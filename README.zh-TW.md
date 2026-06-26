@@ -150,7 +150,7 @@ migrate-plugin → validate → refactor
 | `writing-subagents` | 含 model/isolation 指南的 subagent 設定 |
 | `writing-rules` | 含決策樹和內容驗證的 rules |
 | `writing-hooks` | 靜態分析和品質閘門的 hooks |
-| `reflecting` | 擷取學習成果，路由至 skills 或 rules |
+| `reflecting` | 建議候選學習，深入你挑選的項目 |
 | `improving-skills` | 優化單一 skill |
 | `refactoring-skills` | 跨 skill 整合與去重 |
 | `advising-architecture` | 分類知識類型、驗證方法 |
@@ -182,7 +182,7 @@ Reflexive-Claude-Code/
 ├── .rcc/                     # 每專案 RCC 產出（納入 git）
 │   ├── config.yml            # 遷移狀態 + 決策記錄
 │   ├── {timestamp}-*.md      # analysis / plan / reflection / review 產出
-│   ├── memory/               # learning-from-failures 知識庫
+│   ├── memory/               # 反思學習產出
 │   ├── validation/           # validate_all.py 報告
 │   └── archive/              # 重構時的歷史快照
 ├── plugins/

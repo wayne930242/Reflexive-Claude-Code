@@ -173,7 +173,7 @@ See [references/spec.md](references/spec.md) for full frontmatter specification 
 
 ### Body Structure
 
-Required sections: Overview, Routing, Task Initialization, Tasks (with verification each), Red Flags, Common Rationalizations, Flowchart, References. See [references/patterns.md](references/patterns.md) for full template.
+Essential sections: Overview, Routing, Tasks (with verification each), References. Add only when they earn their place: Task Initialization (multi-step flows), Red Flags / Common Rationalizations (real rationalization risks). No flowchart required. See [references/patterns.md](references/patterns.md) for the template.
 
 ### Verification
 
@@ -181,8 +181,8 @@ Can answer YES to all:
 - [ ] Description starts with "Use when..."
 - [ ] Description does NOT summarize workflow
 - [ ] Body < 300 lines
-- [ ] Has Task Initialization section
-- [ ] Has Red Flags section
+- [ ] Task Initialization present if the flow is multi-step
+- [ ] Red Flags present if there are real rationalization risks
 - [ ] Has verification criteria for each task
 
 ## Task 4: Add References (if needed)
@@ -281,39 +281,6 @@ These thoughts mean you're rationalizing. STOP and reconsider:
 | "More content = better skill" | More content = more to skip. Concise + references = better. |
 | "Red Flags are negative" | Red Flags prevent rationalization. Essential for discipline skills. |
 | "TaskCreate is overhead" | TaskCreate prevents skipping steps. The overhead IS the value. |
-
-## Flowchart: Skill Creation
-
-```dot
-digraph skill_creation {
-    rankdir=TB;
-
-    start [label="Need new skill", shape=doublecircle];
-    analyze [label="Task 1: Analyze\nrequirements", shape=box];
-    baseline [label="Task 2: Design\nskill structure", shape=box];
-    verify_red [label="Failures\ndocumented?", shape=diamond];
-    write [label="Task 3: Write\nSKILL.md", shape=box];
-    refs [label="Task 4: Add\nreferences", shape=box];
-    validate [label="Task 5: Validate\nstructure", shape=box];
-    review [label="Task 6: Quality\nreview", shape=box];
-    review_pass [label="Review\npassed?", shape=diamond];
-    test [label="Task 7: Test\nreal usage", shape=box];
-    done [label="Skill complete", shape=doublecircle];
-
-    start -> analyze;
-    analyze -> baseline;
-    baseline -> verify_red;
-    verify_red -> write [label="yes"];
-    verify_red -> baseline [label="no\nmore scenarios"];
-    write -> refs;
-    refs -> validate;
-    validate -> review;
-    review -> review_pass;
-    review_pass -> test [label="pass"];
-    review_pass -> write [label="fail\nfix issues"];
-    test -> done;
-}
-```
 
 ## References
 

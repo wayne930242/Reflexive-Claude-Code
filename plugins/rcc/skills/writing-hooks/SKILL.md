@@ -315,39 +315,6 @@ These thoughts mean you're rationalizing. STOP and reconsider:
 | "settings.local.json" | Local = not shared. Team hooks go in settings.json. |
 | "Simple logic doesn't need tests" | Hook failures are silent. Always test. |
 
-## Flowchart: Hook Creation
-
-```dot
-digraph hook_creation {
-    rankdir=TB;
-
-    start [label="Need hook", shape=doublecircle];
-    analyze [label="Task 1: Analyze\nrequirements", shape=box];
-    baseline [label="Task 2: RED\nTest without hook", shape=box, style=filled, fillcolor="#ffcccc"];
-    write [label="Task 3: GREEN\nWrite hook script", shape=box, style=filled, fillcolor="#ccffcc"];
-    config [label="Task 4: Configure\nsettings.json", shape=box];
-    validate [label="Task 5: Validate\nbehavior", shape=box];
-    validate_pass [label="Tests\npassed?", shape=diamond];
-    test [label="Task 6: Test\nblocking", shape=box];
-    review [label="Task 7: REFACTOR\nQuality review", shape=box, style=filled, fillcolor="#ccccff"];
-    review_pass [label="Review\npassed?", shape=diamond];
-    done [label="Hook complete", shape=doublecircle];
-
-    start -> analyze;
-    analyze -> baseline;
-    baseline -> write;
-    write -> config;
-    config -> validate;
-    validate -> validate_pass;
-    validate_pass -> test [label="yes"];
-    validate_pass -> write [label="no"];
-    test -> review;
-    review -> review_pass;
-    review_pass -> done [label="pass"];
-    review_pass -> write [label="fail\nfix issues"];
-}
-```
-
 ## References
 
 - [references/static-checks.md](references/static-checks.md) - Complete hook examples

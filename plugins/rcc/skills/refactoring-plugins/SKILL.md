@@ -185,39 +185,6 @@ The script integrates CLI validation and adds checks for manifest, structure, sk
 | "Simple plugin" | Simple plugins still need valid manifests and naming. |
 | "I know the official structure" | Official structure evolves. Verify against the checklist. |
 
-## Flowchart: Plugin Refactoring
-
-```dot
-digraph refactor_plugin {
-    rankdir=TB;
-
-    start [label="Refactor\nplugin", shape=doublecircle];
-    identify [label="Task 1: Identify\nplugin target", shape=box];
-    health [label="Task 2: Run\nhealth check", shape=box];
-    analyze [label="Task 3: Analyze\nfindings", shape=box];
-    present [label="Task 4: Present\nrefactoring plan", shape=box];
-    confirm [label="User\nconfirms?", shape=diamond];
-    execute [label="Task 5: Execute\nrefactoring", shape=box];
-    verify [label="Task 6: Verify\nfixes", shape=box];
-    pass [label="Zero\nerrors?", shape=diamond];
-    release [label="Task 7: Verify version bump\ndoc in plugin CLAUDE.md", shape=box];
-    done [label="Refactoring\ncomplete", shape=doublecircle];
-
-    start -> identify;
-    identify -> health;
-    health -> analyze;
-    analyze -> present;
-    present -> confirm;
-    confirm -> execute [label="yes"];
-    confirm -> done [label="no"];
-    execute -> verify;
-    verify -> pass;
-    pass -> release [label="yes"];
-    pass -> execute [label="no\nfix more"];
-    release -> done;
-}
-```
-
 ## References
 
 - [references/plugin-health-checklist.md](references/plugin-health-checklist.md) — Full 9-category plugin health checklist

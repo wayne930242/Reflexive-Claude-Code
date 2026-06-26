@@ -108,34 +108,3 @@ Ask user to confirm before applying any fixes.
 | "It's just frontmatter" | Wrong frontmatter means skills don't trigger, agents get wrong tools, hooks don't fire. |
 | "I'll fix it later" | Invalid plugin files silently degrade. Fix now or users hit confusing errors. |
 | "Only one file has issues" | One broken link or orphaned file signals systemic neglect. Check everything. |
-
-## Flowchart
-
-```dot
-digraph validating_plugins {
-    rankdir=TB;
-
-    start [label="Validate plugins", shape=doublecircle];
-    run [label="Task 1: Run\nvalidator script", shape=box];
-    script_ok [label="Script ran\nsuccessfully?", shape=diamond];
-    clean [label="Report: clean?", shape=diamond];
-    done_clean [label="All valid ✅", shape=doublecircle];
-    read [label="Task 2: Read\nreport", shape=box];
-    propose [label="Task 3: Propose\nfixes", shape=box];
-    approved [label="User approves\nfixes?", shape=diamond];
-    apply [label="Apply fixes", shape=box];
-    done [label="Done", shape=doublecircle];
-
-    start -> run;
-    run -> script_ok;
-    script_ok -> clean [label="yes"];
-    script_ok -> done [label="no — report error"];
-    clean -> done_clean [label="yes"];
-    clean -> read [label="no"];
-    read -> propose;
-    propose -> approved;
-    approved -> apply [label="yes"];
-    approved -> done [label="no — user declines"];
-    apply -> done;
-}
-```

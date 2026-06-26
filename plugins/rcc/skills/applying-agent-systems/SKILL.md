@@ -125,35 +125,3 @@ These thoughts mean you're rationalizing. STOP and reconsider:
 | "Parallel creation" | Components depend on each other. CLAUDE.md before rules before hooks. |
 | "Skip verification" | Integration issues only appear when components interact. Verify. |
 | "Better idea" | The plan was user-approved. Discuss changes, don't silently deviate. |
-
-## Flowchart: Applying Agent System
-
-```dot
-digraph apply_agent {
-    rankdir=TB;
-
-    start [label="Apply agent\nsystem", shape=doublecircle];
-    read [label="Task 1: Read\ncomponent plan", shape=box];
-    claude_md [label="Create\nCLAUDE.md", shape=box];
-    rules [label="Create\nrules", shape=box];
-    hooks [label="Create\nhooks", shape=box];
-    skills [label="Create\nskills", shape=box];
-    agents [label="Create\nagents", shape=box];
-    verify [label="Verify system\nintegration", shape=box];
-    pass [label="All\npassed?", shape=diamond];
-    handoff [label="Invoke\nreviewing-agent-systems", shape=box];
-    done [label="Apply complete", shape=doublecircle];
-
-    start -> read;
-    read -> claude_md;
-    claude_md -> rules;
-    rules -> hooks;
-    hooks -> skills;
-    skills -> agents;
-    agents -> verify;
-    verify -> pass;
-    pass -> handoff [label="yes"];
-    pass -> claude_md [label="no\nfix failed"];
-    handoff -> done;
-}
-```

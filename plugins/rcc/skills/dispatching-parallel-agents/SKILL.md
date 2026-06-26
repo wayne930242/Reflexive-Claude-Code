@@ -159,44 +159,6 @@ These thoughts mean you're rationalizing. STOP and reconsider:
 | "Fanout writes are fine" | Two agents writing the same file race. Fanout writes only on disjoint slices. |
 | "Pick the best output silently" | The user can't audit a hidden decision. Surface dissent. |
 
-## Flowchart: Dispatch Decision
-
-```dot
-digraph dispatch {
-    rankdir=TB;
-
-    start [label="Need parallel work?", shape=doublecircle];
-    classify [label="Task 0: Classify\npattern", shape=box];
-
-    p_thread [label="P-Thread\ndivergent slices", shape=box];
-    f_thread [label="F-Thread\nBest-of-N", shape=box];
-    scout [label="Scout\nthrow-away recon", shape=box];
-    b_thread [label="B-Thread\norchestrator", shape=box];
-
-    inputs [label="Task 1: Choose\nagents + inputs", shape=box];
-    fanout [label="Task 2: Fan out\n(single message)", shape=box, style=filled, fillcolor="#ccffcc"];
-    merge [label="Task 3: Merge\nresults", shape=box];
-    report [label="Task 4: Report\nto user", shape=box];
-    done [label="Dispatch complete", shape=doublecircle];
-
-    start -> classify;
-    classify -> p_thread [label="divergent"];
-    classify -> f_thread [label="same prompt"];
-    classify -> scout [label="recon"];
-    classify -> b_thread [label="nested"];
-
-    p_thread -> inputs;
-    f_thread -> inputs;
-    scout -> inputs;
-    b_thread -> inputs;
-
-    inputs -> fanout;
-    fanout -> merge;
-    merge -> report;
-    report -> done;
-}
-```
-
 ## References
 
 - [writing-subagents](../writing-subagents/SKILL.md) — design agents that survive fanout

@@ -182,41 +182,6 @@ These thoughts mean you're rationalizing. STOP and reconsider:
 | "Skip past failures" | Past failures are the highest-value context. Always ask. |
 | "The user knows what they want" | Users describe solutions, not problems. Dig for the actual need. |
 
-## Flowchart: Workflow Brainstorming
-
-```dot
-digraph brainstorm_workflows {
-    rankdir=TB;
-
-    start [label="Brainstorm\nworkflows", shape=doublecircle];
-    import [label="Task 1: Import\nanalysis findings", shape=box];
-    has_analysis [label="Analysis\nexists?", shape=diamond];
-    select [label="User selects\nfindings to address", shape=box];
-    pipeline [label="Task 2: Pipeline\nmode exploration", shape=box];
-    pain [label="Task 3: Pain point\ndiscovery", shape=box];
-    routine [label="Task 4: Routine task\nidentification", shape=box];
-    hitl [label="Task 5: Human\nintervention points", shape=box];
-    component [label="Task 6: Component\ntype judgment", shape=box];
-    summary [label="Task 7: Produce\nworkflow summary", shape=box];
-    handoff [label="Invoke\nplanning-agent-systems", shape=box];
-    done [label="Brainstorm complete", shape=doublecircle];
-
-    start -> import;
-    import -> has_analysis;
-    has_analysis -> select [label="yes"];
-    has_analysis -> pipeline [label="no"];
-    select -> pipeline;
-    pipeline -> pain;
-    pain -> routine;
-    routine -> hitl;
-    hitl -> component;
-    component -> summary;
-    summary -> handoff [label="continue"];
-    summary -> done [label="stop here"];
-    handoff -> done;
-}
-```
-
 ## References
 
 - [references/exploration-questions.md](references/exploration-questions.md) — Targeted exploration question bank

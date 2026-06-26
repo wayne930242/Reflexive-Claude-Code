@@ -78,3 +78,7 @@ decisions_log:
     topic: primary orchestrator
     decision: "Opus 4.7 at xhigh effort"
     rationale: "Per Anthropic 4.7 best practices for long-horizon agentic work."
+  - date: "2026-06-26"
+    topic: reflection lightweighting + architecture simplification
+    decision: "Reflecting → two-stage suggest-then-deepen; removed learning-from-failures (incl. 511-line memory-manager.py); stripped trailing skill flowcharts; relaxed Law 7 (no mandatory four-section template) and removed Law 8 (self-reinforcing law display)"
+    rationale: "Reflecting forced full-capture + auto-landing; ritual sections and Python memory tooling added cost without AI value. User opted for suggestion-based reflection and leaner skills."
