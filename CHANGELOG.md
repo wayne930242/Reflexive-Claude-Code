@@ -1,5 +1,16 @@
 # Changelog
 
+## [13.0.0](https://github.com/wayne930242/Reflexive-Claude-Code/compare/v12.0.0...v13.0.0) (2026-07-14)
+
+
+### ⚠ BREAKING CHANGES
+
+* .rcc/config.yml config_version 2 — the models block is removed and component parameters (model/effort) are no longer recorded in config; components inherit the session model by default. skill-reviewer now flags triggers-only descriptions.
+
+### Features
+
+* align skill authoring standards with official spec, stop recording component params in config ([ad6da45](https://github.com/wayne930242/Reflexive-Claude-Code/commit/ad6da45e3d99f410ba54f23875bb952d11bb6d5f))
+
 ## [12.0.0](https://github.com/wayne930242/Reflexive-Claude-Code/compare/v11.1.0...v12.0.0) (2026-06-26)
 
 
