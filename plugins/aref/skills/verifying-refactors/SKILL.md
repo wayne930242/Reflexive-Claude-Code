@@ -107,32 +107,6 @@ Print report summary. Ask user:
 | "Warnings are fine, not FAIL" | Warning ≠ FAIL but IS recorded. User decides acceptance. |
 | "Cognitive complexity 16 is close enough" | Hard rule is hard. Negotiate in plan, not in verify. |
 
-## Flowchart
-
-```dot
-digraph verify {
-    start [shape=doublecircle, label="Start"];
-    toolchain [shape=box, label="Run post-refactor\ntoolchain"];
-    rules [shape=diamond, label="Hard rules pass?"];
-    mutation [shape=box, label="Run mutation testing\non touched modules"];
-    report [shape=box, label="Write verification\nreport"];
-    present [shape=box, label="Present to user"];
-    decision [shape=diamond, label="User decision"];
-    next [shape=doublecircle, label="finalizing-refactors"];
-    abort [shape=doublecircle, label="Abort"];
-    replan [shape=doublecircle, label="Back to planning"];
-
-    start -> toolchain -> rules;
-    rules -> mutation [label="pass"];
-    rules -> report [label="fail"];
-    mutation -> report;
-    report -> present -> decision;
-    decision -> next [label="continue"];
-    decision -> abort [label="abort"];
-    decision -> replan [label="replan"];
-}
-```
-
 ## References
 
 - `references/hard-rules.md`

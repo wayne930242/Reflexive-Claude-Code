@@ -105,47 +105,6 @@ After last phase's user `continue`, print run summary and hand off to `verifying
 | "Merge plan phases for speed" | Phase boundary = rollback unit. Merging = losing rollback. |
 | "amend to fix a typo" | Amend post-review = review bypass. New commit instead. |
 
-## Flowchart
-
-```dot
-digraph apply {
-    start [shape=doublecircle, label="Start"];
-    clean [shape=diamond, label="Git clean?"];
-    abort_dirty [shape=doublecircle, label="Abort: dirty tree"];
-    branch [shape=box, label="Create branch"];
-    phase [shape=box, label="Execute phase N\nedits"];
-    verify [shape=diamond, label="Tests green?"];
-    review [shape=box, label="Dispatch reviewer"];
-    review_ok [shape=diamond, label="Approved?"];
-    commit [shape=box, label="Commit phase"];
-    checkpoint [shape=diamond, label="User action"];
-    next_phase [shape=box, label="Next phase"];
-    last [shape=diamond, label="Last phase?"];
-    handoff [shape=doublecircle, label="verifying-refactors"];
-    rollback [shape=box, label="git reset --hard HEAD~1"];
-    abort_user [shape=doublecircle, label="Abort: user"];
-
-    start -> clean;
-    clean -> abort_dirty [label="no"];
-    clean -> branch [label="yes"];
-    branch -> phase;
-    phase -> verify;
-    verify -> review [label="green"];
-    verify -> rollback [label="red"];
-    review -> review_ok;
-    review_ok -> commit [label="yes"];
-    review_ok -> phase [label="no, retry"];
-    commit -> checkpoint;
-    checkpoint -> last [label="continue"];
-    checkpoint -> rollback [label="rollback"];
-    checkpoint -> abort_user [label="abort"];
-    rollback -> phase;
-    last -> handoff [label="yes"];
-    last -> next_phase [label="no"];
-    next_phase -> phase;
-}
-```
-
 ## References
 
 - `references/phase-commit-protocol.md`

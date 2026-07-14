@@ -9,7 +9,7 @@ description: Writes AGENTS.md per subproject, archives run artifacts, and sugges
 
 **Finalizing refactors IS leaving a codebase that the next AI agent can pick up immediately.**
 
-Write per-subproject AGENTS.md (the emerging 2025 consensus standard), archive run artifacts to `.rcc/archive/`, suggest next-step handoff to rcc based on project state.
+Write per-subproject AGENTS.md (the cross-tool standard for agent-targeted docs), archive run artifacts to `.rcc/archive/`, suggest next-step handoff to rcc based on project state.
 
 **Core principle:** The refactor is not done until the next agent has a map.
 
@@ -122,33 +122,9 @@ Instruct user:
 
 | Thought | Reality |
 |---------|---------|
-| "AGENTS.md is redundant with README" | Research: AGENTS.md is the agent-targeted doc (20k+ repos adopted). README is human-targeted. |
+| "AGENTS.md is redundant with README" | AGENTS.md is the agent-targeted doc; README is human-targeted. Different audiences, different content. |
 | "Skip archive, user can read .rcc/ directly" | Archive keeps unstacked run history. Cleans working .rcc/. |
 | "Merge the branch to finalize" | User merges. Plugin stops at branch. |
-
-## Flowchart
-
-```dot
-digraph finalize {
-    start [shape=doublecircle, label="Start"];
-    detect [shape=box, label="Detect subprojects"];
-    read [shape=box, label="Read existing AGENTS.md"];
-    gen [shape=box, label="Generate content"];
-    diff [shape=box, label="Diff + user approve"];
-    write [shape=box, label="Write AGENTS.md"];
-    archive [shape=box, label="Archive run"];
-    rcc_check [shape=diamond, label=".claude/ exists?"];
-    suggest_reflect [shape=box, label="Suggest /rcc reflect"];
-    suggest_migrate [shape=box, label="Suggest /rcc migrate"];
-    summary [shape=doublecircle, label="Print summary"];
-
-    start -> detect -> read -> gen -> diff -> write -> archive -> rcc_check;
-    rcc_check -> suggest_reflect [label="yes"];
-    rcc_check -> suggest_migrate [label="no"];
-    suggest_reflect -> summary;
-    suggest_migrate -> summary;
-}
-```
 
 ## References
 

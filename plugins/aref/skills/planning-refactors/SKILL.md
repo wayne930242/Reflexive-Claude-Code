@@ -94,35 +94,6 @@ Approved → hand off to `scaffolding-characterization-tests`. Dry-run mode: sto
 | "Top 5 hotspots fits in one run" | 400 LOC ceiling × 3 targets ≈ safe per-run budget. |
 | "Skip cycle-break, deal with it later" | Cyclic deps compound. Break first. |
 
-## Flowchart
-
-```dot
-digraph plan {
-    start [shape=doublecircle, label="Start"];
-    parse [shape=box, label="Parse map"];
-    cycles [shape=diamond, label="Cycles exist?"];
-    break [shape=box, label="Insert break-cycle\nphases"];
-    select [shape=box, label="Select targets"];
-    pattern [shape=box, label="Pick pattern\nper target"];
-    decompose [shape=box, label="Decompose into\nphases ≤400 LOC"];
-    tests [shape=box, label="Mark test needs"];
-    write [shape=box, label="Write plan"];
-    present [shape=box, label="Present"];
-    approve [shape=diamond, label="Approved?"];
-    next [shape=doublecircle, label="scaffolding"];
-    adjust [shape=box, label="Adjust"];
-
-    start -> parse -> cycles;
-    cycles -> break [label="yes"];
-    cycles -> select [label="no"];
-    break -> select;
-    select -> pattern -> decompose -> tests -> write -> present -> approve;
-    approve -> next [label="yes"];
-    approve -> adjust [label="no"];
-    adjust -> pattern;
-}
-```
-
 ## References
 
 - `references/patterns.md`

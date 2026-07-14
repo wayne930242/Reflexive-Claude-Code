@@ -101,28 +101,6 @@ Approved → hand off to `planning-refactors`.
 | "Use LOC as complexity proxy" | LOC correlates weakly. Use cognitive complexity. |
 | "Run on uncommitted changes" | Churn = git history. Dirty tree skews count. |
 
-## Flowchart
-
-```dot
-digraph analyze {
-    start [shape=doublecircle, label="Start"];
-    detect [shape=box, label="Detect languages"];
-    scope [shape=box, label="Determine scope"];
-    tool [shape=box, label="Check toolchain"];
-    run [shape=box, label="Run toolchain"];
-    hotspot [shape=box, label="Compute hotspots"];
-    map [shape=box, label="Write refactor map"];
-    present [shape=box, label="Present to user"];
-    approve [shape=diamond, label="Approved?"];
-    next [shape=doublecircle, label="planning-refactors"];
-    abort [shape=doublecircle, label="Abort"];
-
-    start -> detect -> scope -> tool -> run -> hotspot -> map -> present -> approve;
-    approve -> next [label="yes"];
-    approve -> abort [label="no"];
-}
-```
-
 ## References
 
 - `references/typescript-toolchain.md`

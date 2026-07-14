@@ -93,33 +93,6 @@ Print summary: N modules scaffolded, M skipped (already covered), K marked high-
 | "Golden files too big, just check count" | The size IS the signal. Commit it. |
 | "Skip modules with IO — too hard" | Mark high-risk, escalate to user, don't silently skip. |
 
-## Flowchart
-
-```dot
-digraph scaffold {
-    start [shape=doublecircle, label="Start"];
-    parse [shape=box, label="Parse plan"];
-    filter [shape=box, label="Filter must-scaffold"];
-    none [shape=diamond, label="Any remaining?"];
-    handoff [shape=doublecircle, label="applying-refactors"];
-    recipe [shape=box, label="Pick recipe\nper module"];
-    gen [shape=box, label="Generate tests +\ncapture golden"];
-    run [shape=box, label="Run tests"];
-    green [shape=diamond, label="Green?"];
-    fix [shape=box, label="Diagnose\n(freeze sources)"];
-    commit [shape=box, label="Commit scaffold"];
-
-    start -> parse -> filter -> none;
-    none -> handoff [label="no"];
-    none -> recipe [label="yes"];
-    recipe -> gen -> run -> green;
-    green -> commit [label="yes"];
-    green -> fix [label="no"];
-    fix -> run;
-    commit -> handoff;
-}
-```
-
 ## References
 
 - `references/characterization-test-recipes.md`
