@@ -1,6 +1,6 @@
 ---
 name: writing-claude-md
-description: Use when creating CLAUDE.md, improving existing CLAUDE.md, or setting up project configuration. Use when user says "create CLAUDE.md", "setup project", "configure agent".
+description: Creates or improves CLAUDE.md project configuration with token-efficient, actionable instructions. Use when creating CLAUDE.md, improving existing CLAUDE.md, or setting up project configuration. Use when user says "create CLAUDE.md", "setup project", "configure agent".
 ---
 
 # Writing CLAUDE.md
@@ -13,43 +13,21 @@ CLAUDE.md is context, not enforced configuration. Claude treats it as high-prior
 
 **Core principle:** Only include what Claude can't figure out from reading the code. Specific and verifiable > vague and aspirational.
 
-**Violating the letter of the rules is violating the spirit of the rules.**
-
-## Routing
-
-**Pattern:** Skill Steps
-**Handoff:** none
-**Next:** none
-
 ## Task Initialization (MANDATORY)
 
-Before ANY action, create task list using TaskCreate:
-
-```
-TaskCreate for EACH task below:
-- Subject: "[writing-claude-md] Task N: <action>"
-- ActiveForm: "<doing action>"
-```
+Follow [task initialization protocol](../../references/task-initialization.md).
 
 **Tasks:**
 0. Fetch latest official memory/CLAUDE.md spec
 1. Analyze current state
-2. Identify documentation gaps
-3. Design instruction structure
-4. Write CLAUDE.md
-5. Add project content
-6. Validate structure
-7. Review and optimize
-8. Test with new session
+2. RED - test without proper CLAUDE.md
+3. GREEN - write CLAUDE.md
+4. Add project content
+5. Validate structure
+6. REFACTOR - quality review
+7. Test with new session
 
-Announce: "Created 9 tasks (0–8). Starting execution..."
-
-**Execution rules:**
-1. `TaskUpdate status="in_progress"` BEFORE starting each task
-2. `TaskUpdate status="completed"` ONLY after verification passes
-3. If task fails → stay in_progress, diagnose, retry
-4. NEVER skip to next task until current is completed
-5. At end, `TaskList` to confirm all completed
+Announce: "Created 8 tasks (0–7). Starting execution..."
 
 ## Task 0: Fetch Latest Official Spec
 

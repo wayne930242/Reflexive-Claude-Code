@@ -13,8 +13,6 @@ Scan the project structure, inventory every agent component (CLAUDE.md, rules, h
 
 **Core principle:** Analyze the project first, then the agent system. Recommendations without project context are guesses.
 
-**Violating the letter of the rules is violating the spirit of the rules.**
-
 ## Routing
 
 **Pattern:** Chain
@@ -24,13 +22,7 @@ Scan the project structure, inventory every agent component (CLAUDE.md, rules, h
 
 ## Task Initialization (MANDATORY)
 
-Before ANY action, create task list using TaskCreate:
-
-```
-TaskCreate for EACH task below:
-- Subject: "[analyzing-agent-systems] Task N: <action>"
-- ActiveForm: "<doing action>"
-```
+Follow [task initialization protocol](../../references/task-initialization.md).
 
 **Tasks:**
 1. Scan project structure
@@ -41,13 +33,6 @@ TaskCreate for EACH task below:
 6. Present findings to user
 
 Announce: "Created 6 tasks. Starting execution..."
-
-**Execution rules:**
-1. `TaskUpdate status="in_progress"` BEFORE starting each task
-2. `TaskUpdate status="completed"` ONLY after verification passes
-3. If task fails → stay in_progress, diagnose, retry
-4. NEVER skip to next task until current is completed
-5. At end, `TaskList` to confirm all completed
 
 ## Task 1: Scan Project Structure
 

@@ -1,6 +1,6 @@
 ---
 name: refactoring-plugins
-description: Use when refactoring, migrating, or auditing a Claude Code plugin package. Use when user says "refactor plugin", "audit plugin", "plugin health check", "migrate plugin structure". Use when plugin structure drifts from official best practices.
+description: Refactors and audits Claude Code plugin packages against official best practices. Use when refactoring, migrating, or auditing a Claude Code plugin package. Use when user says "refactor plugin", "audit plugin", "plugin health check", "migrate plugin structure". Use when plugin structure drifts from official best practices.
 ---
 
 # Refactoring Plugins
@@ -13,23 +13,9 @@ Run health checks, detect structural drift, fix anti-patterns, and verify the re
 
 **Core principle:** A plugin that fails health check will fail in production. Measure first, then fix.
 
-**Violating the letter of the rules is violating the spirit of the rules.**
-
-## Routing
-
-**Pattern:** Skill Steps
-**Handoff:** none
-**Next:** none
-
 ## Task Initialization (MANDATORY)
 
-Before ANY action, create task list using TaskCreate:
-
-```
-TaskCreate for EACH task below:
-- Subject: "[refactoring-plugins] Task N: <action>"
-- ActiveForm: "<doing action>"
-```
+Follow [task initialization protocol](../../references/task-initialization.md).
 
 **Tasks:**
 1. Identify plugin target
@@ -41,13 +27,6 @@ TaskCreate for EACH task below:
 7. Verify version bump documentation in plugin CLAUDE.md
 
 Announce: "Created 7 tasks. Starting execution..."
-
-**Execution rules:**
-1. `TaskUpdate status="in_progress"` BEFORE starting each task
-2. `TaskUpdate status="completed"` ONLY after verification passes
-3. If task fails → stay in_progress, diagnose, retry
-4. NEVER skip to next task until current is completed
-5. At end, `TaskList` to confirm all completed
 
 ## Task 1: Identify Plugin Target
 

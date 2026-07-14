@@ -1,6 +1,6 @@
 ---
 name: writing-rules
-description: "Use when adding project conventions or scoping guidelines. Use when user says 'add convention', 'scope guideline', 'add rule', 'create rule'."
+description: Creates scoped convention rules in .claude/rules/ that auto-inject into matching contexts. Use when adding project conventions or scoping guidelines. Use when user says 'add convention', 'scope guideline', 'add rule', 'create rule'.
 ---
 
 # Writing Rules
@@ -13,42 +13,20 @@ Claude Code loads every file under `.claude/rules/` and `~/.claude/rules/` into 
 
 **Core principle:** Rules = small, focused, scope-tagged conventions split out of CLAUDE.md to keep that file under budget. CLAUDE.md = top-level project identity, build commands, gotchas. Hard rules that must never be bypassed = hooks (CLAUDE.md compliance is ~70%, not 100%).
 
-**Violating the letter of the rules is violating the spirit of the rules.**
-
-## Routing
-
-**Pattern:** Skill Steps
-**Handoff:** none
-**Next:** none
-
 ## Task Initialization (MANDATORY)
 
-Before ANY action, create task list using TaskCreate:
-
-```
-TaskCreate for EACH task below:
-- Subject: "[writing-rules] Task N: <action>"
-- ActiveForm: "<doing action>"
-```
+Follow [task initialization protocol](../../references/task-initialization.md).
 
 **Tasks:**
 0. Fetch latest official rule/skill spec
 1. Analyze requirements
-2. Identify convention gaps
-3. Design rule structure  
-4. Write rule file
-5. Validate structure
-6. Review and optimize
-7. Test activation
+2. RED - test without rule
+3. GREEN - write rule file
+4. Validate structure
+5. REFACTOR - quality review
+6. Test activation
 
-Announce: "Created 8 tasks (0–7). Starting execution..."
-
-**Execution rules:**
-1. `TaskUpdate status="in_progress"` BEFORE starting each task
-2. `TaskUpdate status="completed"` ONLY after verification passes
-3. If task fails → stay in_progress, diagnose, retry
-4. NEVER skip to next task until current is completed
-5. At end, `TaskList` to confirm all completed
+Announce: "Created 7 tasks (0–6). Starting execution..."
 
 ## Configuration Creation Process
 
@@ -269,4 +247,4 @@ These thoughts mean you're rationalizing. STOP and reconsider:
 
 - [references/paths-patterns.md](references/paths-patterns.md) - Glob pattern syntax for `paths:` scope tags
 - [references/examples.md](references/examples.md) - Rule examples by domain (includes **Safety Bypass Prevention** baseline templates for git / deploy / destructive ops)
-- [references/flowchart.md](references/flowchart.md) - Full creation flowchart (Tasks 1–6)
+- [references/flowchart.md](references/flowchart.md) - Full creation flowchart (Tasks 1–6; Task 0 fetches the spec first)

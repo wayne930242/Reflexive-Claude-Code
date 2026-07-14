@@ -1,6 +1,6 @@
 ---
 name: reflecting
-description: Use when completing significant work to surface candidate learnings. Use when the user corrects your approach, a bug is resolved, or new patterns emerge. Scans the session, suggests what is worth reflecting on, and lets the user pick which to deepen. Use when user says "reflect", "what did we learn", "capture learnings".
+description: Scans the session, suggests what is worth reflecting on, and lets the user pick which learnings to deepen. Use when completing significant work, when the user corrects your approach, when a bug is resolved, or when new patterns emerge. Use when user says "reflect", "what did we learn", "capture learnings".
 argument-hint: "[pain-point]"
 ---
 

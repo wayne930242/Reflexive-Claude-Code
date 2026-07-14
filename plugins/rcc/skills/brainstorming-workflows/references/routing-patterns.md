@@ -2,6 +2,13 @@
 
 Agent system 中的 skill 路由有四種模式。設計工作流時，每個 skill 必須明確選擇一種模式。
 
+## Contents
+
+- 四種路由模式 — Chain / Tree / Node / Skill Steps 定義與範例
+- 路由模式選擇指南 — 依任務型態選擇模式
+- Skill Routing 區段標準 — SKILL.md 中 Routing 區段的寫法
+- 全局路由圖 — 全系統路由總覽
+
 ## 四種路由模式
 
 ### 1. Tree（決策樹）

@@ -1,6 +1,6 @@
 ---
 name: planning-agent-systems
-description: Use when planning which agent system components to create or modify. Use when called by brainstorming-workflows after workflow exploration is complete.
+description: Plans which agent system components to create or modify, producing a component plan for user confirmation. Use when called by brainstorming-workflows after workflow exploration is complete. Use when user asks to plan agent system components.
 ---
 
 # Planning Agent Systems
@@ -13,8 +13,6 @@ Read the analysis report and workflow summary, decide what to create/modify/dele
 
 **Core principle:** Every component must trace back to a workflow need or a weakness fix. No speculative components.
 
-**Violating the letter of the rules is violating the spirit of the rules.**
-
 ## Routing
 
 **Pattern:** Chain
@@ -24,13 +22,7 @@ Read the analysis report and workflow summary, decide what to create/modify/dele
 
 ## Task Initialization (MANDATORY)
 
-Before ANY action, create task list using TaskCreate:
-
-```
-TaskCreate for EACH task below:
-- Subject: "[planning-agent-systems] Task N: <action>"
-- ActiveForm: "<doing action>"
-```
+Follow [task initialization protocol](../../references/task-initialization.md).
 
 **Tasks:**
 1. Read inputs
@@ -40,13 +32,6 @@ TaskCreate for EACH task below:
 5. Get user confirmation
 
 Announce: "Created 5 tasks. Starting execution..."
-
-**Execution rules:**
-1. `TaskUpdate status="in_progress"` BEFORE starting each task
-2. `TaskUpdate status="completed"` ONLY after verification passes
-3. If task fails → stay in_progress, diagnose, retry
-4. NEVER skip to next task until current is completed
-5. At end, `TaskList` to confirm all completed
 
 ## Task 1: Read Inputs
 

@@ -1,6 +1,6 @@
 ---
 name: migrating-agent-systems
-description: Use when setting up or migrating Claude Code agent system for a project. Use when user says "setup agent", "migrate agent system", "configure claude code", "add agent system".
+description: Sets up or migrates a project's Claude Code agent system through the analyze, brainstorm, plan, apply pipeline. Use when user says "setup agent", "migrate agent system", "configure claude code", "add agent system".
 ---
 
 # Migrating Agent Systems
@@ -13,8 +13,6 @@ Detect whether an agent system already exists, then invoke the appropriate skill
 
 **Core principle:** Detect, don't assume. Route, don't implement.
 
-**Violating the letter of the rules is violating the spirit of the rules.**
-
 ## Routing
 
 **Pattern:** Tree
@@ -24,13 +22,7 @@ Detect whether an agent system already exists, then invoke the appropriate skill
 
 ## Task Initialization (MANDATORY)
 
-Before ANY action, create task list using TaskCreate:
-
-```
-TaskCreate for EACH task below:
-- Subject: "[migrating-agent-systems] Task N: <action>"
-- ActiveForm: "<doing action>"
-```
+Follow [task initialization protocol](../../references/task-initialization.md).
 
 **Tasks:**
 1. Detect and assess existing agent system
@@ -39,13 +31,6 @@ TaskCreate for EACH task below:
 4. Route to appropriate skill chain
 
 Announce: "Created 4 tasks. Starting execution..."
-
-**Execution rules:**
-1. `TaskUpdate status="in_progress"` BEFORE starting each task
-2. `TaskUpdate status="completed"` ONLY after verification passes
-3. If task fails → stay in_progress, diagnose, retry
-4. NEVER skip to next task until current is completed
-5. At end, `TaskList` to confirm all completed
 
 ## Task 1: Detect and Assess Existing Agent System
 
@@ -134,6 +119,7 @@ test -d docs/validation-reports && echo "legacy-validation"
    > - release automation: `{release_automation.decision}` / `{release_automation.tool}`
    > - safety settings: `{settings_scope.safety_bypass}`
    - If `last_rcc_version < current`: offer re-migration to pull newer patterns
+   - If `config_version: 1` with a `models:` block: delete the block and bump to `config_version: 2` (component parameters are not recorded in config; see [references/config-schema.md](references/config-schema.md))
    - If `migration.completed: true` and versions match: ask if user wants to re-run anyway or proceed to specific task
 
 3. **If missing:** Create `.rcc/` directory (if not already by 2a) and write a new `config.yml`. Ask the user (one round of questions):
@@ -145,8 +131,9 @@ test -d docs/validation-reports && echo "legacy-validation"
       - `.claude/settings.json`（團隊共享，checked in）[預設]
       - `.claude/settings.local.json`（個人，gitignored）
       - `~/.claude/settings.json`（使用者全域）
-   3. 主調度員模型：claude-opus-4-7 @ xhigh [預設，依 4.7 最佳實踐]
    ```
+
+   （不詢問、不記錄模型或 effort——這些由元件 frontmatter 控制，預設 inherit session model。）
 
 4. **Write config.yml** with user answers + detected state from Task 1. Populate `decisions_log` with each confirmed answer. If 2a migrated folders, add a log entry recording that.
 

@@ -1,6 +1,6 @@
 ---
 name: migrating-plugins
-description: Use when setting up or migrating a Claude Code plugin. Use when user says "setup plugin", "migrate plugin", "plugin from scratch", "check my plugin", "turn this into a plugin", "package this as plugin". Routes to creating-plugins or validating + refactoring pipeline.
+description: Sets up or migrates a Claude Code plugin, routing to creating-plugins or the validating + refactoring pipeline. Use when user says "setup plugin", "migrate plugin", "plugin from scratch", "check my plugin", "turn this into a plugin", "package this as plugin".
 ---
 
 # Migrating Plugins
@@ -13,8 +13,6 @@ A workspace may contain existing plugins, a script project that should become a 
 
 **Core principle:** Discover what exists. Ask the user. Then route.
 
-**Violating the letter of the rules is violating the spirit of the rules.**
-
 ## Routing
 
 **Pattern:** Tree
@@ -24,13 +22,7 @@ A workspace may contain existing plugins, a script project that should become a 
 
 ## Task Initialization (MANDATORY)
 
-Before ANY action, create task list using TaskCreate:
-
-```
-TaskCreate for EACH task below:
-- Subject: "[migrating-plugins] Task N: <action>"
-- ActiveForm: "<doing action>"
-```
+Follow [task initialization protocol](../../references/task-initialization.md).
 
 **Tasks:**
 1. Discover and select target
@@ -39,13 +31,6 @@ TaskCreate for EACH task below:
 4. Route to appropriate skill chain
 
 Announce: "Created 4 tasks. Starting execution..."
-
-**Execution rules:**
-1. `TaskUpdate status="in_progress"` BEFORE starting each task
-2. `TaskUpdate status="completed"` ONLY after verification passes
-3. If task fails → stay in_progress, diagnose, retry
-4. NEVER skip to next task until current is completed
-5. At end, `TaskList` to confirm all completed
 
 ## Plugin vs Project: Key Differences
 

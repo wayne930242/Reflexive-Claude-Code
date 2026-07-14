@@ -1,6 +1,6 @@
 ---
 name: advising-architecture
-description: Use when starting any skill/agent/rule workflow to validate approach. Use when classifying knowledge type (CLAUDE.md vs rule vs skill vs agent vs hook). Use when checking for component conflicts.
+description: Validates component-type choices for agent system work, classifying knowledge as CLAUDE.md vs rule vs skill vs agent vs hook and checking for conflicts. Use when starting any skill/agent/rule workflow to validate approach. Use when classifying knowledge type. Use when checking for component conflicts.
 context: fork
 agent: Explore
 argument-hint: "[component-description] [intended-type: claudemd|rule|skill|agent|hook]"
@@ -16,23 +16,9 @@ One concept, one location. Misclassification wastes tokens (global rule that sho
 
 **Core principle:** CLAUDE.md = broad project instructions. Rules = path-scoped conventions. Skills = on-demand capabilities. Agents = isolated workers. Hooks = deterministic enforcement.
 
-**Violating the letter of the rules is violating the spirit of the rules.**
-
-## Routing
-
-**Pattern:** Node
-**Handoff:** none
-**Next:** none
-
 ## Task Initialization (MANDATORY)
 
-Before ANY action, create task list using TaskCreate:
-
-```
-TaskCreate for EACH task below:
-- Subject: "[advising-architecture] Task N: <action>"
-- ActiveForm: "<doing action>"
-```
+Follow [task initialization protocol](../../references/task-initialization.md).
 
 **Tasks:**
 1. Understand the request
@@ -41,13 +27,6 @@ TaskCreate for EACH task below:
 4. Provide recommendation
 
 Announce: "Created 4 tasks. Starting execution..."
-
-**Execution rules:**
-1. `TaskUpdate status="in_progress"` BEFORE starting each task
-2. `TaskUpdate status="completed"` ONLY after verification passes
-3. If task fails → stay in_progress, diagnose, retry
-4. NEVER skip to next task until current is completed
-5. At end, `TaskList` to confirm all completed
 
 ## Component Hierarchy (Priority Order)
 

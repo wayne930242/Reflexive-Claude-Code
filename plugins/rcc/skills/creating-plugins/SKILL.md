@@ -1,6 +1,6 @@
 ---
 name: creating-plugins
-description: Use when creating a new Claude Code plugin package. Use when user says "create plugin", "new plugin", "scaffold plugin", "plugin template".
+description: Scaffolds a new Claude Code plugin package with manifest, skills, agents, and marketplace entry. Use when creating a new Claude Code plugin package. Use when user says "create plugin", "new plugin", "scaffold plugin", "plugin template".
 ---
 
 # Creating Plugins
@@ -13,23 +13,9 @@ A plugin is the distribution unit for agent engineering — it bundles skills, c
 
 **Core principle:** Plugins are reusable across projects. Keep them focused and well-documented.
 
-**Violating the letter of the rules is violating the spirit of the rules.**
-
-## Routing
-
-**Pattern:** Skill Steps
-**Handoff:** none
-**Next:** none
-
 ## Task Initialization (MANDATORY)
 
-Before ANY action, create task list using TaskCreate:
-
-```
-TaskCreate for EACH task below:
-- Subject: "[creating-plugins] Task N: <action>"
-- ActiveForm: "<doing action>"
-```
+Follow [task initialization protocol](../../references/task-initialization.md).
 
 **Tasks:**
 1. Gather requirements
@@ -41,13 +27,6 @@ TaskCreate for EACH task below:
 7. Test installation
 
 Announce: "Created 7 tasks. Starting execution..."
-
-**Execution rules:**
-1. `TaskUpdate status="in_progress"` BEFORE starting each task
-2. `TaskUpdate status="completed"` ONLY after verification passes
-3. If task fails → stay in_progress, diagnose, retry
-4. NEVER skip to next task until current is completed
-5. At end, `TaskList` to confirm all completed
 
 ## Task 1: Gather Requirements
 

@@ -1,5 +1,13 @@
 # Plugin Templates
 
+## Contents
+
+- Manifest Format (plugin.json)
+- Marketplace Structure (for multi-plugin repos)
+- Release Automation Templates
+- Shell Injection Syntax (in SKILL.md)
+- README Template
+
 ## Manifest Format (plugin.json)
 
 ```json

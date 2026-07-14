@@ -1,6 +1,6 @@
 ---
 name: writing-hooks
-description: Use when creating Claude Code hooks for code quality, static analysis, or workflow automation. Use when user says "add hook", "enforce linting", "add pre-commit check", "block bad code".
+description: Creates Claude Code hooks that enforce code quality, static analysis, or workflow automation deterministically. Use when user says "add hook", "enforce linting", "add pre-commit check", "block bad code".
 ---
 
 # Writing Hooks
@@ -13,23 +13,9 @@ Hooks run on Claude Code events (PreToolUse, PostToolUse, etc.) and can block ac
 
 **Core principle:** Hooks enforce what humans forget. Fast checks only—slow hooks kill productivity.
 
-**Violating the letter of the rules is violating the spirit of the rules.**
-
-## Routing
-
-**Pattern:** Skill Steps
-**Handoff:** none
-**Next:** none
-
 ## Task Initialization (MANDATORY)
 
-Before ANY action, create task list using TaskCreate:
-
-```
-TaskCreate for EACH task below:
-- Subject: "[writing-hooks] Task N: <action>"
-- ActiveForm: "<doing action>"
-```
+Follow [task initialization protocol](../../references/task-initialization.md).
 
 **Tasks:**
 0. Fetch latest official hook spec
@@ -42,13 +28,6 @@ TaskCreate for EACH task below:
 7. REFACTOR - Quality review
 
 Announce: "Created 8 tasks (0–7). Starting execution..."
-
-**Execution rules:**
-1. `TaskUpdate status="in_progress"` BEFORE starting each task
-2. `TaskUpdate status="completed"` ONLY after verification passes
-3. If task fails → stay in_progress, diagnose, retry
-4. NEVER skip to next task until current is completed
-5. At end, `TaskList` to confirm all completed
 
 ## TDD Mapping for Hooks
 
@@ -136,43 +115,9 @@ See [references/static-checks.md](references/static-checks.md) for complete hook
 
 ### Stop Event Self-Verify (Ralph Wiggum / L-Thread)
 
-When the agent tries to end its turn, block until deterministic checks pass — turning a one-shot agent into a loop that won't quit until the work is actually done.
+When the agent tries to end its turn, block until deterministic checks pass — turning a one-shot agent into a loop that won't quit until the work is actually done. Use for long-running tasks, refactors, migrations, anything where "I think I'm done" is unreliable.
 
-**Use when:** long-running tasks, refactors, migrations, anything where "I think I'm done" is unreliable.
-
-**Shape:**
-
-```python
-# .claude/hooks/stop_verify.py
-import json, subprocess, sys
-
-data = json.load(sys.stdin)
-# Avoid infinite loop: respect stop_hook_active to bail after one retry
-if data.get("stop_hook_active"):
-    sys.exit(0)
-
-result = subprocess.run(["pytest", "-x", "--tb=short"], capture_output=True, text=True)
-if result.returncode != 0:
-    print(result.stdout[-2000:], file=sys.stderr)
-    sys.exit(2)  # Block stop, feed stderr to Claude
-sys.exit(0)
-```
-
-```json
-{
-  "hooks": {
-    "Stop": [{
-      "hooks": [{
-        "type": "command",
-        "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/stop_verify.py",
-        "timeout": 120
-      }]
-    }]
-  }
-}
-```
-
-**Critical:** always check `stop_hook_active` to bail after one retry — otherwise the agent loops forever on unfixable failures.
+See [references/stop-event-self-verify.md](references/stop-event-self-verify.md) for the hook script and settings.json registration. Critical rule: always check `stop_hook_active` to bail after one retry — otherwise the agent loops forever on unfixable failures.
 
 ### Critical Requirements
 

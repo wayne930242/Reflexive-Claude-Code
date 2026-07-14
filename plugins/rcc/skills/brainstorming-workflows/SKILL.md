@@ -14,8 +14,6 @@ These are different data sources — never skip one because the other exists.
 
 **Core principle:** Ask about failures before wishes.
 
-**Violating the letter of the rules is violating the spirit of the rules.**
-
 ## Routing
 
 **Pattern:** Chain
@@ -25,13 +23,7 @@ These are different data sources — never skip one because the other exists.
 
 ## Task Initialization (MANDATORY)
 
-Before ANY action, create task list using TaskCreate:
-
-```
-TaskCreate for EACH task below:
-- Subject: "[brainstorming-workflows] Task N: <action>"
-- ActiveForm: "<doing action>"
-```
+Follow [task initialization protocol](../../references/task-initialization.md).
 
 **Tasks:**
 1. Import analysis findings
@@ -43,13 +35,6 @@ TaskCreate for EACH task below:
 7. Produce workflow summary
 
 Announce: "Created 7 tasks. Starting execution..."
-
-**Execution rules:**
-1. `TaskUpdate status="in_progress"` BEFORE starting each task
-2. `TaskUpdate status="completed"` ONLY after verification passes
-3. If task fails → stay in_progress, diagnose, retry
-4. NEVER skip to next task until current is completed
-5. At end, `TaskList` to confirm all completed
 
 ## Task 1: Import Analysis Findings
 

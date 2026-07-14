@@ -79,7 +79,7 @@ skills/
 └── webhook-handler/SKILL.md
 ```
 
-**Action**: Use `write-rules` skill to create shared conventions.
+**Action**: Use `writing-rules` skill to create shared conventions.
 
 ## Anti-Patterns
 
@@ -87,7 +87,7 @@ skills/
 Keep references one level deep from SKILL.md.
 
 ### ❌ Duplicate Conventions Across Skills
-If same guideline appears in multiple skills → extract to `.claude/rules/` using `write-rules` skill.
+If same guideline appears in multiple skills → extract to `.claude/rules/` using `writing-rules` skill.
 
 ### ❌ Verbose Explanations
 Claude already knows basics—add only non-obvious knowledge.

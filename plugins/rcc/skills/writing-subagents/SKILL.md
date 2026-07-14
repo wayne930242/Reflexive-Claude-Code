@@ -1,6 +1,6 @@
 ---
 name: writing-subagents
-description: "Use when creating specialized Claude Code subagents in .claude/agents/. Use when user says 'create agent', 'add reviewer', 'specialized agent', 'isolated context task'."
+description: Creates specialized Claude Code subagents in .claude/agents/ with minimal tools, clear triggers, and isolated context. Use when user says 'create agent', 'add reviewer', 'specialized agent', 'isolated context task'.
 ---
 
 # Writing Subagents
@@ -13,42 +13,21 @@ Subagents run via the Agent tool with their own context window, tools, and syste
 
 **Core principle:** One agent, one responsibility. Bloated agents become unfocused.
 
-**Violating the letter of the rules is violating the spirit of the rules.**
-
-## Routing
-
-**Pattern:** Skill Steps
-**Handoff:** none
-**Next:** none
-
 ## Task Initialization (MANDATORY)
 
-Before ANY action, create task list using TaskCreate:
-
-```
-TaskCreate for EACH task below:
-- Subject: "[writing-subagents] Task N: <action>"
-- ActiveForm: "<doing action>"
-```
+Follow [task initialization protocol](../../references/task-initialization.md).
 
 **Tasks:**
 0. Fetch latest official subagent spec
 1. Analyze requirements
 2. Document problem context
 3. Design agent configuration
-4. Implement agent file
-5. Validate structure
-6. Test invocation
-7. Review and optimize
+4. Validate structure
+5. Test invocation
+6. Verify behavior
+7. REFACTOR - quality review
 
 Announce: "Created 8 tasks (0–7). Starting execution..."
-
-**Execution rules:**
-1. `TaskUpdate status="in_progress"` BEFORE starting each task
-2. `TaskUpdate status="completed"` ONLY after verification passes
-3. If task fails → stay in_progress, diagnose, retry
-4. NEVER skip to next task until current is completed
-5. At end, `TaskList` to confirm all completed
 
 ## Agent Configuration Process
 

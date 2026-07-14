@@ -8,7 +8,7 @@
 #
 # Schema docs: plugins/rcc/skills/migrating-agent-systems/references/config-schema.md
 
-config_version: 1
+config_version: 2
 
 # ----------------------------------------------------------------------
 # RCC migration state
@@ -39,20 +39,6 @@ settings_scope:
   user_global: ~/.claude/settings.json              # user-wide (all projects)
 
 # ----------------------------------------------------------------------
-# Primary model assignments (Opus 4.7 best practices)
-# ----------------------------------------------------------------------
-models:
-  orchestrator:
-    model: claude-opus-4-7
-    effort: xhigh
-  implementer:
-    model: sonnet
-    effort: high
-  reviewer:
-    model: sonnet
-    effort: medium
-
-# ----------------------------------------------------------------------
 # Artifact directories (relative to repo root)
 # ----------------------------------------------------------------------
 artifacts:
@@ -78,6 +64,10 @@ decisions_log:
     topic: primary orchestrator
     decision: "Opus 4.7 at xhigh effort"
     rationale: "Per Anthropic 4.7 best practices for long-horizon agentic work."
+  - date: "2026-07-14"
+    topic: retire component-parameter recording (config_version 2)
+    decision: "Removed models block; config no longer records parameters that component frontmatter controls itself"
+    rationale: "Pinned model/effort assignments rot as models evolve; components inherit the session model by default."
   - date: "2026-06-26"
     topic: reflection lightweighting + architecture simplification
     decision: "Reflecting → two-stage suggest-then-deepen; removed learning-from-failures (incl. 511-line memory-manager.py); stripped trailing skill flowcharts; relaxed Law 7 (no mandatory four-section template) and removed Law 8 (self-reinforcing law display)"

@@ -1,6 +1,6 @@
 ---
 name: reviewing-agent-systems
-description: Use when reviewing agent system components after creation or modification. Use when called by applying-agent-systems after all components are built. Use when user says "review agent system", "check quality".
+description: Reviews agent system components with specialized reviewer subagents after creation or modification. Use when called by applying-agent-systems after all components are built. Use when user says "review agent system", "check quality".
 ---
 
 # Reviewing Agent Systems
@@ -13,8 +13,6 @@ After components are built, each one must pass its corresponding reviewer agent 
 
 **Core principle:** Building without reviewing is shipping without testing. Every component type has a reviewer — use it.
 
-**Violating the letter of the rules is violating the spirit of the rules.**
-
 ## Routing
 
 **Pattern:** Chain
@@ -24,13 +22,7 @@ After components are built, each one must pass its corresponding reviewer agent 
 
 ## Task Initialization (MANDATORY)
 
-Before ANY action, create task list using TaskCreate:
-
-```
-TaskCreate for EACH task below:
-- Subject: "[reviewing-agent-systems] Task N: <action>"
-- ActiveForm: "<doing action>"
-```
+Follow [task initialization protocol](../../references/task-initialization.md).
 
 **Tasks:**
 1. Collect component inventory
@@ -39,13 +31,6 @@ TaskCreate for EACH task below:
 4. Get user confirmation
 
 Announce: "Created 4 tasks. Starting execution..."
-
-**Execution rules:**
-1. `TaskUpdate status="in_progress"` BEFORE starting each task
-2. `TaskUpdate status="completed"` ONLY after verification passes
-3. If task fails → stay in_progress, diagnose, retry
-4. NEVER skip to next task until current is completed
-5. At end, `TaskList` to confirm all completed
 
 ## Task 1: Collect Component Inventory
 

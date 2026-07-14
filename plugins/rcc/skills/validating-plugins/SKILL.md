@@ -1,6 +1,6 @@
 ---
 name: validating-plugins
-description: Use when auditing plugin structure after migration or refactoring. Scans all SKILL.md, agent, rules, and plugin manifest files for frontmatter errors, broken links, orphaned files, and invalid variables. Generates a Markdown report and proposes targeted fixes. Use when user says "validate plugin", "audit skills", "check plugin structure", "run validation after refactor".
+description: Scans all SKILL.md, agent, rules, and plugin manifest files for frontmatter errors, broken links, orphaned files, and invalid variables, generating a Markdown report with targeted fixes. Use when auditing plugin structure after migration or refactoring. Use when user says "validate plugin", "audit skills", "check plugin structure", "run validation after refactor".
 ---
 
 # Validating Plugins
@@ -11,21 +11,9 @@ Runs batch structural validation across all plugin components, writes a report, 
 
 **Core principle:** Validation should be cheap to run and easy to act on. The report is the source of truth — read it fully before proposing any fixes.
 
-## Routing
-
-**Pattern:** Skill Steps
-**Handoff:** none
-**Next:** none
-
 ## Task Initialization (MANDATORY)
 
-Before ANY action, create task list using TaskCreate:
-
-```
-TaskCreate for EACH task below:
-- Subject: "[validating-plugins] Task N: <action>"
-- ActiveForm: "<doing action>"
-```
+Follow [task initialization protocol](../../references/task-initialization.md).
 
 **Tasks:**
 1. Run validator script
@@ -33,11 +21,6 @@ TaskCreate for EACH task below:
 3. Propose fixes
 
 Announce: "Created 3 tasks. Starting execution..."
-
-**Execution rules:**
-1. `TaskUpdate status="in_progress"` BEFORE starting each task
-2. `TaskUpdate status="completed"` ONLY after verification passes
-3. NEVER skip to next task until current is completed
 
 ## Task 1: Run Validator Script
 

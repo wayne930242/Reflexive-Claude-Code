@@ -1,6 +1,6 @@
 ---
 name: initializing-projects
-description: Use when bootstrapping a new project from scratch. Use when user says "create project", "new project", "initialize project", "start new app".
+description: Bootstraps a new project with scaffolding, tooling, and Claude Code agent system setup. Use when bootstrapping a new project from scratch. Use when user says "create project", "new project", "initialize project", "start new app".
 ---
 
 # Initializing Projects
@@ -13,8 +13,6 @@ Don't just create files—research current docs, confirm with the user, then bui
 
 **Core principle:** Research current best practices. Don't assume—verify with official docs.
 
-**Violating the letter of the rules is violating the spirit of the rules.**
-
 ## Routing
 
 **Pattern:** Chain
@@ -24,13 +22,7 @@ Don't just create files—research current docs, confirm with the user, then bui
 
 ## Task Initialization (MANDATORY)
 
-Before ANY action, create task list using TaskCreate:
-
-```
-TaskCreate for EACH task below:
-- Subject: "[initializing-projects] Task N: <action>"
-- ActiveForm: "<doing action>"
-```
+Follow [task initialization protocol](../../references/task-initialization.md).
 
 **Tasks:**
 1. Gather requirements
@@ -41,13 +33,6 @@ TaskCreate for EACH task below:
 6. Offer agent system setup
 
 Announce: "Created 6 tasks. Starting execution..."
-
-**Execution rules:**
-1. `TaskUpdate status="in_progress"` BEFORE starting each task
-2. `TaskUpdate status="completed"` ONLY after verification passes
-3. If task fails → stay in_progress, diagnose, retry
-4. NEVER skip to next task until current is completed
-5. At end, `TaskList` to confirm all completed
 
 ## Task 1: Gather Requirements
 

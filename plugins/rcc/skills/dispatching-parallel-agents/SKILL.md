@@ -1,6 +1,6 @@
 ---
 name: dispatching-parallel-agents
-description: Use when fanning out work across multiple agents — same prompt to many for Best-of-N, different prompts to many for parallel exploration, or sending a scout before committing. Use when user says "parallel agents", "fan out", "best of N", "scout", "race", "vote", "spawn workers".
+description: Fans out work across multiple agents — same prompt to many for Best-of-N, different prompts for parallel exploration, or a scout before committing. Use when user says "parallel agents", "fan out", "best of N", "scout", "race", "vote", "spawn workers".
 ---
 
 # Dispatching Parallel Agents
@@ -14,14 +14,6 @@ N Agent calls in one message is N bets — they execute concurrently and you pic
 The runtime fans out automatically when multiple Agent tool uses appear in a single response; serializing by mistake (one Agent call per response) wastes the entire benefit.
 
 **Core principle:** Parallelism is a property of the dispatch (one message, N tool uses), not of the agents themselves.
-
-**Violating the letter of the rules is violating the spirit of the rules.**
-
-## Routing
-
-**Pattern:** Skill Steps
-**Handoff:** none
-**Next:** none
 
 ## Task Initialization (MANDATORY)
 

@@ -1,6 +1,6 @@
 ---
 name: applying-agent-systems
-description: Use when executing a component plan to build agent system elements. Use when called by planning-agent-systems after plan is confirmed. Use when user says "apply agent plan", "build agent system".
+description: Builds agent system components from a confirmed component plan. Use when executing a component plan to build agent system elements. Use when called by planning-agent-systems after plan is confirmed. Use when user says "apply agent plan", "build agent system".
 ---
 
 # Applying Agent Systems
@@ -13,8 +13,6 @@ Read the component plan, invoke the appropriate writing-* skill for each compone
 
 **Core principle:** Never create components directly. Always invoke the writing-* skill. Skills encode best practices that direct creation bypasses.
 
-**Violating the letter of the rules is violating the spirit of the rules.**
-
 ## Routing
 
 **Pattern:** Chain
@@ -24,13 +22,7 @@ Read the component plan, invoke the appropriate writing-* skill for each compone
 
 ## Task Initialization (MANDATORY)
 
-Before ANY action, create task list using TaskCreate:
-
-```
-TaskCreate for EACH task below:
-- Subject: "[applying-agent-systems] Task N: <action>"
-- ActiveForm: "<doing action>"
-```
+Follow [task initialization protocol](../../references/task-initialization.md).
 
 **Tasks:**
 1. Read component plan
@@ -38,13 +30,6 @@ TaskCreate for EACH task below:
 3. Verify system integration
 
 Announce: "Created N tasks. Starting execution..."
-
-**Execution rules:**
-1. `TaskUpdate status="in_progress"` BEFORE starting each task
-2. `TaskUpdate status="completed"` ONLY after verification passes
-3. If task fails → stay in_progress, diagnose, retry
-4. NEVER skip to next task until current is completed
-5. At end, `TaskList` to confirm all completed
 
 ## Task 1: Read Component Plan
 

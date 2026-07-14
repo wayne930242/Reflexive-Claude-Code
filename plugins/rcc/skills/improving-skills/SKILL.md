@@ -1,6 +1,6 @@
 ---
 name: improving-skills
-description: Use when optimizing a single existing skill. Use when user says "improve skill", "optimize skill", "update skill", "skill needs work". Use when one specific skill is outdated or underperforming. NOT for multi-skill consolidation (use refactoring-skills instead).
+description: Optimizes a single existing skill through analysis, best-practice research, and targeted edits. Use when user says "improve skill", "optimize skill", "update skill", "skill needs work". Use when one specific skill is outdated or underperforming. NOT for multi-skill consolidation (use refactoring-skills instead).
 ---
 
 # Improving Skills
@@ -13,23 +13,9 @@ Analyze current state, research best practices, apply targeted improvements.
 
 **Core principle:** Improve what exists—don't rewrite from scratch unless necessary.
 
-**Violating the letter of the rules is violating the spirit of the rules.**
-
-## Routing
-
-**Pattern:** Node
-**Handoff:** none
-**Next:** none
-
 ## Task Initialization (MANDATORY)
 
-Before ANY action, create task list using TaskCreate:
-
-```
-TaskCreate for EACH task below:
-- Subject: "[improving-skills] Task N: <action>"
-- ActiveForm: "<doing action>"
-```
+Follow [task initialization protocol](../../references/task-initialization.md).
 
 **Tasks:**
 1. Analyze current skill
@@ -40,13 +26,6 @@ TaskCreate for EACH task below:
 6. Validate and review
 
 Announce: "Created 6 tasks. Starting execution..."
-
-**Execution rules:**
-1. `TaskUpdate status="in_progress"` BEFORE starting each task
-2. `TaskUpdate status="completed"` ONLY after verification passes
-3. If task fails → stay in_progress, diagnose, retry
-4. NEVER skip to next task until current is completed
-5. At end, `TaskList` to confirm all completed
 
 ## Task 1: Analyze Current Skill
 
@@ -97,7 +76,7 @@ grep -r "[skill-name]" . --include="*.md"
 
 **WebSearch:**
 ```
-[skill domain] best practices 2025
+[skill domain] best practices [current year]
 [skill domain] patterns
 ```
 
@@ -117,8 +96,8 @@ Compare with community implementations.
 **Goal:** Create specific improvement plan.
 
 **Check against standards:**
-- [ ] Description starts with "Use when..."
-- [ ] Description doesn't summarize workflow
+- [ ] Description states what the skill does, then "Use when..." triggers
+- [ ] Description doesn't enumerate workflow steps
 - [ ] Task Initialization present if multi-step
 - [ ] Has verification for each task
 - [ ] Red Flags / Rationalizations present if there's real risk
@@ -164,12 +143,12 @@ Compare with community implementations.
 
 **Validation:**
 ```bash
-python3 scripts/validate_skill.py <skill-path>
+python3 "${CLAUDE_SKILL_DIR}/../writing-skills/scripts/validate_skill.py" <skill-path>
 ```
 
 **Or manual checklist:**
 - [ ] Frontmatter valid
-- [ ] Description starts with "Use when..."
+- [ ] Description states what the skill does, then "Use when..." triggers
 - [ ] Has Task Initialization
 - [ ] All tasks have verification
 - [ ] Has Red Flags

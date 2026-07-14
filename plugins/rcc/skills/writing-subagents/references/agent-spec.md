@@ -12,7 +12,7 @@
 | `maxTurns` | No | Maximum agentic turns |
 | `skills` | No | Auto-load skills when invoked |
 | `permissionMode` | No | `default`, `acceptEdits`, `bypassPermissions`, `plan` |
-| `effort` | No | `low`, `medium`, `high`, `max` (Opus 4.6 only) |
+| `effort` | No | `low`, `medium`, `high`, `xhigh`, `max` — available levels depend on the model |
 | `isolation` | No | `worktree` = run in temporary git worktree |
 | `background` | No | `true` = always run in background |
 | `memory` | No | Persistent memory scope: `user`, `project`, `local` |

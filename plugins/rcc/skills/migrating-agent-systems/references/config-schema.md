@@ -11,7 +11,7 @@ Every RCC-enabled project maintains a single `.rcc/config.yml` recording migrati
 ## Schema
 
 ```yaml
-config_version: 1
+config_version: 2
 
 migration:
   completed: true | false
@@ -31,17 +31,6 @@ settings_scope:
   hooks: path                        # where hook configs live
   personal_overrides: path           # gitignored per-dev file
   user_global: path                  # ~/.claude/ wide settings
-
-models:
-  orchestrator:
-    model: claude-opus-4-7 | ...
-    effort: low | medium | high | xhigh | max
-  implementer:
-    model: sonnet | ...
-    effort: ...
-  reviewer:
-    model: sonnet | ...
-    effort: ...
 
 artifacts:
   root: .rcc/
@@ -73,9 +62,6 @@ Canonical answer to "where does this kind of setting go?" Referenced by:
 - `writing-hooks` when registering in settings.json
 - `update-config` skill if present
 
-### `models.*`
-Informs component generation in `planning-agent-systems` and `writing-subagents` — planners default to these models unless the component explicitly needs different.
-
 ### `decisions_log`
 Append-only. `reflecting` adds entries when new decisions are made. Do not delete historical entries — outdated decisions still inform context.
 
@@ -84,12 +70,16 @@ Append-only. `reflecting` adds entries when new decisions are made. Do not delet
 | Skill | Reads | Writes |
 |-------|-------|--------|
 | `migrating-agent-systems` | migration, release_automation, settings_scope | migration (creates/updates) |
-| `planning-agent-systems` | models, settings_scope | — |
+| `planning-agent-systems` | settings_scope, decisions_log | — |
 | `writing-rules` | settings_scope | — |
 | `writing-hooks` | settings_scope | — |
 | `refactoring-plugins` Task 7 | release_automation | release_automation |
 | `creating-plugins` Task 6 | — | release_automation (on new plugin) |
 | `reflecting` | decisions_log (historical context) | decisions_log (append new) |
+
+## Version migration
+
+- **v1 → v2:** the v1 `models:` block is deprecated — delete it during migration and bump `config_version` to 2. Config does not record parameters that component frontmatter controls itself (model, effort); components inherit the session model by default.
 
 ## When to create
 

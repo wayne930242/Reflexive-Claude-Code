@@ -1,6 +1,6 @@
 ---
 name: refactoring-skills
-description: Use when analyzing and refactoring multiple skills across a project. Use when user says "refactor skills", "cleanup skills", "consolidate skills", "skill review". Use when skills overlap, are redundant, or need cross-skill consolidation. NOT for improving a single skill (use improving-skills instead).
+description: Analyzes and refactors multiple skills across a project, consolidating overlaps, extracting shared conventions, and removing redundancy. Use when user says "refactor skills", "cleanup skills", "consolidate skills", "skill review". Use when skills overlap, are redundant, or need cross-skill consolidation. NOT for improving a single skill (use improving-skills instead).
 ---
 
 # Refactoring Skills
@@ -13,8 +13,6 @@ Consolidate, simplify, extract shared conventions, remove redundancy.
 
 **Core principle:** Fewer focused skills > many overlapping skills.
 
-**Violating the letter of the rules is violating the spirit of the rules.**
-
 ## Routing
 
 **Pattern:** Tree
@@ -24,13 +22,7 @@ Consolidate, simplify, extract shared conventions, remove redundancy.
 
 ## Task Initialization (MANDATORY)
 
-Before ANY action, create task list using TaskCreate:
-
-```
-TaskCreate for EACH task below:
-- Subject: "[refactoring-skills] Task N: <action>"
-- ActiveForm: "<doing action>"
-```
+Follow [task initialization protocol](../../references/task-initialization.md).
 
 **Tasks:**
 1. Discover all skills
@@ -41,13 +33,6 @@ TaskCreate for EACH task below:
 6. Generate report
 
 Announce: "Created 6 tasks. Starting execution..."
-
-**Execution rules:**
-1. `TaskUpdate status="in_progress"` BEFORE starting each task
-2. `TaskUpdate status="completed"` ONLY after verification passes
-3. If task fails → stay in_progress, diagnose, retry
-4. NEVER skip to next task until current is completed
-5. At end, `TaskList` to confirm all completed
 
 ## Task 1: Discover All Skills
 
@@ -156,12 +141,12 @@ Compare with community implementations. Better patterns exist?
 
 **For each skill:**
 ```bash
-python3 scripts/validate_skill.py <skill-path>
+python3 "${CLAUDE_SKILL_DIR}/../writing-skills/scripts/validate_skill.py" <skill-path>
 ```
 
 **Or manual checklist:**
 - [ ] Frontmatter has name and description
-- [ ] Description starts with "Use when..."
+- [ ] Description states what the skill does, then "Use when..." triggers
 - [ ] Body < 300 lines
 - [ ] No duplicated conventions (now in rules)
 

@@ -1,6 +1,6 @@
 ---
 name: writing-skills
-description: Use when creating new skills, modifying existing skills, or improving skill quality. Use when user says "create a skill", "write a skill", "add capability". Use when a repeated pattern should become reusable.
+description: Creates and improves Claude Code skills following the official Anthropic spec and house standards. Use when creating new skills, modifying existing skills, or improving skill quality. Use when user says "create a skill", "write a skill", "add capability". Use when a repeated pattern should become reusable.
 ---
 
 # Writing Skills
@@ -13,23 +13,9 @@ Analyze requirements clearly, design skill structure thoughtfully, implement wit
 
 **Core principle:** Clear requirements and structured design lead to effective skills that truly guide agent behavior.
 
-**Violating the letter of the rules is violating the spirit of the rules.**
-
-## Routing
-
-**Pattern:** Skill Steps
-**Handoff:** none
-**Next:** none
-
 ## Task Initialization (MANDATORY)
 
-Before ANY action, create task list using TaskCreate:
-
-```
-TaskCreate for EACH task below:
-- Subject: "[writing-skills] Task N: <action>"
-- ActiveForm: "<doing action>"
-```
+Follow [task initialization protocol](../../references/task-initialization.md).
 
 **Tasks:**
 0. Fetch latest official skill spec
@@ -38,17 +24,10 @@ TaskCreate for EACH task below:
 3. Implement SKILL.md
 4. Add references (if needed)
 5. Validate structure
-6. Review and improve
+6. REFACTOR - quality review
 7. Test with real usage
 
 Announce: "Created 8 tasks (0–7). Starting execution..."
-
-**Execution rules:**
-1. `TaskUpdate status="in_progress"` BEFORE starting each task
-2. `TaskUpdate status="completed"` ONLY after verification passes
-3. If task fails → stay in_progress, diagnose, retry
-4. NEVER skip to next task until current is completed
-5. At end, `TaskList` to confirm all completed
 
 ## Skill Creation Process
 
@@ -167,19 +146,19 @@ See [references/spec.md](references/spec.md) for full frontmatter specification 
 
 **Key rules:**
 - Name: gerund form, lowercase, hyphens only, max 64 chars
-- Description: starts with "Use when...", third person, does not summarize workflow
+- Description: `[What it does]. [Key capabilities]. Use when [triggers].` — third person, does not enumerate workflow steps
 - Body: < 300 lines, detailed content goes to `references/`
 - Parallel tool calls: when skill tasks involve independent reads, searches, or writes, explicitly state "run these tool calls in parallel" so the agent fans out instead of serializing
 
 ### Body Structure
 
-Essential sections: Overview, Routing, Tasks (with verification each), References. Add only when they earn their place: Task Initialization (multi-step flows), Red Flags / Common Rationalizations (real rationalization risks). No flowchart required. See [references/patterns.md](references/patterns.md) for the template.
+Essential sections: Overview, Tasks (with verification each), References. Add only when they earn their place: Routing (only when the skill hands off to other skills — omit if Handoff/Next would be "none"), Task Initialization (multi-step flows), Red Flags / Common Rationalizations (real rationalization risks). No flowchart required. See [references/patterns.md](references/patterns.md) for the template.
 
 ### Verification
 
 Can answer YES to all:
-- [ ] Description starts with "Use when..."
-- [ ] Description does NOT summarize workflow
+- [ ] Description states what the skill does, then "Use when..." triggers
+- [ ] Description does NOT enumerate workflow steps
 - [ ] Body < 300 lines
 - [ ] Task Initialization present if the flow is multi-step
 - [ ] Red Flags present if there are real rationalization risks
@@ -216,7 +195,7 @@ python3 "${CLAUDE_SKILL_DIR}/scripts/validate_skill.py" <path/to/skill>
 **Manual checklist if script unavailable:**
 - [ ] Frontmatter has `name` and `description`
 - [ ] Name is gerund form, lowercase, hyphens only
-- [ ] Description starts with "Use when..."
+- [ ] Description states what the skill does, then "Use when..." triggers
 - [ ] Body < 300 lines
 - [ ] All reference links work
 - [ ] If `context: fork`: `model` explicitly specified (`inherit` = anti-pattern in plugin skills)
@@ -262,7 +241,7 @@ Agent tool:
 These thoughts mean you're rationalizing. STOP and reconsider:
 
 - "Skip requirements analysis, I know what's needed"
-- "Description can summarize the workflow"
+- "Description can enumerate the workflow steps"
 - "300 lines is too restrictive"
 - "Skip reviewer, the skill is obviously good"
 - "Testing is overkill for a simple skill"
@@ -277,7 +256,7 @@ These thoughts mean you're rationalizing. STOP and reconsider:
 |--------|---------|
 | "I know what agents need" | You know what YOU think they need. Baseline reveals actual failures. |
 | "Baseline testing takes too long" | 15 min baseline saves hours debugging weak skill. |
-| "Description should explain the skill" | Description = when to load. Body = what to do. Mixing causes skipping. |
+| "Description only needs triggers" | Description = what it does + when to load. Body = how. Claude picks among 100+ skills by capability statement. |
 | "More content = better skill" | More content = more to skip. Concise + references = better. |
 | "Red Flags are negative" | Red Flags prevent rationalization. Essential for discipline skills. |
 | "TaskCreate is overhead" | TaskCreate prevents skipping steps. The overhead IS the value. |

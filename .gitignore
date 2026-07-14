@@ -19,3 +19,4 @@ __pycache__/
 
 # Plugin validator run artifacts
 **/.rcc/
+openspec/

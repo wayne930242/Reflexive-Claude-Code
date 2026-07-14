@@ -88,6 +88,11 @@ def _validate_description_field(data: dict) -> None:
     desc = data["description"]
     if "use when" not in desc.lower():
         warn("Description should include 'Use when...' triggers")
+    if desc.lower().lstrip('"\'').startswith("use when"):
+        warn(
+            "Description is triggers-only: lead with what the skill does, "
+            "then 'Use when...' triggers"
+        )
     if len(desc) < 20:
         warn("Description seems too short")
     else:
@@ -103,9 +108,11 @@ def validate_body(content: str) -> None:
     body = parts[2].strip()
     lines = body.split("\n")
 
-    # Check length
-    if len(lines) > 500:
-        warn(f"Body has {len(lines)} lines (recommend < 500)")
+    # Check length (house rule < 300; official recommendation < 500).
+    # Body length does not affect activation — it is a recurring token cost
+    # once the skill is loaded.
+    if len(lines) > 300:
+        warn(f"Body has {len(lines)} lines (house rule < 300)")
     else:
         ok(f"Body length: {len(lines)} lines")
 

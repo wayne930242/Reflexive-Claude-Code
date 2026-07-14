@@ -3,6 +3,15 @@
 After weakness analysis and project scanning, use this guide to produce actionable restructuring recommendations.
 Every recommendation must trace back to a specific weakness finding or project characteristic.
 
+## Contents
+
+- Merge Recommendations — when and how to consolidate overlapping components
+- Extract Recommendations — pulling shared conventions out of skills
+- Pipeline Recommendations — chaining skills into workflows
+- Recommendation Summary — output format
+- Restructuring Summary — report template
+- Traceability Requirement — linking recommendations to findings
+
 ---
 
 ## 1. Merge Recommendations

@@ -25,14 +25,14 @@ You are an expert skill architect reviewing Claude Code skills for quality and e
    - No reserved words: `anthropic`, `claude`, `helper`, `utils`
 
 4. **Evaluate Description**
-   - Starts with "Use when..." (triggering conditions only)
+   - States what the skill does, then "Use when..." triggers (what + when, per official spec)
    - Written in third person
-   - Does NOT summarize workflow (causes Claude to skip reading)
+   - Does NOT enumerate internal workflow steps
    - Length: 50–1024 characters (Anthropic spec upper bound is 1024)
    - Includes specific triggers and symptoms
 
 5. **Assess Content Quality**
-   - SKILL.md body < 200 lines (progressive disclosure)
+   - SKILL.md body < 300 lines (house rule; loaded body is a recurring token cost)
    - Writing style: imperative/infinitive form
    - Clear sections, logical flow
    - Concrete guidance, not vague advice
@@ -77,12 +77,12 @@ issues:
 **Frontmatter:**
 - [ ] `name` field exists and is gerund form (verb+-ing)
 - [ ] `description` exists, 50–1024 characters
-- [ ] `description` starts with "Use when..."
-- [ ] `description` does NOT describe the workflow (workflow description causes Claude to skip reading)
+- [ ] `description` states what the skill does, then includes "Use when..." triggers (triggers-only descriptions = flag as issue)
+- [ ] `description` does NOT enumerate internal workflow steps
 - [ ] If `context: fork`: `model` field explicitly specified; `inherit` or missing model = flag as issue (`inherit` is an anti-pattern in plugin skills)
 
 **Size:**
-- [ ] SKILL.md line count < 300 (exceeding this degrades activation quality)
+- [ ] SKILL.md line count < 300 (house rule — loaded body stays resident in context, every line is a recurring token cost; body length does NOT affect activation)
 
 **Progressive disclosure:**
 - [ ] Large checklists / examples / reference docs are in `references/` not inlined in SKILL.md

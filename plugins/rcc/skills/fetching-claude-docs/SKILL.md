@@ -1,6 +1,6 @@
 ---
 name: fetching-claude-docs
-description: "Use PROACTIVELY before writing or modifying any Claude Code component (subagent, skill, hook, rule, slash command, plugin manifest, settings.json, MCP config) to fetch the current official spec from code.claude.com and avoid drifting from up-to-date best practices. Use when user asks 'what is the official spec for X', 'is this the right way to do Y', 'check Anthropic docs for Z'. MUST BE USED at Task 0 of writing-subagents, writing-skills, writing-hooks, writing-rules, writing-claude-md before any design decision."
+description: "Fetches the current official Claude Code component spec from code.claude.com, returning verbatim excerpts so designs never drift from stale memory. Use PROACTIVELY before writing or modifying any Claude Code component (subagent, skill, hook, rule, slash command, plugin manifest, settings.json, MCP config). Use when user asks 'what is the official spec for X', 'is this the right way to do Y', 'check Anthropic docs for Z'. MUST BE USED at Task 0 of writing-subagents, writing-skills, writing-hooks, writing-rules, writing-claude-md before any design decision."
 ---
 
 # Fetching Claude Docs
@@ -13,8 +13,6 @@ This skill exists because the project has historically drifted from official doc
 
 **Core principle:** Return official source verbatim with URL. Do NOT paraphrase — paraphrasing reintroduces drift.
 
-**Violating the letter of the rules is violating the spirit of the rules.**
-
 ## Routing
 
 **Pattern:** Skill Steps
@@ -23,17 +21,11 @@ This skill exists because the project has historically drifted from official doc
 
 ## Task Initialization (MANDATORY)
 
-Before ANY action, create task list using TaskCreate:
-
-```
-TaskCreate for EACH task below:
-- Subject: "[fetching-claude-docs] Task N: <action>"
-- ActiveForm: "<doing action>"
-```
+Follow [task initialization protocol](../../references/task-initialization.md).
 
 **Tasks:**
 1. Identify component type and question
-2. Resolve URL from mapping table
+2. Resolve URL from llms.txt
 3. Fetch official spec via WebFetch
 4. Return verbatim excerpt + URL to caller
 
