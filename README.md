@@ -133,7 +133,7 @@ The planner decides which assets each skill needs; the reviewer checks they exis
 
 ## Full Skill List
 
-### rcc (v13.0.0) <!-- x-release-please-version -->
+### rcc (v13.0.1) <!-- x-release-please-version -->
 
 | Skill | Purpose |
 |-------|---------|
