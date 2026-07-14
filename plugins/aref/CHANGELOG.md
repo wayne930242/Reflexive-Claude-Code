@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.1](https://github.com/wayne930242/Reflexive-Claude-Code/compare/aref-v0.2.0...aref-v0.2.1) (2026-07-14)
+
+
+### Bug Fixes
+
+* **aref:** remove time-pinned claims and redundant flowchart sections ([df31b05](https://github.com/wayne930242/Reflexive-Claude-Code/commit/df31b05c4ba178170557ac33c778a23cbb5e3916))
+
 ## [0.2.0](https://github.com/wayne930242/Reflexive-Claude-Code/compare/aref-v0.1.0...aref-v0.2.0) (2026-04-20)
 
 
