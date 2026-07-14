@@ -133,7 +133,7 @@ migrate-plugin → validate → refactor
 
 ## 完整 Skill 列表
 
-### rcc (v13.0.0) <!-- x-release-please-version -->
+### rcc (v13.0.1) <!-- x-release-please-version -->
 
 | Skill | 用途 |
 |-------|------|

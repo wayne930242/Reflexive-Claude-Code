@@ -1,5 +1,12 @@
 # Changelog
 
+## [13.0.1](https://github.com/wayne930242/Reflexive-Claude-Code/compare/v13.0.0...v13.0.1) (2026-07-14)
+
+
+### Bug Fixes
+
+* **rcc:** guard against None stdout/stderr in plugin validate hook ([bf94c45](https://github.com/wayne930242/Reflexive-Claude-Code/commit/bf94c4508d8d63083a7eea4406c369ed46762a2f))
+
 ## [13.0.0](https://github.com/wayne930242/Reflexive-Claude-Code/compare/v12.0.0...v13.0.0) (2026-07-14)
 
 
