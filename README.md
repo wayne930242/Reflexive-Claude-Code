@@ -159,7 +159,7 @@ The planner decides which assets each skill needs; the reviewer checks they exis
 | `refactoring-plugins` | Health-check plugins against official best practices |
 | `validating-plugins` | Batch scan all plugin files for errors |
 
-### aref (v0.2.0)
+### aref (v0.2.1)
 <!-- aref version is manually synced from plugins/aref/.claude-plugin/plugin.json — release-please cannot scope generic markers per package -->
 
 

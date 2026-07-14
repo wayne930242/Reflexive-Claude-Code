@@ -159,7 +159,7 @@ migrate-plugin → validate → refactor
 | `refactoring-plugins` | 依官方最佳實踐檢查插件健康度 |
 | `validating-plugins` | 批次掃描所有插件檔案錯誤 |
 
-### aref (v0.2.0)
+### aref (v0.2.1)
 <!-- aref 版號由 plugins/aref/.claude-plugin/plugin.json 手動同步 — release-please 無法 scope generic marker per package -->
 
 
