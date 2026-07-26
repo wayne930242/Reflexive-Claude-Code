@@ -1,10 +1,13 @@
 """Constants and enums for Claude Code configuration validation."""
 
-# Skill frontmatter allowed fields
+# Skill frontmatter allowed fields.
+# Source: https://code.claude.com/docs/en/skills.md — "Frontmatter reference" table.
+# Keep in sync with that table; a missing entry makes the hook warn on valid skills.
 SKILL_ALLOWED_FIELDS = {
-    "name", "description", "argument-hint", "disable-model-invocation",
-    "user-invocable", "allowed-tools", "model", "effort", "context",
-    "agent", "hooks", "paths", "shell",
+    "name", "description", "when_to_use", "argument-hint", "arguments",
+    "disable-model-invocation", "user-invocable", "allowed-tools",
+    "disallowed-tools", "model", "effort", "context", "agent", "background",
+    "hooks", "paths", "shell",
 }
 
 # Agent frontmatter allowed fields

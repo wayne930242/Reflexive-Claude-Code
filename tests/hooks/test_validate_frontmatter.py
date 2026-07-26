@@ -76,6 +76,39 @@ def test_check_skill_md_allowed_fields_no_warn(tmp_path):
     assert not any("extra frontmatter" in w for w in warnings)
 
 
+def test_check_skill_md_every_documented_field_no_warn(tmp_path):
+    """Every field in the official Frontmatter reference table must be accepted.
+
+    https://code.claude.com/docs/en/skills.md — a field missing from
+    SKILL_ALLOWED_FIELDS makes the hook warn on a perfectly valid skill.
+    """
+    mod = _load_module()
+    skill_dir = tmp_path / "my-skill"
+    skill_dir.mkdir()
+    frontmatter = "\n".join([
+        "name: my-skill",
+        "description: Use when x.",
+        "when_to_use: When the user says y.",
+        "argument-hint: '[slug]'",
+        "arguments: slug format",
+        "disable-model-invocation: true",
+        "user-invocable: true",
+        "allowed-tools: Read Grep",
+        "disallowed-tools: AskUserQuestion",
+        "model: sonnet",
+        "effort: high",
+        "context: fork",
+        "agent: general-purpose",
+        "background: false",
+        "paths: src/**",
+        "shell: bash",
+    ])
+    (skill_dir / "SKILL.md").write_text(f"---\n{frontmatter}\n---\n# Body\n")
+    warnings = mod.check_skill_md(skill_dir / "SKILL.md")
+    extra = [w for w in warnings if "extra frontmatter" in w]
+    assert extra == [], f"documented fields rejected: {extra}"
+
+
 def test_check_skill_md_broken_link_warns(tmp_path):
     mod = _load_module()
     skill_dir = tmp_path / "my-skill"
