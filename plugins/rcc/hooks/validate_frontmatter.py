@@ -24,8 +24,13 @@ except ImportError:
     from validators.config_validator import check_settings_json, check_hooks_json
 
 
+# Layouts a dotfiles repo may use to hold components that get linked into ~/.claude/.
+# Relative to cwd; "{kind}" is "skills" or "agents".
+DOTFILES_LAYOUTS = (".claude/{kind}", "claude/{kind}", "{kind}")
+
+
 def discover_skill_and_agent_dirs(cwd: Path) -> tuple[list[Path], list[Path]]:
-    """Find valid skill and agent directories from plugin roots and .claude/."""
+    """Find valid skill and agent directories from plugin roots and dotfiles layouts."""
     skill_dirs: list[Path] = []
     agent_dirs: list[Path] = []
 
@@ -44,11 +49,13 @@ def discover_skill_and_agent_dirs(cwd: Path) -> tuple[list[Path], list[Path]]:
                 if candidate.exists() and candidate not in target_list:
                     target_list.append(candidate)
 
-    # Project-level .claude/skills and .claude/agents
-    for subdir, target_list in [("skills", skill_dirs), ("agents", agent_dirs)]:
-        candidate = cwd / ".claude" / subdir
-        if candidate.exists() and candidate not in target_list:
-            target_list.append(candidate)
+    # Project-level and dotfiles-repo layouts. A dotfiles repo mirroring ~/.claude/
+    # may keep components at .claude/<kind>/, claude/<kind>/, or bare <kind>/.
+    for kind, target_list in [("skills", skill_dirs), ("agents", agent_dirs)]:
+        for layout in DOTFILES_LAYOUTS:
+            candidate = cwd / layout.format(kind=kind)
+            if candidate.is_dir() and candidate not in target_list:
+                target_list.append(candidate)
 
     return skill_dirs, agent_dirs
 
