@@ -32,48 +32,10 @@ aref package（獨立版號）：
 **Law 7: Skill Sections** - SKILL.md 依任務需要組織。多步驟流程才用 task 追蹤；Red Flags／Rationalizations 僅在有真實踩雷風險時加入；不強制 flowchart。
 </law>
 
-## Project Structure
-
-```
-.claude-plugin/
-└── marketplace.json        # 市集定義（版本由 release-please 管）
-
-.rcc/                        # 本專案 RCC 產出
-├── config.yml               # 遷移狀態 + 決策 log
-├── {timestamp}-*.md         # analysis / plan / reflection
-├── memory/                  # 反思產出的 learning
-├── validation/              # hook 驗證報告
-└── archive/
-
-plugins/
-├── rcc/                    # 核心 ACE 插件
-│   ├── .claude-plugin/
-│   │   └── plugin.json     # 插件 manifest
-│   ├── skills/             # 所有技能
-│   ├── agents/             # 審查員子代理
-│   └── commands/           # 命令別名
-└── aref/                   # 對既有專案做 agent-friendly 重構
-    ├── .claude-plugin/plugin.json
-    ├── skills/             # 6-skill pipeline
-    ├── agents/refactor-phase-reviewer.md
-    ├── commands/aref.md
-    ├── fixtures/           # 自測用 4 語言迷你專案
-    └── tests/run-fixtures.md
-```
+## Conventions
 
 `aref` 是與 `rcc` 並存的獨立 plugin，專注於對既有 codebase 進行 agent-friendly 重構。版號獨立管理。
 
 Skill 產出寫入 `.rcc/`（不再用 `docs/agent-system/`）。`config.yml` 記錄不會自動回收的決策（release automation、settings_scope、model 指派）。
 
-## Quick Reference
-
-### Version Bump
-更新版本時需同步修改 3 個位置（見 Law 2）
-
-### Add New Skill
-1. 在 `plugins/rcc/skills/` 建立目錄 + `SKILL.md`
-2. 依需要組織內容，避免儀式性樣板（見 Law 7）
-3. 同步更新兩份 README
-
-### Skill Design
-遵循 Laws 4-7
+新增技能：在 `plugins/rcc/skills/` 建立目錄 + `SKILL.md`，依需要組織內容避免儀式性樣板，並同步更新兩份 README。
