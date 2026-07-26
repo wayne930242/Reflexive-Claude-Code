@@ -8,7 +8,7 @@ Imports validation logic from validate_frontmatter.py, scans all relevant files,
 and writes a Markdown report for agent review.
 
 Usage:
-    python3 validate_all.py [--output PATH]
+    python3 validate_all.py [--output PATH] [--user-root]
 """
 
 import argparse
@@ -28,35 +28,59 @@ from validate_frontmatter import (  # noqa: E402
 )
 
 
-def validate_all(cwd: Path) -> dict[str, list[str]]:
-    """Scan all plugin components and return {relative_path: [warnings]}."""
+USER_ROOT = Path.home() / ".claude"
+
+
+def _label(path: Path, cwd: Path) -> str:
+    """Report key: cwd-relative when possible, otherwise the absolute path."""
+    if path.is_relative_to(cwd):
+        return str(path.relative_to(cwd))
+    return str(path)
+
+
+def validate_all(cwd: Path, include_user_root: bool = False) -> dict[str, list[str]]:
+    """Scan all plugin components and return {path_label: [warnings]}."""
     results: dict[str, list[str]] = {}
     skill_dirs, agent_dirs = discover_skill_and_agent_dirs(cwd)
-    rules_dir = cwd / ".claude" / "rules"
+    rules_dirs: list[Path] = [cwd / ".claude" / "rules"]
+
+    if include_user_root:
+        # Files under ~/.claude/ are loaded in every session but live outside any
+        # project cwd, so the PostToolUse hook never sees them.
+        for kind, target_list in [
+            ("skills", skill_dirs),
+            ("agents", agent_dirs),
+            ("rules", rules_dirs),
+        ]:
+            candidate = USER_ROOT / kind
+            if candidate.is_dir() and candidate not in target_list:
+                target_list.append(candidate)
 
     for sd in skill_dirs:
         for skill_md in sorted(sd.rglob("SKILL.md")):
             warnings = check_skill_md(skill_md)
             if warnings:
-                results[str(skill_md.relative_to(cwd))] = warnings
+                results[_label(skill_md, cwd)] = warnings
 
     for ad in agent_dirs:
         for agent_md in sorted(ad.glob("*.md")):
             warnings = check_agent_md(agent_md)
             if warnings:
-                results[str(agent_md.relative_to(cwd))] = warnings
+                results[_label(agent_md, cwd)] = warnings
 
-    if rules_dir.exists():
-        for rule_md in sorted(rules_dir.glob("*.md")):
+    for rd in rules_dirs:
+        if not rd.is_dir():
+            continue
+        for rule_md in sorted(rd.glob("*.md")):
             warnings = check_rules_md(rule_md)
             if warnings:
-                results[str(rule_md.relative_to(cwd))] = warnings
+                results[_label(rule_md, cwd)] = warnings
 
     for plugin_json in sorted(cwd.rglob(".claude-plugin/plugin.json")):
         plugin_dir = plugin_json.parent.parent
         warnings = check_plugin_validate(plugin_dir)
         if warnings:
-            results[str(plugin_json.relative_to(cwd))] = warnings
+            results[_label(plugin_json, cwd)] = warnings
 
     return results
 
@@ -89,10 +113,15 @@ def write_report(results: dict[str, list[str]], cwd: Path, output: Path | None =
 def main() -> None:
     parser = argparse.ArgumentParser(description="Validate all plugin files and write a report.")
     parser.add_argument("--output", type=Path, default=None, help="Report output path")
+    parser.add_argument(
+        "--user-root",
+        action="store_true",
+        help=f"Also scan {USER_ROOT}/skills, {USER_ROOT}/agents, and {USER_ROOT}/rules",
+    )
     args = parser.parse_args()
 
     cwd = Path.cwd()
-    results = validate_all(cwd)
+    results = validate_all(cwd, include_user_root=args.user_root)
     report_path = write_report(results, cwd, args.output)
 
     print(f"report:{report_path}")  # structured output for skill to parse

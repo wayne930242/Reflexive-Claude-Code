@@ -27,10 +27,12 @@ Announce: "Created 3 tasks. Starting execution..."
 **Goal:** Execute `validate_all.py` and capture the report path.
 
 ```bash
-{ command -v uv >/dev/null 2>&1 && uv run "${CLAUDE_SKILL_DIR}/../../hooks/validate_all.py"; } \
-  || { python3 --version >/dev/null 2>&1 && python3 "${CLAUDE_SKILL_DIR}/../../hooks/validate_all.py"; } \
-  || python "${CLAUDE_SKILL_DIR}/../../hooks/validate_all.py"
+{ command -v uv >/dev/null 2>&1 && uv run "${CLAUDE_SKILL_DIR}/../../hooks/validate_all.py" --user-root; } \
+  || { python3 --version >/dev/null 2>&1 && python3 "${CLAUDE_SKILL_DIR}/../../hooks/validate_all.py" --user-root; } \
+  || python "${CLAUDE_SKILL_DIR}/../../hooks/validate_all.py" --user-root
 ```
+
+`--user-root` additionally scans `~/.claude/skills`, `~/.claude/agents`, and `~/.claude/rules`. The PostToolUse hook only fires on files edited in-session inside a project, so components under `~/.claude/` — loaded in every session — are never validated by it. Report entries for those files carry absolute paths; everything else is cwd-relative.
 
 Parse stdout for:
 - `report:<path>` — path to the generated Markdown report
