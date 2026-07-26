@@ -32,27 +32,35 @@ def _load_module() -> types.ModuleType:
     return mod
 
 
+def _load_utils() -> types.ModuleType:
+    """Load validators.utils, where the parsing helpers live."""
+    if str(SCRIPT.parent) not in sys.path:
+        sys.path.insert(0, str(SCRIPT.parent))
+    import validators.utils
+    return validators.utils
+
+
 def test_parse_frontmatter_returns_fields():
-    mod = _load_module()
+    utils = _load_utils()
     text = "---\nname: my-skill\ndescription: does stuff\n---\n\n# Body"
-    result = mod.parse_frontmatter(text)
+    result = utils.parse_frontmatter(text)
     assert result == {"name": "my-skill", "description": "does stuff"}
 
 
 def test_parse_frontmatter_no_frontmatter_returns_none():
-    mod = _load_module()
-    assert mod.parse_frontmatter("# No frontmatter here") is None
+    utils = _load_utils()
+    assert utils.parse_frontmatter("# No frontmatter here") is None
 
 
 def test_parse_frontmatter_empty_block_returns_empty_dict():
-    mod = _load_module()
-    assert mod.parse_frontmatter("---\n---\n") == {}
+    utils = _load_utils()
+    assert utils.parse_frontmatter("---\n---\n") == {}
 
 
 def test_extract_markdown_links_relative_only():
-    mod = _load_module()
+    utils = _load_utils()
     text = "[foo](references/foo.md) [bar](https://example.com) [baz](./scripts/run.sh)"
-    result = mod.extract_markdown_links(text)
+    result = utils.extract_markdown_links(text)
     assert "references/foo.md" in result
     assert "https://example.com" not in result
     assert "./scripts/run.sh" in result
@@ -224,16 +232,68 @@ def test_check_skill_md_dot_slash_link_no_orphan_warn(tmp_path):
 
 def test_check_agent_md_extra_field_warns(tmp_path):
     mod = _load_module()
-    (tmp_path / "my-agent.md").write_text("---\nname: my-agent\ndescription: x\nmodel: inherit\ncontext: fork\ntools: []\ntags: bad\n---\n")
+    (tmp_path / "my-agent.md").write_text("---\nname: my-agent\ndescription: x\nmodel: inherit\ntools: []\ntags: bad\n---\n")
     warnings = mod.check_agent_md(tmp_path / "my-agent.md")
     assert any("tags" in w for w in warnings)
 
 
 def test_check_agent_md_allowed_fields_no_warn(tmp_path):
     mod = _load_module()
-    (tmp_path / "my-agent.md").write_text("---\nname: my-agent\ndescription: x\nmodel: inherit\ncontext: fork\ntools: []\n---\n")
+    (tmp_path / "my-agent.md").write_text("---\nname: my-agent\ndescription: x\nmodel: inherit\ntools: []\n---\n")
     warnings = mod.check_agent_md(tmp_path / "my-agent.md")
     assert warnings == []
+
+
+def test_check_agent_md_context_is_not_an_agent_field(tmp_path):
+    """`context: fork` belongs to skills, not agents.
+
+    https://code.claude.com/docs/en/sub-agents.md lists no `context` field; the
+    official text places it in skills ("With `context: fork` in a skill").
+    """
+    mod = _load_module()
+    (tmp_path / "my-agent.md").write_text("---\nname: my-agent\ndescription: x\ncontext: fork\n---\n")
+    warnings = mod.check_agent_md(tmp_path / "my-agent.md")
+    assert any("context" in w for w in warnings)
+
+
+def test_check_agent_md_every_documented_field_no_warn(tmp_path):
+    """Every field in the official subagent frontmatter table must be accepted."""
+    mod = _load_module()
+    frontmatter = "\n".join([
+        "name: my-agent",
+        "description: x",
+        'tools: ["Read", "Grep"]',
+        "disallowedTools: AskUserQuestion",
+        "model: fable",
+        "permissionMode: manual",
+        "maxTurns: 10",
+        "skills: my-skill",
+        "mcpServers: slack",
+        "memory: project",
+        "background: true",
+        "effort: xhigh",
+        "isolation: worktree",
+        "color: cyan",
+        "initialPrompt: Start here.",
+    ])
+    (tmp_path / "my-agent.md").write_text(f"---\n{frontmatter}\n---\n")
+    warnings = mod.check_agent_md(tmp_path / "my-agent.md")
+    assert warnings == [], f"documented fields rejected: {warnings}"
+
+
+def test_check_agent_md_full_model_id_no_warn(tmp_path):
+    """The model field accepts a full model ID, not only the aliases."""
+    mod = _load_module()
+    (tmp_path / "my-agent.md").write_text("---\nname: my-agent\ndescription: x\nmodel: claude-opus-5\n---\n")
+    warnings = mod.check_agent_md(tmp_path / "my-agent.md")
+    assert not any("invalid model" in w for w in warnings)
+
+
+def test_check_agent_md_bogus_model_warns(tmp_path):
+    mod = _load_module()
+    (tmp_path / "my-agent.md").write_text("---\nname: my-agent\ndescription: x\nmodel: gpt-4\n---\n")
+    warnings = mod.check_agent_md(tmp_path / "my-agent.md")
+    assert any("invalid model" in w for w in warnings)
 
 
 def test_check_rules_md_extra_field_warns(tmp_path):

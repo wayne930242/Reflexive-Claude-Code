@@ -4,7 +4,7 @@ import json
 import re
 from pathlib import Path
 from .constants import (
-    AGENT_ALLOWED_FIELDS, VALID_MODELS, VALID_EFFORT_LEVELS,
+    AGENT_ALLOWED_FIELDS, VALID_MODELS, FULL_MODEL_ID_PATTERN, VALID_EFFORT_LEVELS,
     VALID_PERMISSION_MODES, VALID_MEMORY_SCOPES, VALID_ISOLATION_MODES,
     VALID_COLORS, CLAUDE_CODE_TOOLS
 )
@@ -21,11 +21,16 @@ def check_agent_md(path: Path) -> list[str]:
         for f in sorted(set(fields.keys()) - AGENT_ALLOWED_FIELDS):
             warnings.append(f'extra frontmatter field: "{f}"')
 
-        # Validate model field
+        # Validate model field. Besides the aliases, a full model ID is also valid.
         if "model" in fields:
             model_value = fields["model"].strip().strip('"')
-            if model_value and model_value not in VALID_MODELS:
-                warnings.append(f'invalid model "{model_value}" (valid: {", ".join(sorted(VALID_MODELS))})')
+            if (model_value
+                    and model_value not in VALID_MODELS
+                    and not re.match(FULL_MODEL_ID_PATTERN, model_value)):
+                warnings.append(
+                    f'invalid model "{model_value}" '
+                    f'(valid: {", ".join(sorted(VALID_MODELS))}, or a full model ID)'
+                )
 
         # Validate effort field
         if "effort" in fields:
