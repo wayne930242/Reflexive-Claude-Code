@@ -35,7 +35,8 @@ You are an expert reviewing Claude Code rule files for quality and effectiveness
 
 6. **Assess Load Cost**
    - Count rule lines (body only, excluding frontmatter)
-   - If no `paths:`, this rule loads every session — count against 300-line budget
+   - If no `paths:`, this rule loads at launch in every session — count against the 200-line always-resident budget (CLAUDE.md + all unscoped rules)
+   - If `paths:` is present, the rule is lazy-loaded and does not count against that budget
 
 7. **Classify Content**
    - Rule should contain only abstract directives (what/why)
@@ -81,7 +82,8 @@ issues:
 - [ ] No duplication with other rules (compare against auto-loaded rule content in context — do NOT Grep rule files)
 
 **Load Cost:**
-- [ ] Global rules (no `paths:`) do not push session-start total over 300 lines
+- [ ] Unscoped rules (no `paths:`) do not push the always-resident total (CLAUDE.md + all unscoped rules) over 200 lines
+- [ ] A rule whose content targets a specific file glob has `paths:` — flag missing `paths:` as wasted context, not just missing documentation
 
 ## Critical Rules
 

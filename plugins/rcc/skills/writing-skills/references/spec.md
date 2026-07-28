@@ -15,14 +15,15 @@ House rule: always set `name` and `description` explicitly.
 | `when_to_use` | Extra trigger context appended to `description` in the skill listing (combined text capped at 1,536 chars) |
 | `argument-hint` | Autocomplete hint, e.g., `[issue-number]` |
 | `arguments` | Named positional arguments for `$name` substitution (space-separated string or YAML list) |
-| `disable-model-invocation` | `true` = only manual `/name` invocation; description removed from Claude's context |
+| `disable-model-invocation` | `true` = Claude never auto-loads it; manual `/name` only. Also blocks preloading into subagents and firing from a scheduled task |
 | `user-invocable` | `false` = hidden from `/` menu, only Claude invokes |
 | `allowed-tools` | Tools auto-approved when skill activates (space/comma-separated or YAML list) |
 | `disallowed-tools` | Tools removed from Claude's pool while the skill is active; clears on next user message |
 | `model` | Model override while the skill is active. Accepts the same values as `/model`, or `inherit` |
 | `effort` | Effort level: `low`, `medium`, `high`, `xhigh`, `max` — available levels depend on the model |
 | `context` | `fork` = run in isolated subagent context |
-| `agent` | Subagent type for `context: fork` (`Explore`, `Plan`, `general-purpose`, or custom agent name) |
+| `agent` | Subagent type for `context: fork` (`Explore`, `Plan`, `general-purpose`, or custom agent name). Defaults to `general-purpose` |
+| `background` | Only with `context: fork`. `false` = wait for the result in the invoking turn instead of backgrounding. Default `true` |
 | `hooks` | Skill lifecycle hooks |
 | `paths` | Glob patterns limiting auto-activation (comma-separated or YAML list) |
 | `shell` | Shell for `!` commands: `bash` (default) or `powershell` |
@@ -123,7 +124,7 @@ description: First stages files, then writes the message, then commits.  # enume
 If a convention appears in multiple skills, extract to `.claude/rules/`:
 
 - Use `writing-rules` skill to create shared convention
-- Skills automatically inherit rules (auto-injected)
+- Rules reach the skill through the session context: unscoped rules are always present, `paths:`-scoped rules arrive once Claude reads a matching file
 - Keep only skill-specific details in SKILL.md
 
 **Rule of thumb**: Rules = conventions shared across skills.

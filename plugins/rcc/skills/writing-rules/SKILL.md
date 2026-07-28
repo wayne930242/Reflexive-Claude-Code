@@ -7,11 +7,11 @@ description: Creates scoped convention rules in .claude/rules/ that auto-inject 
 
 ## Overview
 
-**Writing rules IS creating self-documenting, scope-tagged conventions that load every session.**
+**Writing rules IS creating focused, path-scoped conventions that load only when they are relevant.**
 
-Claude Code loads every file under `.claude/rules/` and `~/.claude/rules/` into context at session start as project instructions — the same mechanism as CLAUDE.md. There is no native `paths:` glob filter; the `paths:` frontmatter is a **convention**, not a load gate. Claude reads `paths:` as scope metadata and applies the rule with judgment on matching files. Every line costs session-start tokens.
+`paths:` is a real load gate. Per the [official spec](https://code.claude.com/docs/en/memory#path-specific-rules): "Rules without a `paths` field are loaded unconditionally and apply to all files. Path-scoped rules trigger when Claude reads files matching the pattern, not on every tool use." Rules without `paths:` load at launch with the same priority as `.claude/CLAUDE.md`; rules with `paths:` cost nothing until Claude touches a matching file.
 
-**Core principle:** Rules = small, focused, scope-tagged conventions split out of CLAUDE.md to keep that file under budget. CLAUDE.md = top-level project identity, build commands, gotchas. Hard rules that must never be bypassed = hooks (CLAUDE.md compliance is ~70%, not 100%).
+**Core principle:** Rules = small, focused conventions, scoped with `paths:` so they stay out of context until needed. CLAUDE.md = top-level project identity, build commands, gotchas — always resident, so keep it under 200 lines. Hard rules that must never be bypassed = hooks (instruction compliance is ~70%, not 100%).
 
 ## Task Initialization (MANDATORY)
 
@@ -50,7 +50,7 @@ Skill tool: fetching-claude-docs
              nested CLAUDE.md per directory, @ import syntax, token cost"
 ```
 
-**Verification:** Received YAML with non-empty `spec_excerpt`. Use as authoritative reference. Note: Anthropic's spec does NOT define a `paths:` frontmatter mechanism — `.claude/rules/*.md` files are loaded unconditionally as project instructions. If the fetched spec contradicts anything in this SKILL, the fetched spec wins.
+**Verification:** Received YAML with non-empty `spec_excerpt`. Use as authoritative reference. If the fetched spec contradicts anything in this SKILL, the fetched spec wins — record the contradiction so this SKILL can be corrected.
 
 ## Task 1: Analyze Requirements
 
@@ -58,9 +58,8 @@ Skill tool: fetching-claude-docs
 
 **Questions to answer:**
 - What convention needs enforcement?
-- Which file scope does it apply to (for `paths:` self-documentation)?
+- Which files does it apply to? A concrete glob → path-scoped rule. "Everything" → CLAUDE.md or an unscoped rule.
 - Is it a hard rule that must never be bypassed? → Use a hook, not a rule.
-- Does it belong in CLAUDE.md (top-level identity) or in a rule (focused convention split out for budget)?
 - Does it require multi-step procedure? → Use a skill, not a rule.
 - Does this rule already exist? (compare against auto-loaded rule content in context — do NOT Read or Grep rule files)
 
@@ -73,24 +72,28 @@ digraph rule_decision {
     start [label="New directive needed", shape=doublecircle];
     hard [label="Must NEVER\nbe bypassed?", shape=diamond];
     proc [label="Multi-step\nprocedure?", shape=diamond];
-    budget [label="CLAUDE.md\n> 180 lines?", shape=diamond];
+    scoped [label="Applies to a\nspecific file glob?", shape=diamond];
+    budget [label="CLAUDE.md\n> 200 lines?", shape=diamond];
 
     hook [label="Use hook\n(deterministic)", shape=box];
     skill [label="Use skill\n(loaded on demand)", shape=box];
     claudemd [label="Add to CLAUDE.md", shape=box];
-    rule [label="Split into rule file\nwith paths: scope tag", shape=box];
+    rule [label="Rule file with paths:\n(loads only on matching files)", shape=box];
+    global [label="Unscoped rule file\n(loads at launch;\nsplit for readability)", shape=box];
 
     start -> hard;
     hard -> hook [label="yes"];
     hard -> proc [label="no"];
     proc -> skill [label="yes"];
-    proc -> budget [label="no"];
-    budget -> rule [label="yes"];
+    proc -> scoped [label="no"];
+    scoped -> rule [label="yes"];
+    scoped -> budget [label="no"];
+    budget -> global [label="yes"];
     budget -> claudemd [label="no"];
 }
 ```
 
-**Verification:** Can state the convention in one sentence, name the file scope it applies to, and confirm it isn't a hard rule (which would belong in a hook).
+**Verification:** Can state the convention in one sentence, name the file glob it applies to (or justify why it is genuinely cross-cutting), and confirm it isn't a hard rule (which would belong in a hook).
 
 ## Task 2: RED - Test Without Rule
 
@@ -111,20 +114,22 @@ digraph rule_decision {
 ### Rule Location
 
 ```
-~/.claude/rules/             # User-level (loads in every project session)
-.claude/rules/               # Project-level (loads in this project's sessions)
-├── code-style.md            # Global rule (no paths: tag)
+~/.claude/rules/             # User-level (applies to every project)
+.claude/rules/               # Project-level (this project only)
+├── code-style.md            # Unscoped (no paths:) — loads at launch, every session
 ├── api/
-│   └── conventions.md       # paths: ["src/api/**"]  ← scope hint, not load filter
+│   └── conventions.md       # paths: ["src/api/**"]  ← loads only on matching files
 └── testing/
     └── guidelines.md        # paths: ["**/*.test.ts"]
 ```
+
+All `.md` files are discovered recursively, so subdirectories are just organization.
 
 ### Rule Format
 
 ```yaml
 ---
-paths:                        # Optional — self-documenting scope hint
+paths:                        # Omit only for genuinely cross-cutting rules
   - "src/api/**/*.ts"
 ---
 
@@ -134,23 +139,21 @@ paths:                        # Optional — self-documenting scope hint
 - Constraint 2
 ```
 
-### Loading Mechanism (read carefully — common misconception)
+### Loading Mechanism
 
-Every `.md` under `.claude/rules/` and `~/.claude/rules/` is loaded into context at session start as project instructions, just like CLAUDE.md. This is true regardless of the `paths:` frontmatter.
-
-- `paths:` is a **scope hint** — Claude reads it as metadata and applies the rule with judgment when working on matching files. It does NOT gate loading.
-- Therefore every rule line is a session-start token cost. Keep rules small.
-- User-level `~/.claude/rules/` and project-level `.claude/rules/` both load; project rules take precedence on conflict.
-- Symlinks are supported for sharing rules across projects.
-- For deterministic enforcement (block at file-read time, hard-stop a tool call), use a hook — rules cannot enforce, only suggest.
+- **Without `paths:`** — loaded at launch, every session, same priority as `.claude/CLAUDE.md`. Costs tokens in every conversation.
+- **With `paths:`** — loaded when Claude reads a file matching the glob, not on every tool use. Costs nothing until then. This is the reason to scope aggressively.
+- User-level `~/.claude/rules/` loads before project rules, giving project rules higher priority.
+- Symlinks are supported for sharing rules across projects; circular symlinks are handled.
+- For deterministic enforcement (hard-stop a tool call), use a hook — rules cannot enforce, only suggest.
 
 ### Writing Rules
 
 **Key constraints:**
-- **< 50 lines** — every line costs session-start tokens (loaded unconditionally)
+- **< 50 lines** — long rules dilute adherence, and unscoped ones cost tokens every session
 - **Imperative form** — "MUST use", not "try to use"
 - **No procedures** — how-to belongs in skills
-- **Scope tag** — add `paths:` so future readers (and Claude) know where the rule applies; it's documentation, not a filter
+- **Scope with `paths:`** — this genuinely gates loading. Omit it only when the rule really applies to all work.
 
 See [references/examples.md](references/examples.md) for good/bad rule examples by domain.
 
@@ -160,26 +163,27 @@ See [references/examples.md](references/examples.md) for good/bad rule examples 
 |-------|---------------|--------|
 | Line count | > 50 lines | Must simplify or split |
 | Procedural content | Contains numbered steps, multi-line code blocks | Extract to skill, rule keeps principle only |
-| paths missing | Content targets specific file types but no `paths:` scope tag | Add for self-documentation |
+| paths missing | Content targets specific file types but no `paths:` | Add it — this is free context savings, not just documentation |
+| paths too broad | `paths: "**/*"` or similar | Equivalent to unscoped but lazier; either narrow it or drop `paths:` entirely |
 | Hard rule | Says "MUST NEVER" about destructive/irreversible action | Move to hook (deterministic enforcement); a rule alone is ~70% reliable |
-| Load budget | Adding this rule pushes session-start total (CLAUDE.md + every rule file) > 300 lines | Warn, simplify, or merge |
+| Load budget | Adding this rule pushes CLAUDE.md + all *unscoped* rules > 200 lines | Warn, simplify, merge, or scope with `paths:` |
 
 **Verification:**
-- [ ] Has frontmatter with `paths:` scope tag (or omitted for genuinely cross-cutting rules)
+- [ ] Has `paths:` scoping it (or a stated reason why it is genuinely cross-cutting)
 - [ ] < 50 lines
 - [ ] Imperative language ("MUST", "NEVER")
 - [ ] No procedural content (steps, code blocks as process)
 - [ ] Hard rules (destructive ops, irreversible actions) have a backing hook — not just text
-- [ ] Not duplicating existing rules or CLAUDE.md (both auto-loaded into context — do NOT Read or Grep rule files)
-- [ ] Session-start total (CLAUDE.md + every rule file) still under 300 lines
+- [ ] Not duplicating existing rules or CLAUDE.md (compare against content already in context — do NOT Read or Grep rule files)
+- [ ] Always-resident total (CLAUDE.md + every unscoped rule) still under 200 lines
 
 ## Task 4: Validate Structure
 
 **Goal:** Verify rule file structure is correct.
 
 **Checklist:**
-- [ ] File is in `.claude/rules/` directory
-- [ ] Frontmatter has valid `paths:` glob (or none for global)
+- [ ] File is under `.claude/rules/` (nested subdirectories are fine — discovery is recursive)
+- [ ] Frontmatter has valid `paths:` glob (or none, deliberately, for a cross-cutting rule)
 - [ ] Body < 50 lines
 - [ ] Uses imperative language
 - [ ] No how-to instructions (belongs in skills)
@@ -221,8 +225,9 @@ Agent tool:
 
 These thoughts mean you're rationalizing. STOP and reconsider:
 
-- "This should be in CLAUDE.md, but I'll make it a rule" (split for budget reasons, not to hide it)
-- "paths: will gate the load so size doesn't matter" (false — every rule loads every session)
+- "This should be in CLAUDE.md, but I'll make it a rule" (scope for relevance, not to hide it)
+- "paths: gates the load so size doesn't matter" (a matched rule is still fully resident afterward — keep it small)
+- "Skip paths:, it's just documentation" (false — it is a real load gate; omitting it makes the rule always-resident)
 - "50 lines is too restrictive"
 - "Skip baseline, I know what's needed"
 - "Add how-to instructions here" (rule = directive, skill = procedure)
@@ -238,8 +243,8 @@ These thoughts mean you're rationalizing. STOP and reconsider:
 | Excuse | Reality |
 |--------|---------|
 | "CLAUDE.md is overkill" | If it applies broadly to all work, it belongs in CLAUDE.md. |
-| "Global rules are fine" | Global = always injected. Scope it properly. |
-| "50 lines is arbitrary" | 50 lines × N matches = massive token cost. |
+| "Unscoped rules are fine" | Unscoped = loaded at launch in every session, forever. Add `paths:`. |
+| "50 lines is arbitrary" | Long rules dilute adherence, and unscoped ones bill every session. |
 | "I can add procedures here" | Rules = what. Skills = how. Keep them separate. |
 | "One comprehensive rule" | Multiple focused rules > one bloated rule. |
 

@@ -18,8 +18,8 @@ You are an expert reviewing Claude Code subagent definitions for quality and eff
    - `name`: lowercase with hyphens, matches filename (minus .md)
    - `description`: clear, includes trigger conditions
    - `tools`: listed and appropriate
-   - `model`: specified (inherit, sonnet, haiku, opus)
-   - `context`: fork recommended for isolation
+   - `model`: `inherit`, `sonnet`, `haiku`, `opus`, `fable`, or a full model ID
+   - No invalid fields. `context` and `agent` are **skill** fields — a subagent file that sets them is malformed
 
 3. **Check Single Responsibility**
    - Agent has ONE clear job
@@ -48,9 +48,9 @@ You are an expert reviewing Claude Code subagent definitions for quality and eff
    - Reasonable length (not bloated)
 
 7. **Verify Context Isolation**
-   - `context: fork` for tasks that shouldn't pollute main context
-   - Appropriate for review, analysis, and exploration tasks
-   - Not needed for tasks that must share state
+   - A subagent already runs in its own context window — isolation is inherent, not a field to set
+   - Because it starts fresh, the `description` must tell the caller what context to pass in the prompt
+   - `isolation: worktree` is for file-write conflicts (parallel writers), not context hygiene
 
 ## Output Format
 
@@ -62,7 +62,7 @@ issues:
   - file: plugins/rcc/agents/my-agent.md
     line_range: [1, 7]
     action: add_field       # enum: add_field | delete | replace_line | fix_frontmatter | move_to_references
-    target: "context: fork" # omit if not applicable
+    target: "model: sonnet" # omit if not applicable
     reason: Specific explanation of what rule is violated and why
 ```
 
@@ -73,10 +73,12 @@ issues:
 **Frontmatter:**
 - [ ] `name` exists, lowercase-hyphens, matches filename (minus .md)
 - [ ] `description` exists, includes trigger conditions
-- [ ] `model` field explicitly present and not `inherit` (missing or `inherit` = flag as issue; `inherit` is an anti-pattern in plugin agents)
+- [ ] Every field is valid for a subagent (`name`, `description`, `tools`, `disallowedTools`, `model`, `permissionMode`, `maxTurns`, `skills`, `mcpServers`, `hooks`, `memory`, `background`, `effort`, `isolation`, `color`, `initialPrompt`). Skill-only fields such as `context`/`agent` = flag as issue
+- [ ] `model` field explicitly present and not `inherit` (missing or `inherit` = flag as issue; `inherit` is an anti-pattern in plugin agents, where the parent model is unknown)
 - [ ] `model` value matches three-layer architecture: orchestrator→haiku, implementer→sonnet, quality gate/advisor→opus
 - [ ] `tools` is minimal set (principle of least privilege); quality gate agents use only `Read, Grep, Glob`
 - [ ] No `Bash` in read-only reviewer agents
+- [ ] Plugin agents do not set `hooks`, `mcpServers`, or `permissionMode` — those are ignored for plugin subagents
 
 **Responsibility:**
 - [ ] Agent's single responsibility can be described in one sentence

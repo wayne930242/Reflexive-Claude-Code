@@ -1,6 +1,6 @@
 # Rule Examples by Domain
 
-> **Note**: All rule files under `.claude/rules/` and `~/.claude/rules/` load into context every session as project instructions — the `paths:` frontmatter is a self-documenting scope hint, not a load filter. Rules exist to **split focused conventions out of CLAUDE.md** so that file stays under budget. For destructive/irreversible operations, pair the rule with a hook — text alone is ~70% compliance.
+> **Note**: `paths:` gates loading — a scoped rule enters context only when Claude reads a matching file, while a rule without `paths:` loads at launch in every session. Scope every rule you can, and keep CLAUDE.md plus all unscoped rules under 200 lines. For destructive/irreversible operations, pair the rule with a hook — text alone is ~70% compliance.
 
 ## Code Style Conventions
 

@@ -29,7 +29,8 @@ For each category, check every item. Mark severity:
 
 ## 2. Context Management
 
-- [ ] Reviewer/analyzer subagents lack `context: fork` isolation
+- [ ] Heavy read-only work (review, analysis, exploration) runs in the main conversation instead of a subagent
+- [ ] Subagent file sets skill-only fields (`context`, `agent`) — malformed frontmatter
 - [ ] CLAUDE.md exceeds 200 lines
 - [ ] Skill SKILL.md exceeds 300 lines or ~2,000 tokens (activation quality degrades beyond this)
 - [ ] Reference files loaded eagerly instead of on-demand via reference links
@@ -115,12 +116,12 @@ For each category, check every item. Mark severity:
 
 ## 11. Rules Health
 
-- [ ] Individual rule file > 50 lines (token cost scales with matches)
+- [ ] Individual rule file > 50 lines
 - [ ] Rule has no `paths:` but content clearly targets specific file types or directories
 - [ ] Rule content overlaps with another rule (partial or full duplication)
 - [ ] Rule duplicates instructions already in CLAUDE.md
 - [ ] Path-scoped rule glob matches zero files in the project (dead glob)
-- [ ] CLAUDE.md + global rules (no `paths:`) total exceeds 300 lines (session-start context overload)
+- [ ] CLAUDE.md + unscoped rules (no `paths:`) total exceeds 200 lines (always-resident context overload)
 - [ ] CLAUDE.md single file exceeds 200 lines (official recommended limit)
 - [ ] Rule or CLAUDE.md contains multi-step procedures (should be a skill, not a directive)
 - [ ] Rule or CLAUDE.md contains code blocks used as process instructions (should be flowchart or skill)

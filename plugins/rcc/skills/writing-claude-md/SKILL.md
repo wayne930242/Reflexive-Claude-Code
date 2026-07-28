@@ -121,7 +121,7 @@ Use `MUST`/`NEVER`/`IMPORTANT` sparingly — if everything is critical, nothing 
 
 | If the instruction is... | Use... |
 |--------------------------|--------|
-| A focused convention scoped to a directory or file glob | `.claude/rules/<name>.md` with `paths:` scope tag (still loads every session — split for budget, not for filtering) |
+| A focused convention scoped to a directory or file glob | `.claude/rules/<name>.md` with `paths:` — loads only when Claude reads a matching file, so it costs nothing until relevant |
 | A reusable multi-step workflow | A skill in `.claude/skills/` (loaded on-demand) |
 | **Must NEVER be bypassed** (force-push protection, secret-commit block, destructive ops) | **A hook** with `exit 2` — text in CLAUDE.md is ~70% compliance, not 100%. Hard rules live in hooks. |
 | Only relevant for certain tasks | A skill (loaded on-demand, saves tokens) |
@@ -147,7 +147,7 @@ Use this for: test setup, deploy steps, migration procedures, environment-specif
 
 ### Nested CLAUDE.md (monorepos and multi-package repos)
 
-Claude Code merges nested `CLAUDE.md` files: when working in `apps/api/handlers/foo.ts`, it loads root `CLAUDE.md` + `apps/CLAUDE.md` + `apps/api/CLAUDE.md` if they exist. Use this for monorepos:
+Claude Code merges nested `CLAUDE.md` files: when working in `apps/api/handlers/foo.ts`, it loads root `CLAUDE.md` + `apps/CLAUDE.md` + `apps/api/CLAUDE.md` if they exist. Files *above* the working directory load in full at launch; files in subdirectories *below* it load on demand, when Claude first reads a file there. Nested files are also not re-injected after `/compact` — they reload the next time Claude touches that subdirectory. Use this for monorepos:
 
 - Root `CLAUDE.md`: project identity, top-level layout, shared commands
 - `packages/<name>/CLAUDE.md`: package-specific tooling, test command, gotchas
@@ -180,8 +180,9 @@ CLAUDE.md may *describe* the rule for human readers, but the **enforcement** mus
 **Token efficiency:**
 - CLAUDE.md loads every session — every line costs tokens
 - Move domain knowledge to skills (loaded on-demand)
-- Split focused conventions into `.claude/rules/<name>.md` (still loads every session, but keeps CLAUDE.md scannable)
-- Link to detailed docs instead of inlining them
+- Move file-scoped conventions into `.claude/rules/<name>.md` with `paths:` — these load only when Claude touches a matching file, so they leave the always-resident budget entirely
+- A rule *without* `paths:` still loads at launch; it buys readability, not tokens
+- Link to detailed docs instead of inlining them (`@path` imports load at launch too, so they don't save context either)
 
 **Verification:** Total < 200 lines. Every line earns its place.
 

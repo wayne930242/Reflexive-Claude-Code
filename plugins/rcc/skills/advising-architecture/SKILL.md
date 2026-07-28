@@ -37,25 +37,28 @@ Announce: "Created 4 tasks. Starting execution..."
    └─ Specific, verifiable instructions with MUST/NEVER emphasis
 
 2. Rules (.claude/rules/)    - Path-scoped conventions
-   └─ Auto-injected when paths: glob matches
+   └─ Loaded only when Claude reads a file matching paths:
+   └─ No paths = loaded at launch, every session
    └─ < 50 lines each (token cost)
    └─ Frontmatter: paths (YAML array of globs)
-   └─ No paths = global (loaded at session start)
 
 3. Skills (.claude/skills/)  - Capabilities (how to do)
    └─ Loaded on-demand by Claude OR invoked via /skill-name
    └─ Progressive disclosure: SKILL.md + references/
    └─ Gerund naming: writing-skills, not write-skill
-   └─ Frontmatter: name, description, argument-hint,
-      allowed-tools, model, effort, context, agent,
-      hooks, user-invocable, disable-model-invocation
+   └─ Frontmatter: name, description, when_to_use,
+      argument-hint, arguments, allowed-tools,
+      disallowed-tools, model, effort, context, agent,
+      background, hooks, paths, shell, user-invocable,
+      disable-model-invocation
 
 4. Agents (.claude/agents/)  - Isolated context workers
    └─ Invoked via Agent tool
    └─ Frontmatter: name, description, tools,
       disallowedTools, model, maxTurns, skills,
       permissionMode, effort, isolation, background,
-      memory, mcpServers, hooks
+      memory, mcpServers, hooks, color, initialPrompt
+   └─ context/agent are SKILL fields — invalid here
 
 5. Hooks (.claude/hooks/)    - Automated quality gates
    └─ Exit code 2 = block action

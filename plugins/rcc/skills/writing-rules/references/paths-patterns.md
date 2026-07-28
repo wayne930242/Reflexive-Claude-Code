@@ -1,6 +1,6 @@
 # Path Patterns for Rules
 
-> **Reminder**: `paths:` is a self-documenting scope hint. Every rule file loads every session regardless of `paths:`. Use these patterns to communicate intended scope to Claude and to humans, not to gate loading.
+> **Reminder**: `paths:` is a real load gate. A rule with `paths:` enters context only when Claude reads a matching file; a rule without `paths:` loads at launch in every session. Scope aggressively.
 
 ## Basic Patterns
 
@@ -130,5 +130,10 @@ paths:
 ## Priority Notes
 
 - More specific paths take precedence
-- Rules without `paths:` are global (lowest specificity)
+- Rules without `paths:` are global (lowest specificity) and always resident
 - Use descriptive names: `api-conventions.md`, `testing-guidelines.md`
+
+## Glob Gotchas
+
+- **Brace budget**: a rule's whole `paths:` list shares one budget of 1,000 expanded patterns and 4 MiB. Each brace group multiplies the count (`{a,b}/{c,d}/*.{ts,tsx}` = 8). Patterns that exceed the budget are used unexpanded, so their literal braces match nothing.
+- **Bracket syntax**: `[` starts a bracket expression. A pattern like `photos [2024/**` is invalid and matches nothing; escape it as `photos \[2024/**`.

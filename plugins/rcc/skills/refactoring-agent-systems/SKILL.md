@@ -76,7 +76,7 @@ Announce: "Created 6 tasks. Starting execution..."
 | Conflicting instructions | Unify or remove one | Main conversation edits |
 | Over-engineered component | Simplify (YAGNI) | Main conversation edits |
 | Weak skill trigger | Improve description | Main conversation edits |
-| Missing isolation | Add `context: fork` to agent | Main conversation edits |
+| Heavy read-only work in main context | Move it to a subagent, or add `context: fork` to the skill | Main conversation edits |
 | CLAUDE.md too long | Move content to rules/skills | Main conversation edits |
 | Skill missing asset | Add scripts/, templates/, or references/ | Create directly — no user confirmation needed |
 
