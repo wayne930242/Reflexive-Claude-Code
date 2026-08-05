@@ -1,5 +1,21 @@
 # Changelog
 
+## [13.1.0](https://github.com/wayne930242/Reflexive-Claude-Code/compare/v13.0.1...v13.1.0) (2026-08-05)
+
+
+### Features
+
+* validate_all 新增 --user-root，掃描 ~/.claude 下的元件 ([32b8c5f](https://github.com/wayne930242/Reflexive-Claude-Code/commit/32b8c5f53a57e905f9b1d42027eb0bcbbcb95d7d))
+
+
+### Bug Fixes
+
+* **hooks:** SKILL_ALLOWED_FIELDS 補齊官方 frontmatter 欄位 ([b99d901](https://github.com/wayne930242/Reflexive-Claude-Code/commit/b99d901d34657c270285366d15498e23f444bc59))
+* **hooks:** 校正 agent 驗證常數並修好既有失敗測試 ([b627750](https://github.com/wayne930242/Reflexive-Claude-Code/commit/b62775063fdd99616240ca05f3da046c5423c0de))
+* unify no-flowchart standard across writing-skills/rules/claude-md ([72c7623](https://github.com/wayne930242/Reflexive-Claude-Code/commit/72c7623453f34727381b39868fc9aa412745c24c))
+* 校正 rules 載入機制與 subagent frontmatter 的過期敘述 ([fc48196](https://github.com/wayne930242/Reflexive-Claude-Code/commit/fc48196fb4d358f66621944f685cee7f40aedc12))
+* 讓 frontmatter validator 認得 dotfiles repo 的 skill/agent 目錄 ([e20d2d5](https://github.com/wayne930242/Reflexive-Claude-Code/commit/e20d2d5971153942d2873e5e8ea47b23fb0b299b))
+
 ## [13.0.1](https://github.com/wayne930242/Reflexive-Claude-Code/compare/v13.0.0...v13.0.1) (2026-07-14)
 
 
