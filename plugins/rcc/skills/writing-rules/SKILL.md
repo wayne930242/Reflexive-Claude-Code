@@ -56,42 +56,12 @@ Skill tool: fetching-claude-docs
 
 **Goal:** Understand what convention to encode and where it applies.
 
-**Questions to answer:**
-- What convention needs enforcement?
-- Which files does it apply to? A concrete glob → path-scoped rule. "Everything" → CLAUDE.md or an unscoped rule.
+**Questions to answer, in order:**
 - Is it a hard rule that must never be bypassed? → Use a hook, not a rule.
 - Does it require multi-step procedure? → Use a skill, not a rule.
+- Does it apply to a specific file glob? → Path-scoped rule file.
+- Otherwise: does CLAUDE.md + all unscoped rules stay under 200 lines with this added? → Add to CLAUDE.md. If it would push over budget → unscoped rule file, split for readability.
 - Does this rule already exist? (compare against auto-loaded rule content in context — do NOT Read or Grep rule files)
-
-**Decision tree:**
-
-```dot
-digraph rule_decision {
-    rankdir=TB;
-
-    start [label="New directive needed", shape=doublecircle];
-    hard [label="Must NEVER\nbe bypassed?", shape=diamond];
-    proc [label="Multi-step\nprocedure?", shape=diamond];
-    scoped [label="Applies to a\nspecific file glob?", shape=diamond];
-    budget [label="CLAUDE.md\n> 200 lines?", shape=diamond];
-
-    hook [label="Use hook\n(deterministic)", shape=box];
-    skill [label="Use skill\n(loaded on demand)", shape=box];
-    claudemd [label="Add to CLAUDE.md", shape=box];
-    rule [label="Rule file with paths:\n(loads only on matching files)", shape=box];
-    global [label="Unscoped rule file\n(loads at launch;\nsplit for readability)", shape=box];
-
-    start -> hard;
-    hard -> hook [label="yes"];
-    hard -> proc [label="no"];
-    proc -> skill [label="yes"];
-    proc -> scoped [label="no"];
-    scoped -> rule [label="yes"];
-    scoped -> budget [label="no"];
-    budget -> global [label="yes"];
-    budget -> claudemd [label="no"];
-}
-```
 
 **Verification:** Can state the convention in one sentence, name the file glob it applies to (or justify why it is genuinely cross-cutting), and confirm it isn't a hard rule (which would belong in a hook).
 
@@ -252,4 +222,3 @@ These thoughts mean you're rationalizing. STOP and reconsider:
 
 - [references/paths-patterns.md](references/paths-patterns.md) - Glob pattern syntax for `paths:` scope tags
 - [references/examples.md](references/examples.md) - Rule examples by domain (includes **Safety Bypass Prevention** baseline templates for git / deploy / destructive ops)
-- [references/flowchart.md](references/flowchart.md) - Full creation flowchart (Tasks 1–6; Task 0 fetches the spec first)

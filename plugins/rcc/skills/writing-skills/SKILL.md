@@ -152,7 +152,7 @@ See [references/spec.md](references/spec.md) for full frontmatter specification 
 
 ### Body Structure
 
-Essential sections: Overview, Tasks (with verification each), References. Add only when they earn their place: Routing (only when the skill hands off to other skills — omit if Handoff/Next would be "none"), Task Initialization (multi-step flows), Red Flags / Common Rationalizations (real rationalization risks). No flowchart required. See [references/patterns.md](references/patterns.md) for the template.
+Essential sections: Overview, Tasks (with verification each), References. Add only when they earn their place: Routing (only when the skill hands off to other skills — omit if Handoff/Next would be "none"), Task Initialization (multi-step flows), Red Flags / Common Rationalizations (real rationalization risks). No flowchart — a diagram that re-draws steps already stated in prose is a no-op for current models; reach for one only when the skill specifically targets a low-tier model that needs the extra visual scaffolding. See [references/patterns.md](references/patterns.md) for the template.
 
 ### Verification
 

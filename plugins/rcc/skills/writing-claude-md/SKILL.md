@@ -273,6 +273,5 @@ These thoughts mean you're rationalizing. STOP and reconsider:
 ## References
 
 - [references/examples.md](references/examples.md) — Complete CLAUDE.md example and good/bad instructions
-- [references/flowchart.md](references/flowchart.md) — Full creation flowchart (Tasks 1–7)
 - [../../references/prompt-design-principles.md](../../references/prompt-design-principles.md) — 5-skeleton framework, failure-mode reverse engineering, conditional dispatch, completion semantics
 - Scaffold script: `${CLAUDE_SKILL_DIR}/scripts/init_claude_md.py` — generates initial CLAUDE.md from project structure
