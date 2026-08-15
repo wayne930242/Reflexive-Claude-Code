@@ -354,12 +354,12 @@ if __name__ == "__main__":
         "hooks": [
           {
             "type": "command",
-            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/format.py",
+            "command": "\"${CLAUDE_PROJECT_DIR}\"/.claude/hooks/format.py",
             "timeout": 15
           },
           {
             "type": "command",
-            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/lint.py",
+            "command": "\"${CLAUDE_PROJECT_DIR}\"/.claude/hooks/lint.py",
             "timeout": 30
           }
         ]
@@ -371,7 +371,7 @@ if __name__ == "__main__":
         "hooks": [
           {
             "type": "command",
-            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/protected.py",
+            "command": "\"${CLAUDE_PROJECT_DIR}\"/.claude/hooks/protected.py",
             "timeout": 5
           }
         ]
@@ -392,12 +392,12 @@ if __name__ == "__main__":
         "hooks": [
           {
             "type": "command",
-            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/prettier_eslint.py",
+            "command": "\"${CLAUDE_PROJECT_DIR}\"/.claude/hooks/prettier_eslint.py",
             "timeout": 30
           },
           {
             "type": "command",
-            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/typecheck.py",
+            "command": "\"${CLAUDE_PROJECT_DIR}\"/.claude/hooks/typecheck.py",
             "timeout": 60
           }
         ]
@@ -418,12 +418,12 @@ if __name__ == "__main__":
         "hooks": [
           {
             "type": "command",
-            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/ruff.py",
+            "command": "\"${CLAUDE_PROJECT_DIR}\"/.claude/hooks/ruff.py",
             "timeout": 15
           },
           {
             "type": "command",
-            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/mypy.py",
+            "command": "\"${CLAUDE_PROJECT_DIR}\"/.claude/hooks/mypy.py",
             "timeout": 30
           }
         ]

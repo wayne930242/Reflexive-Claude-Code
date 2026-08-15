@@ -160,7 +160,7 @@ See [references/stop-event-self-verify.md](references/stop-event-self-verify.md)
         "matcher": "Write|Edit",
         "hooks": [{
           "type": "command",
-          "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/eslint_check.py",
+          "command": "\"${CLAUDE_PROJECT_DIR}\"/.claude/hooks/eslint_check.py",
           "timeout": 30
         }]
       }
@@ -180,7 +180,7 @@ See [references/stop-event-self-verify.md](references/stop-event-self-verify.md)
 **Verification:**
 - [ ] Hook registered in correct event
 - [ ] Matcher targets correct tools
-- [ ] Command path uses `$CLAUDE_PROJECT_DIR`
+- [ ] Command path uses `${CLAUDE_PROJECT_DIR}` (braced — see [cross-platform-scripts.md](../../references/cross-platform-scripts.md))
 - [ ] Timeout is reasonable (5-30 seconds)
 
 ## Task 5: Validate Behavior

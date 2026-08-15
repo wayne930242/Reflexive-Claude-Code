@@ -30,7 +30,7 @@ sys.exit(0)
     "Stop": [{
       "hooks": [{
         "type": "command",
-        "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/stop_verify.py",
+        "command": "\"${CLAUDE_PROJECT_DIR}\"/.claude/hooks/stop_verify.py",
         "timeout": 120
       }]
     }]

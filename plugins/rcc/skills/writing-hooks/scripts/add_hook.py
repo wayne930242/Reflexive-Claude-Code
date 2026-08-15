@@ -228,7 +228,7 @@ def update_settings(settings_path: Path, hook_name: str, event: str, matcher: st
     # Check if matcher already exists
     hook_config = {
         "type": "command",
-        "command": f'"$CLAUDE_PROJECT_DIR"/.claude/hooks/{hook_name}.py',
+        "command": f'"${{CLAUDE_PROJECT_DIR}}"/.claude/hooks/{hook_name}.py',
         "timeout": 30,
     }
 
