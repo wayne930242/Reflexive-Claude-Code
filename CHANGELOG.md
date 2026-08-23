@@ -1,5 +1,13 @@
 # Changelog
 
+## [13.1.1](https://github.com/wayne930242/Reflexive-Claude-Code/compare/v13.1.0...v13.1.1) (2026-08-23)
+
+
+### Bug Fixes
+
+* **hooks:** 修正 hook command 的 placeholder 語法並補充跨平台執行語意 ([fca7317](https://github.com/wayne930242/Reflexive-Claude-Code/commit/fca7317f0caf6fd857ebd84d58eb2c480618f6c5))
+* 簡化 skill description 撰寫公式為 1-2 句話 ([de77bb4](https://github.com/wayne930242/Reflexive-Claude-Code/commit/de77bb4af956f712998f21f67f1ba14f868283df))
+
 ## [13.1.0](https://github.com/wayne930242/Reflexive-Claude-Code/compare/v13.0.1...v13.1.0) (2026-08-05)
 
 
