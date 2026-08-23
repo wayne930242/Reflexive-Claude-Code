@@ -91,17 +91,18 @@ Use **gerund form** (verb + -ing):
 ## Description Formula
 
 ```
-[What it does]. [Key capabilities]. Use when [specific triggers].
+[What it does]. Use when [specific triggers].
 ```
 
-Both parts are required: the capability statement lets Claude pick the right skill among 100+ candidates; the "Use when..." clause supplies the triggers.
+Keep it to 1–2 sentences total: what the skill does lets Claude pick the right skill among 100+ candidates; the "Use when..." clause supplies the triggers.
+Add a capability clause only when it disambiguates this skill from a similar one or rules out a false trigger — most skills don't need one.
 Do NOT enumerate internal workflow steps — state capability, not procedure.
 
 **Always write in third person** (description is injected into system prompt).
 
 **Good**:
 ```yaml
-description: Creates semantic git commits. Analyzes staged changes and generates conventional commit messages. Use when committing code or managing git history.
+description: Creates semantic git commits by analyzing staged changes and generating conventional commit messages. Use when committing code or managing git history.
 ```
 
 **Bad**:
@@ -109,6 +110,7 @@ description: Creates semantic git commits. Analyzes staged changes and generates
 description: Use when committing code.              # triggers-only, no capability statement
 description: I can help you with git stuff.         # first person
 description: First stages files, then writes the message, then commits.  # enumerates workflow steps
+description: Creates semantic commits. Supports amend, squash, interactive rebase, conflict resolution, and commit templates. Use when committing.  # capabilities enumerated beyond what's needed to trigger correctly
 ```
 
 ## Body Guidelines

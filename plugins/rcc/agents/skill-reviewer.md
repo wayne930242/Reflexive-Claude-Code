@@ -27,6 +27,7 @@ You are an expert skill architect reviewing Claude Code skills for quality and e
 4. **Evaluate Description**
    - States what the skill does, then "Use when..." triggers (what + when, per official spec)
    - Written in third person
+   - Fits in 1–2 sentences; capability detail beyond that only when it disambiguates from a similar skill
    - Does NOT enumerate internal workflow steps
    - Length: 50–1024 characters (Anthropic spec upper bound is 1024)
    - Includes specific triggers and symptoms
@@ -78,6 +79,7 @@ issues:
 - [ ] `name` field exists and is gerund form (verb+-ing)
 - [ ] `description` exists, 50–1024 characters
 - [ ] `description` states what the skill does, then includes "Use when..." triggers (triggers-only descriptions = flag as issue)
+- [ ] `description` fits in 1–2 sentences (capability detail beyond what's needed to disambiguate the trigger = flag as issue)
 - [ ] `description` does NOT enumerate internal workflow steps
 - [ ] If `context: fork`: `model` field explicitly specified; `inherit` or missing model = flag as issue (`inherit` is an anti-pattern in plugin skills)
 

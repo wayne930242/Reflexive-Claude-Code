@@ -146,7 +146,7 @@ See [references/spec.md](references/spec.md) for full frontmatter specification 
 
 **Key rules:**
 - Name: gerund form, lowercase, hyphens only, max 64 chars
-- Description: `[What it does]. [Key capabilities]. Use when [triggers].` — third person, does not enumerate workflow steps
+- Description: `[What it does]. Use when [triggers].` — third person, 1–2 sentences total; add capability detail only to disambiguate from a similar skill, not as a default third clause; does not enumerate workflow steps
 - Body: < 300 lines, detailed content goes to `references/`
 - Parallel tool calls: when skill tasks involve independent reads, searches, or writes, explicitly state "run these tool calls in parallel" so the agent fans out instead of serializing
 
@@ -158,6 +158,7 @@ Essential sections: Overview, Tasks (with verification each), References. Add on
 
 Can answer YES to all:
 - [ ] Description states what the skill does, then "Use when..." triggers
+- [ ] Description fits in 1–2 sentences
 - [ ] Description does NOT enumerate workflow steps
 - [ ] Body < 300 lines
 - [ ] Task Initialization present if the flow is multi-step
